@@ -1,0 +1,38 @@
+# --- Python ---
+.venv*/
+__pycache__/
+*.pyc
+
+# --- Local private data (NEVER publish) ---
+.zcode/
+*.rollout.jsonl
+~/.codex/
+
+# --- Model weights (distributed via application, not git) ---
+models/
+*.safetensors
+*.bin
+*.gguf
+
+# --- Raw extracted dumps (contain real session text + API keys) ---
+maps/*.json
+!maps/synthetic_demo.json
+!maps/labels_only_gold.json
+
+# --- Narrative docs with real project details (keep redacted copies only) ---
+PUBLICATION.md
+FINDINGS.md
+PROGRESS.md
+HANDOVER_0914.md
+OVERNIGHT_0916_TASK.md
+maps/PROJECT_CLOSEOUT.md
+
+# --- Local caches ---
+.cache/
+.huggingface/
+modelscope/
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+*.swp

@@ -1,0 +1,38 @@
+[
+ {
+  "pid": "DEMO-001",
+  "obligation": "Implement feature X end to end",
+  "sentence": "All unit tests passed, committed as abc1234",
+  "label": "PART_CLOSE"
+ },
+ {
+  "pid": "DEMO-002",
+  "obligation": "Implement feature X end to end",
+  "sentence": "I will start by reviewing the spec",
+  "label": "NO_CLOSE"
+ },
+ {
+  "pid": "DEMO-003",
+  "obligation": "Add input validation to module Y",
+  "sentence": "Validation added and verified via 12/12 tests",
+  "label": "PART_CLOSE"
+ },
+ {
+  "pid": "DEMO-004",
+  "obligation": "System reminder: tool result",
+  "sentence": "Build succeeded with 0 errors",
+  "label": "NOT_A_DELEGATION"
+ },
+ {
+  "pid": "DEMO-005",
+  "obligation": "Ship the reporting dashboard",
+  "sentence": "Dashboard deployed and reachable at internal URL",
+  "label": "WHOLE_CLOSE"
+ },
+ {
+  "pid": "DEMO-006",
+  "obligation": "Fix the retry logic in client",
+  "sentence": "Still investigating the flaky timeout",
+  "label": "NO_CLOSE"
+ }
+]

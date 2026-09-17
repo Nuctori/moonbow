@@ -1,0 +1,2693 @@
+{
+"NC1-p01-0001": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0002": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0003": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0004": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0005": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0006": {
+"label": "PART_CLOSE"
+},
+"NC1-p01-0007": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0008": {
+"label": "PART_CLOSE"
+},
+"NC1-p01-0009": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0010": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0011": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0012": {
+"label": "AMBIGUOUS"
+},
+"NC1-p01-0013": {
+"label": "PART_CLOSE"
+},
+"NC1-p01-0014": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0015": {
+"label": "PART_CLOSE"
+},
+"NC1-p01-0016": {
+"label": "AMBIGUOUS"
+},
+"NC1-p01-0017": {
+"label": "PART_CLOSE"
+},
+"NC1-p01-0018": {
+"label": "AMBIGUOUS"
+},
+"NC1-p01-0019": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0020": {
+"label": "PART_CLOSE"
+},
+"NC1-p01-0021": {
+"label": "PART_CLOSE"
+},
+"NC1-p01-0022": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0023": {
+"label": "PART_CLOSE"
+},
+"NC1-p01-0024": {
+"label": "PART_CLOSE"
+},
+"NC1-p01-0025": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0026": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0027": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0028": {
+"label": "NO_CLOSE"
+},
+"NC1-p01-0029": {
+"label": "PART_CLOSE"
+},
+"NC1-p01-0030": {
+"label": "PART_CLOSE"
+},
+"NC1-p02-0001": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0002": {
+"label": "PART_CLOSE"
+},
+"NC1-p02-0003": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0004": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0005": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0006": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0007": {
+"label": "PART_CLOSE"
+},
+"NC1-p02-0008": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0009": {
+"label": "PART_CLOSE"
+},
+"NC1-p02-0010": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0011": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0012": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0013": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0014": {
+"label": "PART_CLOSE"
+},
+"NC1-p02-0015": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0016": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0017": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0018": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0019": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0020": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0021": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0022": {
+"label": "PART_CLOSE"
+},
+"NC1-p02-0023": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0024": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0025": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0026": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0027": {
+"label": "PART_CLOSE"
+},
+"NC1-p02-0028": {
+"label": "PART_CLOSE"
+},
+"NC1-p02-0029": {
+"label": "NO_CLOSE"
+},
+"NC1-p02-0030": {
+"label": "PART_CLOSE"
+},
+"NC1-p03-0001": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0002": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0003": {
+"label": "PART_CLOSE"
+},
+"NC1-p03-0004": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0005": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0006": {
+"label": "PART_CLOSE"
+},
+"NC1-p03-0007": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0008": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0009": {
+"label": "PART_CLOSE"
+},
+"NC1-p03-0010": {
+"label": "PART_CLOSE"
+},
+"NC1-p03-0011": {
+"label": "PART_CLOSE"
+},
+"NC1-p03-0012": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0013": {
+"label": "AMBIGUOUS"
+},
+"NC1-p03-0014": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0015": {
+"label": "PART_CLOSE"
+},
+"NC1-p03-0016": {
+"label": "PART_CLOSE"
+},
+"NC1-p03-0017": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0018": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0019": {
+"label": "PART_CLOSE"
+},
+"NC1-p03-0020": {
+"label": "PART_CLOSE"
+},
+"NC1-p03-0021": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0022": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0023": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0024": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0025": {
+"label": "PART_CLOSE"
+},
+"NC1-p03-0026": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0027": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0028": {
+"label": "NO_CLOSE"
+},
+"NC1-p03-0029": {
+"label": "PART_CLOSE"
+},
+"NC1-p03-0030": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0001": {
+"label": "NOT_A_DELEGATION"
+},
+"NC1-p04-0002": {
+"label": "PART_CLOSE"
+},
+"NC1-p04-0003": {
+"label": "PART_CLOSE"
+},
+"NC1-p04-0004": {
+"label": "AMBIGUOUS"
+},
+"NC1-p04-0005": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0006": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0007": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0008": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0009": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0010": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0011": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0012": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0013": {
+"label": "PART_CLOSE"
+},
+"NC1-p04-0014": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0015": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0016": {
+"label": "PART_CLOSE"
+},
+"NC1-p04-0017": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0018": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0019": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0020": {
+"label": "PART_CLOSE"
+},
+"NC1-p04-0021": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0022": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0023": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0024": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0025": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0026": {
+"label": "PART_CLOSE"
+},
+"NC1-p04-0027": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0028": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0029": {
+"label": "NO_CLOSE"
+},
+"NC1-p04-0030": {
+"label": "PART_CLOSE"
+},
+"NC1-p05-0001": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0002": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0003": {
+"label": "PART_CLOSE"
+},
+"NC1-p05-0004": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0005": {
+"label": "NOT_A_DELEGATION"
+},
+"NC1-p05-0006": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0007": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0008": {
+"label": "PART_CLOSE"
+},
+"NC1-p05-0009": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0010": {
+"label": "NOT_A_DELEGATION"
+},
+"NC1-p05-0011": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0012": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0013": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0014": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0015": {
+"label": "PART_CLOSE"
+},
+"NC1-p05-0016": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0017": {
+"label": "PART_CLOSE"
+},
+"NC1-p05-0018": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0019": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0020": {
+"label": "PART_CLOSE"
+},
+"NC1-p05-0021": {
+"label": "PART_CLOSE"
+},
+"NC1-p05-0022": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0023": {
+"label": "PART_CLOSE"
+},
+"NC1-p05-0024": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0025": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0026": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0027": {
+"label": "PART_CLOSE"
+},
+"NC1-p05-0028": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0029": {
+"label": "NO_CLOSE"
+},
+"NC1-p05-0030": {
+"label": "PART_CLOSE"
+},
+"NC1-p06-0001": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0002": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0003": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0004": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0005": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0006": {
+"label": "PART_CLOSE"
+},
+"NC1-p06-0007": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0008": {
+"label": "PART_CLOSE"
+},
+"NC1-p06-0009": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0010": {
+"label": "PART_CLOSE"
+},
+"NC1-p06-0011": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0012": {
+"label": "NOT_A_DELEGATION"
+},
+"NC1-p06-0013": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0014": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0015": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0016": {
+"label": "PART_CLOSE"
+},
+"NC1-p06-0017": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0018": {
+"label": "PART_CLOSE"
+},
+"NC1-p06-0019": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0020": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0021": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0022": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0023": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0024": {
+"label": "PART_CLOSE"
+},
+"NC1-p06-0025": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0026": {
+"label": "PART_CLOSE"
+},
+"NC1-p06-0027": {
+"label": "PART_CLOSE"
+},
+"NC1-p06-0028": {
+"label": "PART_CLOSE"
+},
+"NC1-p06-0029": {
+"label": "NO_CLOSE"
+},
+"NC1-p06-0030": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0001": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0002": {
+"label": "PART_CLOSE"
+},
+"NC1-p07-0003": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0004": {
+"label": "PART_CLOSE"
+},
+"NC1-p07-0005": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0006": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0007": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0008": {
+"label": "NOT_A_DELEGATION"
+},
+"NC1-p07-0009": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0010": {
+"label": "PART_CLOSE"
+},
+"NC1-p07-0011": {
+"label": "PART_CLOSE"
+},
+"NC1-p07-0012": {
+"label": "PART_CLOSE"
+},
+"NC1-p07-0013": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0014": {
+"label": "PART_CLOSE"
+},
+"NC1-p07-0015": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0016": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0017": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0018": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0019": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0020": {
+"label": "PART_CLOSE"
+},
+"NC1-p07-0021": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0022": {
+"label": "PART_CLOSE"
+},
+"NC1-p07-0023": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0024": {
+"label": "PART_CLOSE"
+},
+"NC1-p07-0025": {
+"label": "NO_CLOSE"
+},
+"NC1-p07-0026": {
+"label": "PART_CLOSE"
+},
+"NC1-p07-0027": {
+"label": "NOT_A_DELEGATION"
+},
+"NC1-p07-0028": {
+"label": "PART_CLOSE"
+},
+"NC1-p07-0029": {
+"label": "PART_CLOSE"
+},
+"NC1-p07-0030": {
+"label": "PART_CLOSE"
+},
+"NC1-p08-0001": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0002": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0003": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0004": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0005": {
+"label": "PART_CLOSE"
+},
+"NC1-p08-0006": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0007": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0008": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0009": {
+"label": "PART_CLOSE"
+},
+"NC1-p08-0010": {
+"label": "PART_CLOSE"
+},
+"NC1-p08-0011": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0012": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0013": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0014": {
+"label": "NOT_A_DELEGATION"
+},
+"NC1-p08-0015": {
+"label": "PART_CLOSE"
+},
+"NC1-p08-0016": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0017": {
+"label": "PART_CLOSE"
+},
+"NC1-p08-0018": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0019": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0020": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0021": {
+"label": "PART_CLOSE"
+},
+"NC1-p08-0022": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0023": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0024": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0025": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0026": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0027": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0028": {
+"label": "NO_CLOSE"
+},
+"NC1-p08-0029": {
+"label": "PART_CLOSE"
+},
+"NC1-p08-0030": {
+"label": "PART_CLOSE"
+},
+"NC1-p09-0001": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0002": {
+"label": "NOT_A_DELEGATION"
+},
+"NC1-p09-0003": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0004": {
+"label": "PART_CLOSE"
+},
+"NC1-p09-0005": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0006": {
+"label": "PART_CLOSE"
+},
+"NC1-p09-0007": {
+"label": "PART_CLOSE"
+},
+"NC1-p09-0008": {
+"label": "PART_CLOSE"
+},
+"NC1-p09-0009": {
+"label": "PART_CLOSE"
+},
+"NC1-p09-0010": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0011": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0012": {
+"label": "PART_CLOSE"
+},
+"NC1-p09-0013": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0014": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0015": {
+"label": "PART_CLOSE"
+},
+"NC1-p09-0016": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0017": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0018": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0019": {
+"label": "PART_CLOSE"
+},
+"NC1-p09-0020": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0021": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0022": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0023": {
+"label": "PART_CLOSE"
+},
+"NC1-p09-0024": {
+"label": "PART_CLOSE"
+},
+"NC1-p09-0025": {
+"label": "PART_CLOSE"
+},
+"NC1-p09-0026": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0027": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0028": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0029": {
+"label": "NO_CLOSE"
+},
+"NC1-p09-0030": {
+"label": "PART_CLOSE"
+},
+"NC1-p10-0001": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0002": {
+"label": "NOT_A_DELEGATION"
+},
+"NC1-p10-0003": {
+"label": "PART_CLOSE"
+},
+"NC1-p10-0004": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0005": {
+"label": "PART_CLOSE"
+},
+"NC1-p10-0006": {
+"label": "PART_CLOSE"
+},
+"NC1-p10-0007": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0008": {
+"label": "PART_CLOSE"
+},
+"NC1-p10-0009": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0010": {
+"label": "PART_CLOSE"
+},
+"NC1-p10-0011": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0012": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0013": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0014": {
+"label": "PART_CLOSE"
+},
+"NC1-p10-0015": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0016": {
+"label": "PART_CLOSE"
+},
+"NC1-p10-0017": {
+"label": "PART_CLOSE"
+},
+"NC1-p10-0018": {
+"label": "PART_CLOSE"
+},
+"NC1-p10-0019": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0020": {
+"label": "PART_CLOSE"
+},
+"NC1-p10-0021": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0022": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0023": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0024": {
+"label": "PART_CLOSE"
+},
+"NC1-p10-0025": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0026": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0027": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0028": {
+"label": "NO_CLOSE"
+},
+"NC1-p10-0029": {
+"label": "PART_CLOSE"
+},
+"NC1-p10-0030": {
+"label": "NOT_A_DELEGATION"
+},
+"NC2-p03-0002": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0023": {
+"label": "NO_CLOSE"
+},
+"NC2-p06-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0012": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0019": {
+"label": "PART_CLOSE"
+},
+"NC2-p17-0027": {
+"label": "PART_CLOSE"
+},
+"NC2-p13-0004": {
+"label": "NO_CLOSE"
+},
+"NC2-p18-0003": {
+"label": "PART_CLOSE"
+},
+"NC2-p08-0001": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0028": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0006": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0011": {
+"label": "NO_CLOSE"
+},
+"NC2-p20-0012": {
+"label": "NO_CLOSE"
+},
+"NC2-p11-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0015": {
+"label": "NO_CLOSE"
+},
+"NC2-p04-0001": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0030": {
+"label": "PART_CLOSE"
+},
+"NC2-p07-0030": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0028": {
+"label": "PART_CLOSE"
+},
+"NC2-p09-0027": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0025": {
+"label": "NO_CLOSE"
+},
+"NC2-p18-0017": {
+"label": "PART_CLOSE"
+},
+"NC2-p02-0029": {
+"label": "PART_CLOSE"
+},
+"NC2-p03-0026": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0029": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0003": {
+"label": "PART_CLOSE"
+},
+"NC2-p11-0018": {
+"label": "NO_CLOSE"
+},
+"NC2-p01-0014": {
+"label": "PART_CLOSE"
+},
+"NC2-p10-0019": {
+"label": "NO_CLOSE"
+},
+"NC2-p06-0003": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0017": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0011": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0020": {
+"label": "PART_CLOSE"
+},
+"NC2-p15-0011": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0003": {
+"label": "PART_CLOSE"
+},
+"NC2-p09-0002": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0025": {
+"label": "PART_CLOSE"
+},
+"NC2-p13-0007": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0012": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0027": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0028": {
+"label": "PART_CLOSE"
+},
+"NC2-p08-0013": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0009": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0012": {
+"label": "PART_CLOSE"
+},
+"NC2-p10-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0030": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0004": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0009": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0007": {
+"label": "PART_CLOSE"
+},
+"NC2-p09-0004": {
+"label": "NO_CLOSE"
+},
+"NC2-p06-0002": {
+"label": "NO_CLOSE"
+},
+"NC2-p20-0001": {
+"label": "NO_CLOSE"
+},
+"NC2-p01-0025": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0005": {
+"label": "PART_CLOSE"
+},
+"NC2-p14-0025": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0003": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0008": {
+"label": "PART_CLOSE"
+},
+"NC2-p08-0017": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0012": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0011": {
+"label": "PART_CLOSE"
+},
+"NC2-p03-0024": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0027": {
+"label": "PART_CLOSE"
+},
+"NC2-p14-0014": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0024": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0027": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0029": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0008": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0006": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0003": {
+"label": "PART_CLOSE"
+},
+"NC2-p11-0012": {
+"label": "PART_CLOSE"
+},
+"NC2-p17-0014": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0026": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0001": {
+"label": "NO_CLOSE"
+},
+"NC2-p18-0005": {
+"label": "PART_CLOSE"
+},
+"NC2-p15-0001": {
+"label": "PART_CLOSE"
+},
+"NC2-p05-0002": {
+"label": "PART_CLOSE"
+},
+"NC2-p05-0008": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0027": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0026": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0005": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0013": {
+"label": "NO_CLOSE"
+},
+"NC2-p11-0028": {
+"label": "PART_CLOSE"
+},
+"NC2-p07-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0015": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0001": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0015": {
+"label": "PART_CLOSE"
+},
+"NC2-p10-0026": {
+"label": "NO_CLOSE"
+},
+"NC2-p06-0011": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0021": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0025": {
+"label": "PART_CLOSE"
+},
+"NC2-p03-0027": {
+"label": "PART_CLOSE"
+},
+"NC2-p17-0010": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0028": {
+"label": "NOT_A_DELEGATION"
+},
+"NC2-p15-0015": {
+"label": "PART_CLOSE"
+},
+"NC2-p12-0026": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0012": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0009": {
+"label": "PART_CLOSE"
+},
+"NC2-p16-0019": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0018": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0022": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0013": {
+"label": "NO_CLOSE"
+},
+"NC2-p11-0022": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0023": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0022": {
+"label": "PART_CLOSE"
+},
+"NC2-p15-0016": {
+"label": "NOT_A_DELEGATION"
+},
+"NC2-p05-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0018": {
+"label": "PART_CLOSE"
+},
+"NC2-p12-0024": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0020": {
+"label": "PART_CLOSE"
+},
+"NC2-p15-0010": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0025": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0021": {
+"label": "PART_CLOSE"
+},
+"NC2-p19-0002": {
+"label": "PART_CLOSE"
+},
+"NC2-p10-0015": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0004": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0030": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0025": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0016": {
+"label": "NO_CLOSE"
+},
+"NC2-p01-0010": {
+"label": "PART_CLOSE"
+},
+"NC2-p16-0029": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0030": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0001": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0003": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0010": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0014": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0003": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0003": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0004": {
+"label": "PART_CLOSE"
+},
+"NC2-p08-0020": {
+"label": "PART_CLOSE"
+},
+"NC2-p12-0001": {
+"label": "NO_CLOSE"
+},
+"NC2-p20-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0010": {
+"label": "AMBIGUOUS"
+},
+"NC2-p01-0003": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0029": {
+"label": "NO_CLOSE"
+},
+"NC2-p06-0016": {
+"label": "PART_CLOSE"
+},
+"NC2-p11-0030": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0009": {
+"label": "PART_CLOSE"
+},
+"NC2-p19-0023": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0021": {
+"label": "PART_CLOSE"
+},
+"NC2-p14-0019": {
+"label": "NO_CLOSE"
+},
+"NC2-p04-0005": {
+"label": "PART_CLOSE"
+},
+"NC2-p09-0026": {
+"label": "PART_CLOSE"
+},
+"NC2-p19-0020": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0017": {
+"label": "PART_CLOSE"
+},
+"NC2-p10-0016": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0004": {
+"label": "NOT_A_DELEGATION"
+},
+"NC2-p01-0020": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0004": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0018": {
+"label": "NO_CLOSE"
+},
+"NC2-p18-0014": {
+"label": "NO_CLOSE"
+},
+"NC2-p20-0013": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0001": {
+"label": "PART_CLOSE"
+},
+"NC2-p13-0028": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0030": {
+"label": "PART_CLOSE"
+},
+"NC2-p17-0002": {
+"label": "PART_CLOSE"
+},
+"NC2-p19-0026": {
+"label": "NO_CLOSE"
+},
+"NC2-p20-0002": {
+"label": "PART_CLOSE"
+},
+"NC2-p17-0023": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0027": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0017": {
+"label": "PART_CLOSE"
+},
+"NC2-p10-0024": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0005": {
+"label": "NO_CLOSE"
+},
+"NC2-p18-0028": {
+"label": "PART_CLOSE"
+},
+"NC2-p08-0023": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0022": {
+"label": "PART_CLOSE"
+},
+"NC2-p03-0028": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0007": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0017": {
+"label": "PART_CLOSE"
+},
+"NC2-p03-0019": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0002": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0017": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0009": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0023": {
+"label": "PART_CLOSE"
+},
+"NC2-p07-0022": {
+"label": "PART_CLOSE"
+},
+"NC2-p16-0004": {
+"label": "NO_CLOSE"
+},
+"NC2-p18-0002": {
+"label": "PART_CLOSE"
+},
+"NC2-p13-0018": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0009": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0013": {
+"label": "PART_CLOSE"
+},
+"NC2-p05-0016": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0014": {
+"label": "PART_CLOSE"
+},
+"NC2-p12-0006": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0009": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0008": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0025": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0006": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0013": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0010": {
+"label": "PART_CLOSE"
+},
+"NC2-p08-0024": {
+"label": "AMBIGUOUS"
+},
+"NC2-p08-0018": {
+"label": "PART_CLOSE"
+},
+"NC2-p05-0014": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0005": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0022": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0018": {
+"label": "PART_CLOSE"
+},
+"NC2-p07-0008": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0003": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0016": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0008": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0028": {
+"label": "PART_CLOSE"
+},
+"NC2-p07-0009": {
+"label": "PART_CLOSE"
+},
+"NC2-p19-0030": {
+"label": "PART_CLOSE"
+},
+"NC2-p09-0017": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0025": {
+"label": "PART_CLOSE"
+},
+"NC2-p13-0022": {
+"label": "PART_CLOSE"
+},
+"NC2-p11-0020": {
+"label": "NOT_A_DELEGATION"
+},
+"NC2-p16-0014": {
+"label": "PART_CLOSE"
+},
+"NC2-p19-0006": {
+"label": "PART_CLOSE"
+},
+"NC2-p13-0020": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0028": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0023": {
+"label": "PART_CLOSE"
+},
+"NC2-p07-0018": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0014": {
+"label": "PART_CLOSE"
+},
+"NC2-p05-0005": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0001": {
+"label": "PART_CLOSE"
+},
+"NC2-p17-0007": {
+"label": "PART_CLOSE"
+},
+"NC2-p15-0019": {
+"label": "PART_CLOSE"
+},
+"NC2-p03-0017": {
+"label": "PART_CLOSE"
+},
+"NC2-p14-0002": {
+"label": "NO_CLOSE"
+},
+"NC2-p11-0011": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p06-0022": {
+"label": "PART_CLOSE"
+},
+"NC2-p07-0011": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0026": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0023": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0024": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0023": {
+"label": "PART_CLOSE"
+},
+"NC2-p09-0010": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0006": {
+"label": "PART_CLOSE"
+},
+"NC2-p19-0029": {
+"label": "NO_CLOSE"
+},
+"NC2-p20-0015": {
+"label": "PART_CLOSE"
+},
+"NC2-p17-0016": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0012": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0001": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0002": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0007": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0026": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0014": {
+"label": "PART_CLOSE"
+},
+"NC2-p03-0016": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0012": {
+"label": "NO_CLOSE"
+},
+"NC2-p04-0028": {
+"label": "PART_CLOSE"
+},
+"NC2-p17-0004": {
+"label": "NOT_A_DELEGATION"
+},
+"NC2-p17-0009": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0014": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0020": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0008": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0013": {
+"label": "PART_CLOSE"
+},
+"NC2-p02-0015": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0015": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0022": {
+"label": "NO_CLOSE"
+},
+"NC2-p06-0006": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0015": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0020": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0016": {
+"label": "PART_CLOSE"
+},
+"NC2-p11-0013": {
+"label": "PART_CLOSE"
+},
+"NC2-p16-0013": {
+"label": "PART_CLOSE"
+},
+"NC2-p03-0010": {
+"label": "PART_CLOSE"
+},
+"NC2-p08-0007": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0029": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0023": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0028": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0005": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0023": {
+"label": "NO_CLOSE"
+},
+"NC2-p06-0005": {
+"label": "PART_CLOSE"
+},
+"NC2-p07-0014": {
+"label": "PART_CLOSE"
+},
+"NC2-p11-0015": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0013": {
+"label": "PART_CLOSE"
+},
+"NC2-p03-0020": {
+"label": "PART_CLOSE"
+},
+"NC2-p11-0016": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0009": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0023": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0006": {
+"label": "PART_CLOSE"
+},
+"NC2-p12-0020": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0013": {
+"label": "NOT_A_DELEGATION"
+},
+"NC2-p11-0027": {
+"label": "NO_CLOSE"
+},
+"NC2-p18-0019": {
+"label": "PART_CLOSE"
+},
+"NC2-p14-0011": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0030": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0027": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0025": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0023": {
+"label": "PART_CLOSE"
+},
+"NC2-p15-0009": {
+"label": "AMBIGUOUS"
+},
+"NC2-p11-0010": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0020": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0002": {
+"label": "PART_CLOSE"
+},
+"NC2-p03-0025": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0018": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0029": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0028": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0002": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0019": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0029": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0007": {
+"label": "PART_CLOSE"
+},
+"NC2-p17-0022": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0004": {
+"label": "PART_CLOSE"
+},
+"NC2-p11-0019": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0015": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0029": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0006": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0030": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0024": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0022": {
+"label": "PART_CLOSE"
+},
+"NC2-p13-0014": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0022": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0027": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0011": {
+"label": "PART_CLOSE"
+},
+"NC2-p10-0022": {
+"label": "PART_CLOSE"
+},
+"NC2-p03-0015": {
+"label": "NO_CLOSE"
+},
+"NC2-p04-0023": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0026": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0018": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0011": {
+"label": "PART_CLOSE"
+},
+"NC2-p16-0025": {
+"label": "PART_CLOSE"
+},
+"NC2-p11-0004": {
+"label": "NO_CLOSE"
+},
+"NC2-p11-0029": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0030": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0026": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0022": {
+"label": "PART_CLOSE"
+},
+"NC2-p10-0012": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0007": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0006": {
+"label": "PART_CLOSE"
+},
+"NC2-p14-0013": {
+"label": "NO_CLOSE"
+},
+"NC2-p04-0030": {
+"label": "PART_CLOSE"
+},
+"NC2-p19-0010": {
+"label": "AMBIGUOUS"
+},
+"NC2-p02-0016": {
+"label": "NO_CLOSE"
+},
+"NC2-p11-0003": {
+"label": "NO_CLOSE"
+},
+"NC2-p01-0007": {
+"label": "PART_CLOSE"
+},
+"NC2-p19-0019": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0008": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0008": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0016": {
+"label": "PART_CLOSE"
+},
+"NC2-p10-0007": {
+"label": "PART_CLOSE"
+},
+"NC2-p07-0002": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0001": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0017": {
+"label": "PART_CLOSE"
+},
+"NC2-p03-0013": {
+"label": "NO_CLOSE"
+},
+"NC2-p04-0026": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0014": {
+"label": "PART_CLOSE"
+},
+"NC2-p02-0009": {
+"label": "NO_CLOSE"
+},
+"NC2-p18-0015": {
+"label": "NO_CLOSE"
+},
+"NC2-p18-0001": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0010": {
+"label": "PART_CLOSE"
+},
+"NC2-p13-0013": {
+"label": "PART_CLOSE"
+},
+"NC2-p08-0004": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0007": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0029": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0012": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0012": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0011": {
+"label": "NOT_A_DELEGATION"
+},
+"NC2-p15-0017": {
+"label": "NO_CLOSE"
+},
+"NC2-p11-0017": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0009": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0024": {
+"label": "PART_CLOSE"
+},
+"NC2-p12-0004": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0001": {
+"label": "PART_CLOSE"
+},
+"NC2-p07-0005": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0020": {
+"label": "PART_CLOSE"
+},
+"NC2-p02-0018": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0017": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0030": {
+"label": "PART_CLOSE"
+},
+"NC2-p08-0008": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0003": {
+"label": "PART_CLOSE"
+},
+"NC2-p14-0016": {
+"label": "NO_CLOSE"
+},
+"NC2-p01-0004": {
+"label": "NO_CLOSE"
+},
+"NC2-p04-0016": {
+"label": "PART_CLOSE"
+},
+"NC2-p10-0004": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0028": {
+"label": "PART_CLOSE"
+},
+"NC2-p15-0025": {
+"label": "NO_CLOSE"
+},
+"NC2-p06-0025": {
+"label": "NO_CLOSE"
+},
+"NC2-p11-0009": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0019": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0017": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0015": {
+"label": "PART_CLOSE"
+},
+"NC2-p05-0024": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0008": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0018": {
+"label": "NO_CLOSE"
+},
+"NC2-p20-0011": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0017": {
+"label": "PART_CLOSE"
+},
+"NC2-p11-0024": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0024": {
+"label": "PART_CLOSE"
+},
+"NC2-p13-0002": {
+"label": "PART_CLOSE"
+},
+"NC2-p02-0005": {
+"label": "NOT_A_DELEGATION"
+},
+"NC2-p14-0021": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0020": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0006": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0011": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0022": {
+"label": "NO_CLOSE"
+},
+"NC2-p04-0018": {
+"label": "PART_CLOSE"
+},
+"NC2-p10-0006": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0015": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0003": {
+"label": "PART_CLOSE"
+},
+"NC2-p07-0024": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0003": {
+"label": "PART_CLOSE"
+},
+"NC2-p13-0006": {
+"label": "AMBIGUOUS"
+},
+"NC2-p19-0009": {
+"label": "PART_CLOSE"
+},
+"NC2-p02-0027": {
+"label": "PART_CLOSE"
+},
+"NC2-p16-0030": {
+"label": "PART_CLOSE"
+},
+"NC2-p13-0024": {
+"label": "NO_CLOSE"
+},
+"NC2-p01-0016": {
+"label": "NO_CLOSE"
+},
+"NC2-p18-0023": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0005": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0001": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0030": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0028": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0017": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0005": {
+"label": "PART_CLOSE"
+},
+"NC2-p17-0011": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0028": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0027": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0012": {
+"label": "NO_CLOSE"
+},
+"NC2-p11-0014": {
+"label": "PART_CLOSE"
+},
+"NC2-p12-0007": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0022": {
+"label": "PART_CLOSE"
+},
+"NC2-p12-0010": {
+"label": "NOT_A_DELEGATION"
+},
+"NC2-p12-0015": {
+"label": "PART_CLOSE"
+},
+"NC2-p15-0003": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0019": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0024": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0013": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0023": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0029": {
+"label": "PART_CLOSE"
+},
+"NC2-p13-0029": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0025": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0012": {
+"label": "PART_CLOSE"
+},
+"NC2-p12-0003": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0003": {
+"label": "PART_CLOSE"
+},
+"NC2-p08-0011": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0004": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0008": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0020": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0022": {
+"label": "NO_CLOSE"
+},
+"NC2-p18-0006": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0029": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0025": {
+"label": "NOT_A_DELEGATION"
+},
+"NC2-p09-0007": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0007": {
+"label": "NO_CLOSE"
+},
+"NC2-p20-0014": {
+"label": "PART_CLOSE"
+},
+"NC2-p02-0024": {
+"label": "NO_CLOSE"
+},
+"NC2-p20-0018": {
+"label": "NO_CLOSE"
+},
+"NC2-p01-0001": {
+"label": "PART_CLOSE"
+},
+"NC2-p11-0001": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0018": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0001": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0011": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0025": {
+"label": "PART_CLOSE"
+},
+"NC2-p16-0024": {
+"label": "PART_CLOSE"
+},
+"NC2-p02-0026": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0006": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0006": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0014": {
+"label": "NO_CLOSE"
+},
+"NC2-p11-0023": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0030": {
+"label": "PART_CLOSE"
+},
+"NC2-p05-0019": {
+"label": "PART_CLOSE"
+},
+"NC2-p17-0017": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0018": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0010": {
+"label": "NO_CLOSE"
+},
+"NC2-p20-0008": {
+"label": "PART_CLOSE"
+},
+"NC2-p03-0018": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0008": {
+"label": "PART_CLOSE"
+},
+"NC2-p09-0020": {
+"label": "NO_CLOSE"
+},
+"NC2-p01-0006": {
+"label": "NO_CLOSE"
+},
+"NC2-p01-0005": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0001": {
+"label": "PART_CLOSE"
+},
+"NC2-p11-0026": {
+"label": "PART_CLOSE"
+},
+"NC2-p13-0019": {
+"label": "PART_CLOSE"
+},
+"NC2-p16-0001": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0005": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0009": {
+"label": "PART_CLOSE"
+},
+"NC2-p14-0004": {
+"label": "PART_CLOSE"
+},
+"NC2-p14-0023": {
+"label": "PART_CLOSE"
+},
+"NC2-p05-0003": {
+"label": "PART_CLOSE"
+},
+"NC2-p11-0002": {
+"label": "NO_CLOSE"
+},
+"NC2-p01-0023": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0019": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0010": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0019": {
+"label": "PART_CLOSE"
+},
+"NC2-p19-0028": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0003": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0007": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0024": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0026": {
+"label": "NO_CLOSE"
+},
+"NC2-p09-0006": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0015": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0002": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0026": {
+"label": "NO_CLOSE"
+},
+"NC2-p11-0025": {
+"label": "NO_CLOSE"
+},
+"NC2-p13-0010": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0024": {
+"label": "NO_CLOSE"
+},
+"NC2-p04-0011": {
+"label": "NOT_A_DELEGATION"
+},
+"NC2-p04-0019": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0020": {
+"label": "PART_CLOSE"
+},
+"NC2-p09-0022": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0005": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0015": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0026": {
+"label": "PART_CLOSE"
+},
+"NC2-p07-0019": {
+"label": "PART_CLOSE"
+},
+"NC2-p11-0006": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0008": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0014": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0027": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0024": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0027": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0023": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0012": {
+"label": "PART_CLOSE"
+},
+"NC2-p05-0010": {
+"label": "PART_CLOSE"
+},
+"NC2-p09-0009": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0013": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0028": {
+"label": "PART_CLOSE"
+},
+"NC2-p16-0016": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0011": {
+"label": "PART_CLOSE"
+},
+"NC2-p14-0029": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0020": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0030": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0024": {
+"label": "NO_CLOSE"
+},
+"NC2-p08-0002": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0019": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0018": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0030": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0016": {
+"label": "PART_CLOSE"
+},
+"NC2-p08-0012": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0013": {
+"label": "PART_CLOSE"
+},
+"NC2-p05-0026": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0008": {
+"label": "PART_CLOSE"
+},
+"NC2-p08-0010": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0030": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0007": {
+"label": "PART_CLOSE"
+},
+"NC2-p13-0008": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0027": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0012": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0027": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0011": {
+"label": "NO_CLOSE"
+},
+"NC2-p11-0008": {
+"label": "PART_CLOSE"
+},
+"NC2-p05-0029": {
+"label": "NO_CLOSE"
+},
+"NC2-p04-0017": {
+"label": "PART_CLOSE"
+},
+"NC2-p10-0029": {
+"label": "PART_CLOSE"
+},
+"NC2-p05-0027": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0017": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0005": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0014": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0009": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0016": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0021": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0004": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0004": {
+"label": "PART_CLOSE"
+},
+"NC2-p14-0005": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0025": {
+"label": "PART_CLOSE"
+},
+"NC2-p16-0022": {
+"label": "NO_CLOSE"
+},
+"NC2-p16-0015": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0027": {
+"label": "NO_CLOSE"
+},
+"NC2-p11-0007": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0026": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0009": {
+"label": "PART_CLOSE"
+},
+"NC2-p14-0028": {
+"label": "PART_CLOSE"
+},
+"NC2-p08-0025": {
+"label": "NO_CLOSE"
+},
+"NC2-p17-0018": {
+"label": "NO_CLOSE"
+},
+"NC2-p20-0010": {
+"label": "PART_CLOSE"
+},
+"NC2-p09-0021": {
+"label": "NO_CLOSE"
+},
+"NC2-p01-0012": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0013": {
+"label": "NO_CLOSE"
+},
+"NC2-p14-0010": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0018": {
+"label": "NO_CLOSE"
+},
+"NC2-p03-0006": {
+"label": "NO_CLOSE"
+},
+"NC2-p18-0007": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0002": {
+"label": "PART_CLOSE"
+},
+"NC2-p16-0007": {
+"label": "PART_CLOSE"
+},
+"NC2-p20-0019": {
+"label": "PART_CLOSE"
+},
+"NC2-p19-0022": {
+"label": "PART_CLOSE"
+},
+"NC2-p01-0015": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0013": {
+"label": "PART_CLOSE"
+},
+"NC2-p09-0005": {
+"label": "PART_CLOSE"
+},
+"NC2-p18-0016": {
+"label": "NO_CLOSE"
+},
+"NC2-p02-0010": {
+"label": "NO_CLOSE"
+},
+"NC2-p12-0013": {
+"label": "NO_CLOSE"
+},
+"NC2-p15-0012": {
+"label": "NO_CLOSE"
+},
+"NC2-p11-0005": {
+"label": "AMBIGUOUS"
+},
+"NC2-p12-0008": {
+"label": "NO_CLOSE"
+},
+"NC2-p05-0020": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0014": {
+"label": "PART_CLOSE"
+},
+"NC2-p06-0017": {
+"label": "NO_CLOSE"
+},
+"NC2-p01-0002": {
+"label": "NO_CLOSE"
+},
+"NC2-p07-0020": {
+"label": "PART_CLOSE"
+},
+"NC2-p04-0007": {
+"label": "NO_CLOSE"
+},
+"NC2-p04-0012": {
+"label": "NO_CLOSE"
+},
+"NC2-p06-0009": {
+"label": "PART_CLOSE"
+},
+"NC2-p07-0004": {
+"label": "NO_CLOSE"
+},
+"NC2-p10-0008": {
+"label": "NO_CLOSE"
+},
+"NC2-p19-0011": {
+"label": "NO_CLOSE"
+},
+"NC2-p04-0027": {
+"label": "PART_CLOSE"
+},
+"NC2-p12-0029": {
+"label": "PART_CLOSE"
+},
+"NC2-p12-0016": {
+"label": "NO_CLOSE"
+},
+"NC2-p20-0026": {
+"label": "PART_CLOSE"
+}
+}

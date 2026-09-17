@@ -1,0 +1,806 @@
+{
+ "n": 200,
+ "task": "trivalue_blind",
+ "items": [
+  {
+   "pid": "NC2-p01-0029",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p02-0010",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p19-0004",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p18-0006",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p16-0013",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p10-0020",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p01-0028",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p07-0011",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p04-0009",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p09-0030",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p02-0019",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p11-0013",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p18-0029",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p15-0026",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p01-0018",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p19-0029",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p05-0029",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p05-0018",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p04-0005",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p17-0027",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p20-0027",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p19-0017",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p16-0018",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p02-0023",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p15-0004",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p17-0022",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p09-0015",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p04-0027",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p05-0004",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p20-0003",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p03-0015",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p13-0024",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p11-0028",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p09-0014",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p08-0026",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p15-0011",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p02-0002",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p06-0020",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p12-0013",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p08-0012",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p05-0010",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p16-0001",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p18-0012",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p10-0009",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p04-0022",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p17-0021",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p02-0007",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p13-0011",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p19-0014",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p01-0014",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p04-0029",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p15-0021",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p06-0007",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p04-0023",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p09-0013",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p13-0026",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p20-0014",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p09-0001",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p10-0028",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p20-0007",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p19-0015",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p01-0003",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p07-0010",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p01-0019",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p17-0015",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p14-0016",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p11-0009",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p18-0010",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p13-0018",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p09-0010",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p04-0027",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p09-0021",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p06-0015",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p03-0023",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p03-0008",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p08-0021",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p12-0011",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p08-0002",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p08-0016",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p15-0013",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p09-0025",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p12-0019",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p04-0018",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p07-0014",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p10-0018",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p02-0011",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p08-0004",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p07-0024",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p15-0003",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p13-0020",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p08-0020",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p05-0030",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p16-0014",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p18-0013",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p01-0009",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p15-0027",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p20-0024",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p06-0001",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p06-0006",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p04-0017",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p12-0018",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p14-0028",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p11-0006",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p08-0001",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p08-0024",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p06-0016",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p10-0021",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p07-0006",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p13-0008",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p10-0013",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p06-0009",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p09-0006",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p02-0005",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p09-0024",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p01-0021",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p04-0005",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p08-0030",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p17-0011",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p03-0020",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p16-0026",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p07-0030",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p02-0024",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p02-0026",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p16-0030",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p19-0024",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p16-0009",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p02-0015",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p10-0009",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p07-0004",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p19-0022",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p09-0003",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p02-0015",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p06-0011",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p07-0015",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p19-0016",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p16-0017",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p12-0021",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p07-0023",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p02-0003",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p06-0019",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p14-0015",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p09-0023",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p09-0005",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p01-0015",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p03-0013",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p19-0007",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p08-0003",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p01-0011",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p01-0021",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p05-0020",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p05-0003",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p01-0015",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p04-0006",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p13-0027",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p11-0018",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p12-0012",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p03-0008",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p14-0017",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p20-0016",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p15-0018",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p20-0013",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p07-0002",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p20-0022",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p09-0003",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p04-0010",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p03-0030",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p03-0019",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p09-0002",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p12-0030",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p05-0006",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p02-0008",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p06-0022",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p14-0018",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p20-0017",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p13-0021",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p15-0029",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p15-0023",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p06-0011",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p05-0025",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p17-0018",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p16-0021",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p10-0025",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p15-0005",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p07-0024",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p02-0016",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p07-0016",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p10-0030",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p07-0003",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p07-0020",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p07-0030",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p19-0011",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p13-0009",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p18-0030",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p18-0026",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p14-0011",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p18-0011",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p09-0025",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC1-p02-0030",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p06-0030",
+   "task": "trivalue_blind"
+  },
+  {
+   "pid": "NC2-p04-0030",
+   "task": "trivalue_blind"
+  }
+ ]
+}

@@ -1,0 +1,1382 @@
+{
+"L2-n01-0001": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0002": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0003": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0004": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0005": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n01-0006": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0007": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0008": {
+"label": "PART_CLOSE"
+},
+"L2-n01-0009": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0010": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0011": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0012": {
+"label": "PART_CLOSE"
+},
+"L2-n01-0013": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n01-0014": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0015": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0016": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n01-0017": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0018": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0019": {
+"label": "WHOLE_CLOSE"
+},
+"L2-n01-0020": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0021": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n01-0022": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0023": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0024": {
+"label": "PART_CLOSE"
+},
+"L2-n01-0025": {
+"label": "WHOLE_CLOSE"
+},
+"L2-n01-0026": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n01-0027": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0028": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0029": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n01-0030": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n01-0031": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n01-0032": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0033": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0034": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0035": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n01-0036": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0037": {
+"label": "AMBIGUOUS"
+},
+"L2-n01-0038": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0039": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0040": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0041": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0042": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n01-0043": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0044": {
+"label": "NO_CLOSE"
+},
+"L2-n01-0045": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0001": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0002": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0003": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n02-0004": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n02-0005": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n02-0006": {
+"label": "AMBIGUOUS"
+},
+"L2-n02-0007": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0008": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0009": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0010": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0011": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0012": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n02-0013": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0014": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0015": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0016": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n02-0017": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n02-0018": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0019": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n02-0020": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0021": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0022": {
+"label": "PART_CLOSE"
+},
+"L2-n02-0023": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n02-0024": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n02-0025": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0026": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n02-0027": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0028": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0029": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0030": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0031": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n02-0032": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0033": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n02-0034": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0035": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n02-0036": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n02-0037": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n02-0038": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n02-0039": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0040": {
+"label": "AMBIGUOUS"
+},
+"L2-n02-0041": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0042": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0043": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0044": {
+"label": "NO_CLOSE"
+},
+"L2-n02-0045": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0001": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n03-0002": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0003": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0004": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n03-0005": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n03-0006": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n03-0007": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n03-0008": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n03-0009": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0010": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n03-0011": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0012": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0013": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n03-0014": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0015": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0016": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0017": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0018": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0019": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n03-0020": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0021": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0022": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n03-0023": {
+"label": "PART_CLOSE"
+},
+"L2-n03-0024": {
+"label": "PART_CLOSE"
+},
+"L2-n03-0025": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0026": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0027": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0028": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0029": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0030": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0031": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0032": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0033": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0034": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0035": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n03-0036": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0037": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0038": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0039": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0040": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0041": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n03-0042": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n03-0043": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0044": {
+"label": "NO_CLOSE"
+},
+"L2-n03-0045": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0001": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n04-0002": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n04-0003": {
+"label": "PART_CLOSE"
+},
+"L2-n04-0004": {
+"label": "PART_CLOSE"
+},
+"L2-n04-0005": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0006": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0007": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0008": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0009": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n04-0010": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n04-0011": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n04-0012": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0013": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0014": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0015": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n04-0016": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n04-0017": {
+"label": "AMBIGUOUS"
+},
+"L2-n04-0018": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0019": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0020": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n04-0021": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n04-0022": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n04-0023": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0024": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0025": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0026": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0027": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n04-0028": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0029": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0030": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n04-0031": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n04-0032": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0033": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0034": {
+"label": "PART_CLOSE"
+},
+"L2-n04-0035": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0036": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n04-0037": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n04-0038": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n04-0039": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0040": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0041": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n04-0042": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0043": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n04-0044": {
+"label": "NO_CLOSE"
+},
+"L2-n04-0045": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n05-0001": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0002": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0003": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0004": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0005": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0006": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0007": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0008": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0009": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0010": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0011": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n05-0012": {
+"label": "AMBIGUOUS"
+},
+"L2-n05-0013": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n05-0014": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0015": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0016": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0017": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n05-0018": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0019": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0020": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0021": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0022": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0023": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n05-0024": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0025": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0026": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n05-0027": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0028": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n05-0029": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0030": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n05-0031": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n05-0032": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0033": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0034": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n05-0035": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0036": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n05-0037": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0038": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0039": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0040": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0041": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n05-0042": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0043": {
+"label": "NO_CLOSE"
+},
+"L2-n05-0044": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n05-0045": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n06-0001": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0002": {
+"label": "PART_CLOSE"
+},
+"L2-n06-0003": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0004": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0005": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n06-0006": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0007": {
+"label": "PART_CLOSE"
+},
+"L2-n06-0008": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0009": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n06-0010": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0011": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0012": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0013": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n06-0014": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0015": {
+"label": "PART_CLOSE"
+},
+"L2-n06-0016": {
+"label": "AMBIGUOUS"
+},
+"L2-n06-0017": {
+"label": "PART_CLOSE"
+},
+"L2-n06-0018": {
+"label": "PART_CLOSE"
+},
+"L2-n06-0019": {
+"label": "PART_CLOSE"
+},
+"L2-n06-0020": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0021": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0022": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n06-0023": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n06-0024": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n06-0025": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n06-0026": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0027": {
+"label": "PART_CLOSE"
+},
+"L2-n06-0028": {
+"label": "PART_CLOSE"
+},
+"L2-n06-0029": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n06-0030": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0031": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n06-0032": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n06-0033": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0034": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0035": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0036": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0037": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0038": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0039": {
+"label": "AMBIGUOUS"
+},
+"L2-n06-0040": {
+"label": "PART_CLOSE"
+},
+"L2-n06-0041": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0042": {
+"label": "PART_CLOSE"
+},
+"L2-n06-0043": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n06-0044": {
+"label": "NO_CLOSE"
+},
+"L2-n06-0045": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0001": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0002": {
+"label": "PART_CLOSE"
+},
+"L2-n07-0003": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0004": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0005": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0006": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0007": {
+"label": "AMBIGUOUS"
+},
+"L2-n07-0008": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0009": {
+"label": "PART_CLOSE"
+},
+"L2-n07-0010": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0011": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n07-0012": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0013": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0014": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n07-0015": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0016": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n07-0017": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0018": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0019": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0020": {
+"label": "PART_CLOSE"
+},
+"L2-n07-0021": {
+"label": "PART_CLOSE"
+},
+"L2-n07-0022": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0023": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n07-0024": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0025": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0026": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n07-0027": {
+"label": "PART_CLOSE"
+},
+"L2-n07-0028": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n07-0029": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0030": {
+"label": "PART_CLOSE"
+},
+"L2-n07-0031": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0032": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n07-0033": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0034": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0035": {
+"label": "AMBIGUOUS"
+},
+"L2-n07-0036": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0037": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0038": {
+"label": "AMBIGUOUS"
+},
+"L2-n07-0039": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n07-0040": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0041": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n07-0042": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0043": {
+"label": "NO_CLOSE"
+},
+"L2-n07-0044": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n07-0045": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0001": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0002": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0003": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n08-0004": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0005": {
+"label": "AMBIGUOUS"
+},
+"L2-n08-0006": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0007": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0008": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n08-0009": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0010": {
+"label": "PART_CLOSE"
+},
+"L2-n08-0011": {
+"label": "PART_CLOSE"
+},
+"L2-n08-0012": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n08-0013": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0014": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0015": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0016": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0017": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0018": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0019": {
+"label": "PART_CLOSE"
+},
+"L2-n08-0020": {
+"label": "PART_CLOSE"
+},
+"L2-n08-0021": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n08-0022": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n08-0023": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n08-0024": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n08-0025": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0026": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0027": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n08-0028": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0029": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n08-0030": {
+"label": "AMBIGUOUS"
+},
+"L2-n08-0031": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0032": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0033": {
+"label": "PART_CLOSE"
+},
+"L2-n08-0034": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n08-0035": {
+"label": "PART_CLOSE"
+},
+"L2-n08-0036": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n08-0037": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0038": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n08-0039": {
+"label": "PART_CLOSE"
+},
+"L2-n08-0040": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0041": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0042": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0043": {
+"label": "PART_CLOSE"
+},
+"L2-n08-0044": {
+"label": "NO_CLOSE"
+},
+"L2-n08-0045": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0001": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0002": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n09-0003": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0004": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n09-0005": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n09-0006": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0007": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n09-0008": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0009": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n09-0010": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n09-0011": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0012": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0013": {
+"label": "AMBIGUOUS"
+},
+"L2-n09-0014": {
+"label": "AMBIGUOUS"
+},
+"L2-n09-0015": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n09-0016": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n09-0017": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0018": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0019": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0020": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0021": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0022": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0023": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0024": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0025": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n09-0026": {
+"label": "PART_CLOSE"
+},
+"L2-n09-0027": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n09-0028": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0029": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0030": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0031": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0032": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0033": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0034": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n09-0035": {
+"label": "AMBIGUOUS"
+},
+"L2-n09-0036": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0037": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0038": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0039": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n09-0040": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0041": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n09-0042": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n09-0043": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0044": {
+"label": "NO_CLOSE"
+},
+"L2-n09-0045": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0001": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0002": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0003": {
+"label": "PART_CLOSE"
+},
+"L2-n10-0004": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0005": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0006": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n10-0007": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n10-0008": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n10-0009": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0010": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0011": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0012": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n10-0013": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0014": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n10-0015": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0016": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0017": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n10-0018": {
+"label": "PART_CLOSE"
+},
+"L2-n10-0019": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0020": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n10-0021": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0022": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n10-0023": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0024": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0025": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n10-0026": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n10-0027": {
+"label": "PART_CLOSE"
+},
+"L2-n10-0028": {
+"label": "PART_CLOSE"
+},
+"L2-n10-0029": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0030": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n10-0031": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0032": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0033": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n10-0034": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n10-0035": {
+"label": "PART_CLOSE"
+},
+"L2-n10-0036": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0037": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0038": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0039": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0040": {
+"label": "NOT_A_DELEGATION"
+},
+"L2-n10-0041": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0042": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0043": {
+"label": "NO_CLOSE"
+},
+"L2-n10-0044": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n10-0045": {
+"label": "PART_CLOSE"
+},
+"L2-n11-0001": {
+"label": "NO_CLOSE"
+},
+"L2-n11-0002": {
+"label": "NO_CLOSE"
+},
+"L2-n11-0003": {
+"label": "NO_CLOSE"
+},
+"L2-n11-0004": {
+"label": "PART_CLOSE"
+},
+"L2-n11-0005": {
+"label": "NO_CLOSE"
+},
+"L2-n11-0006": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n11-0007": {
+"label": "EVIDENCED_NEG"
+},
+"L2-n11-0008": {
+"label": "NO_CLOSE"
+},
+"L2-n11-0009": {
+"label": "NO_CLOSE"
+},
+"L2-n11-0010": {
+"label": "PART_CLOSE"
+}
+}
