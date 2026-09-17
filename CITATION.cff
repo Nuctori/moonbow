@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: >-
+  If you use this work, please cite the methodology and the label-only gold
+  standard. A full BibTeX entry is provided in CITATION.bib.
+title: >-
+  Can a Model Judge Whether a Task Is Done? A Negative-Result Study on
+  Obligation-Closure Judgment
+abstract: >-
+  We attempted to build a classifier that judges whether a user obligation is
+  closed by an agent's utterance. Five modeling families were tested and
+  excluded with causal experiments; at adequate statistical power the
+  obligation-aware model is indistinguishable from a zero-semantic baseline,
+  and a same-ruler comparison shows a 287M fine-tuned model and a large
+  general LLM perform within 2.5pp. We argue the failure is a task-definition
+  problem, not a modeling one.
+keywords:
+  - agent observability
+  - obligation closure
+  - negative result
+  - evaluation methodology
+  - gliner
+license: Apache-2.0
+authors:
+  - family-names: "The Authors"
+    note: "To be filled on workshop submission"
+repository-code: "https://github.com/placeholder/obligation-closure-study"

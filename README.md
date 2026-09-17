@@ -122,8 +122,32 @@ expect a local model path.
 
 ## Citation
 
-If you use this work, please cite the methodology and the label-only gold. (Citation
-BibTeX will be added upon workshop submission.)
+If you use this work, please cite the methodology and the label-only gold:
+
+```bibtex
+@misc{obligation-closure-study-2026,
+  title  = {Can a Model Judge Whether a Task Is Done? A Negative-Result
+            Study on Obligation-Closure Judgment},
+  author = {The Authors}, year = {2026},
+  howpublished = {GitHub repository}
+}
+```
+
+Structured metadata is in `CITATION.cff`; the same entry plus the GLiNER2
+reference is in `CITATION.bib`.
+
+**References still to verify before submission:**
+- **GLiNER2 / gliner2** — the span-extraction library used for v12.1; the BibTeX
+  above is a placeholder author/year and must be confirmed against the actual release.
+- **DeLong paired-AUROC** — cite the original DeLong (1988, Biometrika) method paper,
+  not a software package.
+- The model backbone is a **mDeBERTa** fine-tune; cite the DeBERTa paper if the
+  architecture is discussed.
+- The general LLM comparison used a Qwen2.5-Instruct family model; cite the Qwen2.5
+  technical report if that comparison is included in the final paper.
+
+All other named works in the project logs (FEVER, various author-year mentions) are
+**not** cited here because they were not used as building blocks of this study.
 
 ## License
 
