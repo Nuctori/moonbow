@@ -1,0 +1,3 @@
+#!/bin/sh
+# 写死门禁（§271）——阻断 G1（tokens 字段滥用），警告 G2-G5
+python ../pipeline/gate.py --staged || exit 1
