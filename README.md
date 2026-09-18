@@ -5,28 +5,43 @@
 ## TL;DR
 
 We tried to build a classifier that judges whether a user obligation is *closed* by an
-agent's utterance. It failed — but **the final, corrected conclusion is architectural,
-not a verdict on model capability**:
+agent's utterance. After four pre-registered rounds that failed for real reasons, we found
+the architecture that **works**:
 
-> **A model cannot be the judge, but it can be the semantic extractor.** The architecture
-> that works is: a **program** deterministically builds a global evidence graph; the
-> **LLM only does semantic capture** (writes intent nodes); the **gap** is computed by the
-> program as a graph difference. The verdict is made by an explicit convention, never by
-> the model.
+> **A model cannot be the judge, but it can be the semantic extractor.**
+> A **program** deterministically builds the evidence graph; the **LLM only does semantic
+> capture** — for each intent node it answers "is this covered by evidence?" with a verbatim
+> quote. The **gap** (intent − evidence) is then computed by the program. The verdict is
+> never made by the model.
 
-Four pre-registered rounds were run. Three failed at their gates for real reasons
-(convention dependence, structural recursion, coverage/reliability trade-off). The
-fourth round's failure was **retracted**: its 0.272 agreement score turned out to be a
-*measurement* failure, not a capability failure — after fixing input filtering,
-truncation, and the boundary-sensitive metric, the same task scores **span-F1 0.947–0.961**
-and **85%** on selecting user requests from noisy context.
+**End-to-end result** (82 units / 121 intent nodes, filtered inputs):
 
-**Two engineering conditions make the architecture work:**
+| Metric | Value |
+|---|---|
+| Accuracy | **0.878** |
+| Precision / Recall (unclosed) | **0.833 / 0.833** |
+| Majority-class baseline | 0.634 (**+24.4pp**) |
+| Evidence quotes verbatim-verifiable | **70/70 = 100%** |
+| Permutation test | p = **0.00005** |
+
+The same task, attempted the wrong ways, gives no gain:
+
+| Method | Accuracy | Baseline |
+|---|---|---|
+| Mechanical hard-evidence token | 50.7% reliability | 50% |
+| Mechanical gap (keyword co-occurrence) | 0.321 | 0.671 |
+| LLM end-to-end (1.5B) | 0.400 | 0.550 |
+| **Per-intent binding (strong model)** | **0.878** | **0.634** |
+
+**Three engineering conditions are load-bearing:**
 1. **Granularity must be in the contract** — the program does the mechanical splitting;
-   the LLM only classifies. (Two fully-deterministic splitting rules disagree with each
-   other at Jaccard 0.338 — granularity is a contract problem, not a capability problem.)
-2. **Inputs must be filtered and never truncated** — otherwise injected blocks pollute
-   the graph.
+   the LLM only classifies. (Two fully-deterministic splitting rules disagree at
+   Jaccard 0.338 — granularity is a contract problem, not a capability problem.)
+2. **Inputs must be filtered and never truncated** — 48% of raw "obligations" were injected
+   blocks and 48.7% were truncated; leaving them in destroys the measurement.
+3. **Judge per intent, not per session** — asking "is this whole session done?" is the
+   convention-dependent task that fails; asking "is this intent covered by evidence?" is
+   narrow and decidable.
 
 This repository ships the methodology, the pre-registered designs, the label-only gold
 standards, and the evaluation harness — but **no real session text**, to protect the
