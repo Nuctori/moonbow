@@ -1,0 +1,7 @@
+{
+ "train_pid": 900,
+ "eval_pid": 200,
+ "pid_overlap": 0,
+ "text_overlap": 0,
+ "text_overlap_rate": 0.0
+}

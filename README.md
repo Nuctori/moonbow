@@ -1,8 +1,20 @@
-# Can a Model Judge Whether a Task Is Done? A Negative-Result Study on Obligation-Closure Judgment
+# Can a Model Judge Whether a Task Is Done? An Exclusion-Chain Study on Obligation-Closure Judgment
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 ## TL;DR
+
+> **Update (measurement audit).** A post-hoc audit found that **three of the four**
+> recorded failure verdicts were artifacts of the evaluation metric, not model failures.
+> One grade (`WEAK`) also has no cross-batch evidence, and the reverse-rate gate used
+> earlier was satisfiable by a constant predictor. See
+> [`results/MEASUREMENT_AUDIT.md`](results/MEASUREMENT_AUDIT.md) for the full write-up and
+> [`protocol/MULTI_METRIC_ACCEPTANCE.md`](protocol/MULTI_METRIC_ACCEPTANCE.md) for the
+> corrected metric family. Headline: a 287M fine-tune reaches **exact 0.780 vs 0.572
+> chance** (Spearman **+0.658**) on a held-out 209-item set with zero train/eval overlap.
+> Read the negative results below together with that correction.
+
+
 
 We tried to build a classifier that judges whether a user obligation is *closed* by an
 agent's utterance. After four pre-registered rounds that failed for real reasons, we found
