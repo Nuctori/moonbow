@@ -4,17 +4,33 @@
 
 ## TL;DR
 
-We spent an extended effort trying to build a classifier that, given a user obligation
-and an agent's utterance, judges whether the obligation is *closed* (done). We failed
-to beat a trivial baseline — and we argue this is not a modeling failure but a
-**task-definition problem**: under a sentence-level tri-value definition, the task is
-not reliably labelable even by large general-purpose language models (≈70% agreement
-between independent model instances), so no classifier can exceed that ceiling.
+We tried to build a classifier that judges whether a user obligation is *closed* by an
+agent's utterance. It failed — and we can now state precisely **why**, after four
+pre-registered research rounds:
 
-This repository contains the **methodology, reproducible evaluation harness, and
-label-only gold standards** — but **no real session text**, to protect the privacy of
-the original work. All results are reproducible from the provided scripts + your own
-session data.
+> **Whenever we asked a model to make a semantic judgment (is this "done"? is this a
+> follow-up? what are the intent nodes?), inter-judge agreement collapsed to 0.27–0.73
+> and could not be improved by changing method.** Convention-dependence is an
+> irreducible property of this task; it reappears at every layer.
+
+**Four rounds, all failing at their pre-registered gate:**
+
+| Round | Direction | Failure |
+|---|---|---|
+| 1 | Semantic ("define done") | Convention-dependent: positive rate 6% / 36.5% / 73.5% across three conventions; all-three agreement 16.5% |
+| 2 | Structural ("formalize the solving process") | Recursion in "is this a follow-up?", silence unjudgeable |
+| 3 | Signal capture + abstention (UNKNOWN) | Coverage and reliability not simultaneously achievable (hard-evidence token: coverage 98.7%, reliability 50.7% = chance) |
+| 4 | Intent graph (program builds the graph, LLM only does semantic capture) | **Intent-node extraction agreement 0.272** (threshold 0.70); median Jaccard 0.000; two instances produced 91 vs 223 nodes |
+
+**Conclusion: there is no convention-independent judge for obligation closure** — not via
+semantics, structure, signals, or intent graphs. A model's semantic judgment cannot serve
+as a reliable component here. What *does* work is a **deterministic evidence tracker**
+(describes evidence, makes no verdict) plus an **explicit convention** (the verdict is
+made by the convention, not the model).
+
+This repository ships the methodology, the pre-registered designs, the label-only gold
+standards, and the evaluation harness — but **no real session text**, to protect the
+privacy of the original work.
 
 ## What we did (the exclusion chain)
 
@@ -43,6 +59,55 @@ test at adequate statistical power (n_pos = 361 ≥ 280):
   (DeLong p = 0.82) and **not significantly better** than v12.1 (p = 0.073, boundary).
 - v12.1 beats hand-crafted features (+0.17) but the gap to the zero-semantic baseline
   is small (+0.077).
+
+## Four pre-registered rounds (the failure chain)
+
+Each round was frozen before data collection, with numeric gates.
+
+### Round 1 — Convention dependence (§218)
+Same 200 items, same model, **only the prompt's definition of "done" changed**:
+
+| Convention | Positive rate |
+|---|---|
+| Strict (requires verifiable evidence) | **6.0%** |
+| Loose ("expresses completion") | **36.5%** |
+| User perspective ("would the user be satisfied") | **73.5%** |
+
+All-three agreement: **16.5%**. A 12.3× swing from the definition alone.
+
+### Round 2 — Structural formalization (§219)
+Reframed as "the process terminates with no unanswered requests". Fails: identifying
+whether a user turn is a follow-up vs. a clarification vs. a new topic recurses back to
+semantic judgment; silence is unjudgeable; and the reverse hypothesis holds — behavioral
+signals may themselves be driven by unobserved satisfaction.
+
+### Round 3 — Signal capture + abstention (§220)
+Idea: only judge where a signal is reliable, else abstain (UNKNOWN).
+
+| Signal | Coverage | Reliability in judged subset |
+|---|---|---|
+| Hard-evidence token (commit hash / 106/106) | 98.7% | **50.7%** (= chance) |
+| Rule combination | 70% | 52.4% |
+
+Coverage and reliability are not simultaneously achievable.
+
+### Round 4 — Intent graph (§221–§223)
+Architecture: a **program** deterministically builds a global evidence graph; the **LLM**
+only does semantic capture (writes intent nodes); the **gap** = intent − evidence is a
+deterministic graph difference. This evades the earlier rounds (the LLM makes no verdict).
+
+Pre-registered gate **J1**: two independent instances extract intent nodes from the same
+120 obligations under the same granularity convention.
+
+| Metric | Value |
+|---|---|
+| Identical node sets | **23.3%** |
+| **Jaccard (mean)** | **0.272** |
+| Jaccard (median) | **0.000** |
+| Node-count drift | 91 vs 223 (2.4×) |
+| Gate (≥0.70) | **FAIL** |
+
+The first step — semantic capture — is unreliable, so the graph is built from noise.
 
 ## The decisive finding: it is a task problem, not a model problem
 
