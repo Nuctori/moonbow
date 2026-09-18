@@ -62,7 +62,9 @@ To regenerate: place your own gold (`{"<pid>": {"label": ...}}`) and item file
 | `NEGATIVE_CONCLUSION_AUDIT.md` | Five adversarial hypotheses against the "no model needed" conclusion |
 | `audit_negative.json` | Raw output: program rule 0.589 on train vs 0.839 on eval; stratum breakdown |
 
-**Result: the negative conclusion is RETRACTED.** The program arm is contaminated — the
+**Result: the negative conclusion is RETRACTED, and the clean redo reverses it.**
+The program rule was re-calibrated on the training set (see `FINAL_COMPARISON.md`): the
+model then leads in **3 of 4** label sets. Original: The program arm is contaminated — the
 token table is derived from the evaluation set's own annotation criterion, so the program
 is scored on the set it was calibrated on (gap 0.250). Neither "model adds nothing" nor
 "program is better" is available. What survives is what never involved the program: the
@@ -71,3 +73,17 @@ swap −28.7pp).
 
 **Methodological point:** the audit was asymmetric. We audited the positive claims
 repeatedly and the project-terminating negative claim not at all. That is backwards.
+
+## Clean comparison and final criterion
+
+| File | Content |
+|------|---------|
+| `FINAL_COMPARISON.md` | Contamination removed; model leads 3/4 sets (2 significant) |
+| `final3arm_result.json` | Three-arm clean comparison with McNemar tests |
+| `indep_prog_result.json` | Feature statistics and rule learned on the training set |
+| `protocol/COVERAGE_CRITERION_v7.md` | Formal revision: layer responsibilities + two-valued model layer |
+
+**Final position:** the model beats chance (exact +0.17..+0.32, Spearman +0.52..+0.65) and
+beats an independently calibrated program rule in 3 of 4 sets. The `NONE` boundary is
+unreliable for **both** arms (model recall 0; program mispredicts 0.404 of MEDIUM as NONE)
+and is excluded from acceptance pending a dedicated annotation experiment.
