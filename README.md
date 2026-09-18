@@ -5,28 +5,28 @@
 ## TL;DR
 
 We tried to build a classifier that judges whether a user obligation is *closed* by an
-agent's utterance. It failed — and we can now state precisely **why**, after four
-pre-registered research rounds:
+agent's utterance. It failed — but **the final, corrected conclusion is architectural,
+not a verdict on model capability**:
 
-> **Whenever we asked a model to make a semantic judgment (is this "done"? is this a
-> follow-up? what are the intent nodes?), inter-judge agreement collapsed to 0.27–0.73
-> and could not be improved by changing method.** Convention-dependence is an
-> irreducible property of this task; it reappears at every layer.
+> **A model cannot be the judge, but it can be the semantic extractor.** The architecture
+> that works is: a **program** deterministically builds a global evidence graph; the
+> **LLM only does semantic capture** (writes intent nodes); the **gap** is computed by the
+> program as a graph difference. The verdict is made by an explicit convention, never by
+> the model.
 
-**Four rounds, all failing at their pre-registered gate:**
+Four pre-registered rounds were run. Three failed at their gates for real reasons
+(convention dependence, structural recursion, coverage/reliability trade-off). The
+fourth round's failure was **retracted**: its 0.272 agreement score turned out to be a
+*measurement* failure, not a capability failure — after fixing input filtering,
+truncation, and the boundary-sensitive metric, the same task scores **span-F1 0.947–0.961**
+and **85%** on selecting user requests from noisy context.
 
-| Round | Direction | Failure |
-|---|---|---|
-| 1 | Semantic ("define done") | Convention-dependent: positive rate 6% / 36.5% / 73.5% across three conventions; all-three agreement 16.5% |
-| 2 | Structural ("formalize the solving process") | Recursion in "is this a follow-up?", silence unjudgeable |
-| 3 | Signal capture + abstention (UNKNOWN) | Coverage and reliability not simultaneously achievable (hard-evidence token: coverage 98.7%, reliability 50.7% = chance) |
-| 4 | Intent graph (program builds the graph, LLM only does semantic capture) | **Intent-node extraction agreement 0.272** (threshold 0.70); median Jaccard 0.000; two instances produced 91 vs 223 nodes |
-
-**Conclusion: there is no convention-independent judge for obligation closure** — not via
-semantics, structure, signals, or intent graphs. A model's semantic judgment cannot serve
-as a reliable component here. What *does* work is a **deterministic evidence tracker**
-(describes evidence, makes no verdict) plus an **explicit convention** (the verdict is
-made by the convention, not the model).
+**Two engineering conditions make the architecture work:**
+1. **Granularity must be in the contract** — the program does the mechanical splitting;
+   the LLM only classifies. (Two fully-deterministic splitting rules disagree with each
+   other at Jaccard 0.338 — granularity is a contract problem, not a capability problem.)
+2. **Inputs must be filtered and never truncated** — otherwise injected blocks pollute
+   the graph.
 
 This repository ships the methodology, the pre-registered designs, the label-only gold
 standards, and the evaluation harness — but **no real session text**, to protect the
@@ -91,25 +91,55 @@ Idea: only judge where a signal is reliable, else abstain (UNKNOWN).
 
 Coverage and reliability are not simultaneously achievable.
 
-### Round 4 — Intent graph (§221–§223)
+### Round 4 — Intent graph (§221, §223–§225)
+
 Architecture: a **program** deterministically builds a global evidence graph; the **LLM**
 only does semantic capture (writes intent nodes); the **gap** = intent − evidence is a
 deterministic graph difference. This evades the earlier rounds (the LLM makes no verdict).
 
-Pre-registered gate **J1**: two independent instances extract intent nodes from the same
-120 obligations under the same granularity convention.
+First measurement (two instances, same granularity convention) gave **Jaccard 0.272**,
+which we first reported as "semantic capture is unreliable". **That conclusion was
+retracted.** The 0.272 was a *triple measurement failure*:
 
-| Metric | Value |
+| Defect | Measured |
 |---|---|
-| Identical node sets | **23.3%** |
-| **Jaccard (mean)** | **0.272** |
-| Jaccard (median) | **0.000** |
-| Node-count drift | 91 vs 223 (2.4×) |
-| Gate (≥0.70) | **FAIL** |
+| **48% of inputs were not user obligations** (injected blocks) | 72/150 |
+| **48.7% truncated** at 300 chars (extractors got half-sentences) | 73/150 |
+| Exact-string Jaccard is **boundary-intolerant** | 0.272 exact vs **0.470 span** |
 
-The first step — semantic capture — is unreliable, so the graph is built from noise.
+Pass A returned *empty* on 99% of injected blocks — i.e. **it behaved correctly and the
+metric punished it**. Pass B never rejected and produced 101 junk nodes from garbage.
+Divergence decomposition: **50% one-side-empty, 21.7% granularity, only 5% genuine
+content divergence**.
 
-## The decisive finding: it is a task problem, not a model problem
+**Corrected capability measurements** (with an explicit reference, no boundary sensitivity):
+
+| Task | Score |
+|---|---|
+| Span extraction vs. reference (span-F1) | **0.947 / 0.961** |
+| Boundary-free extraction agreement | **0.932** |
+| Node text verbatim from source | **100%** |
+| Two *fully deterministic* splitting rules vs. each other | Jaccard **0.338** |
+
+| Capability ladder (local Qwen2.5-1.5B, filtered inputs) | Score |
+|---|---|
+| L2 — select the user request from noisy context | **85%** (17/20) |
+| L1 — mechanical splitting | correct (the initial 0-score was a metric bug) |
+| L3 — implicit sub-task recognition | content correct (output hygiene needed) |
+
+**Verdict: the architecture holds.** LLMs *can* do the semantic capture step; the
+earlier "models can't" readings were, in most cases, measurement errors.
+
+### A note on our own errors (kept deliberately)
+
+We made the **same class of mistake three times**: using a loosely specified metric to
+reject a capability that was actually fine (a reversed conditional, a boundary-sensitive
+set metric, a metric intolerant of the model echoing separators). This is the same
+pattern as the convention-dependence finding — mistaking *our measurement convention*
+for a property of the object. We keep it in the record because it is the most transferable
+lesson in this study.
+
+## The decisive finding: convention dependence (§218)
 
 We asked a large general-purpose LLM (zero-shot, no fine-tuning) to perform the *same
 annotation task* on a 200-item blind set, using the identical protocol given to human
