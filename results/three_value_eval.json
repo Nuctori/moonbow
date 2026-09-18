@@ -1,0 +1,381 @@
+{
+ "model": "models/gliner25_strength3_v1/final",
+ "sets": {
+  "v5b_A": {
+   "n": 203,
+   "excluded": 6,
+   "dist_gold": {
+    "MEDIUM": 147,
+    "STRONG": 56
+   },
+   "metrics": {
+    "exact": 0.7684729064039408,
+    "adjacent": 0.2315270935960591,
+    "within1": 1.0,
+    "reverse": 0.0,
+    "per_class_recall": {
+     "STRONG": 0.8214285714285714,
+     "MEDIUM": 0.7482993197278912
+    }
+   },
+   "spearman": 0.5179531666897275,
+   "baseline": {
+    "exact": 0.6001231527093661,
+    "adjacent": 0.3998768472906333,
+    "within1": 0.9999999999999453,
+    "reverse": 0.0
+   },
+   "arms": {
+    "287M 三值模型": {
+     "exact": 0.7684729064039408,
+     "adjacent": 0.2315270935960591,
+     "within1": 1.0,
+     "reverse": 0.0,
+     "per_class_recall": {
+      "STRONG": 0.8214285714285714,
+      "MEDIUM": 0.7482993197278912
+     }
+    },
+    "trivial(MEDIUM)": {
+     "exact": 0.7241379310344828,
+     "adjacent": 0.27586206896551724,
+     "within1": 1.0,
+     "reverse": 0.0,
+     "per_class_recall": {
+      "STRONG": 0.0,
+      "MEDIUM": 1.0
+     }
+    },
+    "随机打乱": {
+     "exact": 0.5566502463054187,
+     "adjacent": 0.4433497536945813,
+     "within1": 1.0,
+     "reverse": 0.0,
+     "per_class_recall": {
+      "STRONG": 0.19642857142857142,
+      "MEDIUM": 0.6938775510204082
+     }
+    }
+   },
+   "gate_v2": {
+    "g1": false,
+    "g2": true,
+    "g3": true,
+    "g2_value": 0.0,
+    "g3_value": 0.0,
+    "tri_hard": 0.0,
+    "per_class": {
+     "STRONG": {
+      "n": 56,
+      "rev_k": 0,
+      "rev": 0.0
+     },
+     "MEDIUM": {
+      "n": 147,
+      "rev_k": 0,
+      "rev": 0.0
+     }
+    }
+   },
+   "confusion": {
+    "STRONG": {
+     "STRONG": 46,
+     "MEDIUM": 10
+    },
+    "MEDIUM": {
+     "MEDIUM": 110,
+     "STRONG": 37
+    },
+    "NONE": {}
+   }
+  },
+  "v5b_B": {
+   "n": 199,
+   "excluded": 10,
+   "dist_gold": {
+    "MEDIUM": 113,
+    "STRONG": 83,
+    "NONE": 3
+   },
+   "metrics": {
+    "exact": 0.8140703517587939,
+    "adjacent": 0.18592964824120603,
+    "within1": 1.0,
+    "reverse": 0.0,
+    "per_class_recall": {
+     "STRONG": 0.7831325301204819,
+     "MEDIUM": 0.8584070796460177,
+     "NONE": 0.0
+    }
+   },
+   "spearman": 0.645968145744817,
+   "baseline": {
+    "exact": 0.49754271356783697,
+    "adjacent": 0.48999497487436994,
+    "within1": 0.9875376884422038,
+    "reverse": 0.01246231155778893
+   },
+   "arms": {
+    "287M 三值模型": {
+     "exact": 0.8140703517587939,
+     "adjacent": 0.18592964824120603,
+     "within1": 1.0,
+     "reverse": 0.0,
+     "per_class_recall": {
+      "STRONG": 0.7831325301204819,
+      "MEDIUM": 0.8584070796460177,
+      "NONE": 0.0
+     }
+    },
+    "trivial(MEDIUM)": {
+     "exact": 0.5678391959798995,
+     "adjacent": 0.4321608040201005,
+     "within1": 1.0,
+     "reverse": 0.0,
+     "per_class_recall": {
+      "STRONG": 0.0,
+      "MEDIUM": 1.0,
+      "NONE": 0.0
+     }
+    },
+    "随机打乱": {
+     "exact": 0.49246231155778897,
+     "adjacent": 0.49246231155778897,
+     "within1": 0.9849246231155779,
+     "reverse": 0.01507537688442211,
+     "per_class_recall": {
+      "STRONG": 0.40963855421686746,
+      "MEDIUM": 0.5663716814159292,
+      "NONE": 0.0
+     }
+    }
+   },
+   "gate_v2": {
+    "g1": false,
+    "g2": true,
+    "g3": true,
+    "g2_value": 0.0,
+    "g3_value": 0.0,
+    "tri_hard": 0.0,
+    "per_class": {
+     "STRONG": {
+      "n": 83,
+      "rev_k": 0,
+      "rev": 0.0
+     },
+     "MEDIUM": {
+      "n": 113,
+      "rev_k": 0,
+      "rev": 0.0
+     },
+     "NONE": {
+      "n": 3,
+      "rev_k": 0,
+      "rev": 0.0
+     }
+    }
+   },
+   "confusion": {
+    "STRONG": {
+     "STRONG": 65,
+     "MEDIUM": 18
+    },
+    "MEDIUM": {
+     "MEDIUM": 97,
+     "STRONG": 16
+    },
+    "NONE": {
+     "MEDIUM": 3
+    }
+   }
+  },
+  "v5c_A": {
+   "n": 196,
+   "excluded": 13,
+   "dist_gold": {
+    "MEDIUM": 139,
+    "STRONG": 57
+   },
+   "metrics": {
+    "exact": 0.8163265306122449,
+    "adjacent": 0.1836734693877551,
+    "within1": 1.0,
+    "reverse": 0.0,
+    "per_class_recall": {
+     "STRONG": 0.8947368421052632,
+     "MEDIUM": 0.7841726618705036
+    }
+   },
+   "spearman": 0.6261311157541006,
+   "baseline": {
+    "exact": 0.5884795918367349,
+    "adjacent": 0.41152040816326924,
+    "within1": 0.9999999999999453,
+    "reverse": 0.0
+   },
+   "arms": {
+    "287M 三值模型": {
+     "exact": 0.8163265306122449,
+     "adjacent": 0.1836734693877551,
+     "within1": 1.0,
+     "reverse": 0.0,
+     "per_class_recall": {
+      "STRONG": 0.8947368421052632,
+      "MEDIUM": 0.7841726618705036
+     }
+    },
+    "trivial(MEDIUM)": {
+     "exact": 0.7091836734693877,
+     "adjacent": 0.29081632653061223,
+     "within1": 1.0,
+     "reverse": 0.0,
+     "per_class_recall": {
+      "STRONG": 0.0,
+      "MEDIUM": 1.0
+     }
+    },
+    "随机打乱": {
+     "exact": 0.6020408163265306,
+     "adjacent": 0.3979591836734694,
+     "within1": 1.0,
+     "reverse": 0.0,
+     "per_class_recall": {
+      "STRONG": 0.3157894736842105,
+      "MEDIUM": 0.7194244604316546
+     }
+    }
+   },
+   "gate_v2": {
+    "g1": false,
+    "g2": true,
+    "g3": true,
+    "g2_value": 0.0,
+    "g3_value": 0.0,
+    "tri_hard": 0.0,
+    "per_class": {
+     "STRONG": {
+      "n": 57,
+      "rev_k": 0,
+      "rev": 0.0
+     },
+     "MEDIUM": {
+      "n": 139,
+      "rev_k": 0,
+      "rev": 0.0
+     }
+    }
+   },
+   "confusion": {
+    "STRONG": {
+     "STRONG": 51,
+     "MEDIUM": 6
+    },
+    "MEDIUM": {
+     "MEDIUM": 109,
+     "STRONG": 30
+    },
+    "NONE": {}
+   }
+  },
+  "v5c_B": {
+   "n": 205,
+   "excluded": 4,
+   "dist_gold": {
+    "NONE": 21,
+    "MEDIUM": 118,
+    "STRONG": 66
+   },
+   "metrics": {
+    "exact": 0.7170731707317073,
+    "adjacent": 0.28292682926829266,
+    "within1": 1.0,
+    "reverse": 0.0,
+    "per_class_recall": {
+     "STRONG": 0.8484848484848485,
+     "MEDIUM": 0.7711864406779662,
+     "NONE": 0.0
+    }
+   },
+   "spearman": 0.6265868740979138,
+   "baseline": {
+    "exact": 0.44552439024390184,
+    "adjacent": 0.48864390243902506,
+    "within1": 0.9341682926829181,
+    "reverse": 0.0658317073170732
+   },
+   "arms": {
+    "287M 三值模型": {
+     "exact": 0.7170731707317073,
+     "adjacent": 0.28292682926829266,
+     "within1": 1.0,
+     "reverse": 0.0,
+     "per_class_recall": {
+      "STRONG": 0.8484848484848485,
+      "MEDIUM": 0.7711864406779662,
+      "NONE": 0.0
+     }
+    },
+    "trivial(MEDIUM)": {
+     "exact": 0.5756097560975609,
+     "adjacent": 0.424390243902439,
+     "within1": 1.0,
+     "reverse": 0.0,
+     "per_class_recall": {
+      "STRONG": 0.0,
+      "MEDIUM": 1.0,
+      "NONE": 0.0
+     }
+    },
+    "随机打乱": {
+     "exact": 0.4292682926829268,
+     "adjacent": 0.5073170731707317,
+     "within1": 0.9365853658536585,
+     "reverse": 0.06341463414634146,
+     "per_class_recall": {
+      "STRONG": 0.30303030303030304,
+      "MEDIUM": 0.559322033898305,
+      "NONE": 0.09523809523809523
+     }
+    }
+   },
+   "gate_v2": {
+    "g1": false,
+    "g2": true,
+    "g3": true,
+    "g2_value": 0.0,
+    "g3_value": 0.0,
+    "tri_hard": 0.0,
+    "per_class": {
+     "STRONG": {
+      "n": 66,
+      "rev_k": 0,
+      "rev": 0.0
+     },
+     "MEDIUM": {
+      "n": 118,
+      "rev_k": 0,
+      "rev": 0.0
+     },
+     "NONE": {
+      "n": 21,
+      "rev_k": 0,
+      "rev": 0.0
+     }
+    }
+   },
+   "confusion": {
+    "STRONG": {
+     "STRONG": 56,
+     "MEDIUM": 10
+    },
+    "MEDIUM": {
+     "MEDIUM": 91,
+     "STRONG": 27
+    },
+    "NONE": {
+     "MEDIUM": 21
+    }
+   }
+  }
+ }
+}

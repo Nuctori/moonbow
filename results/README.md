@@ -36,6 +36,21 @@ rather than model failures. They are the methodological contribution of the proj
 Read with the limits in `MEASUREMENT_AUDIT.md`: `within-1` is passed by the trivial
 predictor, and the `WEAK` grade has no cross-batch evidence.
 
+## Three-value demotion (see `THREE_VALUE_DEMOTION.md`)
+
+| File | Content |
+|------|---------|
+| `THREE_VALUE_DEMOTION.md` | Why the 4th grade was removed, and the collapse of the NONE boundary |
+| `three_value_eval.json` | Three-grade model on four independent held-out label sets |
+| `three_value_evidence.json` | Cross-batch evidence table; drift drop and WEAK merge counts |
+
+Headline: the 4th grade (`WEAK`) was never a defined category (its evidence field held one
+annotator's private vocabulary). After demoting to three grades and retraining, exact
+exceeds chance by **+0.168 to +0.317** across four independent label sets — but the model
+**never emits `NONE`** (0/24 recall), because `NONE` is a mechanical scan, not a semantic
+match. This independently reproduces the repository's main claim: *the program decides,
+the model only extracts.*
+
 To regenerate: place your own gold (`{"<pid>": {"label": ...}}`) and item file
 (`obligation` / `sentence`) under `data/`, then run the corresponding script in
 `pipeline/`.

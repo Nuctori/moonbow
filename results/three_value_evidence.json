@@ -1,0 +1,41 @@
+{
+ "n": 1138,
+ "dropped_drift": 91,
+ "merged_weak": 27,
+ "n_clean": 1047,
+ "dist3": {
+  "MEDIUM": 700,
+  "STRONG": 225,
+  "NONE": 122
+ },
+ "cross_batch_evidence": {
+  "STRONG": {
+   "per_batch": {
+    "b1": 88,
+    "b2": 90,
+    "b3": 47
+   },
+   "n_batch": 3,
+   "cross_batch": true
+  },
+  "MEDIUM": {
+   "per_batch": {
+    "b1": 153,
+    "b2": 200,
+    "b3": 347
+   },
+   "n_batch": 3,
+   "cross_batch": true
+  },
+  "NONE": {
+   "per_batch": {
+    "b1": 0,
+    "b2": 32,
+    "b3": 90
+   },
+   "n_batch": 2,
+   "cross_batch": true
+  }
+ },
+ "gate6_pass": true
+}
