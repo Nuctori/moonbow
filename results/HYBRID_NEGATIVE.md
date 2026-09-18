@@ -1,3 +1,9 @@
+> **RETRACTED (see `NEGATIVE_CONCLUSION_AUDIT.md`).** The program arm in this comparison
+> scores 0.839 on the evaluation set but only 0.589 on the training set, because the token
+> table is derived from the evaluation set's own annotation criterion. The program is
+> scored against the set it was calibrated on. The conclusion below is therefore not
+> supported, and neither is its reverse. Kept for audit trail.
+
 # Does the program/model split help on evidence-strength grading? No.
 
 Follow-up to `THREE_VALUE_DEMOTION.md`. Its diagnosis implied that the `NONE` boundary

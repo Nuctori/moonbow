@@ -1,3 +1,9 @@
+> **PARTIALLY RETRACTED (see `NEGATIVE_CONCLUSION_AUDIT.md`).** The three-grade criterion
+> change stands, and the model's `NONE` blindness (0/24) is real. But the explanation
+> offered below -- "NONE belongs to the program, not the model" -- relied on comparing the
+> model against a program rule that is calibrated on the evaluation set. That comparison is
+> contaminated; the explanation is withdrawn. Kept for audit trail.
+
 # The four-grade criterion was demoted to three, and the remaining boundary collapsed
 
 Follow-up to `MEASUREMENT_AUDIT.md`. Two findings, both negative for the model.

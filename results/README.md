@@ -54,3 +54,20 @@ the model only extracts.*
 To regenerate: place your own gold (`{"<pid>": {"label": ...}}`) and item file
 (`obligation` / `sentence`) under `data/`, then run the corresponding script in
 `pipeline/`.
+
+## Adversarial audit of the negative result (see `NEGATIVE_CONCLUSION_AUDIT.md`)
+
+| File | Content |
+|------|---------|
+| `NEGATIVE_CONCLUSION_AUDIT.md` | Five adversarial hypotheses against the "no model needed" conclusion |
+| `audit_negative.json` | Raw output: program rule 0.589 on train vs 0.839 on eval; stratum breakdown |
+
+**Result: the negative conclusion is RETRACTED.** The program arm is contaminated — the
+token table is derived from the evaluation set's own annotation criterion, so the program
+is scored on the set it was calibrated on (gap 0.250). Neither "model adds nothing" nor
+"program is better" is available. What survives is what never involved the program: the
+model exceeds chance (exact +0.17..+0.32) and does intent↔evidence matching (counterfactual
+swap −28.7pp).
+
+**Methodological point:** the audit was asymmetric. We audited the positive claims
+repeatedly and the project-terminating negative claim not at all. That is backwards.
