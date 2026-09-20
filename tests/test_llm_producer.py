@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 """tests/test_llm_producer.py
 
-LLM 生产者端到端评测（免费通道：GitHub Models，公开仓库用内置 GITHUB_TOKEN）。
+LLM 生产者端到端评测（免费通道：任意 OpenAI 兼容服务的免费档）。
+原 GitHub Models 通道已退役（端点 410 Gone），现支持：
+- Gemini AI Studio 免费档: base_url=https://generativelanguage.googleapis.com/v1beta/openai, model=gemini-2.0-flash
+- Groq 免费档:            base_url=https://api.groq.com/openai/v1, model=llama-3.3-70b-versatile
+- OpenRouter 免费档:      base_url=https://openrouter.ai/api/v1, model=deepseek/deepseek-chat:free
 
 验证的对象不是守卫的模型权重，而是"协议对真实 LLM 是否成立"这一层：
 1. 要求 LLM 按三字段清单申报时，它是否遵守协议；
@@ -20,12 +24,12 @@ sys.path.insert(0, os.path.abspath("src"))
 
 LLM_ENABLED = os.environ.get("MOONBOW_LLM_E2E") == "1"
 TOKEN = os.environ.get("MOONBOW_LLM_TOKEN") or os.environ.get("GITHUB_TOKEN")
-BASE_URL = os.environ.get("MOONBOW_LLM_BASE_URL", "https://models.github.ai/inference")
-MODEL = os.environ.get("MOONBOW_LLM_MODEL", "openai/gpt-4o-mini")
+BASE_URL = os.environ.get("MOONBOW_LLM_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai")
+MODEL = os.environ.get("MOONBOW_LLM_MODEL", "gemini-2.0-flash")
 
 needs_llm = pytest.mark.skipif(
     not (LLM_ENABLED and TOKEN),
-    reason="需要 MOONBOW_LLM_E2E=1 与 GITHUB_TOKEN（GitHub Models 免费额度）",
+    reason="需要 MOONBOW_LLM_E2E=1 与 LLM key（MOONBOW_LLM_TOKEN / GITHUB_TOKEN，任一 OpenAI 兼容免费档）",
 )
 
 TASK = "给 src/utils.py 增加 slugify 函数（空格转连字符、小写化），并补充单元测试"
