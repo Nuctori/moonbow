@@ -163,3 +163,36 @@ jobs:
           MOONBOW_LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
           MOONBOW_LLM_MODEL: ${{ vars.LLM_MODEL }}
         run: python -m pytest tests/test_llm_producer.py -v
+
+  # ── 真实 Pi harness E2E（免费模型 + 守卫扩展 + 骨架守卫服务，无需权重）──
+  # 宿主就是 Pi：验证"封闭 Pi + progress-guard 扩展 + 守卫服务"全链路在干净环境接通。
+  e2e-pi-llm:
+    name: e2e (Pi + free LLM)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    env:
+      MOONBOW_LLM_E2E: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install moonbow (torch-free) + Pi
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e . --no-deps
+          npm install -g @earendil-works/pi-coding-agent
+          pi --version
+
+      - name: Pi + free LLM + guard chain E2E
+        env:
+          LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+        run: bash ci/pi_e2e.sh

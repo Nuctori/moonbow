@@ -56,6 +56,10 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
                 rounds=rounds,
                 external_tool_success=ext_success,
             )
+            # 裁决遥测：stdout 可见（CI / 安装验证以这行 log 为投递证据）
+            logger.info("/check verdict=%s is_closed=%s skeleton=%s",
+                        verdict.decision.value, verdict.is_closed,
+                        bool(verdict.scores.get("skeleton_only")))
             self._send_json(200, verdict.to_dict())
         except Exception as e:
             logger.exception("守卫裁决发生内部异常")
@@ -71,12 +75,17 @@ def start_server(
     port: int = 18492,
     models_dir: Optional[str] = None,
     device: str = "cpu",
+    lazy: bool = False,
 ):
-    """启动本地守卫微服务并常驻监听。"""
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
-    logger.info("正在初始化 Progress Guard 模型 (%s @ %s)...", models_dir or "default", device)
+    """启动本地守卫微服务并常驻监听。
 
-    guard = ProgressGuard(models_dir=models_dir, device=device)
+    lazy=True：骨架模式，无权重可运行（协议/硬信号/工具证据层；
+    权重缺失时定性信号自动降级，见 verifier）。
+    """
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+    logger.info("正在初始化 Progress Guard 模型 (%s @ %s, lazy=%s)...", models_dir or "default", device, lazy)
+
+    guard = ProgressGuard(models_dir=models_dir, device=device, lazy_load=lazy)
     GuardHTTPRequestHandler.guard = guard
 
     server = HTTPServer((host, port), GuardHTTPRequestHandler)

@@ -62,6 +62,7 @@ def cmd_serve(args):
         port=args.port,
         models_dir=args.models_dir,
         device=args.device,
+        lazy=args.lazy,
     )
 
 
@@ -173,6 +174,7 @@ def main(prog: str = "progress-guard"):
     p_serve.add_argument("-p", "--port", type=int, default=18492, help="监听端口 (默认 18492)")
     p_serve.add_argument("--models-dir", help="自定义模型权重目录")
     p_serve.add_argument("--device", default="cpu", help="推理设备 (cpu/xpu/cuda)")
+    p_serve.add_argument("--lazy", action="store_true", help="骨架模式：无权重运行（协议/硬信号层）")
     p_serve.set_defaults(func=cmd_serve)
 
     # parse 命令
