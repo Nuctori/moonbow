@@ -147,3 +147,61 @@ def test_guard_external_tool_success_override():
 
 if __name__ == "__main__":
     pytest.main(["-v", __file__])
+
+
+# ---------------- 骨架模式（无权重可跑）----------------
+# models_dir 指向不存在目录 + lazy_load=True：强制骨架裁决（仅定量层），
+# 本地与 CI（无权重）行为一致，验证状态机的确定性部分。
+def _skeleton_guard():
+    return ProgressGuard(models_dir="models/__nonexistent__", lazy_load=True)
+
+
+def test_skeleton_require_manifest():
+    guard = _skeleton_guard()
+    v = guard.check(req="任意任务", resp="我做完了，都挺好的")
+    assert v.decision == Decision.REQUIRE_MANIFEST
+    assert not v.is_closed
+
+
+def test_skeleton_status_b_blocked():
+    guard = _skeleton_guard()
+    resp = "STATUS: B 部分完成{N}REMAINING: 未运行测试{N}EVIDENCE: 无".replace("{N}", chr(10))
+    v = guard.check(req="任务", resp=resp)
+    assert v.decision == Decision.BLOCK
+    assert any("B 部分完成" in s for s in v.hard_signals)
+
+
+def test_skeleton_status_d_blocked():
+    guard = _skeleton_guard()
+    resp = "STATUS: D 失败或已回滚{N}REMAINING: 无{N}EVIDENCE: 已回滚改动".replace("{N}", chr(10))
+    v = guard.check(req="任务", resp=resp)
+    assert v.decision == Decision.BLOCK
+
+
+def test_skeleton_remaining_blocked():
+    guard = _skeleton_guard()
+    resp = "STATUS: A 全部完成{N}REMAINING: 文档还没写{N}EVIDENCE: pytest 5 passed".replace("{N}", chr(10))
+    v = guard.check(req="任务", resp=resp)
+    assert v.decision == Decision.BLOCK
+    assert any("文档还没写" in s for s in v.hard_signals)
+
+
+def test_skeleton_tool_success_close():
+    guard = _skeleton_guard()
+    resp = "STATUS: A 全部完成{N}REMAINING: 无{N}EVIDENCE: pytest tests/test_utils.py 返回码 0, 5 passed".replace("{N}", chr(10))
+    v = guard.check(req="实现 slugify 并补充单测", resp=resp, external_tool_success=True)
+    assert v.decision == Decision.CLOSE and v.is_closed
+    assert v.scores.get("skeleton_only") is True  # 走到模型层且成功降级
+
+
+def test_skeleton_tool_success_cannot_override_bad_format():
+    guard = _skeleton_guard()
+    v = guard.check(req="任务", resp="都做完了", external_tool_success=True)
+    assert v.decision == Decision.REQUIRE_MANIFEST
+
+
+def test_protocol_markdown_bold_and_fullwidth_colon():
+    m1 = parse_manifest("**STATUS**: A 全部完成{N}**REMAINING**: 无{N}**EVIDENCE**: pytest 5 passed".replace("{N}", chr(10)))
+    assert m1.is_valid_format and m1.status.value == "A"
+    m2 = parse_manifest("STATUS：B 部分完成{N}REMAINING：差文档{N}EVIDENCE：无".replace("{N}", chr(10)))
+    assert m2.is_valid_format and m2.status.value == "B"

@@ -22,14 +22,17 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install (CPU torch)
+      - name: Install (torch-free, skeleton path)
         run: |
           python -m pip install --upgrade pip
-          pip install torch --index-url https://download.pytorch.org/whl/cpu
-          pip install -e .[dev]
+          pip install -e .[dev] --no-deps
+          pip install pytest
 
-      - name: Unit tests (model-free subset)
-        run: python -m pytest tests/ -v
+      - name: Import smoke (torch-free)
+        run: python -c "import moonbow; print(moonbow.__version__)"
+
+      - name: Unit tests (skeleton + protocol subset)
+        run: python -m pytest tests/test_guard.py -v
 
       - name: CLI routing E2E
         run: |
@@ -126,3 +129,32 @@ jobs:
           REMAINING: 无
           EVIDENCE: pytest 返回码 0, 5 passed" --tool-success >/dev/null
           [ $? -eq 0 ] || { echo "期望 CLOSE 退出码 0"; exit 1; }
+
+  # ── LLM 生产者评测（免费通道：GitHub Models，公开仓库内置 GITHUB_TOKEN）──
+  # 验证"三字段协议对真实 LLM 是否成立"：合规申报放行、无格式打回。骨架模式，无需权重。
+  e2e-llm:
+    name: e2e (LLM producer)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    permissions:
+      models: read
+      contents: read
+    env:
+      MOONBOW_LLM_E2E: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install (torch-free)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e . --no-deps
+          pip install pytest
+
+      - name: LLM producer E2E
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python -m pytest tests/test_llm_producer.py -v

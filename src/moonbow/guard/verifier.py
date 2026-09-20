@@ -14,7 +14,6 @@ from .protocol import (
     parse_manifest,
     PROMPT_REQUIRE_MANIFEST,
 )
-from .models import ModelRegistry
 
 
 class Decision(str, Enum):
@@ -66,13 +65,15 @@ class ProgressGuard:
         self.sim_threshold = sim_threshold
         self.cap_threshold = cap_threshold
         self._models_dir = models_dir
-        self._registry: Optional[ModelRegistry] = None
+        self._lazy = lazy_load
+        self._registry: Optional["ModelRegistry"] = None
 
         if not lazy_load:
             self._ensure_models()
 
-    def _ensure_models(self) -> ModelRegistry:
+    def _ensure_models(self) -> "ModelRegistry":
         if self._registry is None:
+            from .models import ModelRegistry  # 惰性导入：包本体不强制依赖 torch
             self._registry = ModelRegistry(models_dir=self._models_dir, device=self.device)
         return self._registry
 
@@ -133,32 +134,43 @@ class ProgressGuard:
             statement_text = manifest.evidence if manifest.has_evidence else resp
 
         # 4. 微模型推理判定
-        models = self._ensure_models()
-        
-        # 模态判定
-        modality = models.get_modality(statement_text)
-        scores["modality"] = modality
-        if modality != "assert" and not manifest.has_evidence and not external_tool_success:
-            hard.append(f"你的收尾陈述语气为「{modality}」，并非完成性断言")
+        # lazy_load + 权重不可用时降级为"骨架裁决"：仅定量层（协议/硬信号/争议放行），
+        # 定性信号（模态/相似度/捕获）无法产出即不虚构。eager 模式权重缺失仍然抛错。
+        if self._registry is None:
+            if not self._lazy:
+                self._ensure_models()
+            else:
+                try:
+                    self._ensure_models()
+                except Exception:
+                    scores["skeleton_only"] = True
+        models = self._registry
 
-        # 客体语义相似度
-        sim_val = models.get_similarity(req, statement_text)
-        scores["similarity"] = round(sim_val, 4)
-        if sim_val < self.sim_threshold and not manifest.has_evidence and not external_tool_success:
-            soft.append(f"收尾内容与用户请求【{req}】存在客体差异（相似度仅 {sim_val:.3f}），请核对工作是否对齐目标")
+        if models is not None:
+            # 模态判定
+            modality = models.get_modality(statement_text)
+            scores["modality"] = modality
+            if modality != "assert" and not manifest.has_evidence and not external_tool_success:
+                hard.append(f"你的收尾陈述语气为「{modality}」，并非完成性断言")
 
-        # 二值完成度捕获概率
-        cap_p = None
-        if st == StatusCode.A and not manifest.has_remaining:
-            cap_p = models.get_capture_prob(statement_text)
-            scores["capture_prob"] = round(cap_p, 4)
+            # 客体语义相似度
+            sim_val = models.get_similarity(req, statement_text)
+            scores["similarity"] = round(sim_val, 4)
+            if sim_val < self.sim_threshold and not manifest.has_evidence and not external_tool_success:
+                soft.append(f"收尾内容与用户请求【{req}】存在客体差异（相似度仅 {sim_val:.3f}），请核对工作是否对齐目标")
 
-            # 如果没有外部真实单测背书，核查二值捕获头与证据完整度
-            if not external_tool_success:
-                if cap_p < self.cap_threshold and not manifest.has_evidence:
-                    soft.append("检测到收尾内容疑似未完全闭合，请提供具体工程验证证据或如实修正 STATUS")
-                elif not manifest.has_evidence:
-                    soft.append("EVIDENCE 为空。请给出具体测试运行输出、构建日志或验证指标")
+            # 二值完成度捕获概率
+            cap_p = None
+            if st == StatusCode.A and not manifest.has_remaining:
+                cap_p = models.get_capture_prob(statement_text)
+                scores["capture_prob"] = round(cap_p, 4)
+
+                # 如果没有外部真实单测背书，核查二值捕获头与证据完整度
+                if not external_tool_success:
+                    if cap_p < self.cap_threshold and not manifest.has_evidence:
+                        soft.append("检测到收尾内容疑似未完全闭合，请提供具体工程验证证据或如实修正 STATUS")
+                    elif not manifest.has_evidence:
+                        soft.append("EVIDENCE 为空。请给出具体测试运行输出、构建日志或验证指标")
 
         # 5. 综合状态机裁决
         # 规则 5.1: 存在任何硬缺陷 -> 刚性阻断 BLOCK
