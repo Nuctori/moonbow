@@ -137,7 +137,17 @@ def cmd_probe(args):
         sys.exit(1)
 
 
+def _force_utf8_stdio():
+    """Windows 控制台默认 cp1252/GBK，输出中文会 UnicodeEncodeError。"""
+    for s in (sys.stdout, sys.stderr):
+        try:
+            s.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
+
 def main(prog: str = "progress-guard"):
+    _force_utf8_stdio()
     parser = argparse.ArgumentParser(
         prog=prog,
         description="Progress Guard: AI Agent 任务进度与收尾闭合守护内核",

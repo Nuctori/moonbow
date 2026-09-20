@@ -30,7 +30,17 @@ def cmd_plugins():
     print("\n用法: moonbow <插件名> <动作> ...   例: moonbow guard check -r ... -s ...")
 
 
+def _force_utf8_stdio():
+    """Windows 控制台默认 cp1252/GBK，输出中文会 UnicodeEncodeError。"""
+    for s in (sys.stdout, sys.stderr):
+        try:
+            s.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
+
 def main():
+    _force_utf8_stdio()
     argv = sys.argv[1:]
 
     if argv and argv[0] in ("-V", "--version"):

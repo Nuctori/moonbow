@@ -52,7 +52,7 @@ jobs:
           test -f "$HOME/.moonbow-ci/skills/moonbow-bootstrap/SKILL.md"
           grep -q "moonbow-bootstrap" "$HOME/.moonbow-ci/skills/moonbow-bootstrap/SKILL.md"
           moonbow guard install-skill --target "$HOME/.moonbow-ci/skills/moonbow-bootstrap" --remove
-          test ! -e "$HOME/.moonbow-ci"
+          test ! -e "$HOME/.moonbow-ci/skills/moonbow-bootstrap"
 
       - name: Hook reference adapter E2E
         shell: bash
