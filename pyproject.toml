@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "progress-guard"
+version = "0.1.0"
+description = "Progress Guard: A lightweight task-closure and progress verification kernel for AI coding agents"
+readme = "README.md"
+authors = [
+    { name = "Nuctori" }
+]
+license = { text = "Apache-2.0" }
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.0.0",
+    "transformers>=4.40.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+]
+
+[project.scripts]
+progress-guard = "progress_guard.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+progress_guard = [
+    "extensions/*",
+    "models/**/*",
+]
