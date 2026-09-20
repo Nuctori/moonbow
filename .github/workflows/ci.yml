@@ -1,0 +1,128 @@
+name: ci
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  # ── 交付面 E2E（无需模型权重）：安装、协议、CLI 路由、skill 分发、钩子样例、打包 ──
+  core:
+    name: core (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install (CPU torch)
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -e .[dev]
+
+      - name: Unit tests (model-free subset)
+        run: python -m pytest tests/ -v
+
+      - name: CLI routing E2E
+        run: |
+          moonbow --version
+          moonbow plugins
+          moonbow guard --help
+
+      - name: Manifest protocol E2E
+        shell: bash
+        run: |
+          moonbow guard parse -t "STATUS: A 全部完成
+          REMAINING: 无
+          EVIDENCE: pytest 5 passed" | grep -q '"status": "A"'
+          moonbow guard parse -t "没有清单" | grep -q '"is_valid_format": false'
+
+      - name: Skill distribution E2E
+        shell: bash
+        run: |
+          moonbow guard install-skill --target "$HOME/.moonbow-ci/skills/moonbow-bootstrap"
+          test -f "$HOME/.moonbow-ci/skills/moonbow-bootstrap/SKILL.md"
+          grep -q "moonbow-bootstrap" "$HOME/.moonbow-ci/skills/moonbow-bootstrap/SKILL.md"
+          moonbow guard install-skill --target "$HOME/.moonbow-ci/skills/moonbow-bootstrap" --remove
+          test ! -e "$HOME/.moonbow-ci"
+
+      - name: Hook reference adapter E2E
+        shell: bash
+        run: |
+          echo '{}' | python src/moonbow/guard/extensions/guard_stop_hook.py
+          grep -q "invoke" "$HOME/.moonbow/hook.log"
+          echo '{}' | python src/moonbow/guard/extensions/guard_stop_hook.py
+
+      - name: Build wheel (deliverable)
+        run: |
+          pip install build
+          python -m build --wheel
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheel-${{ matrix.os }}
+          path: dist/*.whl
+
+  # ── 全链路 E2E（需生产权重）：真裁决 + serve/probe + CLI 退出码语义 ──
+  # 权重 ~930MB 不进 git；在仓库 Variables 里配置 MODEL_RELEASE_URL 后手动触发。
+  e2e-full:
+    name: e2e (model weights)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    env:
+      MODEL_URL: ${{ vars.MODEL_RELEASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install (CPU torch)
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -e .[dev]
+
+      - name: Download production weights
+        if: env.MODEL_URL != ''
+        run: |
+          curl -L --fail -o weights.zip "$MODEL_URL"
+          unzip -q weights.zip -d .
+          test -d models/capture_head_v1 && test -d models/minilm_slot_heads_v2
+
+      - name: Full unit tests (with weights)
+        if: env.MODEL_URL != ''
+        run: python -m pytest tests/ -v
+
+      - name: Serve + probe E2E (with weights)
+        if: env.MODEL_URL != ''
+        run: |
+          moonbow guard serve &
+          for i in $(seq 1 60); do
+            curl -s --noproxy '*' --max-time 2 http://127.0.0.1:18492/health | grep -q ok && break
+            sleep 2
+          done
+          moonbow guard probe
+
+      - name: CLI verdict exit-code semantics (with weights)
+        if: env.MODEL_URL != ''
+        shell: bash
+        run: |
+          set +e
+          moonbow guard check -r "e2e" -s "STATUS: B 部分完成
+          REMAINING: 未运行测试
+          EVIDENCE: 无" >/dev/null
+          [ $? -eq 1 ] || { echo "期望 BLOCK 退出码 1"; exit 1; }
+          moonbow guard check -r "e2e" -s "STATUS: A 全部完成
+          REMAINING: 无
+          EVIDENCE: pytest 返回码 0, 5 passed" --tool-success >/dev/null
+          [ $? -eq 0 ] || { echo "期望 CLOSE 退出码 0"; exit 1; }

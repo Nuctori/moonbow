@@ -8,6 +8,12 @@ import sys
 import os
 
 sys.path.insert(0, os.path.abspath("src"))
+
+# 生产权重不随仓库发布（~930MB，经 GitHub Release 分发）。
+# 无权重环境（如 CI core job）自动跳过依赖微模型的用例，仅跑协议/路由子集。
+MODELS_READY = os.path.isdir(os.environ.get("MOONBOW_MODELS_DIR", "models"))
+needs_models = pytest.mark.skipif(not MODELS_READY, reason="需要生产权重目录 models/（经 Release 分发，仓库不含）")
+
 from moonbow import (
     ProgressGuard,
     Decision,
@@ -51,6 +57,7 @@ def test_parse_manifest_missing_fields():
     assert m.status is None
 
 
+@needs_models
 def test_guard_require_manifest():
     guard = ProgressGuard(models_dir="models", device="cpu")
     verdict = guard.check(
@@ -64,6 +71,7 @@ def test_guard_require_manifest():
     assert "STATUS:" in verdict.prompt
 
 
+@needs_models
 def test_guard_self_reported_partial_blocked():
     guard = ProgressGuard(models_dir="models", device="cpu")
     resp = (
@@ -81,6 +89,7 @@ def test_guard_self_reported_partial_blocked():
     assert any("B 部分完成" in s for s in verdict.hard_signals)
 
 
+@needs_models
 def test_guard_unverified_assert_clarify():
     guard = ProgressGuard(models_dir="models", device="cpu")
     # 自报全部完成，但证据为空
@@ -99,6 +108,7 @@ def test_guard_unverified_assert_clarify():
     assert verdict.prompt is not None
 
 
+@needs_models
 def test_guard_disputed_close_round2():
     guard = ProgressGuard(models_dir="models", device="cpu")
     # 第 2 轮主模型在看到提示后，重申 A 并补充了测试结果证据
@@ -116,6 +126,7 @@ def test_guard_disputed_close_round2():
     assert verdict.is_closed is True
 
 
+@needs_models
 def test_guard_external_tool_success_override():
     guard = ProgressGuard(models_dir="models", device="cpu")
     resp = (

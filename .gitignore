@@ -37,3 +37,9 @@ modelscope/
 Thumbs.db
 *.swp
 *.egg-info/
+
+# --- Real-session-derived corpora (audit 2026-09-21: contain usernames / API keys / paths, NEVER publish) ---
+labels/
+dataset_qwen35_sft/
+data/archive_corpus/
+data/swe_bench_lite/
