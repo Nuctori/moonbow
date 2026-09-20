@@ -78,6 +78,15 @@ if not verdict.is_closed:
 
 ---
 
+## 3.5 开箱即用（自举接入）
+
+Moonbow 不预置宿主接线器：分发 `moonbow-bootstrap` skill，由用户自己的 AI 按手册把干净接口（`GET /health` + `POST /check`）接入所在 harness 的生命周期事件，并完成硬性投递验证。包内 `extensions/guard_stop_hook.py` 为 Stop 钩子参考适配样例。
+
+```bash
+moonbow guard install-skill [--target DIR] [--remove]   # 默认 ~/.agents/skills/moonbow-bootstrap
+moonbow guard probe [--url URL]                          # 端到端自检（服务 + 一次真实裁决）
+```
+
 ## 4. 作为全局 CLI 命令行工具使用
 
 > 安装后注册 `moonbow` 主命令，命令空间按插件划分：`moonbow guard check/serve/parse/install-pi`；`progress-guard` 为独立兼容别名，直接进入 guard 子命令。下文以 `moonbow guard` 为例。

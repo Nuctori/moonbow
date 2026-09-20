@@ -90,6 +90,53 @@ def cmd_install_pi(args):
     print(f"✓ 已成功将 progress-guard 插件安装至: {dest}")
 
 
+def _skill_src_dir() -> str:
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "skills", "moonbow-bootstrap"))
+
+
+def cmd_install_skill(args):
+    """把 moonbow-bootstrap skill 分发到宿主 skills 目录。"""
+    target = args.target or os.path.expanduser("~/.agents/skills/moonbow-bootstrap")
+    if args.remove:
+        shutil.rmtree(target, ignore_errors=True)
+        print(f"✓ 已移除 skill: {target}")
+        return
+    shutil.copytree(_skill_src_dir(), target, dirs_exist_ok=True)
+    print(f"✓ moonbow-bootstrap skill 已安装至: {target}")
+
+
+def cmd_probe(args):
+    """端到端探针：服务健康 + 一次真实裁决。退出码 0=通, 1=不通。"""
+    import urllib.request
+    base = args.url.rstrip("/")
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))  # localhost 直连，无视环境代理
+
+    def _call(path, payload=None):
+        data = json.dumps(payload).encode("utf-8") if payload is not None else None
+        r = urllib.request.Request(base + path, data=data,
+                                   headers={"Content-Type": "application/json"},
+                                   method="POST" if payload is not None else "GET")
+        with opener.open(r, timeout=args.timeout) as w:
+            return json.loads(w.read().decode("utf-8"))
+
+    try:
+        health = _call("/health")
+        print(f"health : {json.dumps(health, ensure_ascii=False)}")
+        verdict = _call("/check", {
+            "req": "moonbow 探针：确认守卫链路端到端可用",
+            "resp": "STATUS: B 部分完成\nREMAINING: 探针样本，无需处理\nEVIDENCE: 无",
+            "rounds": 1,
+        })
+        print(f"verdict: {json.dumps(verdict, ensure_ascii=False)}")
+        ok = verdict.get("decision") in ("BLOCK", "CLARIFY", "CLOSE")
+        print("probe  : ✓ 链路可用" if ok else "probe  : ✗ 异常裁决")
+        sys.exit(0 if ok else 1)
+    except Exception as e:
+        print(f"probe  : ✗ {e!r}")
+        print("hint   : 先启动服务 -> moonbow guard serve --port 18492")
+        sys.exit(1)
+
+
 def main(prog: str = "progress-guard"):
     parser = argparse.ArgumentParser(
         prog=prog,
@@ -128,6 +175,18 @@ def main(prog: str = "progress-guard"):
     p_install = subparsers.add_parser("install-pi", help="将进度守卫 TypeScript 扩展一键安装至 Pi Agent")
     p_install.add_argument("--target", help="目标安装目录 (默认 ~/.pi/agent/extensions)")
     p_install.set_defaults(func=cmd_install_pi)
+
+    # install-skill 命令
+    p_skill = subparsers.add_parser("install-skill", help="分发 moonbow-bootstrap 自举接入 skill 至宿主 skills 目录")
+    p_skill.add_argument("--target", help="目标目录 (默认 ~/.agents/skills/moonbow-bootstrap)")
+    p_skill.add_argument("--remove", action="store_true", help="移除已安装的 skill")
+    p_skill.set_defaults(func=cmd_install_skill)
+
+    # probe 命令
+    p_probe = subparsers.add_parser("probe", help="端到端探针：/health + 一次真实裁决")
+    p_probe.add_argument("--url", default="http://127.0.0.1:18492", help="守卫微服务地址")
+    p_probe.add_argument("--timeout", type=int, default=30, help="请求超时秒数")
+    p_probe.set_defaults(func=cmd_probe)
 
     args = parser.parse_args()
     if not args.command:

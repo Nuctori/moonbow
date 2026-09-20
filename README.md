@@ -166,6 +166,18 @@ moonbow plugins
 
 SDK / CLI / 微服务 / 扩展四种集成方式的完整说明见 **[DELIVERY_GUIDE.md](DELIVERY_GUIDE.md)**。
 
+### 开箱即用（自举接入）
+
+Moonbow 不假设你的 harness，也不预置宿主接线器。提供一份 **skill**（自举接入手册）和两个**干净接口**（`GET /health`、`POST /check`），由你自己的 AI 完成接线：自省所在 harness 的生命周期机制 → 接入收尾事件 → 投递验证（拿不到证据即回滚）。
+
+```bash
+moonbow guard install-skill            # 分发 moonbow-bootstrap skill（默认 ~/.agents/skills）
+moonbow guard serve --port 18492 &     # 干净接口服务
+moonbow guard probe                    # 端到端自检
+```
+
+包内 `extensions/guard_stop_hook.py` 是一个 Stop 钩子的参考适配样例（提取转写 → 裁决 → 呈现提示 → 遥测），供你的 AI 按宿主改写。
+
 ---
 
 ## 4. 仓库结构与文档

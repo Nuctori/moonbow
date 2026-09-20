@@ -33,4 +33,5 @@ where = ["src"]
 moonbow = [
     "extensions/*",
     "models/**/*",
+    "skills/**/*",
 ]
