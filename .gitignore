@@ -36,3 +36,4 @@ modelscope/
 .DS_Store
 Thumbs.db
 *.swp
+*.egg-info/

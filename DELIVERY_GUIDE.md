@@ -35,7 +35,7 @@ pip install -e .
 ```bash
 pip install build
 python -m build
-# 产物位于 dist/progress_guard-0.1.0-py3-none-any.whl
+# 产物位于 dist/moonbow-0.1.0-py3-none-any.whl
 ```
 
 安装后即可在终端全局直接调用 `progress-guard` 命令行。
@@ -47,7 +47,7 @@ python -m build
 适用于你自研的 Agent 框架、LangGraph、CrewAI、SWE-bench 评测脚本或自动化测试 Runner：
 
 ```python
-from progress_guard import ProgressGuard, Decision
+from moonbow import ProgressGuard, Decision
 
 # 初始化守卫（CPU / XPU / CUDA 均可，显存占用仅约 500MB）
 guard = ProgressGuard(models_dir="models", device="cpu")
@@ -79,6 +79,8 @@ if not verdict.is_closed:
 ---
 
 ## 4. 作为全局 CLI 命令行工具使用
+
+> 安装后同时注册 `moonbow` 与 `progress-guard` 两个等价命令（后者为兼容别名），下文以 `progress-guard` 为例。
 
 ### 4.1 单次收尾检验 (`check`)
 用于 CI/CD 流程、Git Hook 或 Bash 自动化脚本中：
@@ -122,7 +124,7 @@ progress-guard serve --port 18492 --host 127.0.0.1
 ```
 
 #### API 端点规范
-- **健康检查**：`GET /health` -> `{"status": "ok", "service": "progress-guard"}`
+- **健康检查**：`GET /health` -> `{"status": "ok", "service": "moonbow.guard"}`
 - **裁决检查**：`POST /` 或 `POST /check`
   - **请求格式**：
     ```json
@@ -154,7 +156,7 @@ progress-guard serve --port 18492 --host 127.0.0.1
 ## 6. 在现代 Agent (如 Pi / Codex) 中的无感挂载
 
 本项目已内置经实战验证的 TypeScript 插件：
-- 文件位置：`src/progress_guard/extensions/progress-guard.ts`
+- 文件位置：`src/moonbow/guard/extensions/progress-guard.ts`
 
 ### 挂载原理（Context Event 真实拦截）
 1. 在 Agent 会话触发 `turn_end` 且准备停止工作时拦截；
@@ -168,7 +170,9 @@ progress-guard serve --port 18492 --host 127.0.0.1
 ```
 spark-4b/
 ├── src/
-│   └── progress_guard/             # 核心 Python 库与 CLI 实现
+│   └── moonbow/
+│       ├── __init__.py             # 顶层导出
+│       └── guard/                  # Progress Guard 收尾闭合门禁
 │       ├── __init__.py             # 顶层 API 导出
 │       ├── protocol.py             # 三字段清单解析与协议定义
 │       ├── models.py               # 轻量模态/捕获头推理模型

@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "progress-guard"
+name = "moonbow"
 version = "0.1.0"
-description = "Progress Guard: A lightweight task-closure and progress verification kernel for AI coding agents"
+description = "Moonbow: in-harness NLP stream pipelines of narrow-band micro-models for agent metacognition (includes the Progress Guard closure gate)"
 readme = "README.md"
 authors = [
     { name = "Nuctori" }
@@ -23,13 +23,14 @@ dev = [
 ]
 
 [project.scripts]
-progress-guard = "progress_guard.cli:main"
+moonbow = "moonbow.guard.cli:main"
+progress-guard = "moonbow.guard.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-progress_guard = [
+moonbow = [
     "extensions/*",
     "models/**/*",
 ]

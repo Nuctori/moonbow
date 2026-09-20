@@ -1,187 +1,195 @@
-# Spark-4B: Specialized Micro-Pipeline for Zero-Regex Task Progress Guard
+# Moonbow（月虹）
+
+> 在 Agent 的 harness 里，用一组边界明确的小模型实时处理自然语言流，解决元认知问题。
+> 月虹是月光折射出的彩虹——只是月光太暗，肉眼看来是一道白虹：光谱生成之后，又合回了光。
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.14%2B-ee4c2c.svg)](https://pytorch.org/)
-[![Parameter Scale](https://img.shields.io/badge/Model%20Size-%3C400M-success.svg)]()
-[![Hardware](https://img.shields.io/badge/Hardware-Intel%20XPU%20%7C%20CUDA%20%7C%20CPU-blue.svg)]()
-
-> **TL;DR**: AI Agents frequently make "premature exits" — declaring a task finished when it is only partially done, distracted by superficial keywords, or trapped in deadlocks. 
-> 
-> We demonstrate that **large LLMs are neither necessary nor optimal for task-closure verification**. Instead, a **Zero-Regex Two-Stage Specialized Micro-Pipeline (<400M total parameters)** decoupling **Pragmatic Speech-Act Classification (287M)** from **Contrastively Aligned Object Binding (117M)** with an **Incremental Entity Coverage State Machine** achieves **100% defense against cross-topic distractions, 100% interception of premature multi-intent exits, and 100% deadlock-free task cancellations** with **~70ms latency** on consumer edge hardware.
+[![Python Version](https://img.shields.io/badge/Python-3.10%2B-brightgreen.svg)](https://python.org/)
 
 ---
 
-## 1. The Real Problems: Why AI Agent Progress Fails
+## 1. 思路
 
-In real-world engineering environments (e.g., automated coding and debugging), software agents fail in three systematic ways when attempting to judge their own progress:
+### 1.1 一个反复观察到的现象
 
-```
-❌ 1. Cross-Topic Distraction (False Positives)
-   User Request:     "Optimize MySQL query performance on large tables."
-   Agent Response:   "Refactored the frontend navigation bar CSS. All done!"
-   Naive Classifier: Detects "All done!" -> Incorrectly clears the database task.
+LLM 执行长程任务时，对开局规划好的 plan 依从度会逐渐下降直至崩塌，"全局视角"同步塌缩，最后钻进某个细节的牛角尖，需要人来介入重新对齐。此时人的角色其实不像协同创作者，更像一个 DAG 调度执行者。
 
-❌ 2. Multi-Intent Premature Exit (Partial Completion Leak)
-   User Request:     "Change port to 9090 AND implement JWT auth middleware."
-   Agent Response:   "Updated port to 9090 in server.py."
-   Dense Embedding:  Local similarity pulls score > 0.65 -> Prematurely clears both tasks, 
-                     permanently leaking the unfulfilled JWT requirement!
+瓶颈不在模型智力，而在于：**LLM 不擅长执行"程序化的流程"**。哪怕模型迭代专门对齐过这类能力，经过上下文压缩后表现依然不稳定。
 
-❌ 3. Cancellation Deadlock (Stale Blocking)
-   User Command:     "Forget the JWT requirement, let's keep the existing auth."
-   Naive State Machine: Does not recognize "abandon" as a legitimate release -> 
-                        Task stays blocked forever, preventing the agent from returning.
-```
+### 1.2 由此推出的主张
 
-Historically, developers attempted to patch these defects with **monolithic regular expression suites** (`INJECT_RE`, `VERIFY_RE`, commit hash regexes, token splitters). This leads to severe brittle failure modes: any phrasing variance or cross-lingual term causes either false interception or complete leakage.
+> 能被固定化、程序化的流程，应该由程序约束和门禁来确保执行——而不是在 prompt 里写自然语言程序赌概率。
 
----
+一个智能体由三层组成：冻结的模型权重（内化但更新昂贵）、冻结的 harness（skill / MCP / AGENTS.md，便宜但只是"关注点引导"，定义了却没内化）、实时推理的上下文（所有未被覆盖的负担都压在这里）。三层之间存在一个甜点区：**大量 Agent 失败的根源，是边界明确定义、本可程序化的元认知任务，被推给了上下文提示去赌概率。**
 
-## 2. The Solution: Two-Stage Specialized Micro-Pipeline
+Moonbow 落在这个甜点区。核心机制是**两个模型的级联**：
 
-We replace hand-crafted regular expressions with a decoupled, specialized model pipeline where **each model focuses 100% of its capacity on a single orthogonal sub-problem**:
+- **定量模型（捕获级）**：在自然语言流上做模式匹配，捕获候选语义信号并量化其强度——"这里有没有一个完成断言？强度多少？"高吞吐、低成本，只负责发现与测量，不判断可不可信；
+- **定性模型（采用级）**：对捕获到的候选信号做定性裁决，确定**采用率**——"这个断言语气是笃定还是含糊？说的还是不是这件事？"决定捕获是否被采纳为可信信号。
 
-```
-                              Incoming Dialogue Block
-                                         │
-                                         ▼
-                 ┌───────────────────────────────────────────────┐
-                 │ Station 1: Pragmatic Role Classifier (287M)   │
-                 │ Focus: Speech-act intent only, 0% topic bias  │
-                 │ Output: REQUEST / CLOSE / PARTIAL / DROPPED   │
-                 └───────────────────────┬───────────────────────┘
-                                         │
-                 ┌───────────────────────┴───────────────────────┐
-                 ▼                                               ▼
-          [ If REQUEST ]                                   [ If CLOSE ]
-    Extract Target Entities                        Station 2: Dense Aligner (117M)
-    & Register in Monotonic Ledger                 & Entity Coverage Verification
-                 │                                               │
-                 │                                               ▼
-                 │                                 ┌───────────────────────────┐
-                 │                                 │ Check Object Similarity   │
-                 │                                 │   AND Entity Coverage:    │
-                 │                                 │     |Covered| / |Target|  │
-                 │                                 └─────────────┬─────────────┘
-                 │                                               │
-                 │                     ┌─────────────────────────┴─────────────────────────┐
-                 │                     ▼                                                   ▼
-                 │             [ Coverage < 100% ]                                 [ Coverage = 100% ]
-                 │             Downgrade to PARTIAL                                 Resolve & Dismiss
-                 │             Keep Blocking Agent                                 Safe Exit Allowed
-                 └────────────────────►│◄──────────────────────────────────────────────────┘
-```
+两级级联构成对自然语言流的理解管线；协议校验、规则拦截、状态机等确定性程序则作为管线骨架，基于捕获与采用结果做出最终裁决。**全程无需训练任何生成式大模型**，成本比主模型低 2~3 个数量级。
 
-### Architectural Pillars
-1. **Station 1: Pragmatic Role Classification (287M mDeBERTa-v3)**:
-   - Specializes strictly in speech-act roles (`REQUEST`, `CLOSE`, `PARTIAL`, `DROPPED`, `NEUTRAL`).
-   - Eliminates all hardcoded question marks, polite phrasing lists, and negation assertion regexes.
-2. **Station 2: Contrastively Aligned Object Binding (117M MiniLM-L12)**:
-   - Fine-tuned via triplet contrastive learning on strictly held-out engineering pairs (Redis, Kafka, Prometheus, WASM, etc.).
-   - Maps user target objects and completion artifacts into a shared vector space, driving cross-topic distraction similarities into deep negative values (**mean -0.1432**).
-3. **Incremental Entity Coverage State Machine**:
-   - Deconstructs multi-intent requests ($A + B$) into required semantic entities.
-   - Enforces dual criteria: `Dense Similarity >= tau` **AND** `Entity Coverage == 100%`.
-   - Partial completion ($A$ only) automatically downgrades to `PARTIAL`, retaining the block until $B$ is satisfied across subsequent turns.
-4. **Deadlock-Free Abandonment (`DROPPED`)**:
-   - Safely de-registers tasks when users explicitly abandon them without inflating completion metrics.
+### 1.3 与 Skill / MCP 的本质区别
+
+| | Skill / CLAUDE.md | MCP 工具 | Moonbow 管线 |
+|---|---|---|---|
+| 注入位置 | 上下文 | 工具空间（被动动作集） | 生命周期事件（`context` / `turn_end`） |
+| 触发方式 | 靠模型自觉遵守 | 靠模型决定调用 | harness 强制触发 |
+| 对主模型的要求 | 内化指令 | 理解并选择工具 | 无——不感知管线存在 |
+| 失败模式 | 长程任务中逐渐遗忘 | 该调用时不调用 | 状态机兜底，不存在"忘记" |
+| 成本 | 低，但上限低且易过期 | 中 | 毫秒级 + ~500MB 常驻内存 |
+
+Skill 和 MCP 扩充的是 Agent 的**动作空间**；Moonbow 工作在 Agent 的**认知通道**上——它不是一个可以被忽略的工具，而是输出流必经的介质。
+
+完整推导过程（五次实证迭代：规则插件 → 后台结对 subagent → 定性/定量拆分）见 **[docs/THESIS.md](docs/THESIS.md)**。
 
 ---
 
-## 3. Empirical Benchmarks & Comparisons
+## 2. 一个完整的例子：Progress Guard
 
-### A. All-Scenario Engineering Benchmark (20 Critical Real-World Traps)
-Evaluated on our balanced benchmark encompassing exact completion, cross-topic distractions, in-progress investigations, assertion failures, and implicit refactorings:
+`progress-guard` 是 Moonbow 管线的第一个生产化插件，解决 Agent 的三类系统性**收尾失能**：提前早退（未验证就宣布完成）、测试作弊（篡改断言强行过测）、模糊敷衍（无证据结案）。下面用它完整走一遍 Moonbow 的工作方式。
 
-| Model / Architecture | Parameters | Latency (XPU) | Cross-Topic Defense | Premature Exit Defense | Benchmark Acc |
-|---|---|---|---|---|---|
-| Single 287M End-to-End | 287M | 113.9 ms | 25.0% (3/4 False Positives) | 0.0% (Bypassed) | 70.0% |
-| BAAI/bge-reranker-base | 278M | 21.2 ms | 100.0% | 0.0% (Bypassed) | 60.0% |
-| Zero-shot Qwen2.5-1.5B | 1500M | 394.7 ms | 100.0% | 50.0% | 90.0% |
-| **Specialized Pipeline (Ours)** | **404M** | **71.2 ms** | **100.0%** | **100.0%** | **95.0%** |
+### 2.1 把"任务真的完成了吗"拆成可判定的部分
 
-### B. Adversarial Stress Suite (12 Unit Tests)
-Our stress suite (`pipeline/test_entity_coverage_guard.py`) validates edge boundaries:
-- **Premature Exit Interception**: **4 / 4 (100.0%)** — Sub-task completion ($A$ only) is strictly caught and held as `PARTIAL`.
-- **Full Resolution Release**: **3 / 3 (100.0%)** — Monolithic and multi-turn incremental fulfillment ($A \to B$) cleanly closes.
-- **Deadlock-Free Abandonment**: **3 / 3 (100.0%)** — Dynamic user cancellations release the ledger cleanly.
-- **Cross-Topic Rejection**: **2 / 2 (100.0%)** — Distractions and explicit execution refusals are blocked.
+Agent 收尾时必须申报三字段清单（这是定量半的协议基础）：
 
-### C. Subjective Playback on Production Dialogue Trace (138 Blocks)
-Tested on full session logs from `pi-dag-core` (state machine, evidence bugs, and git commits):
-- Intercepted **10+ premature closure claims** during intermediate debugging.
-- Cleanly resolved 3 long-distance conversational intents (`Q2: State machine`, `Q3: Workflow IPC`, `Q5: Retry architecture`) with high margin ($> +0.38$).
-- Correctly retained and blocked on unfulfilled objectives at session termination with **zero handcoded regex rules**.
+```
+STATUS: A 全部完成 | B 部分完成 | C 进行中/受阻 | D 失败/已回滚
+REMAINING: 明确列出未完成项（无则写"无"）
+EVIDENCE: 可验证的证据（命令输出、测试结果、指标）
+```
+
+然后管线对这次收尾申报做一次"捕获 → 采用 → 裁决"：
+
+| 阶段 | 环节 | 载体 | 判什么 |
+|---|---|---|---|
+| 骨架 | 清单格式核验 | 确定性解析器 | 三字段是否齐全、STATUS 是否合法 |
+| 骨架 | 硬信号核对 | 规则 | 自报 B/C/D、无证据的 A → 刚性阻断 |
+| 捕获（定量模型） | 完成度捕获 | 二值捕获头 | 流中有没有"完成断言"信号，强度多少 |
+| 采用（定性模型） | 语气模态 | 模态分类头 | 捕获到的断言是笃定断言还是含糊其辞 |
+| 采用（定性模型） | 客体对齐 | 相似度编码器 | 断言与原始任务是否在说同一个对象 |
+| 骨架 | 最终裁决 | 状态机 | 汇总捕获与采用率，结合轮次与工具结果给出判决 |
+
+定量模型只发现和测量（高召回、便宜）；定性模型决定哪些捕获被采纳（从严、精确）。它们各自只需要回答一个可以形式化定义的窄问题，不需要理解任务全貌——这就是无需大模型的原因。
+
+### 2.2 一次裁决的走查
+
+```
+原始任务 (req):  "将用户列表接口改为 GraphQL 游标分页并补充单测"
+
+收尾申报 (resp):
+  STATUS: A 全部完成
+  REMAINING: 无
+  EVIDENCE: 应该都改好了
+
+① 骨架·协议解析: 三字段齐全，STATUS=A 合法            → 通过
+② 骨架·硬信号  : 自报 A，无未完成项                  → 不触发刚性阻断
+③ 捕获·定量模型: 完成断言捕获强度 0.71（阈值 0.50）   → 捕获到候选"完成"信号
+④ 采用·定性模型: "应该都改好了" → 非断言语气          → 采用率下调
+⑤ 采用·定性模型: EVIDENCE 未提及分页/单测 →
+                相似度 0.19（阈值 0.265）             → 客体偏离，采用率进一步下调
+⑥ 骨架·状态机  : 捕获存在但采用率过低，且为第 1 轮    → 不放行，生成针对性追问
+
+裁决: CLARIFY
+反馈: "你申报全部完成，但证据未涉及游标分页的实现与单测结果。
+      请补充：pytest tests/test_graphql.py 的实际输出。"
+```
+
+第 2 轮若 Agent 补上具体证据并重申完成，定性采用随之回升，状态机按**非对称争议放行**给出 `CLOSE [disputed]` 并留痕；若外部工具（bash 退出码 0）已证实测试通过，则直接豁免放行。三种判决：`BLOCK`（硬信号，刚性阻断）、`CLARIFY`（软信号，单次针对性追问）、`CLOSE`（放行）。
+
+### 2.3 效果
+
+67 样本严苛冻结测试集（反身性审计、无数据泄漏）：
+
+- 综合闭合判定准确率 **80.6%**（Wilson CI [0.696, 0.883]）；
+- 负样本（部分完成/等待/失败）刚性阻断率 **100% (30/30)**；
+- 误放行从单塔基线的 5~6 例压缩至 **1 例**；
+- 单次裁决 **15~25ms**，常驻内存 ~500MB，核心判别组件 ~117M 参数。
+
+对比参照：同样的守卫工作若交给后台大模型 subagent 结对（我们此前的 [pi-pair](https://github.com/Nuctori/pi-pair) 方案），交付精度提升相当，但时间与 token 成本高出一个数量级以上。
 
 ---
 
-## 4. Quick Start
+## 3. 快速开始
 
-### Installation & Environment
 ```bash
 git clone https://github.com/Nuctori/spark-4b.git
-cd spark-4b
-
-# Requirements: Python 3.10+, PyTorch 2.1+, HuggingFace Transformers, GLiNER2
-pip install -r requirements.txt
+cd spark-4b && pip install -e .
 ```
 
-### Run the Specialized Micro-Pipeline
+### SDK
+
 ```python
-from pipeline.entity_coverage_guard import EntityCoverageGuard
+from moonbow import ProgressGuard, Decision
 
-# Initializes both 287M pragmatic model and 117M alignment encoder
-guard = EntityCoverageGuard(device="cpu") # or "xpu" / "cuda"
+guard = ProgressGuard(models_dir="models", device="cpu")
 
-# 1. User registers a multi-intent request
-guard.step(role="user", text="把服务端口修改为 9090，并且新增 JWT 鉴权中间件")
-# State: REGISTERED (Target entities: ['9090', 'JWT'])
+verdict = guard.check(
+    req="将用户列表接口改为 GraphQL 游标分页并补充单测",
+    resp="""STATUS: A 全部完成
+REMAINING: 无
+EVIDENCE: pytest tests/test_graphql.py 返回码 0, 5 passed""",
+    rounds=1,
+    external_tool_success=True,  # bash 实测退出码为 0 时直接豁免放行
+)
 
-# 2. Assistant only completes task A
-action, is_blocked = guard.step(role="assistant", text="已在 server.py 中将端口成功修改为 9090")
-# Result: PARTIAL (Covered: ['9090'], Missing: ['JWT']) -> is_blocked = True!
-
-# 3. Assistant completes task B
-action, is_blocked = guard.step(role="assistant", text="新增了 auth_middleware.py 实现了 JWT 校验")
-# Result: RESOLVED (Coverage: 100%) -> is_blocked = False (Safe to return)
+print(verdict.decision)   # Decision.CLOSE
+print(verdict.is_closed)  # True
 ```
 
-### Reproduce Benchmarks
+### CLI
+
+安装后注册 `moonbow` 命令（保留 `progress-guard` 兼容别名）：
+
 ```bash
-# 1. Run all 20-scenario engineering benchmark
-python pipeline/eval_semantic_matcher_benchmark.py
+# 单次核查（退出码：放行=0 / 阻断=1 / 需澄清=2）
+moonbow check --req "..." --resp "..."
 
-# 2. Run adversarial stress & regression suite
-python pipeline/test_entity_coverage_guard.py
+# 常驻 HTTP 微服务（供任意语言的 harness 调用）
+moonbow serve --port 18492
 
-# 3. Run production session subjective playback
-python pipeline/run_dag_session_subjective_eval_clean.py
+# 一键安装 Pi Agent 拦截扩展
+moonbow install-pi
+```
+
+SDK / CLI / 微服务 / 扩展四种集成方式的完整说明见 **[DELIVERY_GUIDE.md](DELIVERY_GUIDE.md)**。
+
+---
+
+## 4. 仓库结构与文档
+
+```
+spark-4b/
+├── src/moonbow/                    # Moonbow 包
+│   ├── __init__.py                 # 顶层导出（guard 全量 API）
+│   └── guard/                      # 管线插件 ①：Progress Guard 收尾闭合门禁
+│       ├── protocol.py             # 三字段清单协议与容错解析器（定量）
+│       ├── models.py               # 微模型推理：模态头 + 捕获头 + 相似度（定性）
+│       ├── verifier.py             # 硬软信号解耦的状态机裁决引擎（定量）
+│       ├── server.py               # 本地 HTTP 守护服务（18492 端口）
+│       ├── cli.py                  # moonbow / progress-guard 命令行入口
+│       └── extensions/             # Agent 宿主扩展（progress-guard.ts）
+├── tests/                          # 自动化测试套件（8/8 passed）
+├── models/                         # 生产推理微模型权重（~117M）
+├── docs/THESIS.md                  # 思想溯源（五次实证迭代）与架构设计
+├── maps/                           # 研究报告与形式化理论
+├── pipeline/                       # 离线训练、探针与评测基建
+├── data/                           # 评测题库与基准数据
+├── DELIVERY_GUIDE.md               # 交付与跨平台集成指南
+└── RESEARCH_INDEX.md               # 研究脉络索引
 ```
 
 ---
 
-## 5. Scientific Exclusion Chain Archive
+## 5. 路线图
 
-Before arriving at the decoupled micro-pipeline, we conducted extensive causal exclusion experiments. For full reproducibility, failure logs and causal ablations are preserved under `results/`:
+沿"观察系统性失败 → 形式化定义边界 → 拆成定性/定量 → 插入窄带节点"的路径生长管线：
 
-1. **Backbone Replacement (Route 6 / 6b)**: Replacing full attention with linear attention (`fla + causal_conv1d` or `Qwen3.5-0.8B`) fell significantly below the Pareto frontier ($\Delta = -5.6$ to $-10.0$ residual).
-2. **Two-Stage End-to-End Training (Stage 1 + 2)**: Forcing an end-to-end 287M model to judge obligation satisfaction caused severe recall collapse (recall dropped from $0.640$ to $0.400$).
-3. **Convention Dependence (§218)**: Changing prompt conventions swinging positive rates from $6\%$ to $73.5\%$ proved that single-step holistic closure judgment is subjective and ill-posed.
-
-See [`results/DISCIPLINE_FAILURE.md`](results/DISCIPLINE_FAILURE.md) and [`results/MEASUREMENT_AUDIT.md`](results/MEASUREMENT_AUDIT.md) for full audit reports.
+- **意图对齐节点**：持续比对当前动作与原始用户意图的客体漂移（pi-pair 的低成本化）；
+- **目标回归节点**：检测长程任务中的子目标静默丢失，在依从度崩塌前注入全局视角。
 
 ---
 
-## Citation
+## 6. 开源许可证
 
-```bibtex
-@software{spark4b_progress_guard_2026,
-  author = {Nuctori},
-  title = {Spark-4B: Specialized Micro-Pipeline for Zero-Regex Task Progress Guard},
-  year = {2026},
-  url = {https://github.com/Nuctori/spark-4b}
-}
-```
-
-## License
-Apache License 2.0. See [LICENSE](LICENSE) for details.
+本项目采用 [Apache License 2.0](LICENSE) 开源许可证。
