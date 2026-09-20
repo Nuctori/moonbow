@@ -80,35 +80,35 @@ if not verdict.is_closed:
 
 ## 4. 作为全局 CLI 命令行工具使用
 
-> 安装后同时注册 `moonbow` 与 `progress-guard` 两个等价命令（后者为兼容别名），下文以 `progress-guard` 为例。
+> 安装后注册 `moonbow` 主命令，命令空间按插件划分：`moonbow guard check/serve/parse/install-pi`；`progress-guard` 为独立兼容别名，直接进入 guard 子命令。下文以 `moonbow guard` 为例。
 
 ### 4.1 单次收尾检验 (`check`)
 用于 CI/CD 流程、Git Hook 或 Bash 自动化脚本中：
 
 ```bash
 # 场景 A: 规范闭合通过 (返回码 0)
-progress-guard check \
+moonbow guard check \
   --req "把接口分页修改为游标分页" \
   --resp "STATUS: A 全部完成\nREMAINING: 无\nEVIDENCE: pytest 5 passed"
 
 # 场景 B: 未按规范申报 (输出极简清单规范提示，返回码 1)
-progress-guard check \
+moonbow guard check \
   --req "把接口分页修改为游标分页" \
   --resp "我已经把分页写好了，应该没问题了"
 
 # 场景 C: 输出结构化 JSON 便于管道解析
-progress-guard check -r "需求" -s "收尾陈述" --json
+moonbow guard check -r "需求" -s "收尾陈述" --json
 ```
 
 ### 4.2 语法清单测试解析 (`parse`)
 用于检验 Agent 输出是否符合三字段规范：
 ```bash
-progress-guard parse --text "STATUS: B 部分完成\nREMAINING: 还差文档\nEVIDENCE: 无"
+moonbow guard parse --text "STATUS: B 部分完成\nREMAINING: 还差文档\nEVIDENCE: 无"
 ```
 
 ### 4.3 一键安装扩展插件 (`install-pi`)
 ```bash
-progress-guard install-pi
+moonbow guard install-pi
 # 自动将配套的 TypeScript 拦截插件复制至 ~/.pi/agent/extensions/
 ```
 
@@ -120,7 +120,7 @@ progress-guard install-pi
 
 ```bash
 # 启动常驻微服务 (默认端口 18492)
-progress-guard serve --port 18492 --host 127.0.0.1
+moonbow guard serve --port 18492 --host 127.0.0.1
 ```
 
 #### API 端点规范

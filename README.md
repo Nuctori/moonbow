@@ -146,17 +146,22 @@ print(verdict.is_closed)  # True
 
 ### CLI
 
-安装后注册 `moonbow` 命令（保留 `progress-guard` 兼容别名）：
+安装后注册 `moonbow` 命令（保留 `progress-guard` 兼容别名）。命令空间按插件划分：`moonbow <插件> <动作>`，后续新增管线插件时互不占用：
 
 ```bash
 # 单次核查（退出码：放行=0 / 阻断=1 / 需澄清=2）
-moonbow check --req "..." --resp "..."
+moonbow guard check --req "..." --resp "..."
 
 # 常驻 HTTP 微服务（供任意语言的 harness 调用）
-moonbow serve --port 18492
+moonbow guard serve --port 18492
 
 # 一键安装 Pi Agent 拦截扩展
-moonbow install-pi
+moonbow guard install-pi
+
+# 查看已注册的管线插件
+moonbow plugins
+
+# 兼容：旧版顶层命令自动路由到 guard，moonbow check ... 等价于 moonbow guard check ...
 ```
 
 SDK / CLI / 微服务 / 扩展四种集成方式的完整说明见 **[DELIVERY_GUIDE.md](DELIVERY_GUIDE.md)**。
@@ -169,12 +174,13 @@ SDK / CLI / 微服务 / 扩展四种集成方式的完整说明见 **[DELIVERY_G
 spark-4b/
 ├── src/moonbow/                    # Moonbow 包
 │   ├── __init__.py                 # 顶层导出（guard 全量 API）
+│   ├── cli.py                      # 顶层路由器：moonbow <插件> <动作>
 │   └── guard/                      # 管线插件 ①：Progress Guard 收尾闭合门禁
 │       ├── protocol.py             # 三字段清单协议与容错解析器（定量）
 │       ├── models.py               # 微模型推理：模态头 + 捕获头 + 相似度（定性）
 │       ├── verifier.py             # 硬软信号解耦的状态机裁决引擎（定量）
 │       ├── server.py               # 本地 HTTP 守护服务（18492 端口）
-│       ├── cli.py                  # moonbow / progress-guard 命令行入口
+│       ├── cli.py                  # guard 子命令实现（check/serve/parse/install-pi）
 │       └── extensions/             # Agent 宿主扩展（progress-guard.ts）
 ├── tests/                          # 自动化测试套件（8/8 passed）
 ├── models/                         # 生产推理微模型权重（~117M）

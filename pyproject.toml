@@ -23,7 +23,7 @@ dev = [
 ]
 
 [project.scripts]
-moonbow = "moonbow.guard.cli:main"
+moonbow = "moonbow.cli:main"
 progress-guard = "moonbow.guard.cli:main"
 
 [tool.setuptools.packages.find]

@@ -90,9 +90,9 @@ def cmd_install_pi(args):
     print(f"✓ 已成功将 progress-guard 插件安装至: {dest}")
 
 
-def main():
+def main(prog: str = "progress-guard"):
     parser = argparse.ArgumentParser(
-        prog="progress-guard",
+        prog=prog,
         description="Progress Guard: AI Agent 任务进度与收尾闭合守护内核",
     )
     parser.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}")
