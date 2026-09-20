@@ -154,7 +154,31 @@ jobs:
           pip install -e . --no-deps
           pip install pytest
 
+      - name: Probe endpoints & pick free model
+        id: pick
+        run: |
+          for base in "https://models.github.ai" "https://models.inference.ai.azure.com"; do
+            code=$(curl -s -o /tmp/catalog.json -w "%{http_code}" --max-time 20 "$base/catalog" -H "Authorization: Bearer ${{ github.token }}" || echo 000)
+            echo "== $base/catalog -> HTTP $code"
+            head -c 300 /tmp/catalog.json 2>/dev/null; echo
+          done
+          MODEL=$(python3 - <<'PY'
+          import json
+          names = []
+          try:
+              d = json.load(open("/tmp/catalog.json"))
+              names = [m.get("name", "") for m in (d if isinstance(d, list) else d.get("body", d.get("models", []))) if isinstance(m, dict)]
+          except Exception:
+              pass
+          pref = [n for n in names if n and ("mini" in n.lower() or "flash" in n.lower())]
+          print(pref[0] if pref else (names[0] if names else ""))
+          PY
+          )
+          echo "picked model: $MODEL"
+          echo "model=$MODEL" >> "$GITHUB_OUTPUT"
+
       - name: LLM producer E2E
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          MOONBOW_LLM_MODEL: ${{ steps.pick.outputs.model }}
         run: python -m pytest tests/test_llm_producer.py -v
