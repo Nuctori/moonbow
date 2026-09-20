@@ -9,9 +9,10 @@
 #       -> 跑一个小任务 -> 断言守卫服务收到真实裁决（stdout 遥测）。
 set -euo pipefail
 
-: "${LLM_BASE_URL:?未配置 LLM_BASE_URL}"
-: "${LLM_MODEL:?未配置 LLM_MODEL}"
-: "${LLM_API_KEY:?未配置 LLM_API_KEY}"
+if [ -z "${LLM_BASE_URL:-}" ] || [ -z "${LLM_MODEL:-}" ] || [ -z "${LLM_API_KEY:-}" ]; then
+  echo "SKIP: 免费模型未配置（设置 secrets.LLM_API_KEY + vars.LLM_BASE_URL + vars.LLM_MODEL 后手动重新触发本 job）"
+  exit 0
+fi
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(dirname "$HERE")"
