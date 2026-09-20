@@ -1,26 +1,19 @@
 cff-version: 1.2.0
 message: >-
-  If you use this work, please cite the methodology and the label-only gold
-  standard. A full BibTeX entry is provided in CITATION.bib.
-title: >-
-  Can a Model Judge Whether a Task Is Done? A Negative-Result Study on
-  Obligation-Closure Judgment
+  If you use Moonbow or the label-only gold standard in this repository,
+  please cite the project. A BibTeX entry is provided in CITATION.bib.
+title: Moonbow (月虹): In-Harness NLP Stream Pipelines of Narrow-Band Micro-Models for Agent Metacognition
 abstract: >-
-  We attempted to build a classifier that judges whether a user obligation is
-  closed by an agent's utterance. Five modeling families were tested and
-  excluded with causal experiments; at adequate statistical power the
-  obligation-aware model is indistinguishable from a zero-semantic baseline,
-  and a same-ruler comparison shows a 287M fine-tuned model and a large
-  general LLM perform within 2.5pp. We argue the failure is a task-definition
-  problem, not a modeling one.
-keywords:
-  - agent observability
-  - obligation closure
-  - negative result
-  - evaluation methodology
-  - gliner
-license: Apache-2.0
+  Moonbow treats an agent's output as a continuous natural-language stream and
+  adjudicates metacognitive questions with a cascade of a quantitative capture
+  model and a qualitative adoption model composed by a deterministic state
+  machine. The repository ships the Progress Guard closure gate as the first
+  production plugin, together with a label-only gold standard for
+  obligation-closure judgment and an honest negative-result study on
+  small-model single-utterance closure classification (see limitations.md).
 authors:
-  - family-names: "The Authors"
-    note: "To be filled on workshop submission"
-repository-code: "https://github.com/placeholder/obligation-closure-study"
+  - name: Nuctori
+year: 2026
+license: Apache-2.0
+repository-code: "https://github.com/Nuctori/spark-4b"
+type: software

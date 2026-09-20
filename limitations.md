@@ -57,3 +57,22 @@ session data.
 - A same-ruler comparison showing a 287M fine-tuned model and a large general LLM
   perform within 2.5pp on the same task.
 - A methodological contribution: the G-3 gate (negatives must carry evidence).
+
+## 7. SWE-bench: requested, executed qualitatively, not quantified
+
+SWE-bench Lite was the requested online benchmark. A pilot infrastructure was
+built and run end-to-end on a real harness and real repos (closed Pi
+distribution, per-instance venvs, isolated worktrees, anti-reward-hacking
+judgement protocol); the audit surfaced three evaluation-invalidating defects,
+and the guard chain was verified live (see `maps/SWE_EVAL*.md`).
+
+**No quantitative SWE-bench score is claimed anywhere in this repository.**
+Full runs are not tractable on the available local compute (single Intel Arc
+A770; Spark-X2.5-4B at ~9 min/task before backend tuning; per-repo dependency
+environments). All SWE-related findings reported here are qualitative:
+the reward-hacking specimen, the guard delivery defect, and two blind-spot
+specimens (half-fix, non-evidence closure).
+
+The quantitative path is prepared and automated: the `e2e-full` GitHub Actions
+job runs the full weight-backed evaluation whenever production weights are
+attached via the `MODEL_RELEASE_URL` repository variable.

@@ -115,6 +115,8 @@ EVIDENCE: 可验证的证据（命令输出、测试结果、指标）
 
 对比参照：同样的守卫工作若交给后台大模型 subagent 结对（我们此前的 [pi-pair](https://github.com/Nuctori/pi-pair) 方案），交付精度提升相当，但时间与 token 成本高出一个数量级以上。
 
+> **评测状态**：SWE-bench Lite 在线评测已完成基建与先导实测，结论均为**定性**（守卫链路实测可用、reward hacking 标本、两个盲区标本）；完整量化因本地算力不足（单张 A770、4B 模型约 9 分钟/题）**未执行，仓库不声明任何 SWE 分数**。量化路径已自动化：CI 的 `e2e-full` job 在挂载权重后即可完整复现。详见 [limitations.md](limitations.md) 第 7 节。
+
 ---
 
 ## 3. 快速开始
@@ -198,7 +200,7 @@ spark-4b/
 ├── models/                         # 生产推理微模型权重（~117M）
 ├── docs/THESIS.md                  # 思想溯源（五次实证迭代）与架构设计
 ├── maps/                           # 研究报告与形式化理论
-├── pipeline/                       # 离线训练、探针与评测基建
+├── protocol/                       # 金标标注协议与覆盖度判据
 ├── data/                           # 评测题库与基准数据
 ├── DELIVERY_GUIDE.md               # 交付与跨平台集成指南
 └── RESEARCH_INDEX.md               # 研究脉络索引

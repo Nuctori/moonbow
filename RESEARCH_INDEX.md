@@ -1,4 +1,6 @@
-# Spark-4B / Progress Guard 核心学术研究与技术演进索引
+# Moonbow（月虹）核心学术研究与技术演进索引
+
+> 完整报告正文见 [maps/](maps/INDEX.md)（13 份核心研究地图）；本索引是导航与结论速览。
 
 > **项目定位**：探讨与实现针对 AI 编程 Agent 的**轻量级任务收尾闭合核销守卫 (Progress Guard)**。  
 > **形式化命题**：$D(r, s) = \text{assert}(s) \models \text{done}(\text{scope}(r))$。任务闭合不是收尾陈述 $s$ 的固有单句句法属性，而是断言 $s$ 对用户请求 $r$ 意图范围的二元客体蕴含关系。

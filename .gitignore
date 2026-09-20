@@ -43,3 +43,7 @@ labels/
 dataset_qwen35_sft/
 data/archive_corpus/
 data/swe_bench_lite/
+.gate_state.json
+
+# --- CI/test caches ---
+.pytest_cache/

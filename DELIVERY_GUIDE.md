@@ -193,7 +193,7 @@ spark-4b/
 │   └── test_guard.py               # 自动化单元测试套件
 ├── models/                         # 推理权重 (capture_head_v1, minilm_slot_heads_v2)
 ├── maps/                           # 学术研究报告与形式化证明沉淀
-├── pipeline/                       # 离线后训练与研发基建
+├── protocol/                       # 金标标注协议与覆盖度判据
 ├── data/                           # 评测题库与基准数据
 ├── archive_experiments/            # 历史研发与诊断脚本归档
 └── pyproject.toml                  # 现代 Python 标准打包规范
