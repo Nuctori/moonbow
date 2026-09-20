@@ -27,7 +27,7 @@ Progress Guard 支持 **“Python 库 (Library) + 独立 CLI 命令行 + HTTP �
 
 #### 本地开发模式安装
 ```bash
-cd spark-4b
+cd moonbow
 pip install -e .
 ```
 
@@ -177,7 +177,7 @@ moonbow guard serve --port 18492 --host 127.0.0.1
 ## 7. 目录结构规范
 
 ```
-spark-4b/
+moonbow/
 ├── src/
 │   └── moonbow/
 │       ├── __init__.py             # 顶层导出

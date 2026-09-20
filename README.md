@@ -122,8 +122,8 @@ EVIDENCE: 可验证的证据（命令输出、测试结果、指标）
 ## 3. 快速开始
 
 ```bash
-git clone https://github.com/Nuctori/spark-4b.git
-cd spark-4b && pip install -e .
+git clone https://github.com/Nuctori/moonbow.git
+cd moonbow && pip install -e .
 ```
 
 ### SDK
@@ -185,7 +185,7 @@ moonbow guard probe                    # 端到端自检
 ## 4. 仓库结构与文档
 
 ```
-spark-4b/
+moonbow/
 ├── src/moonbow/                    # Moonbow 包
 │   ├── __init__.py                 # 顶层导出（guard 全量 API）
 │   ├── cli.py                      # 顶层路由器：moonbow <插件> <动作>
