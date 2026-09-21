@@ -35,11 +35,17 @@ class Verdict:
     hard_signals: List[str] = field(default_factory=list)
     soft_signals: List[str] = field(default_factory=list)
     scores: Dict[str, Any] = field(default_factory=dict)
+    allow_stop: bool = False
+    acceptance: str = "unverified"
+    review_requested: bool = False
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             "decision": self.decision.value,
             "is_closed": self.is_closed,
+            "allow_stop": self.allow_stop,
+            "acceptance": self.acceptance,
+            "review_requested": self.review_requested,
             "disputed": self.disputed,
             "feedback": self.feedback,
             "prompt": self.prompt,
@@ -83,6 +89,65 @@ class ProgressGuard:
         resp: str,
         rounds: int = 1,
         external_tool_success: Optional[bool] = None,
+        *,
+        mode: str = "advisory",
+        semantic_review_used: bool = False,
+    ) -> Verdict:
+        """Check closure separately from stop permission.
+
+        Hosts persist semantic_review_used per task; rounds is not a delivery receipt.
+        strict preserves the legacy decision/stop behavior.
+        """
+        if mode not in ("advisory", "strict"):
+            raise ValueError("mode must be advisory or strict")
+        if type(semantic_review_used) is not bool:
+            raise TypeError("semantic_review_used must be a bool")
+        verdict = self._check(req, resp, rounds, external_tool_success, mode)
+        if verdict.decision == Decision.REQUIRE_MANIFEST:
+            verdict.acceptance = "invalid"
+        elif verdict.hard_signals:
+            verdict.acceptance = "incomplete"
+        elif not verdict.manifest.has_evidence and external_tool_success is not True:
+            verdict.acceptance = "unverified"
+        elif verdict.soft_signals:
+            verdict.acceptance = "disputed"
+        elif external_tool_success is True:
+            verdict.acceptance = "verified"
+        else:
+            verdict.acceptance = "unverified" if verdict.scores.get("skeleton_only") else "unchecked"
+
+        if mode == "strict":
+            verdict.allow_stop = verdict.is_closed
+            verdict.review_requested = verdict.decision == Decision.CLARIFY
+            return verdict
+
+        semantic = bool(verdict.scores.get("semantic_signals"))
+        verdict.review_requested = (
+            semantic and not semantic_review_used and not verdict.hard_signals
+        )
+        verdict.allow_stop = (
+            verdict.decision != Decision.REQUIRE_MANIFEST and not verdict.review_requested
+        )
+        if verdict.soft_signals:
+            verdict.is_closed = False
+            verdict.disputed = verdict.acceptance == "disputed"
+        if verdict.review_requested:
+            verdict.prompt = (
+                "【进度守卫复核建议】\n" + verdict.feedback + "\n"
+                "请结合已有修改和工具结果复核一次；若确有遗漏，请修复或如实列为剩余事项。"
+                "若无法验证，请明确报告受阻或未验证。不要仅为满足提示而改写申报或测试。"
+            )
+        elif verdict.allow_stop:
+            verdict.prompt = None
+        return verdict
+
+    def _check(
+        self,
+        req: str,
+        resp: str,
+        rounds: int,
+        external_tool_success: Optional[bool],
+        mode: str,
     ) -> Verdict:
         """对 Agent 的收尾输出进行进度闭合仲裁。
 
@@ -93,14 +158,17 @@ class ProgressGuard:
             external_tool_success: 外部工具硬信号（如 pytest 返回码==0）；
                                    若为 True，则硬证据成立，豁免软信号假阴性。
         """
+        if external_tool_success is not None and type(external_tool_success) is not bool:
+            raise TypeError("external_tool_success must be a bool or None")
+        tool_verified = external_tool_success is True
         manifest = parse_manifest(resp)
 
         # 1. 检查三字段清单规范
-        if not manifest.is_valid_format:
+        if not manifest.is_valid_format or manifest.status is None:
             return Verdict(
                 decision=Decision.REQUIRE_MANIFEST,
                 is_closed=False,
-                feedback="缺少收尾三字段申报清单",
+                feedback="收尾三字段申报清单缺失或 STATUS 非法，请使用 A/B/C/D 及对应状态说明",
                 prompt=PROMPT_REQUIRE_MANIFEST,
                 manifest=manifest,
                 hard_signals=["未按规范申报 STATUS / REMAINING / EVIDENCE 三字段"],
@@ -124,6 +192,9 @@ class ProgressGuard:
         if manifest.has_remaining:
             hard.append(f"你自报存在未完成遗留项：{manifest.remaining}")
 
+        if st == StatusCode.A and not manifest.has_evidence and not tool_verified:
+            soft.append("EVIDENCE 为空。请给出具体测试运行输出、构建日志或验证指标")
+
         # 3. 提取用于自然语言判别的实际陈述文本（排除清单声明头）
         statement_lines = [
             line for line in resp.splitlines()
@@ -146,18 +217,24 @@ class ProgressGuard:
                     scores["skeleton_only"] = True
         models = self._registry
 
+        semantic_signals: List[str] = []
         if models is not None:
             # 模态判定
             modality = models.get_modality(statement_text)
             scores["modality"] = modality
-            if modality != "assert" and not manifest.has_evidence and not external_tool_success:
-                hard.append(f"你的收尾陈述语气为「{modality}」，并非完成性断言")
+            if modality != "assert" and not tool_verified:
+                signal = f"收尾陈述语气可能为「{modality}」，请核对是否已完成"
+                if mode == "strict":
+                    if not manifest.has_evidence:
+                        hard.append(signal)
+                else:
+                    semantic_signals.append(signal)
 
             # 客体语义相似度
             sim_val = models.get_similarity(req, statement_text)
             scores["similarity"] = round(sim_val, 4)
-            if sim_val < self.sim_threshold and not manifest.has_evidence and not external_tool_success:
-                soft.append(f"收尾内容与用户请求【{req}】存在客体差异（相似度仅 {sim_val:.3f}），请核对工作是否对齐目标")
+            if sim_val < self.sim_threshold and not tool_verified:
+                semantic_signals.append(f"收尾内容可能未覆盖用户请求【{req}】，请结合实际修改核对目标")
 
             # 二值完成度捕获概率
             cap_p = None
@@ -165,12 +242,12 @@ class ProgressGuard:
                 cap_p = models.get_capture_prob(statement_text)
                 scores["capture_prob"] = round(cap_p, 4)
 
-                # 如果没有外部真实单测背书，核查二值捕获头与证据完整度
-                if not external_tool_success:
-                    if cap_p < self.cap_threshold and not manifest.has_evidence:
-                        soft.append("检测到收尾内容疑似未完全闭合，请提供具体工程验证证据或如实修正 STATUS")
-                    elif not manifest.has_evidence:
-                        soft.append("EVIDENCE 为空。请给出具体测试运行输出、构建日志或验证指标")
+                # 自报证据不消除模型异议；仅外部成功信号可直接豁免。
+                if cap_p < self.cap_threshold and not tool_verified:
+                    semantic_signals.append("收尾内容疑似未完全闭合，请提供工程验证证据或如实修正 STATUS")
+
+        soft.extend(semantic_signals)
+        scores["semantic_signals"] = semantic_signals
 
         # 5. 综合状态机裁决
         # 规则 5.1: 存在任何硬缺陷 -> 刚性阻断 BLOCK
@@ -186,18 +263,18 @@ class ProgressGuard:
             )
 
         # 规则 5.2: 软信号全清 -> 立即放行 CLOSE
-        if not soft:
+        if not soft and st == StatusCode.A:
             return Verdict(
                 decision=Decision.CLOSE,
                 is_closed=True,
-                feedback="验收通过，允许正常退出",
+                feedback="当前检查未检出异议；不等同于独立验收通过",
                 manifest=manifest,
                 scores=scores,
             )
 
         # 规则 5.3: 非对称确认机制 (Disputed Close)
         # 生产者在看到核查提示后，于第 2 轮及以上重申 STATUS=A，且提供了非空证据 -> 争议放行并留痕
-        if rounds >= 2 and st == StatusCode.A and not manifest.has_remaining and manifest.has_evidence:
+        if mode == "strict" and rounds >= 2 and st == StatusCode.A and not manifest.has_remaining and manifest.has_evidence:
             return Verdict(
                 decision=Decision.CLOSE,
                 is_closed=True,

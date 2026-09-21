@@ -30,6 +30,8 @@ def cmd_check(args):
         resp=resp_text,
         rounds=args.rounds,
         external_tool_success=args.tool_success,
+        mode=args.mode,
+        semantic_review_used=args.semantic_review_used,
     )
 
     if args.json:
@@ -37,7 +39,8 @@ def cmd_check(args):
     else:
         print("=" * 60)
         print(f"裁决结论: {verdict.decision.value} {'[争议放行]' if verdict.disputed else ''}")
-        print(f"允许退出: {'是 (CLOSED)' if verdict.is_closed else '否 (BLOCKED)'}")
+        print(f"允许退出: {'是' if verdict.allow_stop else '否'}")
+        print(f"验收状态: {verdict.acceptance}")
         print(f"详细反馈: {verdict.feedback}")
         if verdict.prompt:
             print("-" * 60)
@@ -47,8 +50,8 @@ def cmd_check(args):
             print(f"模型打分: {verdict.scores}")
         print("=" * 60)
 
-    # 退出码规范：放行返回 0，阻断返回 1，澄清返回 2
-    if verdict.decision == Decision.CLOSE:
+    # 退出码表达宿主动作，不代表独立验收通过。
+    if verdict.allow_stop:
         sys.exit(0)
     elif verdict.decision == Decision.CLARIFY:
         sys.exit(2)
@@ -162,6 +165,8 @@ def main(prog: str = "progress-guard"):
     p_check.add_argument("-s", "--resp", default="", help="Agent 收尾输出文本")
     p_check.add_argument("--resp-file", help="从指定文件读取 Agent 收尾输出文本")
     p_check.add_argument("--rounds", type=int, default=1, help="当前交互轮次（默认 1）")
+    p_check.add_argument("--mode", choices=("advisory", "strict"), default="advisory", help="默认建议模式；strict 保留严格裁决")
+    p_check.add_argument("--semantic-review-used", action="store_true", help="宿主已投递本任务的一次语义复核提示")
     p_check.add_argument("--tool-success", action="store_true", help="标记外部测试命令已物理通过")
     p_check.add_argument("--models-dir", help="自定义模型权重目录")
     p_check.add_argument("--device", default="cpu", help="推理设备 (cpu/xpu/cuda)")

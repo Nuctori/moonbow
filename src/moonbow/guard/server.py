@@ -44,10 +44,28 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
             self._send_json(400, {"error": f"Invalid JSON payload: {e}"})
             return
 
+        if not isinstance(payload, dict):
+            self._send_json(400, {"error": "JSON payload must be an object"})
+            return
+
+        ext_success = payload.get("external_tool_success", None)
+        if ext_success is not None and type(ext_success) is not bool:
+            self._send_json(400, {"error": "external_tool_success must be a boolean or null"})
+            return
+
+        mode = payload.get("mode", "advisory")
+        review_used = payload.get("semantic_review_used", False)
+        if mode not in ("advisory", "strict") or type(review_used) is not bool:
+            self._send_json(400, {"error": "mode must be advisory/strict and semantic_review_used must be boolean"})
+            return
+
         req = payload.get("req", "")
         resp = payload.get("resp", "")
-        rounds = int(payload.get("rounds", 1))
-        ext_success = payload.get("external_tool_success", None)
+        try:
+            rounds = int(payload.get("rounds", 1))
+        except (TypeError, ValueError, OverflowError):
+            self._send_json(400, {"error": "rounds must be an integer"})
+            return
 
         try:
             verdict = self.guard.check(
@@ -55,6 +73,8 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
                 resp=resp,
                 rounds=rounds,
                 external_tool_success=ext_success,
+                mode=mode,
+                semantic_review_used=review_used,
             )
             # 裁决遥测：stdout 可见（CI / 安装验证以这行 log 为投递证据）
             logger.info("/check verdict=%s is_closed=%s skeleton=%s",

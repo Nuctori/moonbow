@@ -13,9 +13,9 @@
 3. **模糊逃避 (Vague Closure)**：输出大量“应该可以了”、“后续还需要进一步测试”等非断言语气，企图糊弄结案。
 
 **Progress Guard** 通过轻量本地微模型（~117M，单次推理 <25ms）与极简三字段收尾清单协议，在 Agent 试图退出时充当“守门员”：
-- **硬信号**：自报未完成、缺少测试证据直接刚性阻断（BLOCK）；
-- **软信号**：客体偏离或语气模糊触发精准的客体核对提示（CLARIFY）；
-- **争议放行**：主模型重申完成并提供工程证据时放行留痕（CLOSE [disputed]）。
+- **默认建议模式（advisory）**：每任务最多一次合并语义复核；持续异议不重复追问，也不升级为验收通过。
+- **诚实收尾**：B/C/D、剩余项或缺证据可结束，但记录 incomplete/unverified，不能标记任务已验收。
+- **显式严格模式（strict）**：保留原裁决与争议放行逻辑，适用于宿主明确要求门禁的场景。
 
 ---
 
@@ -68,15 +68,29 @@ verdict = guard.check(
 )
 
 print(f"裁决结论: {verdict.decision}") # Decision.CLOSE
-print(f"允许退出: {verdict.is_closed}") # True
+print(f"允许退出: {verdict.allow_stop}") # True
+print(f"验收状态: {verdict.acceptance}") # verified（信任宿主传入的成功信号）
 print(f"反馈说明: {verdict.feedback}")
 
-if not verdict.is_closed:
-    # 将守卫反馈提示词喂回给 Agent 上下文，迫使其继续执行修复
+if verdict.review_requested:
+    # 宿主先持久化预算，再投递一次提示；后续 check 传 semantic_review_used=True。
     next_prompt = verdict.prompt
 ```
 
 ---
+
+### 默认建议策略与兼容迁移
+
+`check(..., mode="advisory", semantic_review_used=False)` 是默认行为。`rounds` 不代表提示已投递，不能消耗语义预算；预算由宿主持久化后传入。`mode="strict"` 保留原有严格行为。
+
+- `allow_stop`：宿主是否需要安排反馈轮次，与任务是否成功分离。
+- `review_requested`：是否请求一次合并的语义复核。
+- `acceptance`：`invalid`（格式非法）、`incomplete`（自报未完成）、`unverified`（缺证据或语义模型不可用）、`disputed`（语义异议未解决）、`unchecked`（未检出异议但未独立验收）、`verified`（宿主提供成功信号）。
+- `decision`、`is_closed` 保留为闭合检查结果；不要再把 `is_closed` 当作退出许可，也不要把 `CLOSE` 当作独立验收通过。预算耗尽时可以 `allow_stop=true` 且 `is_closed=false`。
+
+`verified` 仍依赖调用者正确绑定工具证据，本版本不验证命令范围或代码版本。宿主已有的必要测试、安全及发布门禁不受 `allow_stop` 豁免。模型加载降级和服务不可达必须记录为未验证。
+
+CLI 使用 `--mode strict` 切换严格策略，`--semantic-review-used` 表示当前任务预算已消耗。退出码 0 表示允许结束，不表示验收成功；自动验收必须读取 JSON 的 `acceptance` 并执行宿主自己的验收规则。
 
 ## 3.5 开箱即用（自举接入）
 
@@ -141,6 +155,8 @@ moonbow guard serve --port 18492 --host 127.0.0.1
       "req": "用户原始需求",
       "resp": "Agent 最新收尾文本",
       "rounds": 1,
+      "mode": "advisory",
+      "semantic_review_used": false,
       "external_tool_success": false
     }
     ```
@@ -149,7 +165,10 @@ moonbow guard serve --port 18492 --host 127.0.0.1
     {
       "decision": "CLARIFY",
       "is_closed": false,
-      "disputed": false,
+      "allow_stop": false,
+      "acceptance": "disputed",
+      "review_requested": true,
+      "disputed": true,
       "feedback": "收尾内容与用户请求存在客体差异...",
       "prompt": "【进度守卫核查意见】...",
       "scores": {
@@ -167,10 +186,16 @@ moonbow guard serve --port 18492 --host 127.0.0.1
 本项目已内置经实战验证的 TypeScript 插件：
 - 文件位置：`src/moonbow/guard/extensions/progress-guard.ts`
 
-### 挂载原理（Context Event 真实拦截）
-1. 在 Agent 会话触发 `turn_end` 且准备停止工作时拦截；
-2. 异步请求本地微服务 `http://127.0.0.1:18492` 进行意图与证据核验；
-3. 若未完成或缺少单测证据，通过 Pi 的 **`context` 事件** 将核查提示动态追加进消息序列中（作为 User 提示），驱动 Agent 自主发起下一轮修复，杜绝空跑与作弊！
+### 宿主预算与投递
+1. Pi 在真实 `input` 上创建任务；扩展来源输入不重置任务。每条真实用户输入是此最小适配器的任务边界。
+2. 只在无工具调用的最终助手回合检查；使用 10 秒请求超时，丢弃旧任务的迟到响应。
+3. 每任务单独持久化一次格式补报和一次语义复核预算；Pi 使用 `appendEntry` / 当前 `getBranch` 恢复，重载与上下文压缩不重置。
+4. 通过 Pi 原生 `sendMessage(..., {deliverAs: "followUp", triggerTurn: true})` 投递，移除手工 context 注入，避免重复提示。
+5. `progress-guard:observation` 记录裁决、验收状态、检查耗时和助手 usage；`progress-guard:delivery` 记录排队。不把排队或模型改口当作成功挽回，也不宣称这些记录已完成成本归因。
+
+Stop-hook 参考适配器使用 `~/.moonbow/hook-state` 原子预算标记，按会话和最后真实用户消息 ID 隔离。可用 `MOONBOW_HOOK_STATE_DIR` 更改路径；没有消息 ID 时退回转写行号，若宿主重写转写文件则无法保证身份稳定，应提供稳定消息 ID。重试仍核查并记录结果，但不重复语义提示。
+
+两种适配器通过 `MOONBOW_GUARD_MODE=strict` 显式选择严格策略。严格模式保留原有宿主防循环上限，不是可靠的安全门禁。格式补报用尽、服务故障或预算持久化失败时不继续触发模型，保留未验证状态。安装扩展后需重载宿主；旧服务缺少策略字段时适配器停止介入并报告需升级。
 
 ---
 

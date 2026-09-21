@@ -43,7 +43,9 @@ moonbow guard probe        # 服务没起就先 moonbow guard serve
 
 按宿主机制把 `POST /check` 接入收尾事件，语义对齐参考样例：
 - 收尾触发时提取 `req` 与 `resp` → POST `/check`；
-- `is_closed=false` 时把 `feedback`（和 `prompt`）以宿主的用户/模型可见方式呈现；
+- 默认 `mode="advisory"`，读取 `allow_stop` 决定是否安排反馈轮次；不得用 `is_closed` 作为退出许可，也不得将允许结束当作验收通过；
+- 每任务持久化一次语义预算，投递 `review_requested=true` 的提示前占用预算，后续传 `semantic_review_used=true`；格式补报单独最多一次。重试、重载或压缩不重置，真实新用户任务才重置；
+- 保留 `acceptance`（invalid/incomplete/unverified/disputed/unchecked/verified），尤其预算耗尽不得升级为 verified；宿主自己的必要验收门禁仍独立执行；
 - 任何异常一律静默放行；带 `stop_hook_active` 类防循环标志的宿主要遵守；
 - 追加一行遥测日志（时间 + 事件 + 裁决），落盘到 `~/.moonbow/hook.log` 或宿主等价位置。
 

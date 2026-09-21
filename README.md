@@ -126,6 +126,10 @@ git clone https://github.com/Nuctori/moonbow.git
 cd moonbow && pip install -e .
 ```
 
+### 默认建议模式
+
+默认 `advisory`：每任务最多一次语义复核，格式补报另计一次；持续异议不重复追问，也不升级成验收通过。SDK/HTTP 返回 `allow_stop`（退出许可）、`acceptance`（验收状态）、`review_requested`（是否请求复核），宿主按任务持久化并传入 `semantic_review_used`。`is_closed` 仍是闭合检查结果，不是退出许可。需要原有严格策略时显式传 `mode="strict"` / CLI `--mode strict`；Pi 和 Stop-hook 使用 `MOONBOW_GUARD_MODE=strict`。详见 [交付指南](DELIVERY_GUIDE.md#默认建议策略与兼容迁移)。下文历史裁决走查中的争议放行对应严格模式。
+
 ### SDK
 
 ```python
