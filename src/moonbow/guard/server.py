@@ -10,6 +10,7 @@ from typing import Optional
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 from .verifier import ProgressGuard, Decision
+from .process_audit import audit_stage_payload
 
 logger = logging.getLogger("progress_guard.server")
 
@@ -46,6 +47,21 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
 
         if not isinstance(payload, dict):
             self._send_json(400, {"error": "JSON payload must be an object"})
+            return
+
+        # ---- 阶段审计端点（过程审计；与收尾 /check 分离，不影响其语义）----
+        if self.path in ("/v1/stage-check", "/stage-check"):
+            try:
+                result = audit_stage_payload(payload)
+                logger.info("/v1/stage-check findings=%d reminder=%s",
+                            len(result.get("findings", [])),
+                            bool(result.get("reminder")))
+                self._send_json(200, result)
+            except (ValueError, TypeError) as e:
+                self._send_json(400, {"error": str(e)})
+            except Exception as e:
+                logger.exception("阶段审计发生内部异常")
+                self._send_json(500, {"error": f"Internal Stage Audit Error: {e}"})
             return
 
         ext_success = payload.get("external_tool_success", None)

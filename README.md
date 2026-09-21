@@ -126,6 +126,34 @@ git clone https://github.com/Nuctori/moonbow.git
 cd moonbow && pip install -e .
 ```
 
+### 阶段审计（过程观察，默认关闭）
+
+除收尾检查外，Pi 扩展支持在 Agent 运行过程中做阶段性审计：可见思考块结束、
+中间汇报文本块结束即触发增量核对（确定性规则，无权重依赖）；隐藏 CoT 的模型
+则依靠中间汇报与工具证据。检测提前，提醒仍走宿主安全边界（steer 排队 /
+followUp 收尾），不承诺打断正在生成的响应。
+
+```bash
+# 过程审计开关（Pi 扩展环境变量）
+#   off      默认。仅保留原有收尾检查
+#   shadow   只记录发现（progress-guard:shadow 条目），绝不注入
+#   advisory 过程发现可投递提醒；与收尾共享每任务一次语义复核预算
+MOONBOW_GUARD_PROCESS=shadow moonbow guard serve
+moonbow guard install-pi   # 安装入口与 process-*.ts 模块（缺一不可）
+```
+
+设计边界：中间汇报不套用 STATUS/REMAINING/EVIDENCE 收尾门禁；"未观察到证据"
+保留为未知（unverified），不判失败；修改前的测试不支持修改后的完成声明（时序
+核对）；补做验证与如实修正完成声明都是合法响应。`/v1/stage-check` 端点与收尾
+`/check` 相互独立，后者语义保持不变。
+
+与 `MOONBOW_GUARD_MODE=strict` 的兼容规则（有显式测试锁定，见
+`tests/test_pi_strict_combo.mjs`）：① 过程审计行为只由 `MOONBOW_GUARD_PROCESS`
+决定，与收尾模式无关，strict 下 advisory/shadow 照常工作；② 过程提醒只计入
+过程状态自身的介入计数，**不占用** strict 收尾防循环上限（每任务 2 次），
+反之 strict 收尾上限耗尽也不关闭过程审计；③ 语义预算（每任务一次）双向共享，
+两种模式均生效。strict 收尾语义逐行未动。
+
 ### 默认建议模式
 
 默认 `advisory`：每任务最多一次语义复核，格式补报另计一次；持续异议不重复追问，也不升级成验收通过。SDK/HTTP 返回 `allow_stop`（退出许可）、`acceptance`（验收状态）、`review_requested`（是否请求复核），宿主按任务持久化并传入 `semantic_review_used`。`is_closed` 仍是闭合检查结果，不是退出许可。需要原有严格策略时显式传 `mode="strict"` / CLI `--mode strict`；Pi 和 Stop-hook 使用 `MOONBOW_GUARD_MODE=strict`。详见 [交付指南](DELIVERY_GUIDE.md#默认建议策略与兼容迁移)。下文历史裁决走查中的争议放行对应严格模式。
