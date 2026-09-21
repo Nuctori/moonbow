@@ -80,22 +80,29 @@ def parse_manifest(text: str) -> ClosureManifest:
 
     status_code: Optional[StatusCode] = None
     status_text = fields.get("STATUS", "").strip()
-    if status_text:
-        upper_st = status_text.upper()
-        if upper_st.startswith("A") or "全部完成" in status_text:
-            status_code = StatusCode.A
-        elif upper_st.startswith("B") or "部分" in status_text:
-            status_code = StatusCode.B
-        elif upper_st.startswith("C") or "进行" in status_text or "受阻" in status_text:
-            status_code = StatusCode.C
-        elif upper_st.startswith("D") or "失败" in status_text or "回滚" in status_text:
-            status_code = StatusCode.D
+    status_labels = {
+        StatusCode.A: ("全部完成",),
+        StatusCode.B: ("部分完成",),
+        StatusCode.C: ("进行中", "受阻", "进行中/受阻", "进行中或受阻"),
+        StatusCode.D: ("失败", "已回滚", "失败/已回滚", "失败或已回滚"),
+    }
+    upper_st = status_text.upper()
+    parts = upper_st.split(maxsplit=1)
+    for code, labels in status_labels.items():
+        if upper_st == code.value or status_text in labels:
+            status_code = code
+            break
+        if len(parts) == 2 and parts[0] == code.value and parts[1] in labels:
+            status_code = code
+            break
+    is_valid = is_valid and status_code is not None
 
     rem_val = fields.get("REMAINING", "").strip()
     ev_val = fields.get("EVIDENCE", "").strip()
     
-    rem_empty = rem_val in ("", "无", "没有", "沒有", "none", "None", "null", "N/A")
-    ev_empty = ev_val in ("", "无", "没有", "沒有", "none", "None", "null", "N/A")
+    empty_values = ("", "无", "没有", "沒有", "none", "null", "n/a")
+    rem_empty = rem_val.casefold() in empty_values
+    ev_empty = ev_val.casefold() in empty_values
 
     return ClosureManifest(
         raw_text=text,

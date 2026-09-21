@@ -121,6 +121,7 @@ def test_guard_disputed_close_round2():
         req="把接口改为 GraphQL 游标分页",
         resp=resp,
         rounds=2,
+        mode="strict",
     )
     assert verdict.decision == Decision.CLOSE
     assert verdict.is_closed is True

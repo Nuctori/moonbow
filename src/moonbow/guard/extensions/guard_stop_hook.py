@@ -9,6 +9,7 @@ harness 的结构性钩子：会话试图停止时，从转写文件提取最后
 
 投递遥测：每次调用追加一行到 ~/.moonbow/hook.log —— 安装验证与运行审计都用它。
 """
+import hashlib
 import json
 import os
 import sys
@@ -18,6 +19,8 @@ from datetime import datetime
 SERVICE = os.environ.get("MOONBOW_URL", "http://127.0.0.1:18492")
 LOG = os.path.expanduser(os.environ.get("MOONBOW_HOOK_LOG", "~/.moonbow/hook.log"))
 MARKER = "【进度守卫"
+MODE = os.environ.get("MOONBOW_GUARD_MODE", "advisory")
+STATE_DIR = os.path.expanduser(os.environ.get("MOONBOW_HOOK_STATE_DIR", "~/.moonbow/hook-state"))
 
 
 def _log(msg: str):
@@ -43,11 +46,11 @@ def _text_of(content) -> str:
 
 def _last_texts(transcript_path: str):
     """从转写 JSONL 提取 (最后一条真实用户消息, 最后一条助手文本)。"""
-    last_user, last_assistant = "", ""
+    last_user, last_assistant, task_id = "", "", ""
     if not transcript_path or not os.path.exists(transcript_path):
-        return last_user, last_assistant
+        return last_user, last_assistant, task_id
     with open(transcript_path, encoding="utf-8", errors="replace") as f:
-        for line in f:
+        for index, line in enumerate(f):
             line = line.strip()
             if not line:
                 continue
@@ -61,12 +64,27 @@ def _last_texts(transcript_path: str):
             if not text:
                 continue
             if role == "user":
-                if MARKER in text or text.strip().startswith("<"):  # 跳过守卫注入与系统包裹
+                if e.get("isMeta") or text.startswith(("【进度守卫提示】", "【进度守卫复核建议】", "【盲区提示】")):
                     continue
                 last_user = text
+                last_assistant = ""
+                task_id = str(e.get("uuid") or e.get("id") or f"{index}:{text}")
             elif role == "assistant":
                 last_assistant = text
-    return last_user, last_assistant
+    return last_user, last_assistant, task_id
+
+
+def _reserve(path):
+    try:
+        os.makedirs(STATE_DIR, exist_ok=True)
+        with open(path, "x", encoding="utf-8") as f:
+            f.write("reserved")
+        return True
+    except FileExistsError:
+        return False
+    except OSError as e:
+        _log(f"budget-unavailable {e!r} -> no intervention")
+        return False
 
 
 def main() -> int:
@@ -74,19 +92,26 @@ def main() -> int:
         hook_input = json.loads(sys.stdin.read() or "{}")
     except Exception:
         return 0
-    if hook_input.get("stop_hook_active"):
-        return 0  # 防循环：本次停止已是钩子拦截后的重试
+    if not isinstance(hook_input, dict):
+        return 0
 
     transcript = hook_input.get("transcript_path", "")
-    req, resp = _last_texts(transcript)
+    req, resp, task_id = _last_texts(transcript)
+    session = str(hook_input.get("session_id") or os.path.abspath(transcript))
+    key = hashlib.sha256(f"{session}:{task_id}".encode()).hexdigest()
+    semantic_path = os.path.join(STATE_DIR, key + ".semantic")
+    format_path = os.path.join(STATE_DIR, key + ".format")
+    semantic_used = os.path.exists(semantic_path)
     _log(f"invoke transcript={bool(transcript)} req={len(req)}ch resp={len(resp)}ch")
-    if not resp:
+    if not req or not resp:
         return 0
 
     payload = json.dumps({
         "req": req,
         "resp": resp,
-        "rounds": 1,
+        "rounds": 2 if hook_input.get("stop_hook_active") or semantic_used else 1,
+        "mode": MODE,
+        "semantic_review_used": semantic_used,
         "external_tool_success": None,  # 钩子无法取证工具真值，交由守卫按文本裁决
     }).encode("utf-8")
 
@@ -102,15 +127,32 @@ def main() -> int:
         return 0
 
     decision = verdict.get("decision", "CLOSE")
-    _log(f"verdict={decision} disputed={verdict.get('disputed', False)}")
-    if verdict.get("is_closed"):
+    _log(f"task={key} verdict={decision} acceptance={verdict.get('acceptance', 'unverified')} "
+         f"allow_stop={verdict.get('allow_stop')} semantic_used={semantic_used}")
+    if type(verdict.get("allow_stop")) is not bool:
+        _log("policy-fields-missing -> no intervention")
+        return 0
+    if verdict["allow_stop"]:
+        return 0
+    if MODE == "strict" and hook_input.get("stop_hook_active"):
+        return 0
+    if verdict.get("review_requested"):
+        budget_path = semantic_path
+    elif decision == "REQUIRE_MANIFEST":
+        budget_path = format_path
+    elif MODE == "strict":
+        budget_path = semantic_path
+    else:
+        return 0
+    if not _reserve(budget_path):
         return 0
 
     notice = verdict.get("feedback", "收尾申报存在未闭合信号，请核查后重试。")
     if verdict.get("prompt"):
         notice += "\n" + verdict["prompt"]
-    print(json.dumps({"decision": "block", "reason": f"【盲区提示】{notice}"},
+    print(json.dumps({"decision": "block", "reason": f"【进度守卫提示】{notice}"},
                      ensure_ascii=False))
+    _log(f"task={key} delivery=emitted semantic={verdict.get('review_requested', False)}")
     return 0
 
 
