@@ -47,3 +47,8 @@ data/swe_bench_lite/
 
 # --- CI/test caches ---
 .pytest_cache/
+
+# --- Build artifacts ---
+dist/
+build/
+*.egg-info/

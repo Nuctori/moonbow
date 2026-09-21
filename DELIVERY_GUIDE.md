@@ -193,6 +193,44 @@ moonbow guard serve --port 18492 --host 127.0.0.1
 4. 通过 Pi 原生 `sendMessage(..., {deliverAs: "followUp", triggerTurn: true})` 投递，移除手工 context 注入，避免重复提示。
 5. `progress-guard:observation` 记录裁决、验收状态、检查耗时和助手 usage；`progress-guard:delivery` 记录排队。不把排队或模型改口当作成功挽回，也不宣称这些记录已完成成本归因。
 
+### 阶段审计（过程观察）适配
+
+Pi 扩展除收尾检查外支持阶段性审计，由 `MOONBOW_GUARD_PROCESS` 控制：
+`off`（默认，零开销，仅收尾检查）/ `shadow`（只记录发现到
+`progress-guard:shadow` 条目，绝不注入）/ `advisory`（过程发现可投递提醒）。
+
+工作方式：`message_update` 携带累计消息快照与流式块标记，扩展在
+`thinking_end` / `text_end` 时从快照整体提取完整块（按消息身份 + 块下标去重，
+不做 delta 累加，结构上杜绝文本翻倍）；`message_end` 做完整性对账补采；
+工具证据以 `tool_execution_end` 为准并与 `toolResult` 消息按 toolCallId 去重。
+增量观察块送 `POST /v1/stage-check`（与收尾 `/check` 独立，纯确定性规则，
+无权重依赖），同一任务同时最多一个审计请求在飞行，完成后尾随合并期间入库
+的块，确保最新状态最终被处理。请求携带 task/branch/snapshotVersion，任务或
+分支切换后的迟到响应一律丢弃。
+
+提醒策略：仅 actionable 且未被提醒过（按 finding fingerprint）的问题才投递，
+`deliverAs: "steer"` 在宿主允许的执行边界排队进入上下文；有 pending 用户输入
+时不插入；语义类提醒与收尾共享每任务一次 `semantic_review_used` 预算，预算
+耗尽只记录不投递，也不升级为验收通过。送达状态机记录
+reserved/queued/observed/failed/unknown——排队不等于模型已读，更不等于问题
+已解决。可见思考不新增默认外部传输；审计对象是待核对数据而非指令，守卫
+不会依据模型汇报执行任何命令。
+
+与 `MOONBOW_GUARD_MODE=strict` 的兼容规则（显式测试锁定于
+`tests/test_pi_strict_combo.mjs`）：① 过程审计行为只由 `MOONBOW_GUARD_PROCESS`
+决定，与收尾模式无关——strict 下 advisory/shadow 照常工作；② 过程提醒只计入
+过程状态自身的介入计数（`progress-guard:process` 条目的
+`budgets.interventions/processReminders`），不占用 strict 收尾防循环上限
+（`progress-guard:state` 的 `interventions`，每任务 2 次）；strict 收尾上限
+耗尽同样不关闭过程审计；③ 语义预算（每任务一次）双向共享——过程语义提醒会
+置位 `task.semanticUsed`（advisory 收尾据此跳过；strict 收尾不读该字段，仅受
+自身上限约束），strict 收尾语义介入也会置位 `pstate.budgets.semanticUsed`
+（此后过程语义提醒不再投递）。strict 收尾语义逐行未动。
+
+已知边界：未对真实宿主 LLM 做流式端到端演练（事件顺序以已安装 SDK 0.85.1
+源码与真实会话记录核验为准）；steer 消息进入上下文的实际时机由宿主循环决定，
+本适配器不承诺打断同一次正在生成的响应。
+
 Stop-hook 参考适配器使用 `~/.moonbow/hook-state` 原子预算标记，按会话和最后真实用户消息 ID 隔离。可用 `MOONBOW_HOOK_STATE_DIR` 更改路径；没有消息 ID 时退回转写行号，若宿主重写转写文件则无法保证身份稳定，应提供稳定消息 ID。重试仍核查并记录结果，但不重复语义提示。
 
 两种适配器通过 `MOONBOW_GUARD_MODE=strict` 显式选择严格策略。严格模式保留原有宿主防循环上限，不是可靠的安全门禁。格式补报用尽、服务故障或预算持久化失败时不继续触发模型，保留未验证状态。安装扩展后需重载宿主；旧服务缺少策略字段时适配器停止介入并报告需升级。
