@@ -232,24 +232,65 @@ moonbow/
 ├── src/moonbow/                    # Moonbow 包
 │   ├── __init__.py                 # 顶层导出（guard 全量 API）
 │   ├── cli.py                      # 顶层路由器：moonbow <插件> <动作>
-│   └── guard/                      # 管线插件 ①：Progress Guard 收尾闭合门禁
-│       ├── protocol.py             # 三字段清单协议与容错解析器（定量）
-│       ├── models.py               # 微模型推理：模态头 + 捕获头 + 相似度（定性）
-│       ├── verifier.py             # 硬软信号解耦的状态机裁决引擎（定量）
-│       ├── server.py               # 本地 HTTP 守护服务（18492 端口）
-│       ├── cli.py                  # guard 子命令实现（check/serve/parse/install-pi）
-│       ├── process_audit.py        # 阶段审计引擎（过程观察，确定性规则）
-│       └── extensions/             # Agent 宿主扩展（progress-guard.ts 等 4 个）
+│   ├── guard/                      # 管线插件 ①：Progress Guard 收尾闭合门禁
+│   │   ├── protocol.py             # 三字段清单协议与容错解析器（定量）
+│   │   ├── models.py               # 微模型推理：模态头 + 捕获头 + 相似度（定性）
+│   │   ├── verifier.py             # 硬软信号解耦的状态机裁决引擎（定量）
+│   │   ├── server.py               # 本地 HTTP 守护服务（18492 端口，含独立
+│   │   │                           #   /v1/task-structure 端点）
+│   │   ├── cli.py                  # guard 子命令实现（check/serve/parse/install-pi）
+│   │   ├── process_audit.py        # 阶段审计引擎（过程观察，确定性规则）
+│   │   └── extensions/             # Agent 宿主扩展（progress-guard.ts、
+│   │                               #   task-structure-advisor.ts 等）
+│   └── task_structure/             # 管线插件 ②：Task Structure Advisor
+│       ├── schema.py               # 捕获项/关系/结构向量（引文级证据，程序校验）
+│       ├── extractor.py            # 捕获层：规则基线 + 后端协议（零模型）
+│       ├── scoring.py              # 计量层：透明阈值 → 等级 + 分型建议
+│       ├── policy.py               # 提醒策略：指纹去重、每版本上限、事实措辞
+│       ├── service.py              # 服务载荷入口（被独立端点调用）
+│       └── backends.py             # 可选 SLM 后端（HTTP / GLiNER，缺失即降级）
 ├── tests/                          # 自动化测试套件（Python + Node）
 ├── experiments/                    # 守卫在线介入效果实验（AB 对照、陷阱阶梯、报告）
+│   └── task_structure/             # 任务结构顾问：212 样本暂定评测集、
+│                                   #   离线评测器、规则基线报告、AB 驱动
 ├── models/                         # 生产推理微模型权重（~117M）
 ├── docs/THESIS.md                  # 思想溯源（五次实证迭代）与架构设计
+├── docs/task_structure_spec.md     # 结构定义与标注规范 v0（冻结）
 ├── maps/                           # 研究报告与形式化理论
 ├── protocol/                       # 金标标注协议与覆盖度判据
 ├── data/                           # 评测题库与基准数据
 ├── DELIVERY_GUIDE.md               # 交付与跨平台集成指南
 └── RESEARCH_INDEX.md               # 研究脉络索引
 ```
+
+### 4.1 Task Structure Advisor（任务结构顾问，默认 off）
+
+从自然语言消息捕获**显式**的交付义务/约束/依赖，用确定性规则量化
+"可观察结构复杂度"，在结构负担高时向主模型提供**可忽略**的拆解或
+分阶段建议。它不是任务真实难度预测器：标签描述任务表述，不代表
+解决难度；未捕获到复杂结构不等于简单；建议不构成要求、不拦截执行、
+不影响守卫的完成判定。
+
+```bash
+# 配置（Pi 插件侧）
+export MOONBOW_TSA_MODE=off        # off（默认，零请求零日志）| shadow | advisory
+export MOONBOW_TSA_URL=http://127.0.0.1:18492   # 守卫服务同址的独立端点
+export MOONBOW_TSA_MAX_REMINDERS=1 # 每任务版本提醒上限
+
+# 离线评测（规则基线，冻结评测集：dev 迭代 / test 一次）
+python experiments/task_structure/build_eval_set.py
+python experiments/task_structure/eval_task_structure.py --split test
+
+# 失败行为：分析超时/服务不可用/结果非法 → 静默跳过，主模型无感；
+# off 模式不注册任何事件处理器（结构上保证零开销）。
+```
+
+当前基线（冻结 test 切分，150 样本，暂定标注集——无人工复核）：
+goal P 0.85 / R 0.60 / F1 0.70；弃权正确率 82%；等级一致率 80%；
+取消抑制 71%；伪任务误报 13%。已知局限与调整历史见
+`experiments/task_structure/baseline_rule_test*.txt` 与规范文档。
+200M 级 SLM 捕获验证**受阻**（本地有权重、推理包不兼容，
+`probe_gliner.py` 可复现）；规则基线为当前唯一后端。
 
 ---
 

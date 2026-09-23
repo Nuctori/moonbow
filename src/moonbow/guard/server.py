@@ -64,6 +64,27 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
                 self._send_json(500, {"error": f"Internal Stage Audit Error: {e}"})
             return
 
+        # ---- 任务结构顾问端点（独立能力；lazy import + 异常完全隔离，
+        #      不触达守卫的任何状态与判定；/check 语义不变）----
+        if self.path in ("/v1/task-structure", "/task-structure"):
+            try:
+                from ..task_structure.service import analyze_payload
+                result = analyze_payload(payload)
+                logger.info("/v1/task-structure level=%s goals=%s abstain=%s",
+                            result.get("level"),
+                            (result.get("vector") or {}).get("goals"),
+                            result.get("abstain"))
+                self._send_json(200, result)
+            except (ValueError, TypeError) as e:
+                self._send_json(400, {"error": str(e)})
+            except ImportError as e:
+                logger.warning("task_structure 模块不可用: %s", e)
+                self._send_json(503, {"error": "task_structure unavailable"})
+            except Exception as e:
+                logger.exception("任务结构分析发生内部异常")
+                self._send_json(500, {"error": f"Internal Task Structure Error: {e}"})
+            return
+
         ext_success = payload.get("external_tool_success", None)
         if ext_success is not None and type(ext_success) is not bool:
             self._send_json(400, {"error": "external_tool_success must be a boolean or null"})
