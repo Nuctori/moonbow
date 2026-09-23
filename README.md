@@ -117,6 +117,17 @@ EVIDENCE: 可验证的证据（命令输出、测试结果、指标）
 
 > **评测状态**：SWE-bench Lite 在线评测已完成基建与先导实测，结论均为**定性**（守卫链路实测可用、reward hacking 标本、两个盲区标本）；完整量化因本地算力不足（单张 A770、4B 模型约 9 分钟/题）**未执行，仓库不声明任何 SWE 分数**。量化路径已自动化：CI 的 `e2e-full` job 在挂载权重后即可完整复现。详见 [limitations.md](limitations.md) 第 7 节。
 
+#### 2.3.1 在线介入效果：首轮受控实测（诚实结论）
+
+在真实 Pi harness 上做了场景化 AB 对照（守卫臂 vs 无守卫臂），结论**不是**一片叫好，如实记录：
+
+- **守卫的直接效应成立**：收尾清单申报协议采纳率 **0% → 54%**，模型在收到提醒后确实会补做验证。
+- **远端效应（完成率提升）未证实**：在难度对齐的复合陷阱任务上，uplift = **−20 点**（Fisher p=0.65，不显著）。
+- **零伤害已验证**：干净任务上守卫零投递、零误报。
+- **方法论发现**：uplift 只在 baseline 完成率落于 **30%~70%** 难度带时可测；任务太易（模型已 100%）或太难（baseline≈0）时 uplift 恒为 0。这解释了此前 SWE-bench 上"零效益"的观测——是任务与度量维度错配，不是链路错误。
+
+同时该批实验暴露并修复了 **10 处真实缺陷**（含上游限流被适配层静默吞掉、伪装成"模型主动收尾"的严重问题）。完整数据、失败模式族谱与复现步骤见 [experiments/](experiments/README.md)。
+
 ---
 
 ## 3. 快速开始
@@ -227,8 +238,10 @@ moonbow/
 │       ├── verifier.py             # 硬软信号解耦的状态机裁决引擎（定量）
 │       ├── server.py               # 本地 HTTP 守护服务（18492 端口）
 │       ├── cli.py                  # guard 子命令实现（check/serve/parse/install-pi）
-│       └── extensions/             # Agent 宿主扩展（progress-guard.ts）
-├── tests/                          # 自动化测试套件（8/8 passed）
+│       ├── process_audit.py        # 阶段审计引擎（过程观察，确定性规则）
+│       └── extensions/             # Agent 宿主扩展（progress-guard.ts 等 4 个）
+├── tests/                          # 自动化测试套件（Python + Node）
+├── experiments/                    # 守卫在线介入效果实验（AB 对照、陷阱阶梯、报告）
 ├── models/                         # 生产推理微模型权重（~117M）
 ├── docs/THESIS.md                  # 思想溯源（五次实证迭代）与架构设计
 ├── maps/                           # 研究报告与形式化理论
