@@ -89,6 +89,9 @@ def load_backend(spec: str):
     if spec.startswith("embedding"):
         import embedding_backend
         return embedding_backend.get_backend(spec)
+    if spec == "llm":
+        import llm_backend
+        return llm_backend.get_backend(spec)
     return RuleBackend()
 
 

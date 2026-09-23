@@ -1,0 +1,35 @@
+=== 去词表化（LLM-only 语义层）dev 切分对照（2026-09-24）===
+
+配置 A：GLiNER 链式二元 v1 措辞 t=0.65
+kind                P      R     F1   TP   FP   FN
+goal             0.60   0.47   0.53   18   12   20
+object           1.00   0.80   0.89    4    0    1
+constraint          -   0.00      -    0    0    5
+dependency          -   0.00      -    0    0    5
+coordination        -   0.00      -    0    0   10
+condition           -   0.00      -    0    0    2
+unresolved          -   0.00      -    0    0    1
+acceptance       0.09   0.33   0.14    1   10    2
+弃权正确率: 52%  等级一致率: 27% (n=15)
+伪任务误报率: 9%  取消抑制正确率: 20%
+改写稳定率: 50% (n=2)  复述不敏感率: 100%
+
+配置 B：+MiniLM 原型合议 tau=0.5（P 升 R 崩）
+kind                P      R     F1   TP   FP   FN
+goal             1.00   0.16   0.27    6    0   32
+object           1.00   0.80   0.89    4    0    1
+constraint          -   0.00      -    0    0    5
+
+=== 对照：规则基线 ===
+kind                P      R     F1   TP   FP   FN
+goal             0.89   0.82   0.85   31    4    7
+object           1.00   0.80   0.89    4    0    1
+constraint       0.83   1.00   0.91    5    1    0
+dependency       0.83   1.00   0.91    5    1    0
+coordination     1.00   0.80   0.89    8    0    2
+condition        1.00   0.50   0.67    1    0    1
+unresolved       1.00   1.00   1.00    1    0    0
+acceptance       1.00   1.00   1.00    3    0    0
+弃权正确率: 92%  等级一致率: 97% (n=33)
+伪任务误报率: 0%  取消抑制正确率: 100%
+改写稳定率: 100% (n=2)  复述不敏感率: 0%
