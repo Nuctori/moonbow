@@ -83,6 +83,9 @@ def load_backend(spec: str):
                 return [Capture(kind=c["kind"], quote=c["quote"])
                         for c in data.get("captures", [])]
         return HttpEvalBackend()
+    if spec.startswith("gliner"):
+        import gliner_backend
+        return gliner_backend.get_backend(spec)
     return RuleBackend()
 
 

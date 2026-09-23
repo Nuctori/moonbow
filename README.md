@@ -286,11 +286,15 @@ python experiments/task_structure/eval_task_structure.py --split test
 ```
 
 当前基线（冻结 test 切分，150 样本，暂定标注集——无人工复核）：
-goal P 0.85 / R 0.60 / F1 0.70；弃权正确率 82%；等级一致率 80%；
-取消抑制 71%；伪任务误报 13%。已知局限与调整历史见
+goal P 0.89 / R 0.61 / F1 0.72；弃权正确率 84%；等级一致率 84%；
+取消抑制 86%；伪任务误报 0%。已知局限与调整历史见
 `experiments/task_structure/baseline_rule_test*.txt` 与规范文档。
-200M 级 SLM 捕获验证**受阻**（本地有权重、推理包不兼容，
-`probe_gliner.py` 可复现）；规则基线为当前唯一后端。
+
+287M GLiNER（fastino/gliner2.5-multi-v1，本地缓存）**可运行**
+（加载须用 `AutoExtractor` API；`GLiNER2.from_pretrained` 与该 checkpoint
+不兼容）。但零样本两条路由（span 抽取 F1 0.37、子句分类 0.05）在 dev
+上均显著低于规则基线 0.85——项目对该模型的成功使用均为**微调头**；
+结构标签微调是让 SLM 后端超过规则的前置条件（待授权）。
 
 ---
 
