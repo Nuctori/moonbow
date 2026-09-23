@@ -288,10 +288,13 @@ class ProgressGuard:
         # 规则 5.4: 处于软信号灰色带 -> 触发单次去元语言反思提示 CLARIFY
         clarify_feedback = "；".join(soft)
         clarify_prompt = (
-            f"【进度守卫核查意见（请据此修正）】\n{clarify_feedback}\n\n"
-            "请对照你的实际修改和用户原始需求逐条核对：\n"
-            "- 若确已完全解决，请保留 STATUS: A 并在 EVIDENCE 填入具体测试或命令执行输出；\n"
-            "- 若属于部分完成或仍在进行，请如实调整 STATUS (如 B 或 C)。"
+            f"【进度守卫核查意见（请据此补完）】\n{clarify_feedback}\n\n"
+            # 先要求"继续做"，表态放最后：实测旧文案把"可调整为 B/C"放在
+            # 首屏，弱主动性模型据此提前收工（2026-09-22）。顺序即优先级。
+            "请对照你的实际修改和用户原始需求逐条核对，并继续把未完成的部分做完：\n"
+            "- 若还有未完成的修改或未运行的验证，现在就继续调用工具完成并跑到有结果；\n"
+            "- 若确已完全解决，请在 EVIDENCE 填入具体测试或命令执行输出。\n"
+            "（STATUS 若确实不是 A，如实填写即可，但仍须继续执行剩余事项。）"
         )
         return Verdict(
             decision=Decision.CLARIFY,

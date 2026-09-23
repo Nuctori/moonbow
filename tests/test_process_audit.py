@@ -156,10 +156,25 @@ def test_later_tool_evidence_resolves_evidence_order_finding():
 
 # ---- 提醒文案 ----
 
-def test_reminder_contains_both_legal_responses():
+def test_reminder_instructs_continuation_not_just_restatement():
+    """提醒必须指向"继续执行"，而非给模型"申报未完成即可收工"的出口。
+
+    2026-09-22 实测：旧文案（"请二选一……或如实修正完成声明"）让弱主动性
+    模型直接申报"部分完成"并终止，把本可完成的任务变成提前投降。
+    新契约：明确要求补做验证/继续调用工具，并显式否掉"仅以文字代替执行"。
+    """
     r = A([claim(1), tool_err(2)])
     s = r["reminder"]["suggestion"]
-    assert "补做" in s and ("如实" in s or "修正" in s)
+    assert "补做" in s, "应要求补做验证"
+    assert "继续" in s, "应要求继续执行"
+    assert "不要仅以文字" in s, "应否掉仅表态收工"
+
+
+def test_reminder_does_not_offer_restatement_only_exit():
+    """回归保护：文案不得把"如实申报未完成"当作可接受的终局选项。"""
+    r = A([claim(1), tool_err(2)])
+    s = r["reminder"]["suggestion"]
+    assert "请二选一" not in s, "不应提供二选一式的退出选项"
 
 
 # ---- 幂等 / fingerprint ----
@@ -188,3 +203,108 @@ def test_payload_validation():
 def test_invalid_kind_rejected():
     with pytest.raises(ValueError):
         StageBlock(seq=1, kind="bogus")
+
+
+# ---- 写入后未验证（2026-09-22 修复的规则缝隙）----
+# 旧实现把写入类工具的成功结果也计入 last_success_tool，于是"改完没验证就
+# 宣布完成"（真实 SWE 运行里最普遍的失败模式）恰好落在 2.1/2.2/2.3 三条分支
+# 之间的缝隙里 → 零发现。下面四条锁住修复后的行为边界。
+
+def _edit_ok(seq, cid="w1"):
+    return StageBlock(seq=seq, kind="toolResult", text="Successfully replaced 1 block",
+                      tool_call_id=cid, tool_name="edit", is_error=False)
+
+
+def test_write_without_verification_is_actionable():
+    """改完直接宣布完成、全程无验证 -> actionable（核心修复点）。"""
+    r = A([
+        think(1, "我接下来要修改 login 函数"),
+        StageBlock(seq=2, kind="toolCall", text='{"name":"edit"}', tool_name="edit"),
+        _edit_ok(3),
+        claim(4),
+    ])
+    fs = [f for f in r["findings"] if f["kind"] == "unverified-claim"
+          and f["status"] == "actionable"]
+    assert fs, f"应报'改了但没验证'，实际: {r['findings']}"
+    assert "验证" in fs[0]["summary"]
+
+
+def test_write_then_verified_is_clean():
+    """写后补了验证 -> 不误报（合法路径必须放行）。"""
+    r = A([
+        think(1, "我接下来要修改 login 函数"),
+        StageBlock(seq=2, kind="toolCall", text='{"name":"edit"}', tool_name="edit"),
+        _edit_ok(3),
+        StageBlock(seq=4, kind="toolCall", text='{"name":"bash"}', tool_name="bash"),
+        tool_ok(5, name="bash"),
+        claim(6),
+    ])
+    assert not [f for f in r["findings"] if f["status"] == "actionable"], \
+        f"写后已验证不该报 actionable: {r['findings']}"
+
+
+def test_read_only_then_claim_is_not_actionable():
+    """只读未改就宣布完成 -> 不报 unverified-write（那是另一种缺口）。"""
+    r = A([
+        StageBlock(seq=1, kind="toolCall", text='{"name":"read"}', tool_name="read"),
+        StageBlock(seq=2, kind="toolResult", text="def login()", tool_name="read"),
+        claim(3),
+    ])
+    assert not [f for f in r["findings"] if f["kind"] == "unverified-claim"
+                and f["status"] == "actionable"], f"只读不该报: {r['findings']}"
+
+
+def test_verification_before_write_does_not_count():
+    """改动前的验证不能支持改动后的完成声明（与 2.2 时序规则一致）。"""
+    r = A([
+        StageBlock(seq=1, kind="toolCall", text='{"name":"bash"}', tool_name="bash"),
+        tool_ok(2, name="bash"),
+        think(3, "我接下来要修改 login 函数"),
+        StageBlock(seq=4, kind="toolCall", text='{"name":"edit"}', tool_name="edit"),
+        _edit_ok(5),
+        claim(6),
+    ])
+    assert [f for f in r["findings"] if f["status"] == "actionable"], \
+        f"改动前验证不得放行: {r['findings']}"
+
+
+# ---- 终止确认：stream_ended 门控（2026-09-22）----
+# 实测 S2 场景：write 刚落盘就报"未经验证"，而模型下一个动作正是 cat 验证，
+# 连锁触发 3 次误报注入。修法是让"运行已结束"成为显式信号，而非从
+# 增量批次里猜终止。
+
+def _write_only():
+    return [StageBlock(seq=1, kind="toolCall", text='{"name":"edit"}', tool_name="edit"),
+            StageBlock(seq=2, kind="toolResult", text="Successfully replaced 1 block",
+                       tool_name="edit", is_error=False)]
+
+
+def test_write_without_verification_reports_only_when_stream_ended():
+    r = StageAuditor().audit("x", _write_only(), [], 1, stream_ended=True)
+    act = [f for f in r["findings"] if f["status"] == "actionable"]
+    assert act, "运行已结束且改动未验证 -> 应报"
+
+
+def test_write_without_verification_silent_while_stream_alive():
+    """验证尚未到达时不得误报（这是 S2 误报注入的根因）。"""
+    r = StageAuditor().audit("x", _write_only(), [], 1, stream_ended=False)
+    act = [f for f in r["findings"] if f["status"] == "actionable"]
+    assert not act, "流未静止时不得判'跑了没验证'"
+
+
+def test_write_then_verified_silent_even_when_ended():
+    blocks = _write_only() + [
+        StageBlock(seq=3, kind="toolCall", text='{"name":"bash"}', tool_name="bash"),
+        StageBlock(seq=4, kind="toolResult", text="1 passed", tool_name="bash", is_error=False)]
+    r = StageAuditor().audit("x", blocks, [], 1, stream_ended=True)
+    act = [f for f in r["findings"] if f["status"] == "actionable"]
+    assert not act, "写后有验证 -> 闭环，不应报"
+
+
+def test_stream_ended_defaults_false_in_http_layer():
+    """HTTP 层缺省 stream_ended=False：老客户端不传时行为保守（不误报）。"""
+    r = audit_stage_payload({"blocks": [
+        {"seq": 1, "kind": "toolCall", "text": "{}", "tool_name": "edit"},
+        {"seq": 2, "kind": "toolResult", "text": "ok", "tool_name": "edit"}],
+        "req": "x", "snapshot_version": 1})
+    assert not [f for f in r["findings"] if f["status"] == "actionable"]

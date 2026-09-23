@@ -38,6 +38,7 @@ export class BlockAssembler {
   private msgCounter = 0;
   private emitted = new Set<string>();      // `${messageKey}:${blockIndex}`
   private msgIds = new WeakMap<object, string>();
+  private stableKeys = new Map<string, string>();  // 稳定标识 -> messageKey
   private resultSeen = new Set<string>();   // toolCallId（工具证据只记一次）
 
   /** startSeq：崩溃/分支恢复后续接全局序号，保证游标语义连续。 */
@@ -45,11 +46,31 @@ export class BlockAssembler {
     this.seqCounter = startSeq;
   }
 
-  /** 消息对象身份：WeakMap（同一流式消息对象被累计修改时稳定）。 */
-  messageKey(message: object & { timestamp?: number }): string {
+  /** 消息身份 key：responseId 优先，对象身份兜底。
+   *
+   * 2026-09-22 实测：只用 WeakMap<对象> 时，pi 在 message_end 传入的是
+   * 新对象（非同一流式对象），同一消息因此拿到新 key、去重失效 ——
+   * 观察流里同一个块被重复采集 3 次（seq 递增、内容全同），时序核对
+   * 被污染，服务端据此算不出 finding。
+   *
+   * 只用 responseId 做稳定标识：它是响应级唯一 id。**不用 timestamp**
+   * —— 多条消息可能共享/缺失时间戳，拿它当 key 会把不同消息并成一条
+   * （实测导致多块采集测试失败）。
+   */
+  messageKey(message: any): string {
+    const rid = message?.responseId;
+    if (rid != null && rid !== "") {
+      const k = `s:${rid}`;
+      const hit = this.stableKeys.get(k);
+      if (hit) { this.msgIds.set(message, hit); return hit; }
+      const id = `m${++this.msgCounter}`;
+      this.stableKeys.set(k, id);
+      this.msgIds.set(message, id);
+      return id;
+    }
     const existing = this.msgIds.get(message);
     if (existing) return existing;
-    const id = `m${++this.msgCounter}-${message.timestamp ?? Date.now()}`;
+    const id = `m${++this.msgCounter}-${message?.timestamp ?? Date.now()}`;
     this.msgIds.set(message, id);
     return id;
   }

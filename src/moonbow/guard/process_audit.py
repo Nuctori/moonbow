@@ -38,6 +38,25 @@ _RESOLVE_PAT = re.compile(
     r"(所以(?:我|需要)|那就|接下来(?:我)?(?:补|加|修|改|验证)|i(?:'| a)ll (?:add|fix|verify|check)|"
     r"let me (?:add|fix|verify|check))", re.IGNORECASE)
 
+# 写入类工具：成功只证明"改动已落盘"，**不证明"改动有效"**——不能充当
+# 完成声明的验证证据。旧实现把它们一并计入 last_success_tool，于是"改完
+# 没验证就宣布完成"（真实 SWE 运行里最普遍的失败模式）恰好落在规则缝隙里：
+# last_success_tool 被 edit 的写入结果覆盖 → 2.2 的 `ls.seq < li` 不成立
+# → 2.1/2.2/2.3 三条分支全不命中 → 零发现。此处把"证据"收窄为验证性质。
+_WRITE_TOOLS = frozenset({"edit", "write", "apply_patch", "multiedit",
+                          "str_replace", "create", "notebook_edit"})
+
+
+def _is_verification_result(b: StageBlock) -> bool:
+    """该结果是否构成"验证证据"而非仅写入成功。
+
+    tool_name 缺失时保守判为验证性质：宁可漏一次提醒，也不把写入当验证
+    （那会把未验证的完成声明直接放行）。
+    """
+    if not b.tool_name:
+        return True
+    return b.tool_name.lower() not in _WRITE_TOOLS
+
 _EXCERPT = 120
 
 
@@ -60,6 +79,7 @@ class StageAuditor:
         blocks: List[StageBlock],
         prior_findings: Optional[List[StageFinding]] = None,
         snapshot_version: int = 0,
+        stream_ended: bool = False,
     ) -> Dict:
         """审计新增观察块，返回 {findings, reminder, semantic, based_on}。
 
@@ -70,7 +90,7 @@ class StageAuditor:
         prior = list(prior_findings or [])
         findings: List[StageFinding] = []
         findings.extend(self._check_thinking(blocks, snapshot_version))
-        findings.extend(self._check_claims_vs_tools(blocks, snapshot_version))
+        findings.extend(self._check_claims_vs_tools(blocks, snapshot_version, stream_ended))
         findings = self._revise_prior(prior, findings, blocks)
         reminder = self._first_reminder(findings, req)
         return {
@@ -105,12 +125,14 @@ class StageAuditor:
         return out
 
     # ---- 规则 2：完成声明 vs 工具证据（时序 + 矛盾 + 未知）----
-    def _check_claims_vs_tools(self, blocks: List[StageBlock], ver: int) -> List[StageFinding]:
+    def _check_claims_vs_tools(self, blocks: List[StageBlock], ver: int,
+                               stream_ended: bool = False) -> List[StageFinding]:
         out: List[StageFinding] = []
         last_intent_seq: Optional[int] = None
         last_claim: Optional[StageBlock] = None
         last_success_tool: Optional[StageBlock] = None
         last_failed_tool: Optional[StageBlock] = None
+        last_write_tool: Optional[StageBlock] = None
 
         for b in sorted(blocks, key=lambda x: x.seq):
             if b.kind in ("text", "thinking"):
@@ -121,10 +143,59 @@ class StageAuditor:
             elif b.kind == "toolResult":
                 if b.is_error:
                     last_failed_tool = b
-                else:
+                elif _is_verification_result(b):
                     last_success_tool = b
+                else:
+                    # 写入成功：记为"改动落盘"，不进入验证证据
+                    last_write_tool = b
 
         if last_claim is None:
+            # 无显式完成声明时的隐式完成点（2026-09-22）：
+            # 真实 SWE 运行里模型极少输出"已完成"字样——它以工具调用静默
+            # 终止。旧实现从这里直接 return，导致 9 个真实会话回放全部零发现
+            # （claims=0）。监工不能依赖被监工者主动申报，故以**运行终止点**
+            # 作为隐式收尾点：只要跑完这段记录，最后一次写入仍未被验证，
+            # 就构成"已开未关"。这是"推理出完成度"的最小实现。
+            if last_write_tool is None:
+                # 无任何成功写入时，检查"写入尝试全部失败"（2026-09-22）：
+                # 实测 01a0c5fd 三次 edit 全被拒（Validation failed /
+                # No changes made），从未落盘，旧规则因为"没有成功写入"
+                # 而沉默——但反复失败本身正是子任务开了没关。
+                failed_writes = [b for b in blocks
+                                 if b.kind == "toolResult" and b.is_error
+                                 and not _is_verification_result(b)]
+                if len(failed_writes) >= 2:
+                    last = failed_writes[-1]
+                    out.append(StageFinding(
+                        fingerprint=_fp("write-attempts-failed", f"{last.seq}"),
+                        kind="unverified-claim", status="actionable",
+                        summary=f"运行中有 {len(failed_writes)} 次代码改动尝试全部失败"
+                                f"（最后一次第{last.seq}块，{last.tool_name}），"
+                                "且模型未申报受阻或完成状态",
+                        evidence=[{"seq": last.seq, "kind": "toolResult",
+                                   "excerpt": _excerpt(last.text)}],
+                        snapshot_version=ver,
+                    ))
+                return out
+            if (last_success_tool is not None
+                    and last_success_tool.seq > last_write_tool.seq):
+                return out  # 最后一次改动之后有验证 -> 视为闭环
+            # 终止确认（2026-09-22）：只在**运行确已结束**（agent_end 置位的
+            # stream_ended）时才判"跑了没验证"。缺这个信号时，服务端只能在
+            # 每批增量上猜终止，于是 write 刚落盘就误报"改了没验证"——
+            # 实测 S2：模型下一个动作正是 cat 验证，却连锁触发 3 次误报注入。
+            if not stream_ended:
+                return out
+            out.append(StageFinding(
+                fingerprint=_fp("unverified-write-terminal", f"{last_write_tool.seq}"),
+                kind="unverified-claim", status="actionable",
+                summary=f"运行结束于第{last_write_tool.seq}块代码改动"
+                        f"（{last_write_tool.tool_name}）之后，"
+                        "该改动未经验证，且模型未申报完成状态",
+                evidence=[{"seq": last_write_tool.seq, "kind": "toolResult",
+                           "excerpt": _excerpt(last_write_tool.text)}],
+                snapshot_version=ver,
+            ))
             return out
 
         claim = last_claim
@@ -164,7 +235,27 @@ class StageAuditor:
                 ],
                 snapshot_version=ver,
             ))
-        # 2.3 无任何成功工具证据 -> 未知，不判失败
+        # 2.3 写入后无验证 -> 该改动"已开未关"（最常见的真实失败模式）。
+        #     写入成功只说明落盘，完成声明仍需验证证据；只要最后一次写入
+        #     之后（或整段记录里）没有任何验证类结果，就构成 actionable 缺口。
+        #     与 2.2 的区别：2.2 管"验证早于改动"，本条管"根本没有验证"。
+        if (last_write_tool is not None
+                and (last_success_tool is None
+                     or last_success_tool.seq < last_write_tool.seq)):
+            out.append(StageFinding(
+                fingerprint=_fp("unverified-write", f"{claim.seq}:{last_write_tool.seq}"),
+                kind="unverified-claim", status="actionable",
+                summary=f"完成声明（第{claim.seq}块）之前有代码改动"
+                        f"（第{last_write_tool.seq}块，{last_write_tool.tool_name}），"
+                        "但该改动之后没有任何验证类证据",
+                evidence=[
+                    {"seq": claim.seq, "kind": claim.kind, "excerpt": _excerpt(claim.text)},
+                    {"seq": last_write_tool.seq, "kind": "toolResult",
+                     "excerpt": _excerpt(last_write_tool.text)},
+                ],
+                snapshot_version=ver,
+            ))
+        # 2.4 无任何工具证据 -> 未知，不判失败
         elif last_success_tool is None:
             out.append(StageFinding(
                 fingerprint=_fp("unverified-claim", f"{claim.seq}"),
@@ -211,8 +302,11 @@ class StageAuditor:
             "evidence": [e.get("excerpt", "") for e in f.evidence],
             "suggestion": (
                 f"【进度守卫（过程核查）】{summary}\n依据：\n{ev}\n"
-                "请二选一：补做相应验证（修改后重跑测试/构建并给出结果）；"
-                "或如实修正完成声明（如改为\"已修改，尚未验证\"）。"
+                # 先给"继续做"的明确指令，再提申报：实测把申报选项放前面会
+                # 让弱主动性模型选择"如实申报未完成"并提前终止（2026-09-22）。
+                "请立刻补做验证：修改后重跑测试/构建并给出结果；"
+                "若确有未完成的改动，继续调用工具做完。"
+                "不要仅以文字说明代替执行。"
                 f"（对照需求：{_excerpt(req) if req else '当前任务'}）"
             ),
         }
@@ -229,5 +323,14 @@ def audit_stage_payload(payload: Dict) -> Dict:
         raise ValueError("findings must be a list")
     prior = [StageFinding.from_dict(f) for f in prior_raw if isinstance(f, dict)]
     ver = int(payload.get("snapshot_version", 0) or 0)
+    stream_ended = bool(payload.get("stream_ended", False))
     req = str(payload.get("req", "") or "")
-    return StageAuditor().audit(req, blocks, prior, ver)
+    import os as _os
+    if _os.environ.get("AUDIT_DEBUG"):
+        import json as _json, sys as _sys
+        print("[audit-debug] blocks=%d kinds=%s" % (
+            len(blocks), [b.kind for b in blocks]), file=_sys.stderr, flush=True)
+        for b in blocks:
+            print("[audit-debug]   seq=%s kind=%s tool=%s text=%r" % (
+                b.seq, b.kind, b.tool_name, b.text[:70]), file=_sys.stderr, flush=True)
+    return StageAuditor().audit(req, blocks, prior, ver, stream_ended)

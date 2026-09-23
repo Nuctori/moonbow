@@ -61,10 +61,30 @@ test('block assembly: growing snapshot + end markers never duplicate blocks', as
   // message_end 对账：同一批块应被去重
   h.handlers.message_end({ message: msg }, h.ctx);
   await flush();
-  const all = h.calls.flatMap(c => c.blocks);
-  const texts = all.filter(b => b.kind !== 'toolCall').map(b => b.text);
-  assert.equal(texts.filter(t => t === '先看看代码').length, 1);
-  assert.equal(texts.filter(t => t === '已完成修复').length, 1);
+  // 2026-09-22 起插件发送"窗口内全部块"（服务端时序核对需要完整历史），
+  // 故同一块会跨批次重复出现 —— 断言改为：**单次调用内**不得有重复块。
+  for (const c of h.calls) {
+    const texts = c.blocks.filter(b => b.kind !== 'toolCall').map(b => b.text);
+    assert.equal(texts.filter(t => t === '先看看代码').length <= 1, true,
+      '单批内同一块不得重复');
+    assert.equal(texts.filter(t => t === '已完成修复').length <= 1, true,
+      '单批内同一块不得重复');
+  }
+  // 全局去重判据：每个 seq 只对应**一种内容**（emitted 集合保证块不被重复创建）
+  const bySeq = new Map();
+  for (const c of h.calls) for (const b of c.blocks) {
+    const prev = bySeq.get(b.seq);
+    if (prev === undefined) bySeq.set(b.seq, b.text);
+    else assert.equal(prev, b.text, `seq=${b.seq} 内容不一致（重复创建）`);
+  }
+  // 内容相同的块只应有一个 seq（不得为同一内容分配多个 seq）
+  const textSeqs = new Map();
+  for (const [sq, tx] of bySeq) {
+    if (tx === '先看看代码' || tx === '已完成修复') {
+      textSeqs.set(tx, (textSeqs.get(tx) || 0) + 1);
+    }
+  }
+  for (const [tx, n] of textSeqs) assert.equal(n, 1, `"${tx}" 被分配了 ${n} 个 seq`);
 });
 
 test('multi thinking blocks + hidden CoT (no thinking) both collect', async (t) => {
@@ -371,4 +391,103 @@ test('delivery observed when custom feedback message enters context', async (t) 
   await tick();
   const d = h.entries.filter(e => e.customType === 'progress-guard:process').at(-1).data;
   assert.equal(d.deliveries.at(-1).status, 'observed');
+});
+
+// —— 17. 工具调用被误写成文本时不得触发收尾裁决（2026-09-22 修复）——
+// 实测：模型把 tool_call 写成纯文本（带 </arg_value> 残渣），该轮
+// stopReason=stop 且无真实 toolCall，旧逻辑据此送 /check，守卫发
+// REQUIRE_MANIFEST 打断推进中的任务。此测试锁住"识别即跳过"。
+
+test('tool-call-as-text does not trigger final check', async (t) => {
+  const h = harness();
+  const checked = [];
+  t.mock.method(globalThis, 'fetch', async (url, options) => {
+    if (String(url).endsWith('/check')) {
+      checked.push(JSON.parse(options.body));
+      return { ok: true, json: async () => ({ decision: 'REQUIRE_MANIFEST', allow_stop: false,
+        acceptance: 'pending', review_requested: false, prompt: '申报清单' }) };
+    }
+    return { ok: true, json: async () => ({ findings: [], reminder: null }) };
+  });
+  h.input();
+  // 模型把 read 调用写成了文本（真实污染样本）
+  const polluted = '[tool_call call_3f37886c] read {"path":"src/flask/blueprints.py"}</arg_value>';
+  h.handlers.turn_end({ message: { role: 'assistant', stopReason: 'stop',
+    content: [{ type: 'text', text: polluted }] } }, h.ctx);
+  await flush();
+  assert.equal(checked.length, 0, '格式错误的文本不应送收尾裁决');
+});
+
+test('genuine completion claim still triggers final check', async (t) => {
+  const h = harness();
+  const checked = [];
+  t.mock.method(globalThis, 'fetch', async (url, options) => {
+    if (String(url).endsWith('/check')) {
+      checked.push(JSON.parse(options.body));
+      return { ok: true, json: async () => ({ decision: 'CLOSE', allow_stop: true,
+        acceptance: 'closed', review_requested: false }) };
+    }
+    return { ok: true, json: async () => ({ findings: [], reminder: null }) };
+  });
+  h.input();
+  h.handlers.turn_end({ message: { role: 'assistant', stopReason: 'stop',
+    content: [{ type: 'text', text: '我已经修复了登录问题，测试全部通过。' }] } }, h.ctx);
+  await flush();
+  assert.equal(checked.length, 1, '真实完成声明必须送审');
+});
+
+// —— 19. 同一消息以不同对象形态重复到达时不得重复采集（2026-09-22 修复）——
+// 实测：pi 在 message_end 传入新对象，WeakMap 去重失效，同一块被采集 3 次
+// （seq 递增、内容全同），观察流被污染，服务端算不出 finding。
+
+test('same message arriving as different objects is deduped by stable id', async (t) => {
+  process.env.MOONBOW_GUARD_PROCESS = 'shadow';
+  const h = harness();
+  const bodies = [];
+  t.mock.method(globalThis, 'fetch', async (_, options) => {
+    const b = JSON.parse(options.body);
+    if (b.blocks?.length) bodies.push(b);
+    return { ok: true, json: async () => ({ findings: [], reminder: null }) };
+  });
+  h.input();
+  const content = [{ type: 'text', text: '复核完毕，无需修正' }];
+  const rid = 'resp-abc';
+  // 三次不同对象、同一 responseId（模拟 pi 的累计快照/定稿多形态）
+  h.handlers.message_end({ message: { role: 'assistant', responseId: rid, content } }, h.ctx);
+  h.handlers.message_end({ message: { role: 'assistant', responseId: rid, content } }, h.ctx);
+  h.handlers.message_end({ message: { role: 'assistant', responseId: rid, content } }, h.ctx);
+  await flush();
+  const seen = bodies.flatMap((b) => b.blocks).filter((x) => x.kind === 'text');
+  assert.equal(seen.length, 1, `同一 responseId 的文本块只应采集一次，实际 ${seen.length}`);
+});
+
+// —— 20. agent_end 时必须以 stream_ended=true 发审计（2026-09-22）——
+// 实测：模型 edit 后正要继续验证就被提前停毛病打断，agent_end 的终止审计
+// 应携带 stream_ended=true，服务端据此报"改了没验证"。若丢失，该缺口永不报。
+
+test('agent_end sends stream_ended=true audit', async (t) => {
+  process.env.MOONBOW_GUARD_PROCESS = 'advisory';
+  const h = harness();
+  const bodies = [];
+  t.mock.method(globalThis, 'fetch', async (url, options) => {
+    const b = JSON.parse(options.body);
+    bodies.push({ url: String(url), body: b });
+    if (String(url).endsWith('/check')) {
+      return { ok: true, json: async () => ({ decision: 'CLOSE', allow_stop: true,
+        acceptance: 'closed', review_requested: false }) };
+    }
+    return { ok: true, json: async () => ({ findings: [], reminder: null }) };
+  });
+  h.input();
+  // 一轮带工具调用的消息（写入类），随后运行结束
+  const msg = snap([
+    { type: 'toolCall', name: 'edit', id: 'call_x', arguments: { path: 'a.py' } },
+  ]);
+  h.handlers.message_end({ message: msg }, h.ctx);
+  h.handlers.agent_end({ messages: [msg] }, h.ctx);
+  await flush();
+  const stage = bodies.filter((x) => x.url.endsWith('/stage-check'));
+  assert.ok(stage.length >= 1, 'agent_end 应触发一次阶段审计');
+  const withFlag = stage.filter((x) => x.body.stream_ended === true);
+  assert.ok(withFlag.length >= 1, '终止审计必须携带 stream_ended=true');
 });

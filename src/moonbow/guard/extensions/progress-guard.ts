@@ -35,6 +35,26 @@ function textOf(content: any): string {
     : "";
 }
 
+/** 该文本是否其实是"工具调用被误写成文本"（模型格式错误，非收尾意图）。
+ *
+ * 2026-09-22 实测：模型有时把 tool_call 写成纯文本（形如
+ * `[tool_call call_xxx] read {"path":...}` 或带 `<arg_value>` 之类的
+ * harness 残渣），该轮 stopReason=stop 且无真实 toolCall，于是被
+ * turn_end 当成"准备收尾"送进 /check，守卫据此发出 REQUIRE_MANIFEST，
+ * 把正在推进的任务打断。识别出来即跳过收尾裁决 —— 这不是收尾意图，
+ * 是工具调用丢失。
+ */
+function looksLikeToolCallText(resp: string): boolean {
+  const t = resp.trim();
+  if (!t) return false;
+  // 明确的 harness 残渣 / 工具调用文本标记
+  if (/\[tool_call[\s\]]/i.test(t)) return true;
+  if (/<\/?(arg_value|arg_key|tool_call)>/i.test(t)) return true;
+  // 极短且形如 `name {"json"...}`（工具调用骨架）
+  if (t.length < 400 && /^(read|bash|edit|write|grep|ls|glob|todo_write)\b[\s\S]*\{\s*"/.test(t)) return true;
+  return false;
+}
+
 export default function activate(pi: ExtensionAPI) {
   let task: TaskState | undefined;
   let pstate: ProcessState | undefined;
@@ -124,21 +144,38 @@ export default function activate(pi: ExtensionAPI) {
     if (appendBlocks(pstate, blocks)) maybeAudit(ctx);
   }
 
-  function maybeAudit(ctx?: ExtensionContext, depth = 0) {
+  // 终止请求可能在上一轮审计飞行期间到达（agent_end 恰逢 pBusy=true），
+  // 此时不能丢弃：记下"曾请求终止"，尾随合并时继承，保证终止审计
+  // 一定以 stream_ended=true 发出（2026-09-22 竞态修复）。
+  let pendingStreamEnd = false;
+
+  function maybeAudit(ctx?: ExtensionContext, depth = 0, streamEnded = false) {
     const mode = processMode();
-    if (mode === "off" || !pstate || pBusy) return;
+    if (mode === "off" || !pstate) return;
+    if (pBusy) {
+      if (streamEnded) pendingStreamEnd = true;
+      return;
+    }
     const current = pstate;
+    const ended = streamEnded || pendingStreamEnd;
+    pendingStreamEnd = false;
     pBusy = true;
     const auditor = new StageAuditor(URL, (u, i) => fetch(u, i));
-    void auditor.submit(current, mode).then((resp) => {
+    void auditor.submit(current, mode, ended).then((resp) => {
       pBusy = false;
       applyAudit(current, resp, mode, ctx);
-      // 尾随合并：审计飞行期间入库的块，补一轮，确保最新状态最终被处理
-      if (pstate === current && depth < 3) {
+      // 尾随合并：审计飞行期间入库的块，补一轮，确保最新状态最终被处理；
+      // 继承终止标记（终止审计若被合并进尾随轮，同样必须带 stream_ended）
+      if (pstate === current && (depth < 3 || pendingStreamEnd)) {
         const last = current.blocks[current.blocks.length - 1];
-        if (last && last.seq >= current.auditedThroughSeq) maybeAudit(ctx, depth + 1);
+        if ((last && last.seq >= current.auditedThroughSeq) || pendingStreamEnd) {
+          maybeAudit(ctx, depth + 1, pendingStreamEnd);
+        }
       }
-    }).catch(() => { pBusy = false; });
+    }).catch(() => {
+      pBusy = false;
+      if (pendingStreamEnd) maybeAudit(ctx, depth + 1, true);
+    });
   }
 
   function applyAudit(state: ProcessState, resp: StageCheckResponse | null,
@@ -240,6 +277,14 @@ export default function activate(pi: ExtensionAPI) {
 
   // ---------------- 收尾检查（原有行为保持不变） ----------------
 
+  // 运行结束：以 stream_ended=true 发一次审计，让服务端能区分
+  // "验证还在路上"与"运行真的结束了"。此前缺这个信号，服务端只能在
+  // 每批增量上猜终止，导致 write 刚落盘就误报"改了没验证"（2026-09-22）。
+  pi.on("agent_end", (_event: any, ctx: ExtensionContext) => {
+    if (processMode() === "off") return;
+    maybeAudit(ctx, 0, true);
+  });
+
   pi.on("turn_end", async (event: any, ctx: ExtensionContext) => {
     const message = event.message;
     if (!task || checking.has(task.id) || message?.role !== "assistant" || ctx.hasPendingMessages()) return;
@@ -247,6 +292,11 @@ export default function activate(pi: ExtensionAPI) {
     if (Array.isArray(message.content) && message.content.some((b: any) => b.type === "toolCall")) return;
     const resp = textOf(message.content);
     if (!resp.trim()) return;
+    // 工具调用被误写成文本 ≠ 收尾意图：跳过收尾裁决，避免打断推进中的任务
+    if (looksLikeToolCallText(resp)) {
+      ctx.ui.setStatus("progress-guard", "守卫: 检测到工具调用格式异常");
+      return;
+    }
     const current = task;
     checking.add(current.id);
     try {
