@@ -1,0 +1,28 @@
+=== Task Structure 评测 | backend=rule | split=test | n=150 ===
+kind                P      R     F1   TP   FP   FN
+goal             0.89   0.61   0.72   89   11   57
+object           0.70   0.78   0.74    7    3    2
+constraint       0.89   0.83   0.86   25    3    5
+dependency       0.65   0.76   0.70   13    7    4
+coordination     0.64   0.88   0.74    7    4    1
+condition        1.00   0.86   0.92    6    0    1
+unresolved       1.00   0.50   0.67    3    0    3
+acceptance       1.00   0.71   0.83    5    0    2
+弃权正确率: 84%  等级一致率: 84% (n=97)
+伪任务误报率: 0%  取消抑制正确率: 86%
+改写稳定率: 67% (n=3)  复述不敏感率: 20%
+延迟 p50=0.1ms  p95=0.2ms
+
+错误样例（前 12 条）：
+  [wrong_abstain] sg_006: no_explicit_task
+  [wrong_abstain] sg_010: no_explicit_task
+  [wrong_abstain] sge_017: no_explicit_task
+  [wrong_abstain] sge_020: no_explicit_task
+  [level] mg_025: gold=high pred=medium
+  [level] mg_031: gold=high pred=medium
+  [level] mc_038: gold=high pred=medium
+  [level] xd_048: gold=medium pred=low
+  [level] xd_054: gold=medium pred=high
+  [wrong_abstain] cu_076: no_explicit_task
+  [wrong_abstain] cu_077: no_explicit_task
+  [level] ac_081: gold=low pred=medium
