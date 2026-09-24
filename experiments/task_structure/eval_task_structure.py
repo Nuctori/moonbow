@@ -95,6 +95,9 @@ def load_backend(spec: str):
     if spec == "finetuned":
         import llm_backend
         return llm_backend.get_backend("finetuned")
+    if spec == "two-axis":
+        import llm_backend
+        return llm_backend.get_backend("two-axis")
     return RuleBackend()
 
 

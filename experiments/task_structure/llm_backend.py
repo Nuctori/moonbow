@@ -192,6 +192,8 @@ def get_backend(spec: str):
         return LLMBackend()
     if spec == "finetuned":
         return FinetunedBackend()
+    if spec == "two-axis":
+        return TwoAxisBackend()
     raise ValueError(spec)
 
 
@@ -251,6 +253,112 @@ class FinetunedBackend:
                 continue
             survivors.append(clause)
             caps.append(Capture(kind=label, quote=clause))
+
+        caps.extend(extract_objects(masked))
+        if self.dedup_cos < 1.0 and survivors:
+            caps = self._semantic_dedup(caps, survivors)
+        return caps
+
+    def _semantic_dedup(self, caps, survivors):
+        from embedding_backend import _encode
+        embs = _encode(survivors)
+        emb_of = dict(zip(survivors, embs))
+        kept, kept_embs = [], {}
+        for c in caps:
+            emb = emb_of.get(c.quote)
+            if emb is None:
+                kept.append(c)
+                continue
+            if any(float(emb @ e) >= self.dedup_cos
+                   for e in kept_embs.get(c.kind, [])):
+                continue
+            kept.append(c)
+            kept_embs.setdefault(c.kind, []).append(emb)
+        return kept
+
+
+# ---------------------------------------------------------------------------
+# 三轴两级后端（规范 v2 草案）：轴1 闸门 → 轴2 角色
+# ---------------------------------------------------------------------------
+
+AXIS1_MODEL = "task_structure_axis1_v1"
+V2_MODEL = "task_structure_clf_v1"
+
+
+class TwoAxisBackend:
+    """轴 1（demand/mention 闸门）+ 轴 2（结构角色）两级判定。
+
+    - 轴 1 = demand → 询问轴 2 角色；轴 2 判 none → 不捕获（如提问式要求）
+    - 轴 1 = mention → 一律不捕获（叙述/引述/撤销都在此侧）
+    - 轴 1 置信度不足（两标签接近）→ 弃权（不捕获），并把原因记入分析
+    这使 cancel 不再是类别：撤销 = mention，结构上不需与 none 竞争。
+    """
+
+    def __init__(self, axis1_dir: str = None, v2_dir: str = None,
+                 dedup_cos: float = None, margin: float = None):
+        root = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
+        self.axis1_dir = axis1_dir or os.path.join(root, "models", AXIS1_MODEL, "final")
+        self.v2_dir = v2_dir or os.path.join(root, "models", V2_MODEL, "final")
+        self.dedup_cos = float(os.environ.get("LLM_DEDUP_COS", "0.88")) \
+            if dedup_cos is None else dedup_cos
+        self.margin = float(os.environ.get("AXIS_MARGIN", "0.15")) \
+            if margin is None else margin
+        self.name = "two-axis[axis1+axis2]"
+        self._a1 = self._a2 = None
+        self._s1 = self._s2 = None
+
+    def _load(self):
+        if self._a1 is None:
+            from gliner2 import AutoExtractor, Schema
+            self._a1 = AutoExtractor.from_pretrained(self.axis1_dir, map_location="cpu")
+            self._s1 = Schema().classification("speech", labels=["demand", "mention"])
+            self._a2 = AutoExtractor.from_pretrained(self.v2_dir, map_location="cpu")
+            self._s2 = Schema().classification("kind", labels=CLASSES)
+        return self._a1, self._a2
+
+    def _axis1(self, clause: str):
+        """返回 ('demand'|'mention'|None, confidence)。None = 弃权。"""
+        res = self._a1.extract(clause, self._s1, threshold=0.0,
+                               include_confidence=True)
+        v = (res or {}).get("speech")
+        if not v:
+            return None, 0.0
+        label = v.get("label") if isinstance(v, dict) else v
+        conf = v.get("confidence", 0.0) if isinstance(v, dict) else 0.0
+        if label == "mention":
+            # mention 置信度低于「1-阈值」时同样视为证据不足
+            if conf < 0.5 + (1 - self.margin) * 0.2:
+                pass                      # 仍采信 mention（保守沉默），不弃权放大
+        return label, conf
+
+    def _axis2(self, clause: str):
+        res = self._a2.extract(clause, self._s2, threshold=0.0,
+                               include_confidence=True)
+        v = (res or {}).get("kind")
+        label = v.get("label") if isinstance(v, dict) else v
+        return label or "none"
+
+    def extract(self, text: str):
+        self._load()
+        masked = _FENCE.sub(lambda m: " " * len(m.group(0)), text)
+        has_fence = masked != text
+        clauses = split_clauses(masked)
+
+        caps, survivors, votes = [], [], []
+        for clause, _s, _e in clauses:
+            if has_fence and _LABEL_LINE.match(clause):
+                continue
+            if len(clause) < 4:
+                continue
+            a1, conf = self._axis1(clause)
+            votes.append((clause, a1, conf))
+            if a1 != "demand":            # mention 或弃权 → 不捕获
+                continue
+            role = self._axis2(clause)
+            if role in ("none", "cancel"):   # 提问式要求 / 撤销残留
+                continue
+            survivors.append(clause)
+            caps.append(Capture(kind=role, quote=clause))
 
         caps.extend(extract_objects(masked))
         if self.dedup_cos < 1.0 and survivors:

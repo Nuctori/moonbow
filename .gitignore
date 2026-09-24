@@ -52,3 +52,4 @@ data/swe_bench_lite/
 dist/
 build/
 *.egg-info/
+mined/
