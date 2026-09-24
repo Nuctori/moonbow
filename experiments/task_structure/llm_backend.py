@@ -190,4 +190,86 @@ class LLMBackend:
 def get_backend(spec: str):
     if spec == "llm":
         return LLMBackend()
+    if spec == "finetuned":
+        return FinetunedBackend()
     raise ValueError(spec)
+
+
+# ---------------------------------------------------------------------------
+# 微调定性头（task_structure_clf_v1，用户 2026-09-24 授权训练）
+# ---------------------------------------------------------------------------
+
+CLASSES = ["goal", "constraint", "dependency", "coordination",
+           "condition", "unresolved", "acceptance", "cancel", "none"]
+
+
+class FinetunedBackend:
+    """微调 9 类子句分类头 + MiniLM 语义去重 + 规则文本机制预处理。
+
+    定性层全部由微调头承担（goal/constraint/dependency/coordination/
+    condition/unresolved/acceptance/cancel/none）；none/cancel 子句丢弃，
+    其余成为捕获（引文=子句）。语义去重与零样本路线共用。
+    """
+
+    KIND_SCHEMA = None
+
+    def __init__(self, model_dir: str = None, dedup_cos: float = None):
+        self.model_dir = model_dir or os.path.join(
+            os.path.abspath(os.path.join(HERE, "..", "..", "..")),
+            "models", "task_structure_clf_v1", "final")
+        self.dedup_cos = float(os.environ.get("LLM_DEDUP_COS", "0.88")) \
+            if dedup_cos is None else dedup_cos
+        self.name = f"finetuned[{os.path.basename(os.path.dirname(self.model_dir))}]"
+        self._model = None
+        self._schema = None
+
+    def _load(self):
+        if self._model is None:
+            from gliner2 import AutoExtractor, Schema
+            self._model = AutoExtractor.from_pretrained(self.model_dir,
+                                                        map_location="cpu")
+            self._schema = Schema().classification("kind", labels=CLASSES)
+        return self._model
+
+    def extract(self, text: str):
+        ext = self._load()
+        masked = _FENCE.sub(lambda m: " " * len(m.group(0)), text)
+        has_fence = masked != text
+        clauses = split_clauses(masked)
+
+        caps, survivors = [], []
+        for clause, start, end in clauses:
+            if has_fence and _LABEL_LINE.match(clause):
+                continue
+            if len(clause) < 4:
+                continue
+            res = ext.extract(clause, self._schema, threshold=0.0,
+                              include_confidence=True)
+            label = (res or {}).get("kind")
+            label = label.get("label") if isinstance(label, dict) else label
+            if label in (None, "none", "cancel"):
+                continue
+            survivors.append(clause)
+            caps.append(Capture(kind=label, quote=clause))
+
+        caps.extend(extract_objects(masked))
+        if self.dedup_cos < 1.0 and survivors:
+            caps = self._semantic_dedup(caps, survivors)
+        return caps
+
+    def _semantic_dedup(self, caps, survivors):
+        from embedding_backend import _encode
+        embs = _encode(survivors)
+        emb_of = dict(zip(survivors, embs))
+        kept, kept_embs = [], {}
+        for c in caps:
+            emb = emb_of.get(c.quote)
+            if emb is None:
+                kept.append(c)
+                continue
+            if any(float(emb @ e) >= self.dedup_cos
+                   for e in kept_embs.get(c.kind, [])):
+                continue
+            kept.append(c)
+            kept_embs.setdefault(c.kind, []).append(emb)
+        return kept

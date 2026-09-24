@@ -1,0 +1,22 @@
+=== Task Structure 评测 | backend=finetuned[task_structure_clf_v1] | split=test | n=150 ===
+kind                P      R     F1   TP   FP   FN
+goal             0.93   0.73   0.82  106    8   40
+object           0.70   0.78   0.74    7    3    2
+constraint       0.68   0.83   0.75   25   12    5
+dependency       0.42   0.76   0.54   13   18    4
+coordination     0.50   0.75   0.60    6    6    2
+condition        0.75   0.86   0.80    6    2    1
+unresolved       0.62   0.83   0.71    5    3    1
+acceptance       0.62   0.71   0.67    5    3    2
+弃权正确率: 90%  等级一致率: 76% (n=111)
+伪任务误报率: 0%  取消抑制正确率: 100%
+改写稳定率: 33% (n=3)  复述不敏感率: 80%
+延迟 p50=188.5ms  p95=393.0ms
+
+错误样例（前 12 条）：
+  [level] mg_025: gold=high pred=medium
+  [level] mg_030: gold=medium pred=low
+  [level] mc_042: gold=high pred=medium
+  [level] xd_049: gold=medium pred=high
+  [level] xd_051: gold=medium pred=high
+  [level] xd_054: gold=medium p

@@ -92,6 +92,9 @@ def load_backend(spec: str):
     if spec == "llm":
         import llm_backend
         return llm_backend.get_backend(spec)
+    if spec == "finetuned":
+        import llm_backend
+        return llm_backend.get_backend("finetuned")
     return RuleBackend()
 
 
