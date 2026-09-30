@@ -1216,3 +1216,40 @@ completion.asserted / task.object.alignment PASS，process.unresolved R=0.764
   （P11 打包副本，发版前需重打包）；④生产落地证据的 matcher 对齐
   兜底（SLM 后端）仍待 semantic 路径质量达标后接入，pytest 解析仅是
   确定性快速通道，不构成 rule 判定路径的默认化。
+
+## 收敛进度追踪 Phase 2：advisory 收敛提示 uplift 实验 + 失败归因（2026-09-30，实验与归因完成；纯会话分析，不训练不推理不占 XPU）
+- 实验（`experiments/convergence_retry.py`，c3_triple_mix 三 bug：整除+排序键+
+  可变默认；control 15 vs convergence 15，mimo-v2.5/ccfree）：完成 3/15 vs
+  **5/15**（Fisher 不显著），部分分均值 0.244 vs 0.333；7 run 投递 advisory，
+  被提示 run 完成 4/7 vs 未被提示 1/8——**强存活混淆**（提示只在会话存活
+  ≥3-4 轮时投递），不能归因提示提升完成。
+- **失败归因报告：`results/convergence-phase2/failure_attribution.md`**
+  （30×3 修复矩阵 + 轨迹分型 + 三层归因 + advised_fail 个案）。核心发现：
+  ①主导失败机制是**伪工具调用**——模型把 tool call 写成正文文本
+  （`[tool_call ...]`），pi 无反馈照常收尾，动作永不执行：28/30 run 出现、
+  13 run 的修复编辑被吞、22 个未完成 run 中 20 个零真实编辑；
+  ②完成边界 = 真实编辑落盘（10 个真实编辑 run → 8 完成 + 2 部分；
+  落盘修复 8/8 全对）；③"一次改三处导致回归"假设不成立（0 回归；
+  合并编辑全对），三 bug 知识无缺口（无选择性漏修，唯一部分形态=
+  只修整除×2）；④runs.jsonl 的 `truncated` 主体是伪调用签名而非时间
+  预算（真超时仅 conv-r11），`env_error`（26/30）是其衍生标志；
+  ⑤环境次级缺陷：ws 与 repo 树不隔离，repo root 跑 pytest 撞跨工作区
+  重名收集错误（7 run 撞、2 run 死于恢复）。
+- 轨迹分型（22 未完成 run）：伪调用截断/动作丢失 17、收集期死亡 2
+  （control-r9/r11）、部分完成后终止 2（control-r2/r4，均修好整除后
+  第二编辑被吞）、静默停止 1（control-r3）、回归循环 0。
+- 三层归因：能力层=工具调用发射可靠性（非任务知识）；信息层=伪调用
+  零反馈黑洞（模型一致"以为改完了"：conv-r1 重发仍被吞、conv-r11 见
+  FFF 原样怀疑缓存而不查文件、conv-r5 以假前提驳提示）+ `-x`/tail 自
+  截断证据（4 run 低诊断）；策略层=完成与"编辑是否真实发出"绑定，
+  提示只改变验证/申报行为（conv-r13 是全批唯一亲眼见 3 passed 的
+  run，由守卫过程核查逼出，也是唯一 clean_completed）。
+- advised_fail 个案（conv-r1/r5/r11）：真失败机制均为"编辑未落盘"，
+  提示内容（收窄范围）与之错配；投递时机（turn3）恰在"已编辑未验证"
+  窗口，缺"先 cat app.py 核对落盘再谈收窄"的动作指引。
+- 遗留（Phase 3 候选）：①客户端检测伪调用并注入执行失败反馈（最高
+  杠杆）；②advisory 加落盘核查动作 + 投递前读会话状态；③ws 加
+  conftest/提示固定 cwd；④伪调用根因归责需换 provider/网关 A/B；
+  ⑤完成口径 8 例中 7 例靠 judge 补测（模型未自证），自证完成率仅
+  1/30；⑥另有 1 个未入册会话（11-03-21，API 中断弃跑）提示第三种
+  死亡形态（传输层中断）。
