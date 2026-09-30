@@ -1,10 +1,11 @@
 import { randomUUID } from "node:crypto";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { BlockAssembler, type GuardBlock } from "./process-events.ts";
-import { StageAuditor, convergenceMode, processMode, type ProcessMode,
+import { StageAuditor, processMode, type ProcessMode,
          type StageCheckResponse } from "./process-audit.ts";
 import { appendBlocks, isGuardOriginText, latestDelivery, newProcessState,
          type DeliveryRecord, type ProcessState } from "./process-task.ts";
+import { installPseudoCallGuard } from "./pseudo-call-guard.ts";
 
 const URL = process.env.MOONBOW_GUARD_URL || "http://127.0.0.1:18492";
 const MODE = process.env.MOONBOW_GUARD_MODE === "strict" ? "strict" : "advisory";
@@ -67,6 +68,9 @@ export default function activate(pi: ExtensionAPI) {
   let assembler = new BlockAssembler();
   const checking = new Set<string>();       // 收尾检查单飞
   let pBusy = false;                        // 过程审计单飞（跨事件去抖）
+  // 伪工具调用检测与反馈：只读观察 + 反馈投递，独立杀开关与预算，
+  // 失败自隔离；不参与任何 guard 判定路径（2026-09-30 Phase 2 归因修复）。
+  const pseudoGuard = installPseudoCallGuard(pi, { getTaskId: () => task?.id });
 
   function save() {
     if (task) pi.appendEntry(STATE, { ...task });
@@ -166,10 +170,7 @@ export default function activate(pi: ExtensionAPI) {
     const ended = streamEnded || pendingStreamEnd;
     pendingStreamEnd = false;
     pBusy = true;
-    // Phase 2：MOONBOW_GUARD_CONVERGENCE 非 off 时为 stage-check 开收敛
-    // 通道（enable_convergence_shadow）。是否真正投递由服务端 env 门控。
-    const auditor = new StageAuditor(URL, (u, i) => fetch(u, i),
-                                     10000, convergenceMode() !== "off");
+    const auditor = new StageAuditor(URL, (u, i) => fetch(u, i));
     void auditor.submit(current, mode, ended).then((resp) => {
       pBusy = false;
       applyAudit(current, resp, mode, ctx);
@@ -251,6 +252,8 @@ export default function activate(pi: ExtensionAPI) {
   pi.on("message_end", (event: any, ctx: ExtensionContext) => {
     const m = event?.message;
     if (!m) return;
+    // 伪调用扫描独立于过程审计模式（有自己的杀开关），必须在 off 早退之前
+    if (m.role === "assistant") pseudoGuard.onAssistantMessage(m, ctx);
     if (m.role === "custom") {
       // 守卫反馈进入上下文：送达状态 observed（只认自己 task 的）
       if (m.customType === "progress-guard:process-feedback" && pstate) {
