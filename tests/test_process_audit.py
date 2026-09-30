@@ -308,3 +308,117 @@ def test_stream_ended_defaults_false_in_http_layer():
         {"seq": 2, "kind": "toolResult", "text": "ok", "tool_name": "edit"}],
         "req": "x", "snapshot_version": 1})
     assert not [f for f in r["findings"] if f["status"] == "actionable"]
+
+
+# ---- P7：语义声明检测 shadow 通道（默认 None 零行为变化） ----
+
+from moonbow.guard.audit_semantic import (  # noqa: E402
+    ProcessSemanticAdapter, ShadowObservation)
+
+
+class FakeShadow:
+    """shadow provider 替身：按文本关键词返回观察。"""
+
+    kind = "fake"
+
+    def __init__(self, fail=False):
+        self.fail = fail
+        self.seen = []
+
+    def observe(self, text):
+        self.seen.append(text)
+        if self.fail:
+            raise RuntimeError("boom")
+        if "还不确定" in text:
+            return ShadowObservation(matched=True, score=0.91)
+        return ShadowObservation(matched=False)
+
+
+def _base_blocks():
+    return [
+        tool_ok(1),
+        StageBlock(seq=2, kind="text", text="我接下来修改登录逻辑。"),
+        claim(3),
+    ]
+
+
+def test_shadow_channel_disabled_by_default():
+    r = StageAuditor().audit("修复登录页崩溃", _base_blocks(), None, 1)
+    assert "shadow_semantic" not in r  # 零行为变化：键都不出现
+
+
+def test_shadow_findings_recorded_without_changing_verdicts():
+    shadow = FakeShadow()
+    r = StageAuditor(semantic_shadow=shadow).audit(
+        "修复登录页崩溃", _base_blocks(), None, 1)
+    base = StageAuditor().audit("修复登录页崩溃", _base_blocks(), None, 1)
+    # 主判定逐字段不变
+    assert r["findings"] == base["findings"]
+    assert r["reminder"] == base["reminder"]
+    assert r["semantic"] == base["semantic"]
+    assert r["based_on"] == base["based_on"]
+    # shadow 结果单独成键
+    assert "shadow_semantic" in r
+    # 只观察中间汇报文本（text 块，含完成声明块）；thinking/tool 不观察
+    assert shadow.seen == ["我接下来修改登录逻辑。", "已经修复了，测试也通过了"]
+    entries = r["shadow_semantic"]
+    assert len(entries) == 2
+    assert [e["seq"] for e in entries] == [2, 3]
+    assert all(e["matched"] is False for e in entries)
+    assert all(e["pattern"] == "process.unresolved@1" for e in entries)
+
+
+def test_shadow_matched_does_not_create_findings_or_reminder():
+    blocks = [StageBlock(seq=1, kind="text", text="超时原因还不确定，待确认。")]
+    r = StageAuditor(semantic_shadow=FakeShadow()).audit("x", blocks, None, 1)
+    assert r["shadow_semantic"][0]["matched"] is True
+    assert r["findings"] == []
+    assert r["reminder"] is None
+    assert r["semantic"] is False
+
+
+def test_shadow_provider_failure_is_isolated():
+    shadow = FakeShadow(fail=True)
+    r = StageAuditor(semantic_shadow=shadow).audit(
+        "修复登录页崩溃", _base_blocks(), None, 1)
+    base = StageAuditor().audit("修复登录页崩溃", _base_blocks(), None, 1)
+    assert r["findings"] == base["findings"]
+    assert r["reminder"] == base["reminder"]
+    assert r["shadow_semantic"][0]["unavailable_reason"] == "error:RuntimeError"
+
+
+def test_shadow_thinking_and_tool_blocks_not_observed():
+    shadow = FakeShadow()
+    blocks = [think(1, "不确定这个假设是否成立。"), tool_ok(2)]
+    r = StageAuditor(semantic_shadow=shadow).audit("x", blocks, None, 1)
+    assert shadow.seen == []
+    assert r["shadow_semantic"] == []
+
+
+def test_process_semantic_adapter_wraps_matcher():
+    from moonbow.semantic.schema import MatchResponse, Provenance
+    prov = Provenance(backend="fake", model_revision="r",
+                      pattern_version="process.unresolved@1", calibrated=False)
+
+    class M:
+        def __init__(self, resp=None, err=None):
+            self.resp, self.err = resp, err
+
+        def match(self, text, pattern=None, **kw):
+            assert pattern == "process.unresolved@1"
+            if self.err:
+                raise self.err
+            return self.resp
+
+    a = ProcessSemanticAdapter(M(MatchResponse(
+        status="ok", matched=True, score=0.87, provenance=prov)))
+    o = a.observe("还不确定")
+    assert o.matched is True and o.score == 0.87
+    assert o.unavailable_reason is None
+
+    o = ProcessSemanticAdapter(M(MatchResponse(
+        status="abstain", reason_code="insufficient_context"))).observe("x")
+    assert o.matched is None and o.unavailable_reason == "abstain:insufficient_context"
+
+    o = ProcessSemanticAdapter(M(err=ValueError("bad"))).observe("x")
+    assert o.unavailable_reason == "error:ValueError"

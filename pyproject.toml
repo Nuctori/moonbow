@@ -34,7 +34,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 moonbow = [
-    "models/**/*",
+    "patterns/*.json",
     "skills/**/*",
 ]
 "moonbow.guard" = [

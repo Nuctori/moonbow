@@ -522,13 +522,26 @@ def analyze_text(text: str, backend: Optional[ExtractorBackend] = None,
     work_text = text[:MAX_INPUT_CHARS] if truncated else text
 
     raw = backend.extract(work_text)
+    # 后端契约状态（P7）：规则后端无这些属性 → 恒 False（零行为变化）；
+    # MatcherExtractor 等适配后端显式标记失败/截断/弃权，进入分析结果，
+    # 使「后端失败空捕获」与「真实零命中」可区分。
+    backend_failed = bool(getattr(backend, "last_backend_failed", False))
+    backend_truncated = bool(getattr(backend, "last_backend_truncated", False))
+    backend_abstain = bool(getattr(backend, "last_backend_abstain", False))
+
     caps = dedup_captures(validate_captures(raw, work_text))
     for i, c in enumerate(caps):
         c.span = (work_text.index(c.quote), work_text.index(c.quote) + len(c.quote))
 
     analysis = StructureAnalysis(text=work_text, source=source, captures=caps,
                                  backend=getattr(backend, "name", "unknown"),
-                                 truncated=truncated, version=version)
+                                 truncated=truncated, version=version,
+                                 backend_failed=backend_failed,
+                                 backend_truncated=backend_truncated)
+    if backend_abstain:
+        # 后端显式弃权：不评等级；classify 的零捕获分支会保留该 reason
+        analysis.abstain = True
+        analysis.abstain_reason = "backend_abstain"
 
     # 显式依赖存在但端点不可机械定位 → 记入 unknowns（不得推断为独立）
     dep_caps = [c for c in caps if c.kind == DEPENDENCY]

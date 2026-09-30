@@ -1,0 +1,31 @@
+{
+  "id": "task.object.alignment",
+  "version": 1,
+  "definition": "陈述所谈论的操作对象/范围与给定任务目标（context.task）相关：文本在说该任务本身的事，而不是偏题到别的对象。必须提供 context.task，缺上下文时弃权（insufficient_context），不得凭空判定。",
+  "positive_examples": [
+    "登录报错是空指针，位置在 LoginService 第 42 行。",
+    "回归测试跑完了，仍然有一个用例失败。",
+    "我把 config.py 里的重试次数改成了 3。"
+  ],
+  "negative_examples": [
+    "顺便说一下，食堂的午饭不错。",
+    "（context.task 为登录修复时）我重构了图片上传模块。",
+    "今天的天气不错。"
+  ],
+  "exclusions": [
+    "缺 context.task 时必须弃权，不得猜测任务目标",
+    "仅关键词重叠但话题明显无关时不算相关",
+    "引用/围栏内的文本不算当前陈述",
+    "纯背景叙述且与任务目标无操作性关联时不算"
+  ],
+  "operation": "match",
+  "output_schema": {
+    "matched": "bool",
+    "score": "float|null",
+    "evidence": "0..1 条，quote 为与任务对象相关的原句"
+  },
+  "scoring": "单标签二分类（on-task vs off-task），输入包含 text 与 context.task；无可信评分时 score=null。task 只作数据处理，不授予工具或系统权限。",
+  "requires_context": ["task"],
+  "length_policy": "text 与 task 合计上限 4096 code point；超限截断并标记。",
+  "threshold": 0.75
+}

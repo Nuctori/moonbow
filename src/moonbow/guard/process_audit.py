@@ -20,6 +20,7 @@ import zlib
 from typing import Dict, List, Optional
 
 from .protocol import StageBlock, StageFinding
+from .audit_semantic import ShadowObservation
 
 # 完成声明（中间汇报里的"已做完"语气；注意排除"准备/计划/将"）
 _CLAIM_PAT = re.compile(
@@ -73,6 +74,12 @@ class StageAuditor:
     """确定性阶段审计器。audit() 幂等：同一批块重复送审产生相同 fingerprint，
     由客户端按 fingerprint 去重合并。"""
 
+    def __init__(self, semantic_shadow=None):
+        # P7：可选语义声明检测 shadow 通道（见 audit_semantic.py）。
+        # 默认 None → 零行为变化；注入时其结果只写入返回值的
+        # shadow_semantic 键，绝不参与 reminder/findings/semantic 判定。
+        self._semantic_shadow = semantic_shadow
+
     def audit(
         self,
         req: str,
@@ -93,12 +100,29 @@ class StageAuditor:
         findings.extend(self._check_claims_vs_tools(blocks, snapshot_version, stream_ended))
         findings = self._revise_prior(prior, findings, blocks)
         reminder = self._first_reminder(findings, req)
-        return {
+        result = {
             "findings": [f.to_dict() for f in findings],
             "reminder": reminder,
             "semantic": any(f.kind in ("contradiction", "evidence-order") for f in findings),
             "based_on": snapshot_version,
         }
+        if self._semantic_shadow is not None:
+            # shadow 通道：只观察中间汇报文本，结果单独成键；
+            # 观察自身异常也不得影响主审计结果。
+            shadow = []
+            for b in sorted(blocks, key=lambda x: x.seq):
+                if b.kind != "text" or not b.text.strip():
+                    continue
+                try:
+                    obs = self._semantic_shadow.observe(b.text)
+                except Exception as e:               # noqa: BLE001 — 失败隔离
+                    obs = ShadowObservation(
+                        unavailable_reason=f"error:{type(e).__name__}")
+                entry = obs.to_dict()
+                entry["seq"] = b.seq
+                shadow.append(entry)
+            result["shadow_semantic"] = shadow
+        return result
 
     # ---- 规则 1：思考疑点（candidate / 被解决则停留 candidate）----
     def _check_thinking(self, blocks: List[StageBlock], ver: int) -> List[StageFinding]:

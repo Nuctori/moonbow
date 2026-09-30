@@ -1,0 +1,31 @@
+{
+  "id": "modality.assertive",
+  "version": 1,
+  "definition": "文本以确定的断言语气陈述事实/状态（assertive），而不是计划、意图、疑问、假设或条件句。区分'事实断言'与'计划/疑问'是本模式的全部目的。",
+  "positive_examples": [
+    "测试全部通过，耗时 12 秒。",
+    "服务器目前运行在 8080 端口。",
+    "数据库里已经有 300 条记录。"
+  ],
+  "negative_examples": [
+    "我计划明天加上缓存。",
+    "端口是 8080 吗？",
+    "如果预算允许，我们就升级依赖。"
+  ],
+  "exclusions": [
+    "疑问句/反问句不算断言",
+    "计划、意图、承诺（'打算/会/准备'）不算",
+    "假设与条件从句（'如果/假如'）不算",
+    "引用或转述他人的话不算作者自己的断言"
+  ],
+  "operation": "match",
+  "output_schema": {
+    "matched": "bool",
+    "score": "float|null",
+    "evidence": "0..1 条，quote 为断言原句"
+  },
+  "scoring": "单标签二分类（assertive vs 非 assertive），取标签对数似然；无评分机制时 score=null。禁止把生成 token 概率解释为命题真值概率。",
+  "requires_context": [],
+  "length_policy": "逐句小批次判定；单次输入上限 2048 code point。",
+  "threshold": 0.8
+}

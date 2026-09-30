@@ -5,6 +5,8 @@
 实现硬软信号分离、客体对齐、二值完成度捕获与非对称争议放行机制。
 """
 from enum import Enum
+import logging
+import os
 from typing import Optional, List, Dict, Any
 from dataclasses import dataclass, field
 
@@ -14,6 +16,16 @@ from .protocol import (
     parse_manifest,
     PROMPT_REQUIRE_MANIFEST,
 )
+from .semantic_provider import (
+    GuardSemanticProvider,
+    LegacyProvider,
+    SemanticObservation,
+    SEMANTIC_CONFIG_ENV,
+    SHADOW_SIGNALS_KEY,
+    env_provider_key,
+)
+
+logger = logging.getLogger("progress_guard.verifier")
 
 
 class Decision(str, Enum):
@@ -66,6 +78,7 @@ class ProgressGuard:
         sim_threshold: float = 0.265,
         cap_threshold: float = 0.50,
         lazy_load: bool = False,
+        provider: Optional["GuardSemanticProvider"] = None,
     ):
         self.device = device
         self.sim_threshold = sim_threshold
@@ -73,6 +86,12 @@ class ProgressGuard:
         self._models_dir = models_dir
         self._lazy = lazy_load
         self._registry: Optional["ModelRegistry"] = None
+        # P6：语义信号 provider。None = 默认 legacy（内部构造 LegacyProvider，
+        # lazy_load 语义保持不变）。
+        self._provider = provider
+        # R5：MOONBOW_GUARD_PROVIDER=semantic 时按配置惰性构建 semantic
+        # provider（仅一次；失败则记 warning 并永久回退 legacy，零行为变化）。
+        self._env_provider_tried = False
 
         if not lazy_load:
             self._ensure_models()
@@ -83,6 +102,12 @@ class ProgressGuard:
             self._registry = ModelRegistry(models_dir=self._models_dir, device=self.device)
         return self._registry
 
+    def semantic_status(self) -> Dict[str, Any]:
+        """只读状态：当前 provider kind / backend / calibrated 声明。"""
+        if self._provider is not None:
+            return self._provider.describe()
+        return LegacyProvider(None).describe()
+
     def check(
         self,
         req: str,
@@ -92,17 +117,19 @@ class ProgressGuard:
         *,
         mode: str = "advisory",
         semantic_review_used: bool = False,
+        provider: Optional["GuardSemanticProvider"] = None,
     ) -> Verdict:
         """Check closure separately from stop permission.
 
         Hosts persist semantic_review_used per task; rounds is not a delivery receipt.
         strict preserves the legacy decision/stop behavior.
+        provider: 本次调用的语义 provider 覆盖（None = 用构造时的默认）。
         """
         if mode not in ("advisory", "strict"):
             raise ValueError("mode must be advisory or strict")
         if type(semantic_review_used) is not bool:
             raise TypeError("semantic_review_used must be a bool")
-        verdict = self._check(req, resp, rounds, external_tool_success, mode)
+        verdict = self._check(req, resp, rounds, external_tool_success, mode, provider)
         if verdict.decision == Decision.REQUIRE_MANIFEST:
             verdict.acceptance = "invalid"
         elif verdict.hard_signals:
@@ -148,6 +175,7 @@ class ProgressGuard:
         rounds: int,
         external_tool_success: Optional[bool],
         mode: str,
+        provider_override: Optional["GuardSemanticProvider"] = None,
     ) -> Verdict:
         """对 Agent 的收尾输出进行进度闭合仲裁。
 
@@ -204,47 +232,107 @@ class ProgressGuard:
         if not statement_text or len(statement_text) < 5:
             statement_text = manifest.evidence if manifest.has_evidence else resp
 
-        # 4. 微模型推理判定
+        # 4. 语义信号（P6：经 provider 获取；默认 None -> 内部 LegacyProvider
+        #    = 原微模型路径，lazy_load 降级语义保持）。
         # lazy_load + 权重不可用时降级为"骨架裁决"：仅定量层（协议/硬信号/争议放行），
         # 定性信号（模态/相似度/捕获）无法产出即不虚构。eager 模式权重缺失仍然抛错。
-        if self._registry is None:
-            if not self._lazy:
-                self._ensure_models()
-            else:
+        provider = provider_override if provider_override is not None else self._provider
+        if provider is None and not self._env_provider_tried:
+            # R5：SDK 默认切换。仅当 MOONBOW_GUARD_PROVIDER=semantic 时
+            # 按配置构建白名单 semantic provider；构建失败回退 legacy。
+            # 环境变量未设置/非法/legacy 时完全走既有路径（零行为变化）。
+            self._env_provider_tried = True
+            if env_provider_key() == "semantic":
                 try:
+                    from .semantic_provider import semantic_provider_from_config
+                    self._provider = provider = semantic_provider_from_config(
+                        os.environ.get(SEMANTIC_CONFIG_ENV))
+                    logger.info("MOONBOW_GUARD_PROVIDER=semantic: "
+                                "已按配置启用 semantic provider")
+                except Exception as e:
+                    logger.warning("semantic provider 构建失败（%s: %s），"
+                                   "回退 legacy 默认", type(e).__name__, e)
+        if provider is None:
+            if self._registry is None:
+                if not self._lazy:
                     self._ensure_models()
-                except Exception:
-                    scores["skeleton_only"] = True
-        models = self._registry
+                else:
+                    try:
+                        self._ensure_models()
+                    except Exception:
+                        scores["skeleton_only"] = True
+            if self._registry is not None:
+                provider = LegacyProvider(self._registry)
 
         semantic_signals: List[str] = []
-        if models is not None:
-            # 模态判定
-            modality = models.get_modality(statement_text)
-            scores["modality"] = modality
-            if modality != "assert" and not tool_verified:
-                signal = f"收尾陈述语气可能为「{modality}」，请核对是否已完成"
-                if mode == "strict":
-                    if not manifest.has_evidence:
-                        hard.append(signal)
-                else:
-                    semantic_signals.append(signal)
+        if provider is None:
+            scores["provider_kind"] = "unavailable"
+        else:
+            scores["provider_kind"] = provider.kind
+            want_capture = st == StatusCode.A and not manifest.has_remaining
+            try:
+                obs = provider.observe(req=req, statement=statement_text,
+                                       want_capture=want_capture)
+            except Exception:
+                if provider.kind == "legacy":
+                    # legacy 路径保持迁移前行为：模型推理失败向上抛（eager 即 500），
+                    # 不静默降级。
+                    raise
+                # semantic provider 自身未处理的失败：明确降级，不崩溃、不伪造信号。
+                obs = SemanticObservation(unavailable_reason="provider_error")
+            if obs is None or obs.unavailable_reason is not None:
+                # provider 失败/不可用：进入既有骨架降级语义，标记未验证。
+                scores["skeleton_only"] = True
+                scores["semantic_unavailable"] = True
+            else:
+                if obs.extra_scores:
+                    scores.update(obs.extra_scores)
+                if obs.modality is not None:
+                    scores["modality"] = obs.modality
+                    if obs.modality != "assert" and not tool_verified:
+                        signal = f"收尾陈述语气可能为「{obs.modality}」，请核对是否已完成"
+                        if mode == "strict":
+                            if not manifest.has_evidence:
+                                hard.append(signal)
+                        else:
+                            semantic_signals.append(signal)
 
-            # 客体语义相似度
-            sim_val = models.get_similarity(req, statement_text)
-            scores["similarity"] = round(sim_val, 4)
-            if sim_val < self.sim_threshold and not tool_verified:
-                semantic_signals.append(f"收尾内容可能未覆盖用户请求【{req}】，请结合实际修改核对目标")
+                if obs.similarity is not None:
+                    sim_val = obs.similarity
+                    scores["similarity"] = round(sim_val, 4)
+                    if sim_val < self.sim_threshold and not tool_verified:
+                        semantic_signals.append(f"收尾内容可能未覆盖用户请求【{req}】，请结合实际修改核对目标")
 
-            # 二值完成度捕获概率
-            cap_p = None
-            if st == StatusCode.A and not manifest.has_remaining:
-                cap_p = models.get_capture_prob(statement_text)
-                scores["capture_prob"] = round(cap_p, 4)
+                if want_capture:
+                    capture_complete: Optional[bool] = None
+                    if obs.capture_prob is not None:
+                        scores["capture_prob"] = round(obs.capture_prob, 4)
+                        capture_complete = obs.capture_prob >= self.cap_threshold
+                    elif obs.capture_complete is not None:
+                        capture_complete = obs.capture_complete
+                    # 自报证据不消除语义异议；仅外部成功信号可直接豁免。
+                    if capture_complete is False and not tool_verified:
+                        semantic_signals.append("收尾内容疑似未完全闭合，请提供工程验证证据或如实修正 STATUS")
 
-                # 自报证据不消除模型异议；仅外部成功信号可直接豁免。
-                if cap_p < self.cap_threshold and not tool_verified:
-                    semantic_signals.append("收尾内容疑似未完全闭合，请提供工程验证证据或如实修正 STATUS")
+                # R5：客体对齐（PASS 信号 task.object.alignment 参与判定；
+                # legacy 观察恒为 None，零行为变化）。豁免语义与捕获一致：
+                # 仅外部成功信号可豁免。
+                if getattr(obs, "alignment_ok", None) is False and not tool_verified:
+                    semantic_signals.append(
+                        "收尾内容与任务目标可能存在客体偏离，请对照用户原始需求核对")
+
+                # R6b：未决事项（PASS 信号 process.unresolved v2 参与判定，
+                # preliminary 口径；legacy 观察恒为 None，零行为变化）。
+                if getattr(obs, "unresolved_detected", None) is not None:
+                    scores["unresolved_detected"] = obs.unresolved_detected
+                if getattr(obs, "unresolved_detected", None) is True and not tool_verified:
+                    semantic_signals.append(
+                        "收尾陈述中疑似存在未解决的疑点或待办事项，请核对是否已全部解决，或如实列入 REMAINING")
+
+                # R5：shadow 信号观察（如有）只进 scores 的 shadow_signals 键
+                # ——绝不参与信号判定与提醒生成。
+                if getattr(obs, "shadow_signals", None):
+                    scores[SHADOW_SIGNALS_KEY] = obs.shadow_signals
 
         soft.extend(semantic_signals)
         scores["semantic_signals"] = semantic_signals
@@ -273,7 +361,14 @@ class ProgressGuard:
             )
 
         # 规则 5.3: 非对称确认机制 (Disputed Close)
-        # 生产者在看到核查提示后，于第 2 轮及以上重申 STATUS=A，且提供了非空证据 -> 争议放行并留痕
+        # 生产者在看到核查提示后，于第 2 轮及以上重申 STATUS=A，且提供了非空证据 -> 争议放行并留痕。
+        # 注（n08 实验，2026-09-30）：曾试验"语义捕获判未闭合时扣住争议放行、
+        # 要求工具实证"的闸门——67 卷实证为净退化（拦下 n08 1 例 FP 的同时
+        # 误伤 e01/e03/e05/e13 四例真闭合，捕获头在该域无法分离 0.039 vs
+        # 0.058，相似度同样无分离力）。结论：在捕获/对齐通道具备域内判别力
+        # 之前，无条件第 2 轮争议放行是更优权衡；n08 类误放行（1/67）作为
+        # 机制已知限制留档。证据：results/semantic-runtime/legacy-vs-semantic/
+        # {predictions_pre_n08fix.jsonl, predictions.jsonl}。
         if mode == "strict" and rounds >= 2 and st == StatusCode.A and not manifest.has_remaining and manifest.has_evidence:
             return Verdict(
                 decision=Decision.CLOSE,

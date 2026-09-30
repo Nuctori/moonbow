@@ -1,0 +1,180 @@
+{"id": "fzmod_r4_0001", "text": "缓存层的迁移昨天已经做完了，全量请求都走新缓存。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT001"}
+{"id": "fzmod_r4_0002", "text": "报告已经整理好了，终稿发你邮箱了。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT002"}
+{"id": "fzmod_r4_0003", "text": "依赖升级全部跑完了，CI 是绿的。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT003"}
+{"id": "fzmod_r4_0004", "text": "数据库已经回滚到昨天的备份了。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT004"}
+{"id": "fzmod_r4_0005", "text": "接口文档已经补齐并提交了。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT005"}
+{"id": "fzmod_r4_0006", "text": "压测跑完了，峰值 QPS 到了 8200。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT006"}
+{"id": "fzmod_r4_0007", "text": "登录页的两个 bug 都修好并且验证过了。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT007"}
+{"id": "fzmod_r4_0008", "text": "迁移脚本已经执行成功，数据一条没丢。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT008"}
+{"id": "fzmod_r4_0009", "text": "The config refactor is done and merged into main.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT009"}
+{"id": "fzmod_r4_0010", "text": "The failing tests were fixed and re-run, all green now.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT010"}
+{"id": "fzmod_r4_0011", "text": "The migration has completed, and the row counts match.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT011"}
+{"id": "fzmod_r4_0012", "text": "The API contract was updated and published yesterday.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT012"}
+{"id": "fzmod_r4_0013", "text": "The dashboard was deployed and verified in production.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT013"}
+{"id": "fzmod_r4_0014", "text": "The retry logic has been implemented and unit-tested.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT014"}
+{"id": "fzmod_r4_0015", "text": "The batch job finished at 3am with zero failures.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT015"}
+{"id": "fzmod_r4_0016", "text": "The docs were rewritten and the PR was approved.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT016"}
+{"id": "fzmod_r4_0017", "text": "日志切换到 JSON 格式的改造昨天已经完成，检索速度明显快了。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT017"}
+{"id": "fzmod_r4_0018", "text": "全量回归已经跑完：320 个用例全部通过，无失败无跳过。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT018"}
+{"id": "fzmod_r4_0019", "text": "数据回填脚本已执行成功，校验结果显示两侧行数完全一致，这一步收口了。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT019"}
+{"id": "fzmod_r4_0020", "text": "跑完压测了，峰值 QPS 8200，P99 延迟 42 毫秒，两项指标都达标。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT020"}
+{"id": "fzmod_r4_0021", "text": "CI 流水线的输出我看过：0 个失败、3 个警告，合入前的检查已经全部走完。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT021"}
+{"id": "fzmod_r4_0022", "text": "配置中心的证书上周三已经换新，旧的在周五统一作废。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT022"}
+{"id": "fzmod_r4_0023", "text": "慢查询治理完成：Top 20 全量处理完毕，平均耗时降了 63%。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT023"}
+{"id": "fzmod_r4_0024", "text": "票据导出的缺陷已经修复并验证通过，随时可以合入主干。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT024"}
+{"id": "fzmod_r4_0025", "text": "历史数据迁移已结束，比对脚本确认一条不差，迁移工作全部落地。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT025"}
+{"id": "fzmod_r4_0026", "text": "前端埋点已按新版规范全量接入，今天的改动都推上去了。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT026"}
+{"id": "fzmod_r4_0027", "text": "内存泄漏的根因已经定位，是连接池未释放，补丁昨天合入了。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT027"}
+{"id": "fzmod_r4_0028", "text": "网关限流规则已经生效，线上五分钟观察期内没有再出现超卖。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT028"}
+{"id": "fzmod_r4_0029", "text": "文档同步这一项做完了，API 变更的十二个接口全部补齐了示例。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT029"}
+{"id": "fzmod_r4_0030", "text": "灰度已经推到 100%，监控面板上再没有出现过 5xx 尖峰，切换宣告完成。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT030"}
+{"id": "fzmod_r4_0031", "text": "镜像瘦身后体积从 1.8G 降到 640M，构建时间也砍半了，优化完成。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT031"}
+{"id": "fzmod_r4_0032", "text": "权限模型的单元测试补齐并且全部通过，这块工作已经闭合。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT032"}
+{"id": "fzmod_r4_0033", "text": "字典表缓存已经上线，命中率的曲线肉眼可见地抬起来了。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT033"}
+{"id": "fzmod_r4_0034", "text": "上一轮评审提出的七条意见已经逐条修完，回复文档也发出去了。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT034"}
+{"id": "fzmod_r4_0035", "text": "通知服务的重试风暴已经止住，死信队列也清空了，事件处理恢复正常。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT035"}
+{"id": "fzmod_r4_0036", "text": "批处理任务的幂等键改造已上线一个版本周期，线上零重复记录。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT036"}
+{"id": "fzmod_r4_0037", "text": "把 vendor 目录清掉之后依赖安装时间从 4 分钟降到 50 秒，清理完成。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT037"}
+{"id": "fzmod_r4_0038", "text": "搜索重构的第一阶段（索引拆分）已经交付，灰度数据看起来干净。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT038"}
+{"id": "fzmod_r4_0039", "text": "双写切换已经完成，旧库写入量归零，数据链路切换收官。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT039"}
+{"id": "fzmod_r4_0040", "text": "这次全会审的材料我定稿了，三个附录也按口径补齐。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT040"}
+{"id": "fzmod_r4_0041", "text": "The race condition is fixed; the flaky test has passed 200 consecutive runs.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT041"}
+{"id": "fzmod_r4_0042", "text": "The deadlock fix landed in release 2.7, and the crash rate chart went flat overnight.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT041"}
+{"id": "fzmod_r4_0043", "text": "Schema backfill finished across all 14 shards; checksums match everywhere.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT042"}
+{"id": "fzmod_r4_0044", "text": "The deprecation notices went out to all tenants last Tuesday.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT042"}
+{"id": "fzmod_r4_0045", "text": "Latency probe shows p99 at 118 ms after the index change; the optimization is done.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT043"}
+{"id": "fzmod_r4_0046", "text": "Memory usage is now stable at 210 MB over a 48-hour soak; the leak is closed out.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT043"}
+{"id": "fzmod_r4_0047", "text": "Quoting the deploy log: 0 errors, 3 rollbacks avoided, the cutover is complete.", "source_family": "interim_report", "lang": "en", "task_id": "fzmodT044"}
+{"id": "fzmod_r4_0048", "text": "The auditor's checklist came back clean, so the compliance work is wrapped.", "source_family": "interim_report", "lang": "en", "task_id": "fzmodT044"}
+{"id": "fzmod_r4_0049", "text": "The converter handles all 62 edge cases in the corpus; coverage is at 100%.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT045"}
+{"id": "fzmod_r4_0050", "text": "Retry storms were traced to the stale token; the patch is merged and deployed.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT045"}
+{"id": "fzmod_r4_0051", "text": "The on-call runbook was rewritten in full and reviewed by both teams.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT046"}
+{"id": "fzmod_r4_0052", "text": "Cache invalidation now fires on every write, verified by the integration suite.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT046"}
+{"id": "fzmod_r4_0053", "text": "缓存层的迁移明天开始做，先把旧缓存留着兜底。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT001"}
+{"id": "fzmod_r4_0054", "text": "报告等我整理好就发你邮箱。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT002"}
+{"id": "fzmod_r4_0055", "text": "接下来把依赖升级跑一遍，看 CI 会不会绿。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT003"}
+{"id": "fzmod_r4_0056", "text": "再出问题的话，我们就回滚到昨天的备份。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT004"}
+{"id": "fzmod_r4_0057", "text": "接口文档我准备补一下再提交。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT005"}
+{"id": "fzmod_r4_0058", "text": "压测我打算今晚跑，目标峰值 QPS 8200。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT006"}
+{"id": "fzmod_r4_0059", "text": "登录页的两个 bug 我马上修，修完就验证。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT007"}
+{"id": "fzmod_r4_0060", "text": "迁移脚本我待会执行，到时候再核对数据。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT008"}
+{"id": "fzmod_r4_0061", "text": "I'll refactor the config next and merge it into main.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT009"}
+{"id": "fzmod_r4_0062", "text": "I'm going to fix the failing tests and re-run them.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT010"}
+{"id": "fzmod_r4_0063", "text": "The migration will start tonight; row counts will be checked after.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT011"}
+{"id": "fzmod_r4_0064", "text": "We plan to update and publish the API contract this week.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT012"}
+{"id": "fzmod_r4_0065", "text": "The dashboard is about to be deployed, then verified in production.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT013"}
+{"id": "fzmod_r4_0066", "text": "I'm going to implement the retry logic and unit-test it.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT014"}
+{"id": "fzmod_r4_0067", "text": "The batch job is scheduled for 3am and is expected to have zero failures.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT015"}
+{"id": "fzmod_r4_0068", "text": "I will rewrite the docs and open a PR for approval.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT016"}
+{"id": "fzmod_r4_0069", "text": "下一步我准备把告警规则收敛到二十条以内。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT047"}
+{"id": "fzmod_r4_0070", "text": "等新值班表排出来，我就开始清理重复告警。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT047"}
+{"id": "fzmod_r4_0071", "text": "我正在排查导出超时的问题，稍后同步进展。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT048"}
+{"id": "fzmod_r4_0072", "text": "排查有眉目了就告诉你，先不忙下结论。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT048"}
+{"id": "fzmod_r4_0073", "text": "重构引擎模块的方案我先写个草稿，下周给你过目。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT049"}
+{"id": "fzmod_r4_0074", "text": "草稿成形之前先不动现有代码。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT049"}
+{"id": "fzmod_r4_0075", "text": "接下来会把限流阈值做成可配置的。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT050"}
+{"id": "fzmod_r4_0076", "text": "配置化的工作量我明天评估完再排期。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT050"}
+{"id": "fzmod_r4_0077", "text": "我打算把冒烟测试接进流水线，卡住不合规的合并。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT051"}
+{"id": "fzmod_r4_0078", "text": "流水线接入之后每晚定时跑一轮。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT051"}
+{"id": "fzmod_r4_0079", "text": "正在给历史接口补兼容层，预计两天。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT052"}
+{"id": "fzmod_r4_0080", "text": "兼容层就位后再灰度切换流量。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT052"}
+{"id": "fzmod_r4_0081", "text": "归档策略我准备照 spoke 团队的模板改一版。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT053"}
+{"id": "fzmod_r4_0082", "text": "改完先在测试环境验证一个月。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT053"}
+{"id": "fzmod_r4_0083", "text": "我马上开始清理孤儿任务，清完发清单。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT054"}
+{"id": "fzmod_r4_0084", "text": "清单出来后咱们再定哪些直接删。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT054"}
+{"id": "fzmod_r4_0085", "text": "接下来两周主攻序列化性能，其他事往后排。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT055"}
+{"id": "fzmod_r4_0086", "text": "性能基线我先重新测一遍当参照。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT055"}
+{"id": "fzmod_r4_0087", "text": "正在写数据订正的回滚预案，写完贴到群里。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT056"}
+{"id": "fzmod_r4_0088", "text": "预案过审后才开始正式修数。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT056"}
+{"id": "fzmod_r4_0089", "text": "我要把日志采样率调低到百分之一，先观察一周。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT057"}
+{"id": "fzmod_r4_0090", "text": "观察期内如果有漏采，随时可以调回来。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT057"}
+{"id": "fzmod_r4_0091", "text": "准备把双活探针部署到第三个机房，方案在评审。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzmodT058"}
+{"id": "fzmod_r4_0092", "text": "评审通过后下周动工。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT058"}
+{"id": "fzmod_r4_0093", "text": "接下来处理用户反馈的排序问题，先复现再说。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT059"}
+{"id": "fzmod_r4_0094", "text": "复现步骤稳定后我建单跟踪。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT059"}
+{"id": "fzmod_r4_0095", "text": "我打算周末把个人环境的证书都续一遍。", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT060"}
+{"id": "fzmod_r4_0096", "text": "续完顺手把过期监控也加上。", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT060"}
+{"id": "fzmod_r4_0097", "text": "I'm going to tackle the query planner rewrite right after the freeze.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT061"}
+{"id": "fzmod_r4_0098", "text": "The freeze lifts on Monday, so the work starts then.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT061"}
+{"id": "fzmod_r4_0099", "text": "I'm drafting the capacity model now; numbers to follow next week.", "source_family": "interim_report", "lang": "en", "task_id": "fzmodT062"}
+{"id": "fzmod_r4_0100", "text": "Once the numbers are in, we can size the new cluster.", "source_family": "interim_report", "lang": "en", "task_id": "fzmodT062"}
+{"id": "fzmod_r4_0101", "text": "We plan to ship the batch API behind a flag first.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT063"}
+{"id": "fzmod_r4_0102", "text": "After the flag soaks, we will widen the rollout.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT063"}
+{"id": "fzmod_r4_0103", "text": "I'm about to start the failover drill; updates as I go.", "source_family": "interim_report", "lang": "en", "task_id": "fzmodT064"}
+{"id": "fzmod_r4_0104", "text": "Findings from the drill will feed the runbook update.", "source_family": "interim_report", "lang": "en", "task_id": "fzmodT064"}
+{"id": "fzmod_r4_0105", "text": "Next up: trimming the image layers and rerunning the build.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT065"}
+{"id": "fzmod_r4_0106", "text": "Build times will be compared against today's baseline.", "source_family": "agent_completion", "lang": "en", "task_id": "fzmodT065"}
+{"id": "fzmod_r4_0107", "text": "这个报错可能是缓存没刷新导致的吧？", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT066"}
+{"id": "fzmod_r4_0108", "text": "你确定这个数字是全量的吗？", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT066"}
+{"id": "fzmod_r4_0109", "text": "应该重启一下就好了吧？", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT067"}
+{"id": "fzmod_r4_0110", "text": "大概就是配额的问题，我说不准。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT067"}
+{"id": "fzmod_r4_0111", "text": "如果预算批下来，我们再考虑自建集群。", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT068"}
+{"id": "fzmod_r4_0112", "text": "万一灰度出问题，是不是得马上回退？", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT068"}
+{"id": "fzmod_r4_0113", "text": "好像是版本不匹配，具体还没查。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT069"}
+{"id": "fzmod_r4_0114", "text": "有人说是网关的问题，我不确定。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT069"}
+{"id": "fzmod_r4_0115", "text": "这批失败重试一下能过吗？", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT070"}
+{"id": "fzmod_r4_0116", "text": "可能得把超时调大一点吧。", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT070"}
+{"id": "fzmod_r4_0117", "text": "周会改到三点了吗？", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT071"}
+{"id": "fzmod_r4_0118", "text": "如果甲方周五前不确认，方案是不是先挂起？", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT071"}
+{"id": "fzmod_r4_0119", "text": "我猜是证书过期了，还没验证。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT072"}
+{"id": "fzmod_r4_0120", "text": "或许是环境变量没带上的缘故吧。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT072"}
+{"id": "fzmod_r4_0121", "text": "你那边跑通了吗？", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT073"}
+{"id": "fzmod_r4_0122", "text": "这个方案靠谱吗，大家觉得呢？", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT073"}
+{"id": "fzmod_r4_0123", "text": "估计要再迭代一轮才能收敛，说不好。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT074"}
+{"id": "fzmod_r4_0124", "text": "如果产品口径再变，前面的活儿会不会白干？", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT074"}
+{"id": "fzmod_r4_0125", "text": "听说他们组下周也发版，会不会冲突啊？", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT075"}
+{"id": "fzmod_r4_0126", "text": "可能是我记错了，那个参数到底是啥来着？", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT075"}
+{"id": "fzmod_r4_0127", "text": "要不先等等看？万一自己恢复了呢。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT076"}
+{"id": "fzmod_r4_0128", "text": "这个阈值应该还没触发吧？", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT076"}
+{"id": "fzmod_r4_0129", "text": "会不会是大小写的问题？", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT077"}
+{"id": "fzmod_r4_0130", "text": "也许把缓存清了就好，不好说。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT077"}
+{"id": "fzmod_r4_0131", "text": "如果升级到新版本，插件还能用吗？", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT078"}
+{"id": "fzmod_r4_0132", "text": "数据是不是得重新灌一遍？", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT078"}
+{"id": "fzmod_r4_0133", "text": "看起来像是路由配置丢了，我没细看。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT079"}
+{"id": "fzmod_r4_0134", "text": "别人反馈说偶尔会卡，具体原因不明。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT079"}
+{"id": "fzmod_r4_0135", "text": "这次发布应该没风险吧？", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT080"}
+{"id": "fzmod_r4_0136", "text": "要是依赖的服务先挂了怎么办？", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT080"}
+{"id": "fzmod_r4_0137", "text": "可能到时候再手工补一次吧。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT081"}
+{"id": "fzmod_r4_0138", "text": "这算不算阻塞项，谁能定一下？", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT081"}
+{"id": "fzmod_r4_0139", "text": "大概是时区的问题吧，回头查查。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT082"}
+{"id": "fzmod_r4_0140", "text": "如果灰度指标平稳，是不是可以直接全量？", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT082"}
+{"id": "fzmod_r4_0141", "text": "我记得之前也出过这个告警，是吗？", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT083"}
+{"id": "fzmod_r4_0142", "text": "也许这条日志可以忽略？", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT083"}
+{"id": "fzmod_r4_0143", "text": "测试环境能连生产网关吗？", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT084"}
+{"id": "fzmod_r4_0144", "text": "这个改动影响面大不大，不好评估吧。", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT084"}
+{"id": "fzmod_r4_0145", "text": "可能要等安全组放行才行，还没消息。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT085"}
+{"id": "fzmod_r4_0146", "text": "脚本跑挂了？还是数据本身有问题？", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT085"}
+{"id": "fzmod_r4_0147", "text": "估计是编码问题，先别改。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT086"}
+{"id": "fzmod_r4_0148", "text": "如果下版本要废弃这个接口，现在还值得优化吗？", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT086"}
+{"id": "fzmod_r4_0149", "text": "这个数对得上吗？帮我看看。", "source_family": "user_request", "lang": "zh", "task_id": "fzmodT087"}
+{"id": "fzmod_r4_0150", "text": "或许要重启节点才能生效吧，不确定。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT087"}
+{"id": "fzmod_r4_0151", "text": "Could this be a caching issue, or something deeper?", "source_family": "conversation_interference", "lang": "en", "task_id": "fzmodT088"}
+{"id": "fzmod_r4_0152", "text": "Maybe the token just expired; I'm not sure.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzmodT088"}
+{"id": "fzmod_r4_0153", "text": "If the budget is approved, should we revisit self-hosting?", "source_family": "user_request", "lang": "en", "task_id": "fzmodT089"}
+{"id": "fzmod_r4_0154", "text": "Was the fix deployed to staging yet?", "source_family": "user_request", "lang": "en", "task_id": "fzmodT089"}
+{"id": "fzmod_r4_0155", "text": "Rumor says the gateway is at fault, but nothing is confirmed.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzmodT090"}
+{"id": "fzmod_r4_0156", "text": "It's probably a version mismatch, but who knows.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzmodT090"}
+{"id": "fzmod_r4_0157", "text": "Should we roll back if the error rate spikes?", "source_family": "user_request", "lang": "en", "task_id": "fzmodT091"}
+{"id": "fzmod_r4_0158", "text": "Approximately how long does the backfill take? A guess is fine.", "source_family": "user_request", "lang": "en", "task_id": "fzmodT091"}
+{"id": "fzmod_r4_0159", "text": "今天就先到这里，明天接着调。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT092"}
+{"id": "fzmod_r4_0160", "text": "日志模块那一部分确实上线了，检索页还差两个交互。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT092"}
+{"id": "fzmod_r4_0161", "text": "这数字对不对？我再核一遍。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT093"}
+{"id": "fzmod_r4_0162", "text": "核完我会直接更新看板。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT093"}
+{"id": "fzmod_r4_0163", "text": "老板说上线了，我还没亲眼确认。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT094"}
+{"id": "fzmod_r4_0164", "text": "他号称两天搞定，先记着。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzmodT094"}
+{"id": "fzmod_r4_0165", "text": "周五准时发版，各组留意窗口。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT095"}
+{"id": "fzmod_r4_0166", "text": "发版内容已经冻结，变更单也批了。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT095"}
+{"id": "fzmod_r4_0167", "text": "这轮改完是不是就稳了？", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT096"}
+{"id": "fzmod_r4_0168", "text": "存量脏数据清完后，增量链路就干净了。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT096"}
+{"id": "fzmod_r4_0169", "text": "我担保这个数字没问题。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT097"}
+{"id": "fzmod_r4_0170", "text": "先大概按这个口径走，回头再细调。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT097"}
+{"id": "fzmod_r4_0171", "text": "失败用例已经清零，但验收脚本还没评审。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT098"}
+{"id": "fzmod_r4_0172", "text": "评审安排好了会通知大家。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT098"}
+{"id": "fzmod_r4_0173", "text": "上季度那个事故的复盘我确实写完了，一直没来得及发。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT099"}
+{"id": "fzmod_r4_0174", "text": "发不发由你们定。", "source_family": "interim_report", "lang": "zh", "task_id": "fzmodT099"}
+{"id": "fzmod_r4_0175", "text": "Let's call it a day and pick it up tomorrow.", "source_family": "interim_report", "lang": "en", "task_id": "fzmodT100"}
+{"id": "fzmod_r4_0176", "text": "The importer part is genuinely live; the exporter still needs wiring.", "source_family": "interim_report", "lang": "en", "task_id": "fzmodT100"}
+{"id": "fzmod_r4_0177", "text": "My manager said it shipped, but I haven't verified.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzmodT101"}
+{"id": "fzmod_r4_0178", "text": "Are we sure the numbers are final here?", "source_family": "interim_report", "lang": "en", "task_id": "fzmodT101"}
+{"id": "fzmod_r4_0179", "text": "The patch is merged and the regression suite passes; that thread is closed.", "source_family": "interim_report", "lang": "en", "task_id": "fzmodT102"}
+{"id": "fzmod_r4_0180", "text": "We'll announce the cutover on Friday.", "source_family": "interim_report", "lang": "en", "task_id": "fzmodT102"}

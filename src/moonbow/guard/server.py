@@ -6,17 +6,30 @@
 """
 import json
 import logging
+import os
 from typing import Optional
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 from .verifier import ProgressGuard, Decision
 from .process_audit import audit_stage_payload
+from .semantic_provider import (
+    PROVIDER_ENV,
+    SEMANTIC_CONFIG_ENV,
+    env_provider_key,
+)
 
 logger = logging.getLogger("progress_guard.server")
 
 
 class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
     guard: ProgressGuard = None  # 类属性，在启动时注入
+    # 可选：语义 provider（P2 SemanticMatcher 经 adapter）。None = 未配置，
+    # /check 请求 semantic_provider="semantic" 时明确 400，不静默回退。
+    semantic_provider = None
+    # R5：/check 未显式指定 semantic_provider 时的缺省值。默认 "legacy"
+    # （既有行为零变化）；MOONBOW_GUARD_PROVIDER=semantic 启动时置为
+    # "semantic"（配置激活，代码就绪）。
+    default_provider_key = "legacy"
 
     def _send_json(self, status_code: int, data: dict):
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
@@ -29,6 +42,13 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path in ("/health", "/", "/ping"):
             self._send_json(200, {"status": "ok", "service": "progress-guard"})
+        elif self.path == "/v1/semantic-status":
+            # 只读状态：当前语义 provider kind / backend / calibrated 声明。
+            if self.semantic_provider is not None:
+                status = dict(self.semantic_provider.describe())
+            else:
+                status = self.guard.semantic_status()
+            self._send_json(200, status)
         else:
             self._send_json(404, {"error": "Not Found"})
 
@@ -104,6 +124,18 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
             self._send_json(400, {"error": "rounds must be an integer"})
             return
 
+        # P6/R5：可选语义 provider 选择。缺省值由部署配置决定
+        # （MOONBOW_GUARD_PROVIDER=semantic 时默认 semantic；缺省 legacy，
+        # 与既有 /check 行为一致）。请求显式指定时覆盖缺省。
+        provider_key = payload.get("semantic_provider", self.default_provider_key)
+        if provider_key not in ("legacy", "semantic"):
+            self._send_json(400, {"error": "semantic_provider must be 'legacy' or 'semantic'"})
+            return
+        if provider_key == "semantic" and self.semantic_provider is None:
+            self._send_json(400, {"error": "semantic_provider='semantic' requested but semantic runtime is not configured on this server"})
+            return
+        check_provider = self.semantic_provider if provider_key == "semantic" else None
+
         try:
             verdict = self.guard.check(
                 req=req,
@@ -112,6 +144,7 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
                 external_tool_success=ext_success,
                 mode=mode,
                 semantic_review_used=review_used,
+                provider=check_provider,
             )
             # 裁决遥测：stdout 可见（CI / 安装验证以这行 log 为投递证据）
             logger.info("/check verdict=%s is_closed=%s skeleton=%s",
@@ -133,17 +166,45 @@ def start_server(
     models_dir: Optional[str] = None,
     device: str = "cpu",
     lazy: bool = False,
+    semantic_provider=None,
 ):
     """启动本地守卫微服务并常驻监听。
 
     lazy=True：骨架模式，无权重可运行（协议/硬信号/工具证据层；
     权重缺失时定性信号自动降级，见 verifier）。
+    semantic_provider：可选 SemanticProviderAdapter（P6）。None = 仅 legacy，
+    /check 请求 semantic_provider="semantic" 时明确 400。
+
+    R5 默认切换（配置驱动，缺省 legacy 零变化）：
+    - MOONBOW_GUARD_PROVIDER=semantic 启动时按
+      MOONBOW_GUARD_SEMANTIC_CONFIG（缺省 config/semantic_runtime_lora.json）
+      构建白名单 semantic provider，/check 与 SDK 默认走 semantic；
+      构建失败记 warning 并保持 legacy。
+    - 一键回滚 = 移除该环境变量 + 重启（verdict 与 legacy 基线逐字段一致，
+      见 P10 回滚演练 results/semantic-runtime/p9-host/rollback_drill.md）。
     """
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
     logger.info("正在初始化 Progress Guard 模型 (%s @ %s, lazy=%s)...", models_dir or "default", device, lazy)
 
+    env_key = env_provider_key()
+    if semantic_provider is None and env_key == "semantic":
+        try:
+            from .semantic_provider import semantic_provider_from_config
+            semantic_provider = semantic_provider_from_config(
+                os.environ.get(SEMANTIC_CONFIG_ENV))
+            GuardHTTPRequestHandler.default_provider_key = "semantic"
+            logger.info("MOONBOW_GUARD_PROVIDER=semantic: /check 默认走 "
+                        "semantic provider（白名单；回滚 = 移除该环境变量并重启）")
+        except Exception as e:
+            logger.warning("semantic provider 构建失败（%s: %s），保持 legacy 默认",
+                           type(e).__name__, e)
+    elif env_key is None:
+        GuardHTTPRequestHandler.default_provider_key = "legacy"
+        logger.info("%s 未设置或非法：/check 默认 legacy（既有行为零变化）", PROVIDER_ENV)
+
     guard = ProgressGuard(models_dir=models_dir, device=device, lazy_load=lazy)
     GuardHTTPRequestHandler.guard = guard
+    GuardHTTPRequestHandler.semantic_provider = semantic_provider
 
     server = HTTPServer((host, port), GuardHTTPRequestHandler)
     logger.info("Progress Guard 服务已启动: http://%s:%d", host, port)
