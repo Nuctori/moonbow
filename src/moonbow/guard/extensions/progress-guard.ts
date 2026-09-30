@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { BlockAssembler, type GuardBlock } from "./process-events.ts";
-import { StageAuditor, processMode, type ProcessMode,
+import { StageAuditor, convergenceMode, processMode, type ProcessMode,
          type StageCheckResponse } from "./process-audit.ts";
 import { appendBlocks, isGuardOriginText, latestDelivery, newProcessState,
          type DeliveryRecord, type ProcessState } from "./process-task.ts";
@@ -166,7 +166,10 @@ export default function activate(pi: ExtensionAPI) {
     const ended = streamEnded || pendingStreamEnd;
     pendingStreamEnd = false;
     pBusy = true;
-    const auditor = new StageAuditor(URL, (u, i) => fetch(u, i));
+    // Phase 2：MOONBOW_GUARD_CONVERGENCE 非 off 时为 stage-check 开收敛
+    // 通道（enable_convergence_shadow）。是否真正投递由服务端 env 门控。
+    const auditor = new StageAuditor(URL, (u, i) => fetch(u, i),
+                                     10000, convergenceMode() !== "off");
     void auditor.submit(current, mode, ended).then((resp) => {
       pBusy = false;
       applyAudit(current, resp, mode, ctx);

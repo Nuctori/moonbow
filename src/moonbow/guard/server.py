@@ -12,7 +12,12 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 
 from .verifier import ProgressGuard, Decision
 from .process_audit import audit_stage_payload
-from .convergence import ConvergenceShadow
+from .convergence import (
+    CONVERGENCE_ENV,
+    AdvisoryBudget,
+    ConvergenceShadow,
+    convergence_mode_from_env,
+)
 from .semantic_provider import (
     PROVIDER_ENV,
     SEMANTIC_CONFIG_ENV,
@@ -36,6 +41,14 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
     # ConvergenceShadow.compute 是块流纯函数、无跨请求状态，复用安全。
     # 缺省 None：不传 flag 的请求行为与之前逐字节一致）。
     convergence_shadow = None
+    # Phase 2：收敛提示 advisory 门控。MOONBOW_GUARD_CONVERGENCE：
+    # off（默认，现状）| shadow（只记录）| advisory（触发命中且预算未用时
+    # reminder 可投递收敛提示）。env 仅在 start_server 读取一次；类属性
+    # 缺省 off 保证测试/直启进程零变化。advisory 状态查询：
+    # GET /v1/convergence-status（只读，不改变行为）。
+    convergence_mode = "off"
+    # advisory 模式的独立预算（每任务最多 2 次，按 (task_id|req哈希, signal) 记）
+    convergence_advisory = None
 
     def _send_json(self, status_code: int, data: dict):
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
@@ -48,6 +61,13 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path in ("/health", "/", "/ping"):
             self._send_json(200, {"status": "ok", "service": "progress-guard"})
+        elif self.path == "/v1/convergence-status":
+            # 只读状态：收敛通道模式与预算用量（advisory 观测/冒烟验证用）
+            advisory = self.convergence_advisory
+            self._send_json(200, {
+                "mode": self.convergence_mode,
+                "tasks_with_delivery": (len(advisory._counts) if advisory else 0),
+            })
         elif self.path == "/v1/semantic-status":
             # 只读状态：当前语义 provider kind / backend / calibrated 声明。
             if self.semantic_provider is not None:
@@ -87,9 +107,16 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
                 if conv_flag:
                     if GuardHTTPRequestHandler.convergence_shadow is None:
                         GuardHTTPRequestHandler.convergence_shadow = ConvergenceShadow()
+                    # Phase 2：advisory 门控——仅 server env=advisory 时注入
+                    # 预算（触发命中 → reminder 可投递）；off/shadow 注入
+                    # None，与 Phase 1 逐字节一致。
+                    conv_advisory = (GuardHTTPRequestHandler.convergence_advisory
+                                     if GuardHTTPRequestHandler.convergence_mode == "advisory"
+                                     else None)
                     result = audit_stage_payload(
                         payload,
-                        convergence_shadow=GuardHTTPRequestHandler.convergence_shadow)
+                        convergence_shadow=GuardHTTPRequestHandler.convergence_shadow,
+                        convergence_advisory=conv_advisory)
                 else:
                     result = audit_stage_payload(payload)
                 logger.info("/v1/stage-check findings=%d reminder=%s",
@@ -201,9 +228,27 @@ def start_server(
       构建失败记 warning 并保持 legacy。
     - 一键回滚 = 移除该环境变量 + 重启（verdict 与 legacy 基线逐字段一致，
       见 P10 回滚演练 results/semantic-runtime/p9-host/rollback_drill.md）。
+
+    Phase 2 收敛通道（MOONBOW_GUARD_CONVERGENCE=off|shadow|advisory，默认
+    off = Phase 1 现状）：advisory 时 /v1/stage-check 的收敛触发命中可在
+    reminder 投递收敛提示（独立预算，每任务最多 2 次）。
     """
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
     logger.info("正在初始化 Progress Guard 模型 (%s @ %s, lazy=%s)...", models_dir or "default", device, lazy)
+
+    mode = convergence_mode_from_env()
+    if mode != "off":
+        GuardHTTPRequestHandler.convergence_mode = mode
+        if mode == "advisory":
+            GuardHTTPRequestHandler.convergence_advisory = AdvisoryBudget()
+        logger.info("%s=%s：收敛通道开启（advisory=触发命中可投递收敛提示；"
+                    "一键回滚 = 移除该环境变量并重启）", CONVERGENCE_ENV, mode)
+    else:
+        GuardHTTPRequestHandler.convergence_mode = "off"
+        GuardHTTPRequestHandler.convergence_advisory = None
+        if os.environ.get(CONVERGENCE_ENV):
+            logger.warning("%s=%r 非法（合法值 off/shadow/advisory）：保持 off",
+                           CONVERGENCE_ENV, os.environ[CONVERGENCE_ENV])
 
     env_key = env_provider_key()
     if semantic_provider is None and env_key == "semantic":
