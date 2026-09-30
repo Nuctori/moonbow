@@ -237,6 +237,23 @@ Stop-hook 参考适配器使用 `~/.moonbow/hook-state` 原子预算标记，按
 
 ---
 
+## 6.5 语义匹配运行时（semantic runtime，opt-in，实验性）
+
+Moonbow 0.1.0 起包含统一语义匹配运行时：固定版本 pattern + 严格契约 + 共享
+Runtime（单加载/队列/deadline/取消）+ 可替换 backend（Fake/HTTP/SLM）+ Guard
+兼容迁移层（legacy 默认，行为逐行不变）。HTTP 服务独立于 guard 服务：
+`python -m moonbow.semantic.http --config config/semantic_runtime.example.json`。
+
+**能力状态（如实）**：统一接口/运行时/兼容层已验证；SLM 后端（Qwen3.5-0.8B）
+离线判定延迟已达标（XPU bf16 p50≈126ms）但语义质量未通过校准门禁（precision
+不达标，校准 4/4 calibrated=false）——**semantic 路径默认关闭，不得用于生产
+提醒路径**，仅 opt-in 试验。`ts.capture` 保持 rule 路径。
+
+详情：`docs/semantic_api.md`（API/HTTP/错误码/FakeBackend/配置）与
+`docs/semantic_runtime_README.md`（状态总览）；证据：`results/semantic-runtime/`。
+
+---
+
 ## 7. 目录结构规范
 
 ```

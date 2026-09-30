@@ -110,8 +110,10 @@ def test_guard_unverified_assert_clarify():
 
 @needs_models
 def test_guard_disputed_close_round2():
+    """第 2 轮重申 + 具体证据 → 争议放行（n08 实验后保留原契约：捕获头在
+    本域无法分离真闭合与 n08 类误报，闸门方案净退化已回退，见
+    results/semantic-runtime/legacy-vs-semantic/）。"""
     guard = ProgressGuard(models_dir="models", device="cpu")
-    # 第 2 轮主模型在看到提示后，重申 A 并补充了测试结果证据
     resp = (
         "STATUS: A 全部完成\n"
         "REMAINING: 无\n"

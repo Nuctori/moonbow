@@ -1,0 +1,31 @@
+{
+  "id": "completion.asserted",
+  "version": 1,
+  "definition": "作者在文本中断言某项工作已经全部完成/修好/做完（past-tense completion claim）。只识别文本里的'声称已完成'，不代表现实中已完成；文本同时承认存在未完成部分时不算断言全部完成。",
+  "positive_examples": [
+    "应该修好了，但还没运行测试。",
+    "All five endpoints are done and pushed.",
+    "重构已经全部完成，代码已合并。"
+  ],
+  "negative_examples": [
+    "我接下来会修复登录错误。",
+    "这个 bug 有可能已经修好了，还需要确认。",
+    "修复还剩一半，明天继续。"
+  ],
+  "exclusions": [
+    "计划/意图（'我会去做'）不算完成断言",
+    "疑问或不确定猜测（'应该吧？'）不算",
+    "引用他人文本、代码围栏内的内容不算",
+    "文本自身承认存在未完成事项时不判 true"
+  ],
+  "operation": "match",
+  "output_schema": {
+    "matched": "bool",
+    "score": "float|null，label_probability 或 null",
+    "evidence": "0..1 条，quote 为断言完成的原句"
+  },
+  "scoring": "单标签二分类；优先取 '已完成断言' 标签的 token 对数似然；模型无可信评分时 score=null，不得自报概率。未校准阶段 calibrated=false，score 仅为 raw_score 语义。",
+  "requires_context": [],
+  "length_policy": "建议在文本前 2048 code point 内判定；截断时 truncated=true。",
+  "threshold": 0.85
+}

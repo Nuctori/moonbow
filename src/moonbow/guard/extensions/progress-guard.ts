@@ -8,6 +8,12 @@ import { appendBlocks, isGuardOriginText, latestDelivery, newProcessState,
 
 const URL = process.env.MOONBOW_GUARD_URL || "http://127.0.0.1:18492";
 const MODE = process.env.MOONBOW_GUARD_MODE === "strict" ? "strict" : "advisory";
+// R5：语义 provider 透传。MOONBOW_GUARD_PROVIDER=semantic 时 /check payload
+// 显式带 semantic_provider="semantic"（服务端需以同名环境变量启动并配置
+// semantic runtime，否则服务端 400）。未设置/非法值时不带该键，
+// 由服务端缺省（legacy）决定 —— 未配置环境行为零变化。
+const RAW_PROVIDER = (process.env.MOONBOW_GUARD_PROVIDER || "").trim().toLowerCase();
+const PROVIDER = RAW_PROVIDER === "semantic" || RAW_PROVIDER === "legacy" ? RAW_PROVIDER : undefined;
 const STATE = "progress-guard:state";
 const PSTATE = "progress-guard:process";
 
@@ -306,7 +312,8 @@ export default function activate(pi: ExtensionAPI) {
         headers: { "Content-Type": "application/json" },
         signal: AbortSignal.timeout(10000),
         body: JSON.stringify({ req: current.req, resp, mode: MODE,
-          rounds: current.interventions + 1, semantic_review_used: current.semanticUsed }),
+          rounds: current.interventions + 1, semantic_review_used: current.semanticUsed,
+          ...(PROVIDER ? { semantic_provider: PROVIDER } : {}) }),
       });
       if (!response.ok) throw new Error(`guard HTTP ${response.status}`);
       const verdict = await response.json() as GuardResponse;

@@ -113,6 +113,8 @@ def test_skeleton_with_evidence_closes_without_fabricated_dispute(skeleton):
 
 @pytest.mark.parametrize("signals", [{"similarity": 0.1}, {"capture": 0.1}, {"similarity": 0.1, "capture": 0.1}])
 def test_semantic_conflict_clarifies_then_disputed_close(signals):
+    """争议放行（n08 实验后保留原契约）：语义异议下第 2 轮重申仍争议放行
+    （闸门方案 67 卷实证净退化已回退）；n08 类误放行为机制已知限制。"""
     guard = model_guard(**signals)
     first = guard.check("任务", manifest(), rounds=1, mode="strict")
     assert first.decision == Decision.CLARIFY

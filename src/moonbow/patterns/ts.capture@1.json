@@ -1,0 +1,40 @@
+{
+  "id": "ts.capture",
+  "version": 1,
+  "definition": "任务结构 8 类捕获（docs/task_structure_spec.md §2，v0 冻结）：只声称'文本里出现了什么'，不刻画任务全貌。kind 枚举固定为 goal/object/constraint/dependency/coordination/condition/unresolved/acceptance，歧义裁决沿用规范 §3（取消优先、伪任务优先、一子句一主捕获等）。",
+  "positive_examples": [
+    "修复登录接口，保持旧客户端兼容。",
+    "先跑迁移再更新 API。",
+    "如果超过 10GB 则分批处理，验收标准：全部用例通过。"
+  ],
+  "negative_examples": [
+    "上周已经修复了登录问题（背景叙述，非当前义务）。",
+    "例如可以把配置抽出来（伪任务引导词）。",
+    "这个系统那个地方（无锚点模糊指代，不捕获）。"
+  ],
+  "exclusions": [
+    "取消动词+元引用的子句不捕获",
+    "例子/参考/代码围栏/引用行内的'任务'不捕获",
+    "推测的先后（未明说）不算 dependency",
+    "端点不明的依赖计 1 次 dependency 并记 unknowns，不推断可并行"
+  ],
+  "operation": "find_all",
+  "output_schema": {
+    "captures": [
+      {
+        "kind": "goal|object|constraint|dependency|coordination|condition|unresolved|acceptance",
+        "kind_enum": ["goal", "object", "constraint", "dependency", "coordination", "condition", "unresolved", "acceptance"],
+        "quote": "verbatim 原文子串",
+        "start": "int，code point 半开区间起点",
+        "end": "int，半开区间终点",
+        "score": "float|null"
+      }
+    ],
+    "unknowns": "如 ['dependency']，端点不明时记录",
+    "truncated": "bool，部分截断不得宣称全量抽取"
+  },
+  "scoring": "多标签结构化抽取，小批次独立判定或结构化输出；不得把互不排斥的 8 类做成单一 softmax 类别。每条 capture 的 score 可为 null；严格原文有效率必须 100%，坏引文判 invalid_output。",
+  "requires_context": [],
+  "length_policy": "长文本按窗口切分；任何截断必须 truncated=true，不得宣称全量。",
+  "threshold": null
+}

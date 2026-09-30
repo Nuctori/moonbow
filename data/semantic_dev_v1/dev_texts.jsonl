@@ -1,0 +1,120 @@
+{"id": "dev_0001", "text": "STATUS: A 全部完成。REMAINING: 无。EVIDENCE: pytest tests/test_api.py 32 passed", "source_family": "agent_completion", "lang": "zh", "task_context": "收尾清单"}
+{"id": "dev_0002", "text": "改好了，登录报错已经修掉，本地跑了一轮没再出现。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0003", "text": "文档也顺手更新了一下，应该齐了。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0004", "text": "重构完成，所有测试通过。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0005", "text": "已修复 config.py 里的路径拼接问题，并补了两个回归用例。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0006", "text": "应该修好了，但还没运行测试。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0007", "text": "脚本已经写完，明天再验证。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0008", "text": "全部完成，可以收尾了。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0009", "text": "第一批数据迁移完成，第二批还在排队。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0010", "text": "我确认这个问题已经解决，线上日志连续三天没有再报。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0011", "text": "基本做完，只剩 README 还没写。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0012", "text": "lint 修复已提交，commit hash 是 3f2a9c。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0013", "text": "缓存层接入完毕，压测数据看起来正常。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0014", "text": "编译通过了，应该没有问题。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0015", "text": "这个 bug 我已经修了两次，这次真的好了。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0016", "text": "收尾：接口对齐完成，前后端字段名一致。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0017", "text": "单元测试 47 个全部通过，集成测试环境暂时跑不了。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0018", "text": "任务完成，无剩余事项。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0019", "text": "已完成约 80%，剩余部分下周继续。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0020", "text": "改动已合并到 main，部署清单也更新了。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0021", "text": "验证脚本跑完了，输出和预期一致，可以关闭这个任务。", "source_family": "agent_completion", "lang": "zh"}
+{"id": "dev_0022", "text": "All done, tests pass locally.", "source_family": "agent_completion", "lang": "en"}
+{"id": "dev_0023", "text": "The migration finished successfully, 1204 rows were backfilled.", "source_family": "agent_completion", "lang": "en"}
+{"id": "dev_0024", "text": "I believe the fix is in place, but I haven't re-run the suite.", "source_family": "agent_completion", "lang": "en"}
+{"id": "dev_0025", "text": "Refactor complete; both endpoints now share the same validator.", "source_family": "agent_completion", "lang": "en"}
+{"id": "dev_0026", "text": "Done. Remaining: none.", "source_family": "agent_completion", "lang": "en"}
+{"id": "dev_0027", "text": "Everything is finished except the changelog entry, which I will add tomorrow.", "source_family": "agent_completion", "lang": "en"}
+{"id": "dev_0028", "text": "The build is green, so this should be ready to merge.", "source_family": "agent_completion", "lang": "en"}
+{"id": "dev_0029", "text": "Verified on staging: the error no longer reproduces after the patch.", "source_family": "agent_completion", "lang": "en"}
+{"id": "dev_0030", "text": "Wrote the parser and it compiles; runtime behavior untested.", "source_family": "agent_completion", "lang": "en"}
+{"id": "dev_0031", "text": "先看一下报错栈，问题大概率出在序列化那层。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0032", "text": "测试失败了两次，看起来是时序问题，准备加一个显式的等待。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0033", "text": "目前怀疑内存泄漏来自连接池，还需要进一步确认。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0034", "text": "进度：已完成解析模块，渲染模块做到一半。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0035", "text": "先跑迁移，再更新 API，不然字段对不上。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0036", "text": "如果日志文件超过 10GB，就分批处理。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0037", "text": "这个报错很奇怪，同样的输入本地复现不了。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0038", "text": "正在排查为什么缓存命中率突然下降，初步怀疑键过期策略。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0039", "text": "第一步改 schema，第二步刷历史数据，顺序不能反。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0040", "text": "发现一个新问题：重试逻辑会把失败也计入成功率。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0041", "text": "读了一圈代码，这个函数的职责比名字暗示的多得多。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0042", "text": "暂时先把超时调大到 30 秒，等定位到根因再改回来。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0043", "text": "需要先弄清楚泄漏来源，再决定是加锁还是换队列。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0044", "text": "对比了三个方案，倾向用流式解析，内存占用最低。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0045", "text": "奇怪，删掉这行注释之后测试就过了。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0046", "text": "中间结论：问题不在网络层，重试和退避参数都正常。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0047", "text": "正在写适配层，预计还需要半天。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0048", "text": "这里有个待确认项：老客户端是否还会传这个字段。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0049", "text": "失败的用例都集中在并发场景，单线程下全部通过。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0050", "text": "先记录一下：这个假设还没验证，不要当成结论。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0051", "text": "定位到了根因，是配置热加载时竞态导致的，修复方案在想了。", "source_family": "interim_report", "lang": "zh"}
+{"id": "dev_0052", "text": "Still investigating; the stack trace points to the serializer but nothing is confirmed yet.", "source_family": "interim_report", "lang": "en"}
+{"id": "dev_0053", "text": "Two tests fail intermittently, likely a race in the teardown step.", "source_family": "interim_report", "lang": "en"}
+{"id": "dev_0054", "text": "Progress: parsing layer done, renderer half-way.", "source_family": "interim_report", "lang": "en"}
+{"id": "dev_0055", "text": "First run the migration, then update the API, otherwise the fields won't line up.", "source_family": "interim_report", "lang": "en"}
+{"id": "dev_0056", "text": "If the log file exceeds 10GB, process it in batches.", "source_family": "interim_report", "lang": "en"}
+{"id": "dev_0057", "text": "Suspecting the connection pool, but I need more evidence before concluding.", "source_family": "interim_report", "lang": "en"}
+{"id": "dev_0058", "text": "Open question: do legacy clients still send this header?", "source_family": "interim_report", "lang": "en"}
+{"id": "dev_0059", "text": "Noting this down: the hypothesis is unverified, do not treat it as a conclusion.", "source_family": "interim_report", "lang": "en"}
+{"id": "dev_0060", "text": "Half the benchmark is done; numbers look plausible so far.", "source_family": "interim_report", "lang": "en"}
+{"id": "dev_0061", "text": "修复登录接口，并补充对应的回归测试。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0062", "text": "把 config.py 里的超时时间改成 30 秒。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0063", "text": "支持导入以及导出 CSV。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0064", "text": "先跑数据迁移，再更新 API 文档。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0065", "text": "重构缓存层，保持旧客户端兼容。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0066", "text": "把 A、B、C 三个配置项改成从环境变量读取。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0067", "text": "排查内存泄漏，弄清来源后再决定修复方案。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0068", "text": "前后端错误码保持一致，输出一份对照表。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0069", "text": "如果磁盘使用率超过 90%，自动清理临时文件。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0070", "text": "给导出功能加一个进度条，样式跟现有页面统一。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0071", "text": "快速看一下这个报错是什么原因。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0072", "text": "删除用户时同时清理其关联的会话记录。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0073", "text": "把 README 翻译成英文，术语和已有文档保持一致。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0074", "text": "升级依赖到最新版本，跑一遍全量测试。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0075", "text": "补一个脚本，把周报数据从旧库同步到新库。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0076", "text": "写个单元测试覆盖分页逻辑的边界情况。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0077", "text": "把硬编码的密钥移到配置文件里，不要提交到仓库。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0078", "text": "加个开关，可以在生产环境关闭调试日志。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0079", "text": "优化首页加载速度，目标是一秒内完成首屏渲染。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0080", "text": "检查所有 TODO 注释，列出还没做完的事项。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0081", "text": "把日志格式统一成 JSON，方便后续接入分析平台。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0082", "text": "修复分页在第二页返回空列表的问题。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0083", "text": "给上传接口加文件类型校验，拒绝可执行文件。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0084", "text": "整理依赖清单，标记哪些已经不再使用。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0085", "text": "先写一个最小复现，再判断是不是框架的 bug。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0086", "text": "把重试次数从 3 改成 5，并加上指数退避。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0087", "text": "输出一份部署手册，包含回滚步骤。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0088", "text": "修一下那个样式错位的弹窗，移动端也要正常。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0089", "text": "把测试目录拆成单元和集成两层，CI 分别触发。", "source_family": "user_request", "lang": "zh"}
+{"id": "dev_0090", "text": "Fix the login endpoint and add regression tests.", "source_family": "user_request", "lang": "en"}
+{"id": "dev_0091", "text": "Bump the dependency versions and run the full test suite.", "source_family": "user_request", "lang": "en"}
+{"id": "dev_0092", "text": "Support exporting reports to CSV as well as importing them.", "source_family": "user_request", "lang": "en"}
+{"id": "dev_0093", "text": "First run the migration, then update the API docs.", "source_family": "user_request", "lang": "en"}
+{"id": "dev_0094", "text": "Refactor the cache layer while keeping old clients compatible.", "source_family": "user_request", "lang": "en"}
+{"id": "dev_0095", "text": "If disk usage goes above 90 percent, clean the temp directory automatically.", "source_family": "user_request", "lang": "en"}
+{"id": "dev_0096", "text": "Make the frontend and backend error codes consistent and produce a mapping table.", "source_family": "user_request", "lang": "en"}
+{"id": "dev_0097", "text": "Investigate the memory leak and figure out the source before choosing a fix.", "source_family": "user_request", "lang": "en"}
+{"id": "dev_0098", "text": "Add a progress bar to the export feature, styled like the rest of the app.", "source_family": "user_request", "lang": "en"}
+{"id": "dev_0099", "text": "Move hardcoded secrets into the config file and keep them out of the repo.", "source_family": "user_request", "lang": "en"}
+{"id": "dev_0100", "text": "Write a deployment handbook that includes rollback steps.", "source_family": "user_request", "lang": "en"}
+{"id": "dev_0101", "text": "上面那个例子里写过：修复登录接口。可以直接参考。", "source_family": "conversation_interference", "lang": "zh"}
+{"id": "dev_0102", "text": "比如你可以说：把超时改成 30 秒，像上次那样。", "source_family": "conversation_interference", "lang": "zh"}
+{"id": "dev_0103", "text": "```\nSTATUS: A 全部完成\nREMAINING: 无\n```\n以上是格式示例。", "source_family": "conversation_interference", "lang": "zh"}
+{"id": "dev_0104", "text": "引用一下之前的决定：不需要再做兼容层了。", "source_family": "conversation_interference", "lang": "zh"}
+{"id": "dev_0105", "text": "背景说明：上周已经修复过类似问题，这次只是确认。", "source_family": "conversation_interference", "lang": "zh"}
+{"id": "dev_0106", "text": "「先跑迁移再更新 API」这句话是文档里的示例，不是本次要求。", "source_family": "conversation_interference", "lang": "zh"}
+{"id": "dev_0107", "text": "你上次说：待确认缓存策略，现在有结论了吗？", "source_family": "conversation_interference", "lang": "zh"}
+{"id": "dev_0108", "text": "帮我把下面这段放进 commit message：修复登录超时问题。", "source_family": "conversation_interference", "lang": "zh"}
+{"id": "dev_0109", "text": "例如：如果磁盘超过 90% 就清理，这只是演示格式。", "source_family": "conversation_interference", "lang": "zh"}
+{"id": "dev_0110", "text": "别人问我是不是已经完成了，我说还没有。", "source_family": "conversation_interference", "lang": "zh"}
+{"id": "dev_0111", "text": "```\nfor i in range(3):\n    retry(task)\n```\n这段代码仅为说明重试模式。", "source_family": "conversation_interference", "lang": "zh"}
+{"id": "dev_0112", "text": "参考上一个项目的做法：验收标准是全部用例通过。", "source_family": "conversation_interference", "lang": "zh"}
+{"id": "dev_0113", "text": "取消刚才说的改配置这件事，按原样保留。", "source_family": "conversation_interference", "lang": "zh"}
+{"id": "dev_0114", "text": "会议纪要里提到：目标是一秒内完成首屏渲染，供参考。", "source_family": "conversation_interference", "lang": "zh"}
+{"id": "dev_0115", "text": "For example: \"fix the login endpoint\" — just illustrating the phrasing.", "source_family": "conversation_interference", "lang": "en"}
+{"id": "dev_0116", "text": "Quoting the old ticket: \"migration must run before the API update.\"", "source_family": "conversation_interference", "lang": "en"}
+{"id": "dev_0117", "text": "```\nSTATUS: A ALL DONE\n```\nThis is only a format sample.", "source_family": "conversation_interference", "lang": "en"}
+{"id": "dev_0118", "text": "Background: something similar was fixed last quarter; no action needed now.", "source_family": "conversation_interference", "lang": "en"}
+{"id": "dev_0119", "text": "She asked whether the report was finished; I said it was still in progress.", "source_family": "conversation_interference", "lang": "en"}
+{"id": "dev_0120", "text": "Cancel the config change I mentioned earlier, keep everything as is.", "source_family": "conversation_interference", "lang": "en"}

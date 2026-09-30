@@ -306,6 +306,51 @@ python experiments/task_structure/eval_task_structure.py --backend finetuned --s
 
 ---
 
+### 4.2 统一语义匹配运行时（Semantic Match Runtime，判定侧 opt-in）
+
+把 Moonbow 各插件的可复用核心收敛为一个自然语言模式匹配 API：
+`match(text, pattern|requirement) → matched/score/evidence/provenance`，
+三个管线插件（Guard / Task Structure / Stage Audit）共享同一份常驻模型
+（基座加载一次，多 LoRA 适配器毫秒级热切换，未知 adapter 报 `unsupported`
+绝不静默回退）。
+
+```bash
+# 独立语义服务（fake 后端即可起，slm 后端见 config/semantic_runtime_lora.json）
+python -m moonbow.semantic.http --config config/semantic_runtime.example.json
+
+# Guard 语义路径激活（判定侧 opt-in；缺省 legacy 行为零变化）
+export MOONBOW_GUARD_PROVIDER=semantic
+# 回滚：移除该变量并重启，verdict 与 legacy 基线逐字段一致（已演练）
+```
+
+**能力现状（截至 2026-09-30，标签均为 agent 自审的 provisional 口径）**：
+
+| 信号 | 状态 | 验收口径 |
+|---|---|---|
+| completion.asserted（完成断言） | pass | 留出 test P=0.895 / R=0.810 |
+| task.object.alignment（客体对齐） | pass | 留出 test P=0.854 / R=0.972 |
+| process.unresolved（未决事项） | pass-preliminary | holdout_v2 P=0.857 / R=0.947 |
+| modality.assertive（语气判定） | no-go | 0.8B 底座语气不可分，zero-shot 如实标记 |
+| ts.capture（8 类字符串捕获） | 未达标 | 生成式 span 不可用；GLiNER 接入待 8 类微调 |
+
+与旧系统（微调 MiniLM 判别头）的**同卷对比**（67 样本闭合判定集）：
+两路径 53/67 持平、负样本阻断与误放行完全一致、闭合判定零翻转；
+semantic 延迟 p50 约 550ms（legacy 40ms）。旧 80.6% 在当前代码重放为
+79.1%（1 例版本漂移）。旧考卷 13 例 FN 中 12 例是协议/骨架层的
+设计性失败（自报 B、空证据），微调不可解也不应解；争议放行机制
+（第 2 轮重申）经闸门实验实证为当前更优权衡，维持原设计。
+
+模型与训练：判定底座为 openjev（Qwen3.5-0.8B NLI 交叉编码器，MIT）+
+各信号 LoRA（`models/semantic_lora/`，不入库）；训练/评测数据为
+`data/semantic_frozen_v1/`（600 条冻结集 + 扩充批，provisional）。
+全部推理在 XPU（Intel Arc A770）执行，禁止 CPU 推理路径。
+
+API / 部署 / 回滚详情：[docs/semantic_api.md](docs/semantic_api.md) ·
+能力状态与限制：[docs/semantic_runtime_README.md](docs/semantic_runtime_README.md) ·
+实施进度与全部实验证据：[docs/semantic_runtime_progress.md](docs/semantic_runtime_progress.md)
+
+---
+
 ## 5. 路线图
 
 沿"观察系统性失败 → 形式化定义边界 → 拆成定性/定量 → 插入窄带节点"的路径生长管线：

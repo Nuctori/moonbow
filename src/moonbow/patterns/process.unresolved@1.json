@@ -1,0 +1,31 @@
+{
+  "id": "process.unresolved",
+  "version": 1,
+  "definition": "文本中存在明确的、尚未解决的疑点/待查事项：作者自己标记了不确定、待确认、需要调查的问题。识别'过程未决'，不评估问题的真实难度。",
+  "positive_examples": [
+    "内存泄漏的来源还需要先弄清楚。",
+    "这里为什么超时还不确定，待确认。",
+    "还有一个边界条件没查：空输入时会发生什么。"
+  ],
+  "negative_examples": [
+    "内存泄漏已定位并修复。",
+    "（无任何未决事项的常规进度汇报）测试都通过了。",
+    "或许以后可以加个缓存（纯属设想，非待办）。"
+  ],
+  "exclusions": [
+    "已经解决的疑点（有明确解决陈述）不算未决",
+    "模糊措辞而无明确待查对象时按弃权处理，不捕获",
+    "假设性设想（'或许/说不定'）不算未决事项",
+    "引用他人提出的疑问且作者已回应解决的，不算"
+  ],
+  "operation": "match",
+  "output_schema": {
+    "matched": "bool",
+    "score": "float|null",
+    "evidence": "0..1 条，quote 为未决疑点的原句"
+  },
+  "scoring": "单标签二分类（存在未决 vs 无未决），取标签对数似然；无评分机制时 score=null。",
+  "requires_context": [],
+  "length_policy": "建议窗口 2048 code point；截断时 truncated=true 且不得宣称全量。",
+  "threshold": 0.8
+}

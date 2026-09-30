@@ -1,0 +1,132 @@
+{"id": "fzproc_r5_0001", "text": "上线导出功能这版先做，但分页导出超过十万行会不会把内存打爆，还没验证过，发版前必须先压一轮测确认。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT001"}
+{"id": "fzproc_r5_0002", "text": "上线导出功能这版先做，大分页吃内存的问题上周压测已经跑过，确认没有风险，这条不用再管。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT001"}
+{"id": "fzproc_r5_0003", "text": "灰度比例先按 5% 放，老用户那边会不会集中投诉还没有底，等客服给个准信再放大比例。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT002"}
+{"id": "fzproc_r5_0004", "text": "灰度比例已经放大到 20%，老用户投诉的顾虑客服确认过没有新增，可以继续推。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT002"}
+{"id": "fzproc_r5_0005", "text": "消息去重打算用 redis setnx，但主从切换瞬间会不会丢标记我还没查过，得先弄清楚再定方案。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT003"}
+{"id": "fzproc_r5_0006", "text": "消息去重方案定了用 redis，主从切换丢标记的疑问查过了，哨兵模式下写会切到新主，方案可行。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT003"}
+{"id": "fzproc_r5_0007", "text": "接口改造下周动工，老调用方现在到底还有多少个在用 v1，这个数没人统计过，开工前必须摸清。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT004"}
+{"id": "fzproc_r5_0008", "text": "接口改造下周动工，v1 调用方数量上周统计完了：还剩 7 个，全部已经通知迁移。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT004"}
+{"id": "fzproc_r5_0009", "text": "这次重构会动存储层，但历史双写残留的数据到底有多少谁也说不准，需要先做一次盘点。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT005"}
+{"id": "fzproc_r5_0010", "text": "这次重构会动存储层，双写残留数据上周盘点完了，共两万三千条，清理脚本已经备好。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT005"}
+{"id": "fzproc_r5_0011", "text": "移动端适配走 h5 还是套壳还没定，产品那边得先给个结论，我们才好排人力。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT006"}
+{"id": "fzproc_r5_0012", "text": "移动端适配方案定了走 h5，产品昨天已经拍板，人力这周就能排进来。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT006"}
+{"id": "fzproc_r5_0013", "text": "排期时把预案演练放进去了，但演练会不会触发下游告警风暴还没评估过，演练前要先跟值班组对一遍。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT007"}
+{"id": "fzproc_r5_0014", "text": "预案演练安排在周三，会触发告警风暴的顾虑已经跟值班组对过了，届时临时静默，方案没变。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT007"}
+{"id": "fzproc_r5_0015", "text": "新流程要走审批，但财务系统对这种单据支不支持自动审批还两说，提单前先去确认。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT008"}
+{"id": "fzproc_r5_0016", "text": "新流程走审批没问题，财务系统支持这类单据的自动审批，配置项昨天已经打开。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT008"}
+{"id": "fzproc_r5_0017", "text": "灰度期间要不要保留双写，取决于回滚时长到底能不能压进十分钟，这个数还没实测过。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT009"}
+{"id": "fzproc_r5_0018", "text": "灰度期间保留双写，回滚时长实测过能压进十分钟以内，满足预案要求。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT009"}
+{"id": "fzproc_r5_0019", "text": "文档要不要加迁移指南，取决于老版本用户还有多大的存量，这个占比没人给过数。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT010"}
+{"id": "fzproc_r5_0020", "text": "文档加了迁移指南，老版本存量占比查过了只有 3%，按低优先级维护即可。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT010"}
+{"id": "fzproc_r5_0021", "text": "We can reuse the staging cluster for the load test, but whether the quota allows four times the normal traffic is still unverified - check with infra before scheduling.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT011"}
+{"id": "fzproc_r5_0022", "text": "We can reuse the staging cluster for the load test; the four-times traffic quota was approved by infra yesterday, so scheduling can start.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT011"}
+{"id": "fzproc_r5_0023", "text": "Plan to ship the SDK on Thursday. One open question: does the artifact proxy mirror the new registry? Nobody has confirmed that yet.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT012"}
+{"id": "fzproc_r5_0024", "text": "Plan to ship the SDK on Thursday. The artifact proxy does mirror the new registry - ops confirmed this morning - so no blocker there.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT012"}
+{"id": "fzproc_r5_0025", "text": "Migrate the cron jobs to the central scheduler this sprint, but how many jobs silently depend on server-local time is unknown; audit that first.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT013"}
+{"id": "fzproc_r5_0026", "text": "Migrate the cron jobs to the central scheduler this sprint; the timezone audit is done, only two jobs need a wrapper, estimate attached.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT013"}
+{"id": "fzproc_r5_0027", "text": "Rename the API fields in v3, pending a check that no mobile release currently in review still reads the old names.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT014"}
+{"id": "fzproc_r5_0028", "text": "Rename the API fields in v3; the mobile release in review was checked and already reads the new names, so proceed.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT014"}
+{"id": "fzproc_r5_0029", "text": "线上这批订单金额算错应该不至于吧？麻烦你再核对一遍对账脚本，别想当然。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT015"}
+{"id": "fzproc_r5_0030", "text": "金额计算这块不至于有问题，对账脚本昨天复核过了，别再反复看了。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT015"}
+{"id": "fzproc_r5_0031", "text": "这个依赖升级不至于把老接口打挂吧？你先在预发完整回归一遍再合。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzprocT016"}
+{"id": "fzproc_r5_0032", "text": "这个依赖升级不会打挂老接口，预发已经全量回归过，直接合就行。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzprocT016"}
+{"id": "fzproc_r5_0033", "text": "你说的缓存击穿风险是已经修了，还是只是怀疑有？我需要一句准话。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT017"}
+{"id": "fzproc_r5_0034", "text": "缓存击穿风险已经修了，加了互斥锁和空值缓存，有压测报告为证。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT017"}
+{"id": "fzproc_r5_0035", "text": "客户说的数据对不上具体指哪个字段，弄清楚了吗？别猜，去问一句再来汇报。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzprocT018"}
+{"id": "fzproc_r5_0036", "text": "客户说的数据对不上就是时区展示问题，已当面向客户确认并修复，工单关了。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzprocT018"}
+{"id": "fzproc_r5_0037", "text": "明晚切流不至于要全组待命吧？你确认下 SOP 里到底怎么写的。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT019"}
+{"id": "fzproc_r5_0038", "text": "明晚切流不用全组待命，SOP 写明了只需值班两人，照着执行即可。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT019"}
+{"id": "fzproc_r5_0039", "text": "新表结构不至于和现有报表冲突吧？这个你得真去比一遍字段，别凭印象说没事。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzprocT020"}
+{"id": "fzproc_r5_0040", "text": "新表结构和现有报表不冲突，字段映射上周逐个比对过，比对表在附件里。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzprocT020"}
+{"id": "fzproc_r5_0041", "text": "现在这个超时配置在高并发下不至于雪崩吧？先做一轮压测再答复我。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT021"}
+{"id": "fzproc_r5_0042", "text": "这个超时配置高并发下不会雪崩，上轮压测已经验证过阈值，结论在报告第三节。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT021"}
+{"id": "fzproc_r5_0043", "text": "权限收紧之后老脚本不至于批量失败吧？先在测试机上跑一圈脚本清单确认。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzprocT022"}
+{"id": "fzproc_r5_0044", "text": "权限收紧之后老脚本不会批量失败，测试机上脚本清单全跑通了，有执行记录。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzprocT022"}
+{"id": "fzproc_r5_0045", "text": "It cannot be the DNS propagation again, can it? Verify the TTL config before you blame the network team.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT023"}
+{"id": "fzproc_r5_0046", "text": "It is not DNS propagation; the TTL config was verified and the network team signed off, case closed.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT023"}
+{"id": "fzproc_r5_0047", "text": "Surely the importer will not choke on a two-GB file, right? Actually test it before promising the customer anything.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzprocT024"}
+{"id": "fzproc_r5_0048", "text": "The importer handles a two-GB file fine - we streamed it in last week's benchmark - no need to re-test.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzprocT024"}
+{"id": "fzproc_r5_0049", "text": "You did actually get sign-off from legal on the new disclaimer, did you not? I do not want assumptions here.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT025"}
+{"id": "fzproc_r5_0050", "text": "Legal sign-off on the new disclaimer came through this morning in writing, so that box is ticked.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT025"}
+{"id": "fzproc_r5_0051", "text": "The backup restore would actually work if we needed it, right? Prove it with a drill before you keep telling me it is fine.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzprocT026"}
+{"id": "fzproc_r5_0052", "text": "The backup restore works - we ran a full restore drill in August and archived the report - that question is settled.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzprocT026"}
+{"id": "fzproc_r5_0053", "text": "We are not going to hit the rate limit during the flash sale, are we? Get a real number from the gateway team first.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT027"}
+{"id": "fzproc_r5_0054", "text": "We will not hit the rate limit during the flash sale; the gateway team already confirmed our quota headroom in writing.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT027"}
+{"id": "fzproc_r5_0055", "text": "The nightly sync cannot silently skip records, can it? Check the row-count reconciliation before you swear it is clean.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzprocT028"}
+{"id": "fzproc_r5_0056", "text": "The nightly sync does not skip records - row-count reconciliation has run clean for 30 straight days - stop worrying about it.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzprocT028"}
+{"id": "fzproc_r5_0057", "text": "迁移收尾汇报：两批数据都核对完了；还差一件事没定——旧库只读窗口开多久，DBA 还没回。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT029"}
+{"id": "fzproc_r5_0058", "text": "把这个接口做成幂等的；先查清楚现在重复提交的真实发生率，再决定要不要加幂等键。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT030"}
+{"id": "fzproc_r5_0059", "text": "Wait, the failover last night - did anyone actually verify the replica caught up, or did we just assume it did?", "source_family": "conversation_interference", "lang": "en", "task_id": "fzprocT031"}
+{"id": "fzproc_r5_0060", "text": "Add pagination to the audit log endpoint; first find out what the largest single-day query volume is so the page size is grounded.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT032"}
+{"id": "fzproc_r5_0061", "text": "本迭代三个需求全部提测完成，唯一悬着的是埋点口径，数据组还没拍板。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT033"}
+{"id": "fzproc_r5_0062", "text": "STATUS: 已上线。REMAINING: 灰度观察报告未出。EVIDENCE: 流水线 #204 绿", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT034"}
+{"id": "fzproc_r5_0063", "text": "周报：性能优化项收尾，缓存命中率达标；CDN 切换的备案问题还没有回音。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT035"}
+{"id": "fzproc_r5_0064", "text": "今天的活儿干完了，脚本迁移 40 个跑通；还有个疑问：老机器上的定时任务要不要一并迁，等你拍板。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT036"}
+{"id": "fzproc_r5_0065", "text": "v2.3 已发布，更新日志写完；遗留一个待确认：老版本安装包是否下架，等法务意见。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT037"}
+{"id": "fzproc_r5_0066", "text": "本期需求交付完毕。唯一未决：压测报告里那个 p99 抖动算不算达标，需要架构组给口径。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT038"}
+{"id": "fzproc_r5_0067", "text": "阶段汇报：数据迁移第一、二批完成并校验通过；第三批是否需要停机窗口，DBA 还没给结论。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT039"}
+{"id": "fzproc_r5_0068", "text": "告警降噪项目收官，规则全部上线；还有一件事没落定：值班轮换表谁来维护，等主管定。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT040"}
+{"id": "fzproc_r5_0069", "text": "接口联调全部通过，文档也补齐了；悬而未决的只有灰度名单，运营今天下班前给。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT041"}
+{"id": "fzproc_r5_0070", "text": "本周代码冻结完成，bug 清零；待定事项：要不要给老客户发升级公告，市场部未回复。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT042"}
+{"id": "fzproc_r5_0071", "text": "今日构建产物已归档，冒烟全过；有一个问号：预发环境的白名单要不要同步收紧，等安全组说法。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT043"}
+{"id": "fzproc_r5_0072", "text": "图标重绘完成并合入主干；待办确认：旧图标要不要保留一版做降级，设计没给结论。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT044"}
+{"id": "fzproc_r5_0073", "text": "灰度放量完成，崩溃率稳定；悬着的只有一件事：低端机的降级开关要不要默认打开，等性能组数据。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT045"}
+{"id": "fzproc_r5_0074", "text": "本季文档迁移全部完成；未决：旧站 301 保留时长，等 SEO 那边评估。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT046"}
+{"id": "fzproc_r5_0075", "text": "STATUS: merged. REMAINING: the migration runbook needs SRE review. EVIDENCE: PR #882, CI green", "source_family": "agent_completion", "lang": "en", "task_id": "fzprocT047"}
+{"id": "fzproc_r5_0076", "text": "All five tickets are done for this sprint; the only open point is whether QA wants a second regression pass before the release note goes out.", "source_family": "agent_completion", "lang": "en", "task_id": "fzprocT048"}
+{"id": "fzproc_r5_0077", "text": "给导出加进度条；动手前先查清楚大文件导出现在走的是同步还是异步，别拍脑袋改。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT049"}
+{"id": "fzproc_r5_0078", "text": "把登录页报错文案改温和些；改之前核实一下现在有哪些错误码在用，别漏。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT050"}
+{"id": "fzproc_r5_0079", "text": "订单列表加个按状态筛选；先确认后端接口支不支持，不支持就先排后端任务。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT051"}
+{"id": "fzproc_r5_0080", "text": "部署脚本换成容器化；切换前统计一下现有裸机部署的配置漂移情况，写进迁移文档。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT052"}
+{"id": "fzproc_r5_0081", "text": "给客服后台加批量退款；先弄清财务系统对批量接口的限流策略，再定每批条数。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT053"}
+{"id": "fzproc_r5_0082", "text": "首页改版上线前，先核实新版首屏在 4G 下的加载耗时，超了就砍图。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT054"}
+{"id": "fzproc_r5_0083", "text": "权限系统合并两个角色体系之前，先盘点现在有多少用户同时挂两个角色，避免合并后越权。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT055"}
+{"id": "fzproc_r5_0084", "text": "文档站换个搜索服务；换之前先统计现有搜索的日均调用量，新服务按这个量谈报价。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT056"}
+{"id": "fzproc_r5_0085", "text": "把日志接入新的采集网关；接入前确认网关对单条日志大小的上限，超长日志要有截断策略。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT057"}
+{"id": "fzproc_r5_0086", "text": "移动端开推送之前，先查清各渠道的到达率现状，作为上线后的对照基线。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT058"}
+{"id": "fzproc_r5_0087", "text": "把验证码换成滑块；换之前先弄清现在短信验证码的日发送量和成本，作为对比依据。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT059"}
+{"id": "fzproc_r5_0088", "text": "给订单加导出 Excel 功能；先确认运营侧用的是哪个模板版本，别做两套。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT060"}
+{"id": "fzproc_r5_0089", "text": "定时任务迁到分布式调度；迁移前核实每个任务的最大运行时长，超长的要拆。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT061"}
+{"id": "fzproc_r5_0090", "text": "新客服工单系统上线前，先查清现在的工单平均响应时长，留作效果对比。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT062"}
+{"id": "fzproc_r5_0091", "text": "把配置中心从文件改成推送；改之前确认所有服务对配置变更的监听方式，防止改了不生效。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT063"}
+{"id": "fzproc_r5_0092", "text": "给 API 加版本化路径；先盘点外部调用方各自用的路径形态，再定兼容策略。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT064"}
+{"id": "fzproc_r5_0093", "text": "Add retry logic to the webhook dispatcher; before implementing, find out the current end-to-end failure rate so improvement is measurable.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT065"}
+{"id": "fzproc_r5_0094", "text": "Roll out the new pricing page next week; before that, check whether the billing service can express the annual-monthly hybrid plan.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT066"}
+{"id": "fzproc_r5_0095", "text": "Refactor the notification service into two deployables. Before splitting, confirm which consumers rely on in-process calls today - nobody has written that down. Keep the public API stable; feature-flag the rollout.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT067"}
+{"id": "fzproc_r5_0096", "text": "Move image processing to the worker pool. Step one: find out what the current queue depth looks like at peak, since that sizes the pool. Constraint: no task may wait longer than 30 seconds.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT068"}
+{"id": "fzproc_r5_0097", "text": "Unify the two auth middlewares. Open question before we start: does the legacy session store support the new TTL format? Verify against a staging replica first. Deliverable: one middleware, old one deleted, docs updated.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT069"}
+{"id": "fzproc_r5_0098", "text": "Ship the CSV export v2. Prerequisite: measure how long the current export takes for the largest tenant; if over five minutes, implement streaming. Acceptance: identical row counts, headers unchanged.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT070"}
+{"id": "fzproc_r5_0099", "text": "Upgrade the message broker to 3.12. Before upgrading, confirm the client library matrix - especially the Python legacy consumer. Order: staging, canary, fleet. Rollback: config flip only.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT071"}
+{"id": "fzproc_r5_0100", "text": "Introduce request tracing. First find out how many services already emit trace headers; the inventory determines the rollout order. Do not break the existing correlation-id contract.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT072"}
+{"id": "fzproc_r5_0101", "text": "Migrate the search index to the new cluster. Pre-flight: check whether synonym lists survived the last export; the last migration silently dropped them. Cutover only after a query-parity report.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT073"}
+{"id": "fzproc_r5_0102", "text": "Refactor billing webhooks. Unresolved: which of the fourteen endpoint owners are still active - survey them before changing the payload. Keep old fields for one release.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT074"}
+{"id": "fzproc_r5_0103", "text": "Clean up feature flags. Before deleting anything, verify each flag against production traffic; anything above zero in 30 days stays. Deliverable: a deletion report.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT075"}
+{"id": "fzproc_r5_0104", "text": "Move nightly backups to the new storage tier. First confirm the restore path works from that tier with a full drill; a backup you cannot restore is not a backup. Schedule: within this month.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT076"}
+{"id": "fzproc_r5_0105", "text": "Add rate limiting per API key. Open question: the current Redis version lacks the needed atomic ops - confirm whether an upgrade is required before design freeze.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT077"}
+{"id": "fzproc_r5_0106", "text": "Retire the internal admin portal. Prerequisite: find out which dashboards are still referenced in runbooks; redirect those first. No data deletion in this phase.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT078"}
+{"id": "fzproc_r5_0107", "text": "Standardize error responses. Before drafting the schema, audit what the mobile clients actually parse; breaking their parser is a store-release delay. Proposal due Friday.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT079"}
+{"id": "fzproc_r5_0108", "text": "Set up staging data masking. Unverified: whether the masking middleware handles JSON arrays - test that case explicitly before relying on it.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT080"}
+{"id": "fzproc_r5_0109", "text": "Split the monorepo CI into per-package pipelines. First measure which packages dominate cache misses; start with the top three. Constraint: total CI wall time must not increase.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT081"}
+{"id": "fzproc_r5_0110", "text": "Introduce staging synthetic checks. Before enabling alerts, establish two weeks of baseline noise so thresholds are evidence-based, not guesses.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT082"}
+{"id": "fzproc_r5_0111", "text": "Consolidate the two queue topics. Unresolved: whether any consumer still uses the wildcard subscription - check the consumer registry and confirm before merging topics.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT083"}
+{"id": "fzproc_r5_0112", "text": "Adopt trunk-based development for the payments squad. Prerequisite: confirm the release train tooling supports feature branches older than a day; otherwise keep short-lived branches.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT084"}
+{"id": "fzproc_r5_0113", "text": "之前不确定老接口还有没有调用方，刚才查了网关日志，已经没有任何流量，可以下线。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT085"}
+{"id": "fzproc_r5_0114", "text": "疑问：新缓存要不要设随机 TTL？结论：要，热点 key 过期扎堆的风险真实存在，方案里已经加了。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT086"}
+{"id": "fzproc_r5_0115", "text": "本来拿不准灰度要不要分两批，看了变更日历，下周有双促，确定分两批，方案定了。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT087"}
+{"id": "fzproc_r5_0116", "text": "查一下新版 SDK 在 iOS 17 上崩溃率有没有升高——不用了，监控面板上看到了，没升高，结案。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT088"}
+{"id": "fzproc_r5_0117", "text": "上条消息里的问题不用管了，我自己复现了一下，是本地缓存没清，跟服务端无关。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT089"}
+{"id": "fzproc_r5_0118", "text": "早会时对回滚方案的疑问已经消除：演练走了一遍全程四分钟，满足窗口，按原方案执行。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT090"}
+{"id": "fzproc_r5_0119", "text": "Initial doubt: whether the cron overlap caused the double charge. Answered: no, the payment retry did; the fix is in, case closed.", "source_family": "agent_completion", "lang": "en", "task_id": "fzprocT091"}
+{"id": "fzproc_r5_0120", "text": "Check whether staging still points to the production queue - scratch that, I found the config, it points to staging, all good, just noting it here.", "source_family": "user_request", "lang": "en", "task_id": "fzprocT092"}
+{"id": "fzproc_r5_0121", "text": "上周关于分库键选用户维度还是订单维度的争论已经有结论了，定了用户维度，评审纪要在 wiki。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT093"}
+{"id": "fzproc_r5_0122", "text": "之前悬着的白屏投诉，排查清楚了，是旧版本 WebView 的 bug，用户升级后自动消失，不再跟进。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT094"}
+{"id": "fzproc_r5_0123", "text": "历史遗留的疑问——为什么要两套配置格式——翻了 git 历史，是当年两拨人各自起的，现在已经合并成一套。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzprocT095"}
+{"id": "fzproc_r5_0124", "text": "上个月对消息幂等的疑虑已经解决，唯一 id 方案上线两周一单重复，议题可以关闭。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT096"}
+{"id": "fzproc_r5_0125", "text": "先前拿不准要不要保留 XML 接口，流量统计出来三个月零调用，问题关闭，按下线处理。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT097"}
+{"id": "fzproc_r5_0126", "text": "The open question from the offsite - who owns the ETL jobs - is settled: the data platform team, documented in the roster since May.", "source_family": "agent_completion", "lang": "en", "task_id": "fzprocT098"}
+{"id": "fzproc_r5_0127", "text": "本次范围内的工作全部完成并验收；范围外的多租户改造要不要做，是下一季度规划的事，本次不涉及。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT099"}
+{"id": "fzproc_r5_0128", "text": "发布按计划完成。至于成本优化空间还有多少，那是独立立项，不在这条线的验收口径里。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT100"}
+{"id": "fzproc_r5_0129", "text": "这个 sprint 的目标达成。单测覆盖率要不要提到 90%，属于下一个迭代的改进项，本次不处理。", "source_family": "interim_report", "lang": "zh", "task_id": "fzprocT101"}
+{"id": "fzproc_r5_0130", "text": "本次先只修登录超时这一件事；搜索排序的问题另开需求单，别混在这个工单里做。", "source_family": "user_request", "lang": "zh", "task_id": "fzprocT102"}
+{"id": "fzproc_r5_0131", "text": "本批修复收尾。遗留疑问已登记到待办池（日志归档策略），按流程下个迭代单独评估，不在本次结论里。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzprocT103"}
+{"id": "fzproc_r5_0132", "text": "The migration is done and accepted. Whether to also retire the legacy CLI is a separate decision for next quarter, outside this scope.", "source_family": "agent_completion", "lang": "en", "task_id": "fzprocT104"}

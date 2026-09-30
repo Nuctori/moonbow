@@ -102,6 +102,10 @@ class StructureAnalysis:
     abstain_reason: Optional[str] = None
     truncated: bool = False              # 输入被截断 → 不得下"简单"结论
     backend: str = "rule"
+    # 后端契约状态（P7）：区分「后端失败空捕获」与「真实零命中」。
+    # rule 路径恒 False；仅非规则后端显式标记时为 True。
+    backend_failed: bool = False            # 后端调用失败/契约内 error
+    backend_truncated: bool = False         # 后端侧截断（区别于输入截断 truncated）
     vector: Optional[StructureVector] = None
     level: str = LEVEL_UNKNOWN
     level_reasons: List[str] = field(default_factory=list)
@@ -119,6 +123,8 @@ class StructureAnalysis:
             "abstain_reason": self.abstain_reason,
             "truncated": self.truncated,
             "backend": self.backend,
+            "backend_failed": self.backend_failed,
+            "backend_truncated": self.backend_truncated,
             "vector": self.vector.to_dict() if self.vector else None,
             "level": self.level,
             "level_reasons": list(self.level_reasons),

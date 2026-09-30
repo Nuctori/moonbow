@@ -52,6 +52,9 @@ def analyze_payload(payload: dict, decide_reminder: bool = False) -> dict:
     analysis = analyze_text(text, backend=backend, source=source, version=version)
     out = analysis.to_dict()
     out["backend"] = getattr(backend, "name", "rule")
+    # P7：后端契约状态透传（只加字段，不改既有键语义；rule 路径恒 False）
+    out["backend_failed"] = analysis.backend_failed
+    out["backend_truncated"] = analysis.backend_truncated
     out["fingerprint"] = structure_fingerprint(analysis)
     # 候选措辞由服务端统一构造（单一事实来源）；是否发送由客户端
     # 按 advisory/shadow 模式与本地去重决定——服务端状态不构成要求。
