@@ -59,6 +59,7 @@ docs/semantic_runtime_progress.md 的 Phase 0 / Phase 0.5 段，
 shadow_convergence 键；绝不产生 reminder、绝不参与 findings /
 semantic 判定、绝不新增用户投递。
 """
+import hashlib
 import re
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Sequence
@@ -292,3 +293,117 @@ class ConvergenceShadow:
         fail_streak = ShadowEntry(FAIL_STREAK_SIGNAL, streak >= FAIL_STREAK_MIN,
                                   streak_detail)
         return [stall.to_dict(), fail_streak.to_dict()]
+
+
+# ---- Phase 2：advisory 投递包装（只包装，不改上面两条触发规则本体）----
+#
+# MOONBOW_GUARD_CONVERGENCE=off|shadow|advisory（server 层门控，默认 off）：
+# - off / shadow：与 Phase 1 现状逐行为一致（shadow 只记录、零投递）；
+# - advisory：触发规则命中且该任务收敛提醒预算未用时，stage-check 响应的
+#   reminder 字段可投递收敛提示。措辞可忽略、不拦截、不计入既有 strict
+#   收尾预算（与 P7 过程预算边界一致——不碰 semanticUsed / formatUsed /
+#   收尾 interventions，交付通道复用过程提醒的 steer 路径）。
+# 投递状态写进 shadow_convergence 条目（delivered: true/false）。
+
+CONVERGENCE_ENV = "MOONBOW_GUARD_CONVERGENCE"
+CONVERGENCE_MODES = ("off", "shadow", "advisory")
+
+# 措辞纪律（与 GUARD_EFFECT_REPORT 一致）：advisory 提示必须可忽略、
+# 给具体的下一步、不设收尾出口措辞。文本为实验固定话术，勿随手改。
+ADVISORY_TEXT = {
+    STALL_SIGNAL: ("你已连续多轮修改但没有一次验证成功。建议收窄范围："
+                   "先把其中一个问题修到测试通过，其余如实列入 REMAINING。"),
+    FAIL_STREAK_SIGNAL: ("同一验证反复失败，建议先聚焦让单个测试通过，再扩展。"),
+}
+ADVISORY_SUMMARY = {
+    STALL_SIGNAL: "多轮修改无一次验证成功（coverage==0）",
+    FAIL_STREAK_SIGNAL: "同一验证连续多轮失败",
+}
+# 复用过程提醒的守卫标记前缀：客户端采集层据此跳过守卫自己的反馈正文，
+# 防自我审计循环（process-task.GUARD_MARK = "【进度守卫"）。
+ADVISORY_MARK = "【进度守卫（收敛提示）】"
+
+
+def convergence_mode_from_env(environ=None) -> str:
+    """解析 MOONBOW_GUARD_CONVERGENCE（缺省/非法一律 off + 可解释）。
+    独立成函数便于测试；server 启动时调用一次。"""
+    import os
+    env = environ if environ is not None else os.environ
+    raw = (env.get(CONVERGENCE_ENV) or "").strip().lower()
+    return raw if raw in CONVERGENCE_MODES else "off"
+
+
+def req_hash_of(req: str) -> str:
+    """任务键回退：req 文本哈希（sha256 前 16 hex，跨进程稳定）。"""
+    return hashlib.sha256((req or "").encode("utf-8")).hexdigest()[:16]
+
+
+def advisory_fingerprint(signal: str, task_key: str) -> str:
+    return f"convergence:{signal}:{task_key}"
+
+
+def build_advisory_reminder(signal: str, task_key: str, entry: Dict[str, Any]) -> Dict[str, Any]:
+    """构造与主审计 reminder 同 schema 的收敛提示（客户端零改动即可投递）。"""
+    detail = entry.get("detail") or {}
+    ev: List[str] = []
+    if "round" in detail:
+        ev.append("第%s轮观测" % detail["round"])
+    if signal == STALL_SIGNAL:
+        if "goals_passed" in detail:
+            ev.append("已落地目标 %s/%s" % (detail.get("goals_passed"),
+                                            detail.get("goals_total")))
+        if detail.get("pytest_rounds"):
+            ev.append("pytest 证据 %s 次" % detail["pytest_rounds"])
+    else:
+        if "streak" in detail:
+            ev.append("连续失败 %s 轮" % detail["streak"])
+    text = ADVISORY_TEXT.get(signal) or ADVISORY_TEXT[FAIL_STREAK_SIGNAL]
+    return {
+        "summary": ADVISORY_SUMMARY.get(signal, signal),
+        "fingerprint": advisory_fingerprint(signal, task_key),
+        "evidence": ev,
+        "suggestion": (
+            f"{ADVISORY_MARK}{text}"
+            "（本提示可忽略；是否采纳由你判断，不影响收尾验收。）"
+        ),
+    }
+
+
+class AdvisoryBudget:
+    """收敛提示的独立预算（每任务最多 MAX_PER_TASK 次，按 (task_key, signal) 记账）。
+
+    - task_key 优先取 stage-check payload 的 task_id（同一 req 文本的多个
+      任务实例各自独立预算——批量实验同一 prompt 跑 N 个 run，若按 req
+      哈希共享预算，第 3 个 run 起全部静音）；payload 无 task_id 时回退
+      req 哈希（与规格口径一致）。
+    - 同一 (task_key, signal) 至多投 1 次：compute() 是纯函数、命中会持续
+      命中，不去重会每批审计都投（客户端 fingerprint 去重也挡，双保险）。
+    - 与既有预算完全独立：不占 semanticUsed / formatUsed / 收尾 interventions。
+    - 服务端进程内存态；重启清零（记录条目带 delivered 可审计）。上限
+      max_tasks 防长驻进程无界增长（先进先出淘汰）。
+    """
+
+    MAX_PER_TASK = 2
+
+    def __init__(self, max_tasks: int = 4096):
+        self._counts: Dict[str, Dict[str, int]] = {}
+        self._max_tasks = int(max_tasks)
+
+    def _task(self, task_key: str) -> Dict[str, int]:
+        if task_key not in self._counts:
+            if len(self._counts) >= self._max_tasks:
+                self._counts.pop(next(iter(self._counts)))
+            self._counts[task_key] = {}
+        return self._counts[task_key]
+
+    def used(self, task_key: str) -> int:
+        return sum(self._counts.get(task_key, {}).values())
+
+    def allow(self, task_key: str, signal: str) -> bool:
+        task = self._counts.get(task_key, {})
+        return (task.get(signal, 0) == 0
+                and self.used(task_key) < self.MAX_PER_TASK)
+
+    def record(self, task_key: str, signal: str) -> None:
+        task = self._task(task_key)
+        task[signal] = task.get(signal, 0) + 1
