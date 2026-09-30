@@ -1105,3 +1105,114 @@ completion.asserted / task.object.alignment PASS，process.unresolved R=0.764
   predictions_n08gate_experiment.jsonl（闸门实验）、predictions.jsonl
   （回退后=基线 53/67）。verifier.py 规则 5.3 注释留档全过程。
 - 回归：guard 全矩阵 188 + 15 passed（exit 0）。
+
+## 收敛进度追踪 Phase 0：离线回放（2026-09-30，纯数据分析，未动 src/）
+- 目的：验证可计算的收敛速度特征能否在任务早期（第 3-4 轮）预测最终失败。
+  数据 = pi_eval/home/sessions/ 2026-09-22 批次（GUARD_EFFECT_REPORT §2.0b /
+  trap_ladder 实验的真实会话），233 个 trap run（s1×145、s1h×20、c3×30、
+  off_by_one×16、复合/单陷阱其余 22），mimo-v2.5 占 220；排除 s2 干净任务
+  （无 pytest 目标，防标签污染）。守卫臂由 progress-guard custom_message
+  标记（41 run；c3 全 baseline）。
+- 产物：`tools/convergence_study.py`（特征全确定性可复算）、
+  `results/convergence-phase0/{study_report.md,features.jsonl,metrics.json}`。
+- 核心结论：①第 3 轮快照全部特征 AUC 0.46–0.55，无预测力（前 3 轮普遍无
+  验证事件，特征未分化）；②第 4 轮对存活 run 分化清晰：rsl≥3
+  （rounds_since_last_verify_success）AUC 0.924 / P=0.60 R=1.0，
+  write_verify_ratio AUC 0.880，pytest_fail_streak≥2 AUC 0.866 / P=0.90 R=0.43；
+  ③把"第 3 轮观测时刻已提前停止且无验证成功"并入后，组合规则在 n=233 上
+  P=0.602 [0.537,0.663] R=1.0——可迁移信号是"验证缺位"而非收敛速度；
+  ④失败构成：fail_then_stop 111（80%）、截断残留 11、打转 9、全程无验证 8；
+  63/139（45%）失败活不过第 3 轮（探索期静默停止为主体，与 §2.0.1 一致）。
+- 统计功效：Wilson 区间宽（±0.08–0.19），rounds=4 快照有幸存者偏差，
+  c3 子样本（30 run，rounds=4 仅剩 12）单独无功效——数值仅作 Phase 1 先验。
+- Phase 1 建议：纯影子观测，复用本脚本特征；候选触发线 rsl≥3@round4（高召回）
+  与 fail_streak≥2（高精确）；验收线 = 影子 precision≥0.7。
+
+## 收敛进度追踪 Phase 0.5：目标覆盖度泛化信号回放（2026-09-30，纯数据分析，未动 src/）
+- 目的：把 Phase 0 的域特定信号（pytest 缺位，只适用修 bug 任务）泛化为
+  "目标落地事件"——任务按家族有 goals（单陷阱/s1/s1h=1、复合 c1/c2/c4=2、
+  c3=3），目标拿到工具级落地证据即 grounded；信号 = coverage
+  （grounded/total）轨迹停滞。生产版落地证据应由 semantic matcher 对齐判定
+  （域无关、SLM 后端）；本次回测用确定性代理解析 pytest 输出。
+- 产物：`tools/goal_coverage_study.py`（复用 convergence_study 的会话定位/
+  轮次切分/基线特征；回归处理=曾过后被失败输出再点名即移出 passed 集）、
+  `results/convergence-phase0/{goal_coverage_report.md,goal_coverage_metrics.json,
+  goal_coverage_features.jsonl}`（Phase 0 产物未覆盖）。同一批 233 run。
+- 核心结果：①**非劣性成立**——rounds=4 上 pytest_fail_streak≥2 的 10 个命中
+  全部被 G2（coverage==0）覆盖（only_baseline=0），泛化信号是特例的严格超集；
+  第 4 轮时间视角 G2（含提前停止 run，n=233）P=0.908 [0.852,0.945] R=1.0，
+  优于 Phase 0 round3 组合规则（P=0.602/R=1.0），提升来源=第 4 轮时 78 个
+  成功 run 已 full pass（首个 pass 集中在第 4 轮）被移出误报池。
+  ②stagnation 阈值在本语料不可辨识（取值退化为 {0}∪{≥4}，≥1..≥4 结果相同），
+  推荐 2（防御性、零代价）；触发不早于第 4 轮观测时刻；代价=慢热成功 run
+  误报 14/233（首个 pass 最晚第 23 轮）。③部分得分度量在本语料**无检验样本**：
+  c3 失败全部是收集期错误（3 目标一起失败），成功是 0→3 一步到位，
+  max_goals_passed 分组完美分离（0→18 run 全败；3→12 run 全过）但 1/3、2/3
+  档样本为 0；c4 仅 2 run 出现过 1/2 且均失败——信息量不能宣称，Phase 1 需
+  构造逐测试可独立判定任务再测；c3@round4 快照幸存仅 12（失败 1），单独无功效。
+  ④本语料 0 次回归（过而后挂），回归移除机制未被触发；轨迹与 Phase 0
+  cumulative_verify_successes 交叉核实 283 对 0 不一致。
+- 生产化边界：无 pytest 输出的任务类型（非 Python、问答/探索、非结构化输出）
+  必须走 matcher 对齐兜底（SLM 后端，禁 rule）；pytest 解析仅是确定性快速
+  通道；收集期错误应判"无证据"而非"失败证据"；套件-目标粒度错配
+  （s1h 出现 "1 failed, 1 passed" 但 1-goal 口径记 0）由 matcher 逐目标对齐解决。
+
+## 收敛进度追踪 Phase 1：stage audit 收敛信号 shadow 通道（2026-09-30，完成；纯逻辑，不训练不推理不占 XPU；只记录、零投递、默认关闭）
+- 目的：把 Phase 0/0.5 的两条触发规则接入 `StageAuditor` 的 shadow 通道
+  （P7 shadow_semantic 同模式），先在真实宿主流上只记录不投递地验证，
+  验收线沿用 Phase 0 建议（影子 precision≥0.7 后才谈 advisory 化）。
+- 产物：`src/moonbow/guard/convergence.py`（ConvergenceShadow，新增）、
+  `tests/test_convergence_shadow.py`（31 用例，新增）；
+  `src/moonbow/guard/process_audit.py`（StageAuditor 增可选
+  convergence_shadow 参数 + audit() 结果可选 shadow_convergence 键 +
+  audit_stage_payload 透传参，时序核对/证据性质/发现修订逻辑一行未动）、
+  `src/moonbow/guard/server.py`（/v1/stage-check 可选
+  enable_convergence_shadow，bool 校验，缺省 false 走原路径）为最小改动。
+- 轮定义（近似）：StageBlock 流不含 assistant 消息边界，无法按
+  convergence_study 原始口径（含 toolCall 的 assistant 消息+后续全部
+  toolResult=1 轮）切分；以 tool_result 事件计数近似（第 k 个 toolResult
+  = 第 k 轮观测点）。已知局限：并行多调用一轮被拆多轮 → 轮次偏高
+  （触发偏早，方向固定且 shadow 不投递）；轮内成败并列被拆成相邻轮，
+  fail_streak 从"轮内任一失败且无成功"变为"逐结果连续失败"。
+- pytest 证据识别：tool_call_id 配对的 toolCall 调用文本含 "pytest"
+  优先（is_verify_call 口径，不复刻 name=="bash" 限制）；无配对（toolCall
+  被 400 块环形缓冲截掉）时按结果文本摘要特征（"N passed"/"N failed"/
+  "no tests ran"）回退；配对存在时由调用侧决定，`ls` 的输出再像也不算。
+- 解析规则移植（goal_coverage_study，逐函数注明来源）：全绿 → 全部目标
+  落地；失败输出点名目标移出 passed 集（回归处理）；"N passed/M failed"
+  与点名数一致 → 部分得分；匿名复合目标 grounded=total-M；单目标任务
+  = 套件通过；无摘要行输出（收集期错误）→ passed 不动（"无证据"）。
+  fail_streak 单独用 Phase 0 基线严格二分口径（非全绿即失败），与覆盖度
+  部分得分口径不同源，与两条离线回测同卷可比。
+- 两条规则最终形态（R6b 后）：①converge.stall = 轮次≥4 且 coverage==0
+  且流中出现过 pytest 输出；轮次<4 abstain(rounds<4)，无 pytest 痕迹
+  abstain(no_pytest_evidence)——无验证目标的任务 coverage==0 只是
+  "无证据"，判了会把非 Python/问答/探索类任务全误标。②
+  converge.fail_streak = 连续 pytest 失败≥2 轮（无 pytest 时 streak=0
+  直接 False，无 abstain 语义歧义）。目标数第一版显式注入
+  （goals_total 缺省 1；target_tests 命名目标可选），不从 req 提取。
+- 幂等保证：compute() 是 (req, blocks) 纯函数、无实例状态；客户端
+  （process-audit.ts）每批发送窗口内全部块，纯函数口径等价于全流重放，
+  同流重复审计同结果（与 audit() fingerprint 幂等一致，有用例锁定，
+  含块乱序到达按 seq 排序不变）。
+- 默认关闭证明：StageAuditor 缺省 convergence_shadow=None → 响应不含
+  shadow_convergence 键、四键（findings/reminder/semantic/based_on）
+  与现状逐字节一致；server 缺省 false 走原路径；有用例断言"HTTP 不带
+  flag 的响应 == 直接 audit_stage_payload 输出"。零投递硬约束：G2 已
+  触发 + 主审计有矛盾发现的流上，findings/reminder/semantic 逐字段
+  不变（两条用例）；shadow 自身异常失败隔离（converge.unavailable 占位）。
+- 测试：`python -m pytest tests/test_convergence_shadow.py
+  tests/test_process_audit.py tests/test_server_stage.py` → 65 passed
+  （31+26+8）；扩面回归 guard/semantic 8 个文件 413 passed。
+  用例覆盖：幂等（纯函数/审计/乱序）、默认关闭零变化、轮定义、pytest
+  识别（配对/回退/非 pytest 不算）、摘要解析（通过数变化与回归、命名
+  目标失败名单+部分得分、收集期错误不动 passed）、G2 第 4 轮零覆盖
+  触发 / 已有覆盖不触发 / goals_total=3 部分覆盖（1/3）不触发、
+  fail_streak 触发 / 全绿打断 / 严格二分、shadow 绝不进
+  reminder/findings、失败隔离、HTTP 透传（flag 缺省/false/true/非 bool 400）。
+- 遗留（Phase 2 候选）：①真实会话流上采集 shadow 触发统计，验证
+  precision≥0.7 验收线（本阶段仅单测/集成测试，无回放数据）；②精确轮
+  边界需客户端流携带 turn 边界；③publish_repo 镜像树未同步本次改动
+  （P11 打包副本，发版前需重打包）；④生产落地证据的 matcher 对齐
+  兜底（SLM 后端）仍待 semantic 路径质量达标后接入，pytest 解析仅是
+  确定性快速通道，不构成 rule 判定路径的默认化。
