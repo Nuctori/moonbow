@@ -21,6 +21,7 @@ from typing import Dict, List, Optional
 
 from .protocol import StageBlock, StageFinding
 from .audit_semantic import ShadowObservation
+from .convergence import unavailable_entry
 
 # 完成声明（中间汇报里的"已做完"语气；注意排除"准备/计划/将"）
 _CLAIM_PAT = re.compile(
@@ -74,11 +75,15 @@ class StageAuditor:
     """确定性阶段审计器。audit() 幂等：同一批块重复送审产生相同 fingerprint，
     由客户端按 fingerprint 去重合并。"""
 
-    def __init__(self, semantic_shadow=None):
+    def __init__(self, semantic_shadow=None, convergence_shadow=None):
         # P7：可选语义声明检测 shadow 通道（见 audit_semantic.py）。
         # 默认 None → 零行为变化；注入时其结果只写入返回值的
         # shadow_semantic 键，绝不参与 reminder/findings/semantic 判定。
         self._semantic_shadow = semantic_shadow
+        # Phase 1：可选收敛信号 shadow 通道（见 convergence.py）。
+        # 同模式：默认 None → 零行为变化；注入时结果只写入
+        # shadow_convergence 键，绝不参与 reminder/findings/semantic 判定。
+        self._convergence_shadow = convergence_shadow
 
     def audit(
         self,
@@ -93,6 +98,8 @@ class StageAuditor:
         findings：本批产生的发现（含 prior 中被本批证据更新的状态）。
         reminder：advisory 模式下值得介入的第一条 actionable 的提醒文案；
                   shadow 模式同样返回（客户端决定是否投递）。
+        注入 shadow provider 时额外返回 shadow_semantic /
+        shadow_convergence 键（只记录、零投递）；缺省不含，零行为变化。
         """
         prior = list(prior_findings or [])
         findings: List[StageFinding] = []
@@ -122,6 +129,15 @@ class StageAuditor:
                 entry["seq"] = b.seq
                 shadow.append(entry)
             result["shadow_semantic"] = shadow
+        if self._convergence_shadow is not None:
+            # Phase 1 收敛 shadow 通道：从块流确定性计算（纯函数、幂等），
+            # 结果单独成键；计算异常同样失败隔离，绝不影响主审计结果。
+            try:
+                result["shadow_convergence"] = \
+                    self._convergence_shadow.compute(req, blocks)
+            except Exception as e:               # noqa: BLE001 — 失败隔离
+                result["shadow_convergence"] = [
+                    unavailable_entry(f"error:{type(e).__name__}")]
         return result
 
     # ---- 规则 1：思考疑点（candidate / 被解决则停留 candidate）----
@@ -336,8 +352,12 @@ class StageAuditor:
         }
 
 
-def audit_stage_payload(payload: Dict) -> Dict:
-    """HTTP 层入口：解析/校验 payload 并执行审计。校验失败抛 ValueError。"""
+def audit_stage_payload(payload: Dict, convergence_shadow=None) -> Dict:
+    """HTTP 层入口：解析/校验 payload 并执行审计。校验失败抛 ValueError。
+
+    convergence_shadow：可选收敛 shadow 观察者（Phase 1，server 层按
+    enable_convergence_shadow 显式开启后注入）；缺省 None = 零行为变化。
+    """
     blocks_raw = payload.get("blocks", [])
     if not isinstance(blocks_raw, list):
         raise ValueError("blocks must be a list")
@@ -357,4 +377,5 @@ def audit_stage_payload(payload: Dict) -> Dict:
         for b in blocks:
             print("[audit-debug]   seq=%s kind=%s tool=%s text=%r" % (
                 b.seq, b.kind, b.tool_name, b.text[:70]), file=_sys.stderr, flush=True)
-    return StageAuditor().audit(req, blocks, prior, ver, stream_ended)
+    return StageAuditor(convergence_shadow=convergence_shadow).audit(
+        req, blocks, prior, ver, stream_ended)

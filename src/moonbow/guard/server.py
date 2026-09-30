@@ -12,6 +12,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 
 from .verifier import ProgressGuard, Decision
 from .process_audit import audit_stage_payload
+from .convergence import ConvergenceShadow
 from .semantic_provider import (
     PROVIDER_ENV,
     SEMANTIC_CONFIG_ENV,
@@ -30,6 +31,11 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
     # （既有行为零变化）；MOONBOW_GUARD_PROVIDER=semantic 启动时置为
     # "semantic"（配置激活，代码就绪）。
     default_provider_key = "legacy"
+    # Phase 1：收敛信号 shadow 观察者（/v1/stage-check 的
+    # enable_convergence_shadow=true 时惰性构造、类级复用。
+    # ConvergenceShadow.compute 是块流纯函数、无跨请求状态，复用安全。
+    # 缺省 None：不传 flag 的请求行为与之前逐字节一致）。
+    convergence_shadow = None
 
     def _send_json(self, status_code: int, data: dict):
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
@@ -72,7 +78,20 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
         # ---- 阶段审计端点（过程审计；与收尾 /check 分离，不影响其语义）----
         if self.path in ("/v1/stage-check", "/stage-check"):
             try:
-                result = audit_stage_payload(payload)
+                # Phase 1：可选收敛 shadow 通道（只记录、零投递）。
+                # payload 缺省不带 enable_convergence_shadow → 走原路径，
+                # 响应不含 shadow_convergence 键（零行为变化）。
+                conv_flag = payload.get("enable_convergence_shadow", False)
+                if not isinstance(conv_flag, bool):
+                    raise ValueError("enable_convergence_shadow must be a boolean")
+                if conv_flag:
+                    if GuardHTTPRequestHandler.convergence_shadow is None:
+                        GuardHTTPRequestHandler.convergence_shadow = ConvergenceShadow()
+                    result = audit_stage_payload(
+                        payload,
+                        convergence_shadow=GuardHTTPRequestHandler.convergence_shadow)
+                else:
+                    result = audit_stage_payload(payload)
                 logger.info("/v1/stage-check findings=%d reminder=%s",
                             len(result.get("findings", [])),
                             bool(result.get("reminder")))
