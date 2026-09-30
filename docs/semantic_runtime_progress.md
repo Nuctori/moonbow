@@ -1217,39 +1217,38 @@ completion.asserted / task.object.alignment PASS，process.unresolved R=0.764
   兜底（SLM 后端）仍待 semantic 路径质量达标后接入，pytest 解析仅是
   确定性快速通道，不构成 rule 判定路径的默认化。
 
-## 收敛进度追踪 Phase 2：advisory 收敛提示 uplift 实验 + 失败归因（2026-09-30，实验与归因完成；纯会话分析，不训练不推理不占 XPU）
-- 实验（`experiments/convergence_retry.py`，c3_triple_mix 三 bug：整除+排序键+
-  可变默认；control 15 vs convergence 15，mimo-v2.5/ccfree）：完成 3/15 vs
-  **5/15**（Fisher 不显著），部分分均值 0.244 vs 0.333；7 run 投递 advisory，
-  被提示 run 完成 4/7 vs 未被提示 1/8——**强存活混淆**（提示只在会话存活
-  ≥3-4 轮时投递），不能归因提示提升完成。
-- **失败归因报告：`results/convergence-phase2/failure_attribution.md`**
-  （30×3 修复矩阵 + 轨迹分型 + 三层归因 + advised_fail 个案）。核心发现：
-  ①主导失败机制是**伪工具调用**——模型把 tool call 写成正文文本
-  （`[tool_call ...]`），pi 无反馈照常收尾，动作永不执行：28/30 run 出现、
-  13 run 的修复编辑被吞、22 个未完成 run 中 20 个零真实编辑；
-  ②完成边界 = 真实编辑落盘（10 个真实编辑 run → 8 完成 + 2 部分；
-  落盘修复 8/8 全对）；③"一次改三处导致回归"假设不成立（0 回归；
-  合并编辑全对），三 bug 知识无缺口（无选择性漏修，唯一部分形态=
-  只修整除×2）；④runs.jsonl 的 `truncated` 主体是伪调用签名而非时间
-  预算（真超时仅 conv-r11），`env_error`（26/30）是其衍生标志；
-  ⑤环境次级缺陷：ws 与 repo 树不隔离，repo root 跑 pytest 撞跨工作区
-  重名收集错误（7 run 撞、2 run 死于恢复）。
-- 轨迹分型（22 未完成 run）：伪调用截断/动作丢失 17、收集期死亡 2
-  （control-r9/r11）、部分完成后终止 2（control-r2/r4，均修好整除后
-  第二编辑被吞）、静默停止 1（control-r3）、回归循环 0。
-- 三层归因：能力层=工具调用发射可靠性（非任务知识）；信息层=伪调用
-  零反馈黑洞（模型一致"以为改完了"：conv-r1 重发仍被吞、conv-r11 见
-  FFF 原样怀疑缓存而不查文件、conv-r5 以假前提驳提示）+ `-x`/tail 自
-  截断证据（4 run 低诊断）；策略层=完成与"编辑是否真实发出"绑定，
-  提示只改变验证/申报行为（conv-r13 是全批唯一亲眼见 3 passed 的
-  run，由守卫过程核查逼出，也是唯一 clean_completed）。
-- advised_fail 个案（conv-r1/r5/r11）：真失败机制均为"编辑未落盘"，
-  提示内容（收窄范围）与之错配；投递时机（turn3）恰在"已编辑未验证"
-  窗口，缺"先 cat app.py 核对落盘再谈收窄"的动作指引。
-- 遗留（Phase 3 候选）：①客户端检测伪调用并注入执行失败反馈（最高
-  杠杆）；②advisory 加落盘核查动作 + 投递前读会话状态；③ws 加
-  conftest/提示固定 cwd；④伪调用根因归责需换 provider/网关 A/B；
-  ⑤完成口径 8 例中 7 例靠 judge 补测（模型未自证），自证完成率仅
-  1/30；⑥另有 1 个未入册会话（11-03-21，API 中断弃跑）提示第三种
-  死亡形态（传输层中断）。
+## PseudoCallGuard：伪工具调用检测与反馈（2026-09-30，完成；harness 层，纯逻辑，不跑推理不占 XPU）
+
+- 背景：Phase 2 归因（`results/convergence-phase2/failure_attribution.md`
+  §0/§5.1，证据清单见其附 2）确认主导失败机制是 mimo 经网关把 tool call
+  写成正文文本（`[tool_call call_xxx] edit {...}`），pi 按正常文本收尾、
+  动作永不执行且零反馈：28/30 run 中招、13 run 修复编辑被吞。本阶段在
+  扩展层补上"检测 + 反馈"闭环（反馈措辞即 §5.1 建议的中文定式）。
+- 实现：新模块 `src/moonbow/guard/extensions/pseudo-call-guard.ts`。
+  触发：`message_end` 扫 assistant 消息文本，命中伪调用签名（bracket
+  主形态 / XML / 行首工具名+JSON 骨架 / harness 残渣，按优先级取主形态）
+  且该消息无 toolCall 内容块（伴随真实调用的混合消息只记遥测不投递，
+  Phase 2 实测 1 例混合形态）；stopReason=error/aborted 不扫。
+  反馈：固定措辞经 `followUp + triggerTurn` 投递（伪调用消息收尾时
+  agent 已停，steer 送不到）。预算：每任务最多 3 次（防 conv-r1 式
+  "重发仍被吞"循环），先预留后投递、超预算只记遥测；`hasPendingMessages`
+  抑制不耗预算；跨重启预算从遥测账本（`progress-guard:pseudo-call`
+  条目按 taskId 记账）恢复。杀开关 `MOONBOW_PSEUDO_CALL_FEEDBACK=off`
+  （默认 on，off 零扫描零记录零投递）；消息级去重（对象 WeakSet +
+  responseId/id 双保险）。
+- 挂载：`progress-guard.ts` 最小 diff（import + install + 在
+  `message_end` 的 processMode 早退**之前**调一行——伪调用守卫独立于
+  过程审计模式开关）。本模块不自行 `pi.on`（宿主同名事件单处理器），
+  全逻辑 try/catch 失败自隔离，不参与任何 guard 判定路径。
+- 测试：`tests/test_pseudo_call_guard.mjs`（node:test，19 用例）——
+  五种形态签名命中、多调用计数、伴随真实调用不误报、无伪调用不报、
+  固定措辞与投递通道、3 次预算封顶/新任务重置/跨重启账本恢复、off
+  杀开关、过程审计 off 时独立工作、投递通道故障失败隔离（宿主收尾
+  裁决不受影响）、pending 抑制、同消息重投递去重。
+  `node --test tests/*.mjs` → 52 passed（含既有 33 + 新增 19），exit 0；
+  `pytest tests/test_guard_semantic_provider.py -q` → 69 passed。
+- 遗留：①检测为文本签名法，模型若在正文里合法引用签名样例（如读了
+  归因报告后转述）会按预算误报至多 3 次后静默——不阻断、不进判定；
+  ②真实 agent A/B 实验（伪调用 run 的编辑落盘率是否改善）由 Phase 3
+  实验负责，本阶段只做 harness 修复与单测；③publish_repo 镜像树待
+  主代理同步。
