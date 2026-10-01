@@ -1,0 +1,80 @@
+=== 287M GLiNER 零样本两路由 vs 规则基线（dev 切分 62 样本，2026-09-24）===
+
+=== Task Structure 评测 | backend=gliner-entities[zh_plain@0.3] | split=dev | n=62 ===
+kind                P      R     F1   TP   FP   FN
+goal             0.37   0.37   0.37   14   24   24
+object              -   0.00      -    0    0    5
+constraint       0.00   0.00      -    0    5    5
+dependency       0.00   0.00      -    0    1    5
+coordination     0.40   0.20   0.27    2    3    8
+condition        0.00   0.00      -    0    3    2
+unresolved          -   0.00      -    0    0    1
+acceptance          -   0.00      -    0    0    3
+弃权正确率: 61%  等级一致率: 57% (n=23)
+伪任务误报率: 45%  取消抑制正确率: 60%
+改写稳定率: 0% (n=2)  复述不敏感率: 100%
+延迟 p50=101.8ms  p95=116.8ms
+
+错误样例（前 12 条）：
+  [wrong_abstain] sg_005: no_explicit_task
+  [wrong_abstain] sg_011: no_explicit_task
+  [level] mg_021: gold=high pred=medium
+  [level] mg_023: gold=high pred=low
+  [wrong_abstain] mg_024: no_explicit_task
+  [level] mg_034: gold=high pred=medium
+  [wrong_abstain] mc_040: no_explicit_task
+  [level] xd_047: gold=medium pred=low
+  [level] xd_050: gold=medium pred=low
+  [wrong_abstain] co_067: no_explicit_task
+  [level] co_068: gold=medium pred=low
+  [wrong_abstain] cu_072: no_explicit_task
+
+=== Task Structure 评测 | backend=gliner-clf[@0.0] | split=dev | n=62 ===
+kind                P      R     F1   TP   FP   FN
+goal             0.33   0.03   0.05    1    2   37
+object              -   0.00      -    0    0    5
+constraint       0.15   0.60   0.24    3   17    2
+dependency       0.07   0.20   0.10    1   14    4
+coordination     0.50   0.50   0.50    5    5    5
+condition        0.00   0.00      -    0    5    2
+unresolved       0.00   0.00      -    0   18    1
+acceptance       0.00   0.00      -    0    2    3
+弃权正确率: 68%  等级一致率: 54% (n=28)
+伪任务误报率: 82%  取消抑制正确率: 60%
+改写稳定率: 50% (n=2)  复述不敏感率: 100%
+延迟 p50=180.5ms  p95=308.2ms
+
+错误样例（前 12 条）：
+  [wrong_abstain] sg_003: no_explicit_task
+  [wrong_abstain] sg_004: no_explicit_task
+  [wrong_abstain] sg_005: no_explicit_task
+  [level] sg_011: gold=low pred=medium
+  [level] sge_013: gold=low pred=medium
+  [level] mg_021: gold=high pred=medium
+  [level] mg_032: gold=medium pred=high
+  [wrong_abstain] xd_047: no_explicit_task
+  [level] xd_050: gold=medium pred=low
+  [level] cu_072: gold=low pred=medium
+  [level] cu_073: gold=low pred=medium
+  [level] cu_074: gold=low pred=medium
+
+=== 规则基线（对照，同一切分）===
+kind                P      R     F1   TP   FP   FN
+goal             0.89   0.82   0.85   31    4    7
+object           1.00   0.80   0.89    4    0    1
+constraint       0.83   1.00   0.91    5    1    0
+dependency       0.83   1.00   0.91    5    1    0
+coordination     1.00   0.80   0.89    8    0    2
+condition        1.00   0.50   0.67    1    0    1
+unresolved       1.00   1.00   1.00    1    0    0
+acceptance       1.00   1.00   1.00    3    0    0
+弃权正确率: 92%  等级一致率: 97% (n=33)
+伪任务误报率: 0%  取消抑制正确率: 100%
+改写稳定率: 100% (n=2)  复述不敏感率: 0%
+延迟 p50=0.1ms  p95=0.2ms
+
+错误样例（前 12 条）：
+  [wrong_abstain] sg_004: no_explicit_task
+  [wrong_abstain] sg_005: no_explicit_task
+  [level] rd_190: gold=low pred=medium
+  [wrong_abstain] al_205: no_explicit_task

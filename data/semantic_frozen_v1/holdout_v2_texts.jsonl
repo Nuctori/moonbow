@@ -1,0 +1,120 @@
+{"id": "fzh2_0001", "text": "给评论加敏感词过滤；上线前先弄清现在误杀率大概什么水平，留个对照。", "source_family": "user_request", "lang": "zh", "task_id": "fzT301"}
+{"id": "fzh2_0002", "text": "把静态资源迁到 CDN；迁移前核实证书是自带还是跟域名走，别搞断 HTTPS。", "source_family": "user_request", "lang": "zh", "task_id": "fzT302"}
+{"id": "fzh2_0003", "text": "新后台的表格加服务端分页；先查清现在数据量最大的租户一页拉多少条，别拍脑袋定页大小。", "source_family": "user_request", "lang": "zh", "task_id": "fzT303"}
+{"id": "fzh2_0004", "text": "接入新的短信服务商；切换前确认模板报备要多久，别卡在审核上。", "source_family": "user_request", "lang": "zh", "task_id": "fzT304"}
+{"id": "fzh2_0005", "text": "给流程引擎加超时自动跳过；先搞清楚现有流程里哪些节点本来就允许长时间等待，别一刀切。", "source_family": "user_request", "lang": "zh", "task_id": "fzT305"}
+{"id": "fzh2_0006", "text": "Split the settings page into tabs; before that, find out which sections users touch most so the defaults land on the right tab.", "source_family": "user_request", "lang": "en", "task_id": "fzT306"}
+{"id": "fzh2_0007", "text": "Move the report builder to the new chart library; first confirm the old pivots can be expressed in it, or the migration stalls halfway.", "source_family": "user_request", "lang": "en", "task_id": "fzT307"}
+{"id": "fzh2_0008", "text": "Enable 2FA for admin accounts; beforehand, check how many service accounts would be locked out by the change.", "source_family": "user_request", "lang": "en", "task_id": "fzT308"}
+{"id": "fzh2_0009", "text": "Reorganize the monolith's job scheduling. Before extracting the scheduler, confirm how many jobs share database connections - that decides the cutoff order. Keep the cron syntax compatible; rollout behind a flag.", "source_family": "user_request", "lang": "en", "task_id": "fzT309"}
+{"id": "fzh2_0010", "text": "Launch the partner API. Open item: which rate-limit tier partners actually need - survey the top ten before publishing limits. Auth via existing keys; docs due with the release.", "source_family": "user_request", "lang": "en", "task_id": "fzT310"}
+{"id": "fzh2_0011", "text": "Consolidate the three deployment scripts. Prerequisite: find out which environments pin specific script versions; pin them in config first. Acceptance: one script, same outputs, rollback documented.", "source_family": "user_request", "lang": "en", "task_id": "fzT311"}
+{"id": "fzh2_0012", "text": "Introduce soft deletes across the CRM tables. Unverified: whether reporting jobs filter deleted rows correctly - audit those queries before enabling the flag. Timeline: this quarter.", "source_family": "user_request", "lang": "en", "task_id": "fzT312"}
+{"id": "fzh2_0013", "text": "Migrate user avatars to object storage. Before the move, measure peak upload concurrency to size the presign pool; keep the legacy URL redirects for 90 days.", "source_family": "user_request", "lang": "en", "task_id": "fzT313"}
+{"id": "fzh2_0014", "text": "Rewrite the notification digest job. First check whether the timezone handling in the current job is correct - users have reported odd delivery hours. Deliverable: correct batching, plus a test for DST transitions.", "source_family": "user_request", "lang": "en", "task_id": "fzT314"}
+{"id": "fzh2_0015", "text": "Roll out the new search ranking offline eval. Pre-flight: confirm the replay logs cover at least two weeks of traffic; otherwise the eval is too thin. Report format follows the template in the wiki.", "source_family": "user_request", "lang": "en", "task_id": "fzT315"}
+{"id": "fzh2_0016", "text": "Move config for the mobile feature flags to the edge service. Open question: does the edge service support staged rollout percentages? Confirm before committing to a date; otherwise ship a simple on/off version.", "source_family": "user_request", "lang": "en", "task_id": "fzT316"}
+{"id": "fzh2_0017", "text": "报表中心改成实时刷新，但上游接口能不能撑住轮询频率还不确定，先让平台组评估，评估完再定方案。", "source_family": "user_request", "lang": "zh", "task_id": "fzT317"}
+{"id": "fzh2_0018", "text": "二方包准备升到 2.0，但它对 JDK 8 的兼容性没有官方说明，升级前先在测试机装一遍验证。", "source_family": "user_request", "lang": "zh", "task_id": "fzT318"}
+{"id": "fzh2_0019", "text": "老库要不要直接归档取决于合规那边对保留年限的要求，这个口径还没拿到，归档方案先挂起。", "source_family": "user_request", "lang": "zh", "task_id": "fzT319"}
+{"id": "fzh2_0020", "text": "Adopt the new CI cache layer, pending confirmation that it works with our self-hosted runners - nobody has tried it on them yet.", "source_family": "user_request", "lang": "en", "task_id": "fzT320"}
+{"id": "fzh2_0021", "text": "Standardize on Postgres 16, but whether the CDC connector supports it is still unverified; check with the data team before booking the migration window.", "source_family": "user_request", "lang": "en", "task_id": "fzT321"}
+{"id": "fzh2_0022", "text": "把首页轮播图的切换间隔从 5 秒改成 8 秒，样式不用动。", "source_family": "user_request", "lang": "zh", "task_id": "fzT322"}
+{"id": "fzh2_0023", "text": "给导出中心加一个失败重试按钮，只重试失败的任务，成功的置灰。", "source_family": "user_request", "lang": "zh", "task_id": "fzT323"}
+{"id": "fzh2_0024", "text": "登录页的忘记密码链接挪到输入框下方，视觉稿在附件。", "source_family": "user_request", "lang": "zh", "task_id": "fzT324"}
+{"id": "fzh2_0025", "text": "订单详情页加一个复制单号的小按钮，点击后提示已复制。", "source_family": "user_request", "lang": "zh", "task_id": "fzT325"}
+{"id": "fzh2_0026", "text": "接口返回里补上 create_time 的时区标注，所有列表接口统一处理。", "source_family": "user_request", "lang": "zh", "task_id": "fzT326"}
+{"id": "fzh2_0027", "text": "后台用户列表按注册时间倒序排列，分页保持不变。", "source_family": "user_request", "lang": "zh", "task_id": "fzT327"}
+{"id": "fzh2_0028", "text": "把按钮上的确认文案从确定改成立即提交，全部页面统一替换。", "source_family": "user_request", "lang": "zh", "task_id": "fzT328"}
+{"id": "fzh2_0029", "text": "给上传组件加文件类型白名单，只允许 pdf、doc、xlsx 三种。", "source_family": "user_request", "lang": "zh", "task_id": "fzT329"}
+{"id": "fzh2_0030", "text": "短信通知里加上订单号后四位，模板改动走正常审核流程。", "source_family": "user_request", "lang": "zh", "task_id": "fzT330"}
+{"id": "fzh2_0031", "text": "搜索结果页空态文案换成新的引导语，视觉已评审通过。", "source_family": "user_request", "lang": "zh", "task_id": "fzT331"}
+{"id": "fzh2_0032", "text": "定时任务执行完往值班群发一条摘要，包含成功与失败数量。", "source_family": "user_request", "lang": "zh", "task_id": "fzT332"}
+{"id": "fzh2_0033", "text": "删除用户时增加二次确认弹窗，文案按法务给的版本来。", "source_family": "user_request", "lang": "zh", "task_id": "fzT333"}
+{"id": "fzh2_0034", "text": "新员工入职页的步骤条改成可点击跳转，样式对齐设计系统。", "source_family": "user_request", "lang": "zh", "task_id": "fzT334"}
+{"id": "fzh2_0035", "text": "把测试环境的数据库账号权限收敛为只读，生产不动。", "source_family": "user_request", "lang": "zh", "task_id": "fzT335"}
+{"id": "fzh2_0036", "text": "API 文档里给每个接口补上错误码说明，先从核心十个接口开始。", "source_family": "user_request", "lang": "zh", "task_id": "fzT336"}
+{"id": "fzh2_0037", "text": "水印功能给导出的报表统一加上公司抬头，位置右下角。", "source_family": "user_request", "lang": "zh", "task_id": "fzT337"}
+{"id": "fzh2_0038", "text": "Rename the debug endpoint to /internal/debug and restrict it to the VPN range.", "source_family": "user_request", "lang": "en", "task_id": "fzT338"}
+{"id": "fzh2_0039", "text": "Add a tooltip to the quota widget explaining the reset window, copy provided.", "source_family": "user_request", "lang": "en", "task_id": "fzT339"}
+{"id": "fzh2_0040", "text": "Bump the log retention for the audit index to 180 days and note the cost delta.", "source_family": "user_request", "lang": "en", "task_id": "fzT340"}
+{"id": "fzh2_0041", "text": "Standardize the date format across all admin tables to YYYY-MM-DD HH:mm.", "source_family": "user_request", "lang": "en", "task_id": "fzT341"}
+{"id": "fzh2_0042", "text": "Cap the batch import file size at 50 MB and return a clear error above that.", "source_family": "user_request", "lang": "en", "task_id": "fzT342"}
+{"id": "fzh2_0043", "text": "Move the health check interval from 30 to 15 seconds for the payment pods only.", "source_family": "user_request", "lang": "en", "task_id": "fzT343"}
+{"id": "fzh2_0044", "text": "Add the service version to the response headers of the public gateway.", "source_family": "user_request", "lang": "en", "task_id": "fzT344"}
+{"id": "fzh2_0045", "text": "Pre-fill the support form with the user's current plan when opened from settings.", "source_family": "user_request", "lang": "en", "task_id": "fzT345"}
+{"id": "fzh2_0046", "text": "给帮助中心的搜索框加上热词推荐，词表运营每月更新一次。", "source_family": "user_request", "lang": "zh", "task_id": "fzT346"}
+{"id": "fzh2_0047", "text": "把客服工作台的工单列表默认视图切换成「今日待办」，用户可自行改回。", "source_family": "user_request", "lang": "zh", "task_id": "fzT347"}
+{"id": "fzh2_0048", "text": "导航栏加一个版本日志入口，指向静态页即可，不用做权限控制。", "source_family": "user_request", "lang": "zh", "task_id": "fzT348"}
+{"id": "fzh2_0049", "text": "导出的 CSV 统一用 UTF-8 BOM 编码，解决 Excel 打开乱码的反馈。", "source_family": "user_request", "lang": "zh", "task_id": "fzT349"}
+{"id": "fzh2_0050", "text": "Show the last deployment time in the admin footer, pulled from the release API.", "source_family": "user_request", "lang": "en", "task_id": "fzT350"}
+{"id": "fzh2_0051", "text": "Truncate long error messages in the log viewer to one line with expand-on-click.", "source_family": "user_request", "lang": "en", "task_id": "fzT351"}
+{"id": "fzh2_0052", "text": "确认一下新版 App 有没有强制更新逻辑——查过了，有的，2.1 起就带强更开关，这事不用处理。", "source_family": "user_request", "lang": "zh", "task_id": "fzT352"}
+{"id": "fzh2_0053", "text": "看看支付回调有没有重试机制——看了，有，最多重试五次，间隔递增，逻辑没问题。", "source_family": "user_request", "lang": "zh", "task_id": "fzT353"}
+{"id": "fzh2_0054", "text": "之前担心新表分区键选错，现在确认了按月分区完全够用，查询计划也验证过，按这个建表。", "source_family": "user_request", "lang": "zh", "task_id": "fzT354"}
+{"id": "fzh2_0055", "text": "Wondering whether the webhook retries are idempotent - checked the handler, it keys on delivery id, so yes, no change needed.", "source_family": "user_request", "lang": "en", "task_id": "fzT355"}
+{"id": "fzh2_0056", "text": "Asked whether staging shares the prod cache - it does not, separate clusters confirmed with ops, closing this.", "source_family": "user_request", "lang": "en", "task_id": "fzT356"}
+{"id": "fzh2_0057", "text": "这个工单只处理导出乱码问题；要不要顺便升级导出库不在本单范围，另立需求评估。", "source_family": "user_request", "lang": "zh", "task_id": "fzT357"}
+{"id": "fzh2_0058", "text": "本次迭代只做权限收紧；多租户计费怎么改是另一条线的事，别在这里掺和。", "source_family": "user_request", "lang": "zh", "task_id": "fzT358"}
+{"id": "fzh2_0059", "text": "先修这个崩溃，内存占用优化的疑问登记到技术债列表，下个专项处理。", "source_family": "user_request", "lang": "zh", "task_id": "fzT359"}
+{"id": "fzh2_0060", "text": "Fix the double-submit bug in this ticket; the broader idempotency redesign is a separate epic and out of scope here.", "source_family": "user_request", "lang": "en", "task_id": "fzT360"}
+{"id": "fzh2_0061", "text": "等一下，你说接口已经在灰度了？我怎么记得昨天还说要等审批，到底哪个是真的？", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT361"}
+{"id": "fzh2_0062", "text": "这批数据不至于又是脏的吧？上次的教训还在，你先抽样查二十条给我看。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT362"}
+{"id": "fzh2_0063", "text": "你确定迁移脚本在预发跑过了？我怎么没看到执行记录，别到时候一头雾水。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT363"}
+{"id": "fzh2_0064", "text": "不是说这个功能砍掉了吗，怎么又出现在需求池里了？给个准话，到底做不做。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT364"}
+{"id": "fzh2_0065", "text": "回滚按钮不至于没绑后端接口吧？别是只画了个壳，真到用的时候抓瞎。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT365"}
+{"id": "fzh2_0066", "text": "Hold on - the key rotation already happened? I thought we agreed to wait for the change window. Which is it?", "source_family": "conversation_interference", "lang": "en", "task_id": "fzT366"}
+{"id": "fzh2_0067", "text": "The export surely is not still running on the old node, right? Someone actually verified that before the failover drill?", "source_family": "conversation_interference", "lang": "en", "task_id": "fzT367"}
+{"id": "fzh2_0068", "text": "Wait, you are telling me the flag was never wired up? Then what have we been demoing all week?", "source_family": "conversation_interference", "lang": "en", "task_id": "fzT368"}
+{"id": "fzh2_0069", "text": "这个优化不是一上午就能搞定的吗，有什么好讨论的。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT369"}
+{"id": "fzh2_0070", "text": "这种小改动还用开评审会？直接改了发版不就完了。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT370"}
+{"id": "fzh2_0071", "text": "不就是加个字段嘛，至于排两个星期？", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT371"}
+{"id": "fzh2_0072", "text": "好了好了，这个问题下次站会再说，今天先散了吧。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT372"}
+{"id": "fzh2_0073", "text": "你们说啥呢，我这边看到的页面一直好好的。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT373"}
+{"id": "fzh2_0074", "text": "这事归运维管吧，我们前端就不掺和了。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT374"}
+{"id": "fzh2_0075", "text": "行行行，你说得都对，按你的来。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT375"}
+{"id": "fzh2_0076", "text": "我又不是没写过轮询，这有什么难的。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT376"}
+{"id": "fzh2_0077", "text": "下午茶点谁家？老规矩那家？", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT377"}
+{"id": "fzh2_0078", "text": "昨天那场球看了没，最后绝杀太离谱了。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT378"}
+{"id": "fzh2_0079", "text": "周报我还没写，先摸十分钟鱼再写。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT379"}
+{"id": "fzh2_0080", "text": "这需求文档写得跟天书一样，谁看谁头大。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT380"}
+{"id": "fzh2_0081", "text": "别催了别催了，马上马上，代码正在跑。", "source_family": "conversation_interference", "lang": "zh", "task_id": "fzT381"}
+{"id": "fzh2_0082", "text": "That is a two-line change, why are we even talking about it?", "source_family": "conversation_interference", "lang": "en", "task_id": "fzT382"}
+{"id": "fzh2_0083", "text": "Not this again - we settled that debate months ago, move on.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzT383"}
+{"id": "fzh2_0084", "text": "Honestly the whole design doc could be one paragraph. Anyway, lunch?", "source_family": "conversation_interference", "lang": "en", "task_id": "fzT384"}
+{"id": "fzh2_0085", "text": "That is an ops problem, not ours - ticket it and forget it.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzT385"}
+{"id": "fzh2_0086", "text": "Sure, sure, whatever you say, boss.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzT386"}
+{"id": "fzh2_0087", "text": "Did anyone else see the build turn green? Finally.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzT387"}
+{"id": "fzh2_0088", "text": "I will write the retro notes later, no big rush.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzT388"}
+{"id": "fzh2_0089", "text": "The demo went fine, nobody even looked at that screen, relax.", "source_family": "conversation_interference", "lang": "en", "task_id": "fzT389"}
+{"id": "fzh2_0090", "text": "今日任务收工：接口改造全部提测；有一个没定的事——回归范围包不包括老小程序端，QA 还没答复。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzT390"}
+{"id": "fzh2_0091", "text": "本周开发工作完成，分支已合并；待确认：合并后要不要立即删特性开关，等产品观察完这周数据再定。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzT391"}
+{"id": "fzh2_0092", "text": "改动已上线并验证通过；遗留一个问号：旧版本兼容代码删不删，下周一跟维护方碰一下再定。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzT392"}
+{"id": "fzh2_0093", "text": "三个工单全部办结，回复已发出；只剩一件事悬着：要不要给受影响客户补发优惠券，等运营拍板。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzT393"}
+{"id": "fzh2_0094", "text": "STATUS: released to production. REMAINING: confirm whether the partner sandbox needs the same patch. EVIDENCE: pipeline #771 green", "source_family": "agent_completion", "lang": "en", "task_id": "fzT394"}
+{"id": "fzh2_0095", "text": "Sprint items all closed; one thing still open: whether to schedule the failover drill this month or next - waiting on the SRE calendar.", "source_family": "agent_completion", "lang": "en", "task_id": "fzT395"}
+{"id": "fzh2_0096", "text": "本迭代需求全部交付完毕，测试通过、文档更新、无遗留事项，可以收工。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzT396"}
+{"id": "fzh2_0097", "text": "迁移全部完成：数据核对一致、老库已下线、监控无告警，项目正式关闭。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzT397"}
+{"id": "fzh2_0098", "text": "今天的活儿干完了：脚本跑完、报告发出、问题清零，没有悬着的事。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzT398"}
+{"id": "fzh2_0099", "text": "版本 3.2 已发布，灰度全量完成，崩溃率与留存均正常，本次迭代闭环。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzT399"}
+{"id": "fzh2_0100", "text": "All deliverables are done: code merged, docs updated, runbook handed over. Nothing outstanding on my side.", "source_family": "agent_completion", "lang": "en", "task_id": "fzT400"}
+{"id": "fzh2_0101", "text": "The hotfix shipped at 14:00, error rates back to baseline for six hours straight. Ticket closed, no follow-ups.", "source_family": "agent_completion", "lang": "en", "task_id": "fzT401"}
+{"id": "fzh2_0102", "text": "上周担心的缓存不一致问题已经闭环：加了双删策略后连续一周校验无差异，可以翻篇。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzT402"}
+{"id": "fzh2_0103", "text": "之前对账差异的疑问查清楚了，是汇率取整口径问题，已修复并对平，历史问题不再追踪。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzT403"}
+{"id": "fzh2_0104", "text": "早先拿不准的合并顺序定了：先基础库后业务层，试跑一次无冲突，按此执行。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzT404"}
+{"id": "fzh2_0105", "text": "The doubt from the last review about index bloat is resolved - the rebuild job finished and stats are back to normal.", "source_family": "agent_completion", "lang": "en", "task_id": "fzT405"}
+{"id": "fzh2_0106", "text": "刚才不确定要不要重启才生效，查了文档确认配置是热加载的，不用重启，改动已生效。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzT406"}
+{"id": "fzh2_0107", "text": "本来怀疑是连接池耗尽，看了监控不是，是下游超时引起的重试风暴，根因明确，修复中。", "source_family": "agent_completion", "lang": "zh", "task_id": "fzT407"}
+{"id": "fzh2_0108", "text": "First thought the export was truncated - actually it is paginated and complete; verified all pages against the source, no data missing.", "source_family": "agent_completion", "lang": "en", "task_id": "fzT408"}
+{"id": "fzh2_0109", "text": "阶段状态：第一批割接完成。待定事项：第二批是否跨周末执行。证据：割接检查单 #12 全勾。", "source_family": "interim_report", "lang": "zh", "task_id": "fzT409"}
+{"id": "fzh2_0110", "text": "STATUS: rollout 60%. REMAINING: open question on whether region-b needs a maintenance window. EVIDENCE: dashboard snapshot attached", "source_family": "interim_report", "lang": "en", "task_id": "fzT410"}
+{"id": "fzh2_0111", "text": "Week 3 report: pipeline migration done for teams A and B. Unresolved: team C's runners are still on the legacy pool - awaiting infra confirmation.", "source_family": "interim_report", "lang": "en", "task_id": "fzT411"}
+{"id": "fzh2_0112", "text": "本期专项按计划收官，验收通过。老集群要不要复用是资产盘点的事，不在本专项范围。", "source_family": "interim_report", "lang": "zh", "task_id": "fzT412"}
+{"id": "fzh2_0113", "text": "月度汇报：优化目标达成，指标全部达标。下季度要不要引入新框架另行立项，本报告不展开。", "source_family": "interim_report", "lang": "zh", "task_id": "fzT413"}
+{"id": "fzh2_0114", "text": "Phase 2 accepted and signed off. Whether to extend the tooling to the EU cluster is a separate proposal, out of this report's scope.", "source_family": "interim_report", "lang": "en", "task_id": "fzT414"}
+{"id": "fzh2_0115", "text": "周报：完成搜索重构上线，错误率下降 40%，耗时符合预期，全部按计划推进。", "source_family": "interim_report", "lang": "zh", "task_id": "fzT415"}
+{"id": "fzh2_0116", "text": "阶段汇报：标注平台二期上线，标注效率提升 25%，剩余两期按排期推进中。", "source_family": "interim_report", "lang": "zh", "task_id": "fzT416"}
+{"id": "fzh2_0117", "text": "本周期内完成三个接口的性能改造，压测数据达标，报告已归档。", "source_family": "interim_report", "lang": "zh", "task_id": "fzT417"}
+{"id": "fzh2_0118", "text": "迁移进度：60% 数据已搬完并抽样核对一致，按节奏推进，无异常。", "source_family": "interim_report", "lang": "zh", "task_id": "fzT418"}
+{"id": "fzh2_0119", "text": "Status: the dedup job now runs hourly, storage growth is down 30%, all within plan.", "source_family": "interim_report", "lang": "en", "task_id": "fzT419"}
+{"id": "fzh2_0120", "text": "Mid-sprint update: eight of ten stories done, two on track, no blockers reported.", "source_family": "interim_report", "lang": "en", "task_id": "fzT420"}

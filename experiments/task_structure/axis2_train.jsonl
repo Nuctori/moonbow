@@ -1,0 +1,1346 @@
+{"text": "内存不得超限", "label": "constraint", "zone": "balance"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "重构分页组件模块", "label": "goal", "zone": "goal"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "命名规则待定", "label": "unresolved", "zone": "unres"}
+{"text": "多语言文件的键结构必须一致", "label": "coordination", "zone": "coord"}
+{"text": "让分页组件支持离线", "label": "goal", "zone": "constr_ctrl"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "让全部用例通过", "label": "goal", "zone": "acc_ctrl"}
+{"text": "更新文档与实现的配置文件", "label": "goal", "zone": "coord_ctrl"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "支付回调完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "文档与实现的错误码要保持一致", "label": "coordination", "zone": "coord"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "命名规则还需要确认", "label": "unresolved", "zone": "unres"}
+{"text": "先迁移登录接口的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "测试与生产的字段定义必须统一", "label": "coordination", "zone": "coord"}
+{"text": "不得阻塞主线程", "label": "constraint", "zone": "balance"}
+{"text": "更新缓存模块的文档", "label": "goal", "zone": "goal"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "重构缓存模块模块", "label": "goal", "zone": "goal"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "改造用户表", "label": "goal", "zone": "dep_ctrl"}
+{"text": "把支付回调的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "当数据量超过 10GB时启用分批导出", "label": "condition", "zone": "cond"}
+{"text": "排查限流阈值报错的原因", "label": "goal", "zone": "goal"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "给文档与实现补一份字段说明", "label": "goal", "zone": "coord_ctrl"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "把搜索功能的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "给缓存模块加上重试", "label": "goal", "zone": "goal"}
+{"text": "先迁移上传路径的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "需要先弄清楚命名规则的依据", "label": "unresolved", "zone": "unres"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "上线上传路径", "label": "goal", "zone": "dep_ctrl"}
+{"text": "消息队列完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "压缩用户表的静态资源", "label": "goal", "zone": "goal"}
+{"text": "Add retry to 限流阈值", "label": "goal", "zone": "goal"}
+{"text": "排查支付回调报错的原因", "label": "goal", "zone": "goal"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "暂停放量", "label": "goal", "zone": "cond_ctrl"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "更新灰度比例的文档", "label": "goal", "zone": "goal"}
+{"text": "把构建脚本的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "把支付回调部署到预发", "label": "goal", "zone": "goal"}
+{"text": "减小支付回调的内存占用", "label": "goal", "zone": "constr_ctrl"}
+{"text": "更新导出功能的文档", "label": "goal", "zone": "goal"}
+{"text": "Bump the 鉴权逻辑 timeout", "label": "goal", "zone": "goal"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "限流阈值完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "确定折算比例", "label": "goal", "zone": "unres_ctrl"}
+{"text": "不能修改对外签名", "label": "constraint", "zone": "constr"}
+{"text": "把支付回调的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "改造灰度比例", "label": "goal", "zone": "dep_ctrl"}
+{"text": "统计上传路径的调用量", "label": "goal", "zone": "goal"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "分页组件完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "Web 与小程序的配置保持同步", "label": "coordination", "zone": "coord"}
+{"text": "不能修改对外签名，请据此改造", "label": "constraint", "zone": "constr"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "更新用户表的文档", "label": "goal", "zone": "goal"}
+{"text": "把通知服务的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "日志里不得出现用户内容", "label": "constraint", "zone": "constr"}
+{"text": "压缩搜索功能的静态资源", "label": "goal", "zone": "goal"}
+{"text": "等分页组件就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "给灰度比例做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "如果缓存未命中就回源查询", "label": "condition", "zone": "cond"}
+{"text": "给订单列表加上重试", "label": "goal", "zone": "goal"}
+{"text": "耗时不超过 2 秒", "label": "constraint", "zone": "balance"}
+{"text": "把上传路径的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "给导出功能的日志做脱敏", "label": "goal", "zone": "constr_ctrl"}
+{"text": "迁移消息队列", "label": "goal", "zone": "dep_ctrl"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "耗时不超过 2 秒", "label": "constraint", "zone": "balance"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "必须在离线时可用", "label": "constraint", "zone": "constr"}
+{"text": "先迁移导出功能的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "把上传路径的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "不能改动公共接口", "label": "constraint", "zone": "balance"}
+{"text": "给构建脚本加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "等支付回调就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "把分页组件的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "把配置加载模块的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "迁移鉴权逻辑", "label": "goal", "zone": "dep_ctrl"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "把报表服务的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "把配置加载模块的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "如果数据量超过 10GB就启用分批导出", "label": "condition", "zone": "cond"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "压缩缓存模块的静态资源", "label": "goal", "zone": "goal"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "等订单列表就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "不能改动公共接口", "label": "constraint", "zone": "balance"}
+{"text": "把缓存模块的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "给登录接口加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "把日志格式改成统一格式", "label": "goal", "zone": "coord_ctrl"}
+{"text": "统计订单列表的调用量", "label": "goal", "zone": "goal"}
+{"text": "旧客户端必须仍可用", "label": "constraint", "zone": "constr"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "日志级别的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "压测日志级别并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "让订单列表支持离线", "label": "goal", "zone": "constr_ctrl"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "给报表服务做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "报表服务完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "保持向后兼容，请据此改造", "label": "constraint", "zone": "constr"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "确定服务商选型", "label": "goal", "zone": "unres_ctrl"}
+{"text": "把导出功能部署到预发", "label": "goal", "zone": "goal"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "把消息队列的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "在消息队列上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "统计配置加载模块的调用量", "label": "goal", "zone": "goal"}
+{"text": "把登录接口的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "给配置加载模块的日志做脱敏", "label": "goal", "zone": "constr_ctrl"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "更新鉴权逻辑的文档", "label": "goal", "zone": "goal"}
+{"text": "等配置加载模块就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "Fix the 通知服务 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "不得阻塞主线程", "label": "constraint", "zone": "balance"}
+{"text": "修复限流阈值的分页问题", "label": "goal", "zone": "goal"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "缓存模块的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "把消息队列部署到预发", "label": "goal", "zone": "goal"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "构建脚本的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "压测搜索功能并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "订单列表的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "发送告警", "label": "goal", "zone": "cond_ctrl"}
+{"text": "统计分页组件的调用量", "label": "goal", "zone": "goal"}
+{"text": "折算比例还需要确认", "label": "unresolved", "zone": "unres"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "删除报表服务里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "旧数据必须可读", "label": "constraint", "zone": "balance"}
+{"text": "当缓存未命中时回源查询", "label": "condition", "zone": "cond"}
+{"text": "Add retry to 上传路径", "label": "goal", "zone": "goal"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "统计导出功能的调用量", "label": "goal", "zone": "goal"}
+{"text": "给分页组件补一份说明", "label": "goal", "zone": "goal"}
+{"text": "把订单列表的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "不得阻塞主线程", "label": "constraint", "zone": "balance"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "改造限流阈值", "label": "goal", "zone": "dep_ctrl"}
+{"text": "必须支持离线", "label": "constraint", "zone": "balance"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "验收：全部用例通过", "label": "acceptance", "zone": "acc"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "给上传路径加上重试", "label": "goal", "zone": "goal"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "等通知服务就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "统计支付回调的调用量", "label": "goal", "zone": "goal"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "修复报表服务的分页问题", "label": "goal", "zone": "goal"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "给订单列表补一份说明", "label": "goal", "zone": "goal"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "给鉴权逻辑加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "删除日志级别里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "通知服务的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "统计消息队列的调用量", "label": "goal", "zone": "goal"}
+{"text": "上线搜索功能", "label": "goal", "zone": "dep_ctrl"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "Once the 导出功能 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "给订单列表加一层兼容层", "label": "goal", "zone": "constr_ctrl"}
+{"text": "给登录接口的日志做脱敏", "label": "goal", "zone": "constr_ctrl"}
+{"text": "客户端与服务端的字段定义必须统一", "label": "coordination", "zone": "coord"}
+{"text": "不得阻塞主线程", "label": "constraint", "zone": "balance"}
+{"text": "内存占用不超过 512MB", "label": "constraint", "zone": "constr"}
+{"text": "给导出功能补一份说明", "label": "goal", "zone": "goal"}
+{"text": "Fix the 缓存模块 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "给订单列表加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "压缩登录接口的静态资源", "label": "goal", "zone": "goal"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "不能改动公共接口", "label": "constraint", "zone": "balance"}
+{"text": "重构用户表模块", "label": "goal", "zone": "goal"}
+{"text": "改造支付回调", "label": "goal", "zone": "dep_ctrl"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "压缩消息队列的静态资源", "label": "goal", "zone": "goal"}
+{"text": "日志不能含个人信息", "label": "constraint", "zone": "balance"}
+{"text": "验收标准是10k 行表格在 200ms 内渲染", "label": "acceptance", "zone": "acc"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "减小配置加载模块的内存占用", "label": "goal", "zone": "constr_ctrl"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "前后端的命名规范要对齐", "label": "coordination", "zone": "coord"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "验收：CI 全绿", "label": "acceptance", "zone": "acc"}
+{"text": "改造消息队列", "label": "goal", "zone": "dep_ctrl"}
+{"text": "把用户表部署到预发", "label": "goal", "zone": "goal"}
+{"text": "排查构建脚本报错的原因", "label": "goal", "zone": "goal"}
+{"text": "给报表服务加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "给登录接口补一份说明", "label": "goal", "zone": "goal"}
+{"text": "Fix the 消息队列 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "删除通知服务里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "给通知服务加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "先做 A，再做 B", "label": "dependency", "zone": "balance"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "验收标准是CI 全绿", "label": "acceptance", "zone": "acc"}
+{"text": "给上传路径做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "给订单列表的日志做脱敏", "label": "goal", "zone": "constr_ctrl"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "用户表完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "不得阻塞主线程", "label": "constraint", "zone": "balance"}
+{"text": "客户端与服务端的错误码要保持一致", "label": "coordination", "zone": "coord"}
+{"text": "在搜索功能上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "删除消息队列里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "更新通知服务的文档", "label": "goal", "zone": "goal"}
+{"text": "统计日志级别的调用量", "label": "goal", "zone": "goal"}
+{"text": "压缩限流阈值的静态资源", "label": "goal", "zone": "goal"}
+{"text": "上线登录接口", "label": "goal", "zone": "dep_ctrl"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "用哪个服务商更好", "label": "none", "zone": "none"}
+{"text": "Bump the 支付回调 timeout", "label": "goal", "zone": "goal"}
+{"text": "把配置加载模块的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "Bump the 通知服务 timeout", "label": "goal", "zone": "goal"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "内存不得超限", "label": "constraint", "zone": "balance"}
+{"text": "文档与实现的配置保持同步", "label": "coordination", "zone": "coord"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "给消息队列加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "重构上传路径模块", "label": "goal", "zone": "goal"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "实现暂停放量的逻辑", "label": "goal", "zone": "cond_ctrl"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "把鉴权逻辑的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "不能改动公共接口", "label": "constraint", "zone": "balance"}
+{"text": "Bump the 限流阈值 timeout", "label": "goal", "zone": "goal"}
+{"text": "必须支持离线", "label": "constraint", "zone": "balance"}
+{"text": "给用户表加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "实现启用分批导出的逻辑", "label": "goal", "zone": "cond_ctrl"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "迁移订单列表", "label": "goal", "zone": "dep_ctrl"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "旧数据必须可读", "label": "constraint", "zone": "balance"}
+{"text": "把报表服务的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "等灰度比例就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "统计灰度比例的调用量", "label": "goal", "zone": "goal"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "服务商选型尚不确定，先留扩展点", "label": "unresolved", "zone": "unres"}
+{"text": "把鉴权逻辑的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "删除搜索功能里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "旧数据必须可读", "label": "constraint", "zone": "balance"}
+{"text": "把构建脚本的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "Web 与小程序的错误码要保持一致", "label": "coordination", "zone": "coord"}
+{"text": "压缩分页组件的静态资源", "label": "goal", "zone": "goal"}
+{"text": "压缩通知服务的静态资源", "label": "goal", "zone": "goal"}
+{"text": "上线缓存模块", "label": "goal", "zone": "dep_ctrl"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "给导出功能加一层兼容层", "label": "goal", "zone": "constr_ctrl"}
+{"text": "删除缓存模块里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "改造上传路径", "label": "goal", "zone": "dep_ctrl"}
+{"text": "压缩配置加载模块的静态资源", "label": "goal", "zone": "goal"}
+{"text": "旧数据必须可读", "label": "constraint", "zone": "balance"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "通知值班", "label": "goal", "zone": "cond_ctrl"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "让用户表支持离线", "label": "goal", "zone": "constr_ctrl"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "必须兼容旧版本", "label": "constraint", "zone": "balance"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "把鉴权逻辑部署到预发", "label": "goal", "zone": "goal"}
+{"text": "必须兼容旧版本", "label": "constraint", "zone": "balance"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "日志不能含个人信息", "label": "constraint", "zone": "balance"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "修复日志级别的分页问题", "label": "goal", "zone": "goal"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "排查日志级别报错的原因", "label": "goal", "zone": "goal"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "构建脚本完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "测试与生产的配置保持同步", "label": "coordination", "zone": "coord"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "实现通知值班的逻辑", "label": "goal", "zone": "cond_ctrl"}
+{"text": "给订单列表做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "压缩报表服务的静态资源", "label": "goal", "zone": "goal"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "先迁移搜索功能的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "迁移配置加载模块", "label": "goal", "zone": "dep_ctrl"}
+{"text": "更新Web 与小程序的配置文件", "label": "goal", "zone": "coord_ctrl"}
+{"text": "不得阻塞主线程", "label": "constraint", "zone": "balance"}
+{"text": "旧数据必须可读", "label": "constraint", "zone": "balance"}
+{"text": "删除构建脚本里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "给上传路径补一份说明", "label": "goal", "zone": "goal"}
+{"text": "日志级别完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "修复导出功能的分页问题", "label": "goal", "zone": "goal"}
+{"text": "压缩上传路径的静态资源", "label": "goal", "zone": "goal"}
+{"text": "删除鉴权逻辑里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "升级窗口尚不确定，先留扩展点", "label": "unresolved", "zone": "unres"}
+{"text": "更新前后端的配置文件", "label": "goal", "zone": "coord_ctrl"}
+{"text": "把订单列表的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "把订单列表部署到预发", "label": "goal", "zone": "goal"}
+{"text": "给构建脚本补一份说明", "label": "goal", "zone": "goal"}
+{"text": "导出功能的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "迁移导出功能", "label": "goal", "zone": "dep_ctrl"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "必须支持离线", "label": "constraint", "zone": "balance"}
+{"text": "压缩日志级别的静态资源", "label": "goal", "zone": "goal"}
+{"text": "把命名规则定下来并写入文档", "label": "goal", "zone": "unres_ctrl"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "压测构建脚本并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "Once the 限流阈值 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "给配置加载模块加上重试", "label": "goal", "zone": "goal"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "旧数据必须可读", "label": "constraint", "zone": "balance"}
+{"text": "重构日志级别模块", "label": "goal", "zone": "goal"}
+{"text": "删除上传路径里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "给限流阈值做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "让缓存模块支持离线", "label": "goal", "zone": "constr_ctrl"}
+{"text": "限流阈值的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "给日志级别做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "完成的定义是10k 行表格在 200ms 内渲染", "label": "acceptance", "zone": "acc"}
+{"text": "更新分页组件的文档", "label": "goal", "zone": "goal"}
+{"text": "把用户表的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "把订单列表的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "把采样率定下来并写入文档", "label": "goal", "zone": "unres_ctrl"}
+{"text": "给日志级别加一层兼容层", "label": "goal", "zone": "constr_ctrl"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "删除配置加载模块里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "把通知服务部署到预发", "label": "goal", "zone": "goal"}
+{"text": "迁移上传路径", "label": "goal", "zone": "dep_ctrl"}
+{"text": "Add retry to 用户表", "label": "goal", "zone": "goal"}
+{"text": "重构支付回调模块", "label": "goal", "zone": "goal"}
+{"text": "让通知服务支持离线", "label": "goal", "zone": "constr_ctrl"}
+{"text": "如果构建失败就通知值班", "label": "condition", "zone": "cond"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "修复缓存模块的分页问题", "label": "goal", "zone": "goal"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "确定命名规则", "label": "goal", "zone": "unres_ctrl"}
+{"text": "Bump the 分页组件 timeout", "label": "goal", "zone": "goal"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "给配置加载模块加一层兼容层", "label": "goal", "zone": "constr_ctrl"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "重构订单列表模块", "label": "goal", "zone": "goal"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "重构导出功能模块", "label": "goal", "zone": "goal"}
+{"text": "把上传路径的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "重构灰度比例模块", "label": "goal", "zone": "goal"}
+{"text": "旧数据必须可读", "label": "constraint", "zone": "balance"}
+{"text": "不得影响其他服务", "label": "constraint", "zone": "constr"}
+{"text": "把升级窗口定下来并写入文档", "label": "goal", "zone": "unres_ctrl"}
+{"text": "把消息队列的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "Bump the 配置加载模块 timeout", "label": "goal", "zone": "goal"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "给搜索功能加上重试", "label": "goal", "zone": "goal"}
+{"text": "Fix the 报表服务 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "迁移搜索功能", "label": "goal", "zone": "dep_ctrl"}
+{"text": "把导出功能的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "必须支持离线", "label": "constraint", "zone": "balance"}
+{"text": "修改 A 之后才能改 B", "label": "dependency", "zone": "balance"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "内存不得超限", "label": "constraint", "zone": "balance"}
+{"text": "更新构建脚本的文档", "label": "goal", "zone": "goal"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "迁移限流阈值", "label": "goal", "zone": "dep_ctrl"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "A 上线后回归 B", "label": "dependency", "zone": "balance"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "Add retry to 消息队列", "label": "goal", "zone": "goal"}
+{"text": "Add retry to 订单列表", "label": "goal", "zone": "goal"}
+{"text": "搜索功能完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "内存不得超限", "label": "constraint", "zone": "balance"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "把日志级别的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "客户端与服务端的命名规范要对齐", "label": "coordination", "zone": "coord"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "修复消息队列的分页问题", "label": "goal", "zone": "goal"}
+{"text": "耗时不超过 2 秒", "label": "constraint", "zone": "balance"}
+{"text": "不能改动公共接口", "label": "constraint", "zone": "balance"}
+{"text": "上线导出功能", "label": "goal", "zone": "dep_ctrl"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "必须在离线时可用，请据此改造", "label": "constraint", "zone": "constr"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "修复构建脚本的分页问题", "label": "goal", "zone": "goal"}
+{"text": "更新配置加载模块的文档", "label": "goal", "zone": "goal"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "修复用户表的分页问题", "label": "goal", "zone": "goal"}
+{"text": "内存不得超限", "label": "constraint", "zone": "balance"}
+{"text": "日志不能含个人信息", "label": "constraint", "zone": "balance"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "内存不得超限", "label": "constraint", "zone": "balance"}
+{"text": "给通知服务补一份说明", "label": "goal", "zone": "goal"}
+{"text": "Add retry to 分页组件", "label": "goal", "zone": "goal"}
+{"text": "Fix the 导出功能 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "重构配置加载模块模块", "label": "goal", "zone": "goal"}
+{"text": "把文档与实现的错误码改成统一格式", "label": "goal", "zone": "coord_ctrl"}
+{"text": "把鉴权逻辑的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "给用户表补一份说明", "label": "goal", "zone": "goal"}
+{"text": "灰度比例完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "不能改动公共接口", "label": "constraint", "zone": "balance"}
+{"text": "完成的定义是全部用例通过", "label": "acceptance", "zone": "acc"}
+{"text": "迁移报表服务", "label": "goal", "zone": "dep_ctrl"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "排查报表服务报错的原因", "label": "goal", "zone": "goal"}
+{"text": "测试与生产的错误码要保持一致", "label": "coordination", "zone": "coord"}
+{"text": "Fix the 灰度比例 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "鉴权逻辑完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "不得阻塞主线程", "label": "constraint", "zone": "balance"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "排查导出功能报错的原因", "label": "goal", "zone": "goal"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "等消息队列就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "日志不能含个人信息", "label": "constraint", "zone": "balance"}
+{"text": "实现立即回滚的逻辑", "label": "goal", "zone": "cond_ctrl"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "确保压测下无错误", "label": "goal", "zone": "acc_ctrl"}
+{"text": "旧数据必须可读", "label": "constraint", "zone": "balance"}
+{"text": "把缓存模块的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "等报表服务就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "用户表的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "更新登录接口的文档", "label": "goal", "zone": "goal"}
+{"text": "给缓存模块做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "完成的定义是演练零报错", "label": "acceptance", "zone": "acc"}
+{"text": "压测支付回调并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "迁移顺序还需要确认", "label": "unresolved", "zone": "unres"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "Fix the 日志级别 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "给日志级别的日志做脱敏", "label": "goal", "zone": "constr_ctrl"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "排查用户表报错的原因", "label": "goal", "zone": "goal"}
+{"text": "旧数据必须可读", "label": "constraint", "zone": "balance"}
+{"text": "上线订单列表", "label": "goal", "zone": "dep_ctrl"}
+{"text": "给缓存模块加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "Fix the 配置加载模块 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "排查分页组件报错的原因", "label": "goal", "zone": "goal"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "压测消息队列并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "给Web 与小程序补一份字段说明", "label": "goal", "zone": "coord_ctrl"}
+{"text": "Once the 缓存模块 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "先迁移灰度比例的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "旧数据必须可读", "label": "constraint", "zone": "balance"}
+{"text": "让压测下无错误", "label": "goal", "zone": "acc_ctrl"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "搜索功能的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "Fix the 订单列表 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "改造通知服务", "label": "goal", "zone": "dep_ctrl"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "把导出功能的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "不能改动公共接口", "label": "constraint", "zone": "balance"}
+{"text": "给限流阈值补一份说明", "label": "goal", "zone": "goal"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "在导出功能上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "内存不得超限", "label": "constraint", "zone": "balance"}
+{"text": "顺便看下监控", "label": "none", "zone": "none"}
+{"text": "让日志级别支持离线", "label": "goal", "zone": "constr_ctrl"}
+{"text": "把缓存模块部署到预发", "label": "goal", "zone": "goal"}
+{"text": "Add retry to 导出功能", "label": "goal", "zone": "goal"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "把用户表的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "必须兼容旧版本", "label": "constraint", "zone": "balance"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "分页组件的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "把构建脚本的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "迁移日志级别", "label": "goal", "zone": "dep_ctrl"}
+{"text": "排查订单列表报错的原因", "label": "goal", "zone": "goal"}
+{"text": "等日志级别就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "上线消息队列", "label": "goal", "zone": "dep_ctrl"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "排查配置加载模块报错的原因", "label": "goal", "zone": "goal"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "完成的定义是CI 全绿", "label": "acceptance", "zone": "acc"}
+{"text": "不得阻塞主线程", "label": "constraint", "zone": "balance"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "Once the 通知服务 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "压测报表服务并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "Bump the 日志级别 timeout", "label": "goal", "zone": "goal"}
+{"text": "Once the 日志级别 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "这个问题怎么处理比较好", "label": "none", "zone": "none"}
+{"text": "Fix the 上传路径 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "缓存模块完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "压测登录接口并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "压缩构建脚本的静态资源", "label": "goal", "zone": "goal"}
+{"text": "适当优化一下启动流程", "label": "none", "zone": "none"}
+{"text": "Bump the 登录接口 timeout", "label": "goal", "zone": "goal"}
+{"text": "把搜索功能部署到预发", "label": "goal", "zone": "goal"}
+{"text": "把前后端的错误码改成统一格式", "label": "goal", "zone": "coord_ctrl"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "给分页组件加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "给导出功能加上重试", "label": "goal", "zone": "goal"}
+{"text": "把搜索功能的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "重构登录接口模块", "label": "goal", "zone": "goal"}
+{"text": "统计用户表的调用量", "label": "goal", "zone": "goal"}
+{"text": "把限流阈值的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "命名规则尚不确定，先留扩展点", "label": "unresolved", "zone": "unres"}
+{"text": "给支付回调加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "通知服务完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "把消息队列的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "压缩导出功能的静态资源", "label": "goal", "zone": "goal"}
+{"text": "当构建失败时通知值班", "label": "condition", "zone": "cond"}
+{"text": "Add retry to 灰度比例", "label": "goal", "zone": "goal"}
+{"text": "修复分页组件的分页问题", "label": "goal", "zone": "goal"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "给鉴权逻辑补一份说明", "label": "goal", "zone": "goal"}
+{"text": "消息队列的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "给分页组件的日志做脱敏", "label": "goal", "zone": "constr_ctrl"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "先迁移报表服务的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "先迁移限流阈值的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "Bump the 消息队列 timeout", "label": "goal", "zone": "goal"}
+{"text": "上传路径完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "升级窗口待定", "label": "unresolved", "zone": "unres"}
+{"text": "Web 与小程序的字段定义必须统一", "label": "coordination", "zone": "coord"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "Once the 搜索功能 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "B 的改造依赖 A 的输出", "label": "dependency", "zone": "balance"}
+{"text": "排查缓存模块报错的原因", "label": "goal", "zone": "goal"}
+{"text": "Fix the 限流阈值 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "修复鉴权逻辑的分页问题", "label": "goal", "zone": "goal"}
+{"text": "把Web 与小程序的错误码改成统一格式", "label": "goal", "zone": "coord_ctrl"}
+{"text": "把缓存模块的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "先迁移缓存模块的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "把登录接口部署到预发", "label": "goal", "zone": "goal"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "耗时不超过 2 秒", "label": "constraint", "zone": "balance"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "删除登录接口里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "把迁移顺序定下来并写入文档", "label": "goal", "zone": "unres_ctrl"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "把通知服务的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "把灰度比例部署到预发", "label": "goal", "zone": "goal"}
+{"text": "在分页组件上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "Add retry to 构建脚本", "label": "goal", "zone": "goal"}
+{"text": "客户端与服务端的配置保持同步", "label": "coordination", "zone": "coord"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "验收：演练零报错", "label": "acceptance", "zone": "acc"}
+{"text": "确定采样率", "label": "goal", "zone": "unres_ctrl"}
+{"text": "不能改动公共接口", "label": "constraint", "zone": "balance"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "给日志级别加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "给配置加载模块做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "Fix the 分页组件 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "耗时不超过 2 秒", "label": "constraint", "zone": "balance"}
+{"text": "上传路径的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "文档与实现的字段定义必须统一", "label": "coordination", "zone": "coord"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "把分页组件部署到预发", "label": "goal", "zone": "goal"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "日志不能含个人信息", "label": "constraint", "zone": "balance"}
+{"text": "修复通知服务的分页问题", "label": "goal", "zone": "goal"}
+{"text": "必须支持离线", "label": "constraint", "zone": "balance"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "内存不得超限", "label": "constraint", "zone": "balance"}
+{"text": "Bump the 缓存模块 timeout", "label": "goal", "zone": "goal"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "不得阻塞主线程", "label": "constraint", "zone": "balance"}
+{"text": "把限流阈值部署到预发", "label": "goal", "zone": "goal"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "压测上传路径并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "保持向后兼容", "label": "constraint", "zone": "constr"}
+{"text": "不能改动公共接口", "label": "constraint", "zone": "balance"}
+{"text": "超时设成多少合适", "label": "none", "zone": "none"}
+{"text": "改造配置加载模块", "label": "goal", "zone": "dep_ctrl"}
+{"text": "先迁移订单列表的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "改造构建脚本", "label": "goal", "zone": "dep_ctrl"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "修复上传路径的分页问题", "label": "goal", "zone": "goal"}
+{"text": "旧数据必须可读", "label": "constraint", "zone": "balance"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "压测订单列表并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "重构构建脚本模块", "label": "goal", "zone": "goal"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "删除导出功能里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "当灰度异常时暂停放量", "label": "condition", "zone": "cond"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "Bump the 报表服务 timeout", "label": "goal", "zone": "goal"}
+{"text": "日志不能含个人信息", "label": "constraint", "zone": "balance"}
+{"text": "前后端的错误码要保持一致", "label": "coordination", "zone": "coord"}
+{"text": "把服务商选型定下来并写入文档", "label": "goal", "zone": "unres_ctrl"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "把灰度比例的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "在灰度比例上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "把客户端与服务端的错误码改成统一格式", "label": "goal", "zone": "coord_ctrl"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "更新客户端与服务端的配置文件", "label": "goal", "zone": "coord_ctrl"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "Once the 用户表 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "把构建脚本部署到预发", "label": "goal", "zone": "goal"}
+{"text": "Once the 灰度比例 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "给用户表加上重试", "label": "goal", "zone": "goal"}
+{"text": "Fix the 登录接口 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "给支付回调的日志做脱敏", "label": "goal", "zone": "constr_ctrl"}
+{"text": "Once the 鉴权逻辑 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "Fix the 鉴权逻辑 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "确保全部用例通过", "label": "goal", "zone": "acc_ctrl"}
+{"text": "给日志级别补一份说明", "label": "goal", "zone": "goal"}
+{"text": "改造搜索功能", "label": "goal", "zone": "dep_ctrl"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "在限流阈值上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "要不要先做迁移", "label": "none", "zone": "none"}
+{"text": "更新日志级别的文档", "label": "goal", "zone": "goal"}
+{"text": "耗时不超过 2 秒", "label": "constraint", "zone": "balance"}
+{"text": "在配置加载模块上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "A 上线后回归 B", "label": "dependency", "zone": "balance"}
+{"text": "减小订单列表的内存占用", "label": "goal", "zone": "constr_ctrl"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "必须兼容旧版本", "label": "constraint", "zone": "balance"}
+{"text": "耗时不超过 2 秒", "label": "constraint", "zone": "balance"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "日志不能含个人信息", "label": "constraint", "zone": "balance"}
+{"text": "A 完成后再做 B 的改造", "label": "dependency", "zone": "balance"}
+{"text": "给日志级别加上重试", "label": "goal", "zone": "goal"}
+{"text": "改造登录接口", "label": "goal", "zone": "dep_ctrl"}
+{"text": "日志不能含个人信息", "label": "constraint", "zone": "balance"}
+{"text": "实现发送告警的逻辑", "label": "goal", "zone": "cond_ctrl"}
+{"text": "内存占用不超过 512MB，请据此改造", "label": "constraint", "zone": "constr"}
+{"text": "给配置加载模块加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "给消息队列加上重试", "label": "goal", "zone": "goal"}
+{"text": "等登录接口就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "压测用户表并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "当队列积压超过一万条时发送告警", "label": "condition", "zone": "cond"}
+{"text": "重构报表服务模块", "label": "goal", "zone": "goal"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "当错误率上升时立即回滚", "label": "condition", "zone": "cond"}
+{"text": "给客户端与服务端补一份字段说明", "label": "goal", "zone": "coord_ctrl"}
+{"text": "迁移灰度比例", "label": "goal", "zone": "dep_ctrl"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "压测分页组件并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "更新上传路径的文档", "label": "goal", "zone": "goal"}
+{"text": "Add retry to 支付回调", "label": "goal", "zone": "goal"}
+{"text": "不能改动公共接口", "label": "constraint", "zone": "balance"}
+{"text": "给用户表的日志做脱敏", "label": "goal", "zone": "constr_ctrl"}
+{"text": "在报表服务上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "给支付回调加一层兼容层", "label": "goal", "zone": "constr_ctrl"}
+{"text": "减小登录接口的内存占用", "label": "goal", "zone": "constr_ctrl"}
+{"text": "压缩灰度比例的静态资源", "label": "goal", "zone": "goal"}
+{"text": "这个方案靠谱吗", "label": "none", "zone": "none"}
+{"text": "Add retry to 登录接口", "label": "goal", "zone": "goal"}
+{"text": "统计缓存模块的调用量", "label": "goal", "zone": "goal"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "内存不得超限", "label": "constraint", "zone": "balance"}
+{"text": "更新支付回调的文档", "label": "goal", "zone": "goal"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "减小日志级别的内存占用", "label": "goal", "zone": "constr_ctrl"}
+{"text": "给通知服务加上重试", "label": "goal", "zone": "goal"}
+{"text": "让各端状态一致", "label": "goal", "zone": "acc_ctrl"}
+{"text": "必须支持离线", "label": "constraint", "zone": "balance"}
+{"text": "在日志级别上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "统计通知服务的调用量", "label": "goal", "zone": "goal"}
+{"text": "耗时不超过 2 秒", "label": "constraint", "zone": "balance"}
+{"text": "必须支持离线", "label": "constraint", "zone": "balance"}
+{"text": "更新测试与生产的配置文件", "label": "goal", "zone": "coord_ctrl"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "把导出功能的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "必须兼容旧版本", "label": "constraint", "zone": "balance"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "改造导出功能", "label": "goal", "zone": "dep_ctrl"}
+{"text": "改造缓存模块", "label": "goal", "zone": "dep_ctrl"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "等缓存模块就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "在订单列表上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "排查消息队列报错的原因", "label": "goal", "zone": "goal"}
+{"text": "让登录接口支持离线", "label": "goal", "zone": "constr_ctrl"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "压测限流阈值并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "迁移缓存模块", "label": "goal", "zone": "dep_ctrl"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "更新报表服务的文档", "label": "goal", "zone": "goal"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "把鉴权逻辑的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "耗时不超过 2 秒", "label": "constraint", "zone": "balance"}
+{"text": "把用户表的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "给分页组件加上重试", "label": "goal", "zone": "goal"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "上线报表服务", "label": "goal", "zone": "dep_ctrl"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "上线构建脚本", "label": "goal", "zone": "dep_ctrl"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "压缩订单列表的静态资源", "label": "goal", "zone": "goal"}
+{"text": "必须支持离线", "label": "constraint", "zone": "balance"}
+{"text": "配置加载模块完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "把日志级别的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "给上传路径加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "给灰度比例加上重试", "label": "goal", "zone": "goal"}
+{"text": "让10k 行表格在 200ms 内渲染", "label": "goal", "zone": "acc_ctrl"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "Add retry to 鉴权逻辑", "label": "goal", "zone": "goal"}
+{"text": "迁移顺序待定", "label": "unresolved", "zone": "unres"}
+{"text": "验收标准是各端状态一致", "label": "acceptance", "zone": "acc"}
+{"text": "给登录接口加一层兼容层", "label": "goal", "zone": "constr_ctrl"}
+{"text": "不得阻塞主线程", "label": "constraint", "zone": "balance"}
+{"text": "给鉴权逻辑做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "验收标准是演练零报错", "label": "acceptance", "zone": "acc"}
+{"text": "上线日志级别", "label": "goal", "zone": "dep_ctrl"}
+{"text": "先迁移分页组件的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "改造订单列表", "label": "goal", "zone": "dep_ctrl"}
+{"text": "把搜索功能的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "在 A 就绪之前不要动 B", "label": "dependency", "zone": "balance"}
+{"text": "迁移顺序尚不确定，先留扩展点", "label": "unresolved", "zone": "unres"}
+{"text": "给缓存模块的日志做脱敏", "label": "goal", "zone": "constr_ctrl"}
+{"text": "灰度比例的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "排查通知服务报错的原因", "label": "goal", "zone": "goal"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "把用户表的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "给导出功能做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "必须支持离线", "label": "constraint", "zone": "balance"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "旧客户端必须仍可用，请据此改造", "label": "constraint", "zone": "constr"}
+{"text": "给搜索功能做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "响应时间不超过 500ms，请据此改造", "label": "constraint", "zone": "constr"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "回源查询", "label": "goal", "zone": "cond_ctrl"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "改造分页组件", "label": "goal", "zone": "dep_ctrl"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "不能改动公共接口", "label": "constraint", "zone": "balance"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "验收：10k 行表格在 200ms 内渲染", "label": "acceptance", "zone": "acc"}
+{"text": "Once the 订单列表 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "服务商选型待定", "label": "unresolved", "zone": "unres"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "给导出功能加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "Bump the 搜索功能 timeout", "label": "goal", "zone": "goal"}
+{"text": "压缩鉴权逻辑的静态资源", "label": "goal", "zone": "goal"}
+{"text": "Bump the 上传路径 timeout", "label": "goal", "zone": "goal"}
+{"text": "上线鉴权逻辑", "label": "goal", "zone": "dep_ctrl"}
+{"text": "把限流阈值的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "统计构建脚本的调用量", "label": "goal", "zone": "goal"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "等用户表就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "给消息队列做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "日志不能含个人信息", "label": "constraint", "zone": "balance"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "Once the 报表服务 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "在鉴权逻辑上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "重构消息队列模块", "label": "goal", "zone": "goal"}
+{"text": "把日志级别的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "修复灰度比例的分页问题", "label": "goal", "zone": "goal"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "统计登录接口的调用量", "label": "goal", "zone": "goal"}
+{"text": "把报表服务的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "统计报表服务的调用量", "label": "goal", "zone": "goal"}
+{"text": "把消息队列的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "耗时不超过 2 秒", "label": "constraint", "zone": "balance"}
+{"text": "把上传路径的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "给搜索功能补一份说明", "label": "goal", "zone": "goal"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "把分页组件的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "给消息队列补一份说明", "label": "goal", "zone": "goal"}
+{"text": "给通知服务做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "上线灰度比例", "label": "goal", "zone": "dep_ctrl"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "折算比例尚不确定，先留扩展点", "label": "unresolved", "zone": "unres"}
+{"text": "压测缓存模块并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "需要先弄清楚升级窗口的依据", "label": "unresolved", "zone": "unres"}
+{"text": "完成的定义是各端状态一致", "label": "acceptance", "zone": "acc"}
+{"text": "上线配置加载模块", "label": "goal", "zone": "dep_ctrl"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "折算比例待定", "label": "unresolved", "zone": "unres"}
+{"text": "先迁移用户表的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "耗时不超过 2 秒", "label": "constraint", "zone": "balance"}
+{"text": "给支付回调补一份说明", "label": "goal", "zone": "goal"}
+{"text": "给灰度比例补一份说明", "label": "goal", "zone": "goal"}
+{"text": "迁移用户表", "label": "goal", "zone": "dep_ctrl"}
+{"text": "修改 A 之后才能改 B", "label": "dependency", "zone": "balance"}
+{"text": "Once the 消息队列 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "压测灰度比例并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "响应时间不超过 500ms", "label": "constraint", "zone": "constr"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "Add retry to 配置加载模块", "label": "goal", "zone": "goal"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "Once the 支付回调 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "旧数据必须可读", "label": "constraint", "zone": "balance"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "验收：压测下无错误", "label": "acceptance", "zone": "acc"}
+{"text": "上线通知服务", "label": "goal", "zone": "dep_ctrl"}
+{"text": "把灰度比例的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "Fix the 搜索功能 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "统计鉴权逻辑的调用量", "label": "goal", "zone": "goal"}
+{"text": "把日志级别部署到预发", "label": "goal", "zone": "goal"}
+{"text": "耗时不超过 2 秒", "label": "constraint", "zone": "balance"}
+{"text": "更新搜索功能的文档", "label": "goal", "zone": "goal"}
+{"text": "给用户表加一层兼容层", "label": "goal", "zone": "constr_ctrl"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "重构搜索功能模块", "label": "goal", "zone": "goal"}
+{"text": "给构建脚本加上重试", "label": "goal", "zone": "goal"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "更新订单列表的文档", "label": "goal", "zone": "goal"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "Add retry to 报表服务", "label": "goal", "zone": "goal"}
+{"text": "在构建脚本上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "验收：各端状态一致", "label": "acceptance", "zone": "acc"}
+{"text": "必须兼容旧版本", "label": "constraint", "zone": "balance"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "把分页组件的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "Fix the 用户表 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "让支付回调支持离线", "label": "goal", "zone": "constr_ctrl"}
+{"text": "让导出功能支持离线", "label": "goal", "zone": "constr_ctrl"}
+{"text": "必须支持离线", "label": "constraint", "zone": "balance"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "压测配置加载模块并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "内存不得超限", "label": "constraint", "zone": "balance"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "把上传路径部署到预发", "label": "goal", "zone": "goal"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "必须兼容旧版本", "label": "constraint", "zone": "balance"}
+{"text": "迁移支付回调", "label": "goal", "zone": "dep_ctrl"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "必须兼容旧版本", "label": "constraint", "zone": "balance"}
+{"text": "确保演练零报错", "label": "goal", "zone": "acc_ctrl"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "修复订单列表的分页问题", "label": "goal", "zone": "goal"}
+{"text": "确定迁移顺序", "label": "goal", "zone": "unres_ctrl"}
+{"text": "删除限流阈值里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "立即回滚", "label": "goal", "zone": "cond_ctrl"}
+{"text": "等鉴权逻辑就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "测试与生产的命名规范要对齐", "label": "coordination", "zone": "coord"}
+{"text": "内存不得超限", "label": "constraint", "zone": "balance"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "让配置加载模块支持离线", "label": "goal", "zone": "constr_ctrl"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "服务商选型还需要确认", "label": "unresolved", "zone": "unres"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "不能改动公共接口", "label": "constraint", "zone": "balance"}
+{"text": "迁移通知服务", "label": "goal", "zone": "dep_ctrl"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "更新消息队列的文档", "label": "goal", "zone": "goal"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "把登录接口的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "确保10k 行表格在 200ms 内渲染", "label": "goal", "zone": "acc_ctrl"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "把日志级别的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "先迁移鉴权逻辑的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "把订单列表的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "排查搜索功能报错的原因", "label": "goal", "zone": "goal"}
+{"text": "验收标准是压测下无错误", "label": "acceptance", "zone": "acc"}
+{"text": "必须支持离线", "label": "constraint", "zone": "balance"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "改造鉴权逻辑", "label": "goal", "zone": "dep_ctrl"}
+{"text": "给报表服务加上重试", "label": "goal", "zone": "goal"}
+{"text": "Once the 分页组件 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "先迁移消息队列的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "改造日志级别", "label": "goal", "zone": "dep_ctrl"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "必须支持离线", "label": "constraint", "zone": "balance"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "减小通知服务的内存占用", "label": "goal", "zone": "constr_ctrl"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "删除灰度比例里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "先迁移配置加载模块的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "等限流阈值就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "Once the 构建脚本 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "各环境的日志格式统一", "label": "coordination", "zone": "coord"}
+{"text": "升级窗口还需要确认", "label": "unresolved", "zone": "unres"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "前后端的字段定义必须统一", "label": "coordination", "zone": "coord"}
+{"text": "鉴权逻辑的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "改造报表服务", "label": "goal", "zone": "dep_ctrl"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "启用分批导出", "label": "goal", "zone": "cond_ctrl"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "删除支付回调里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "日志不能含个人信息", "label": "constraint", "zone": "balance"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "确定升级窗口", "label": "goal", "zone": "unres_ctrl"}
+{"text": "Add retry to 通知服务", "label": "goal", "zone": "goal"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "登录接口的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "必须兼容旧版本", "label": "constraint", "zone": "balance"}
+{"text": "给配置加载模块补一份说明", "label": "goal", "zone": "goal"}
+{"text": "旧数据必须可读", "label": "constraint", "zone": "balance"}
+{"text": "把灰度比例的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "需要先弄清楚迁移顺序的依据", "label": "unresolved", "zone": "unres"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "确保CI 全绿", "label": "goal", "zone": "acc_ctrl"}
+{"text": "迁移构建脚本", "label": "goal", "zone": "dep_ctrl"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "不得阻塞主线程", "label": "constraint", "zone": "balance"}
+{"text": "在 A 就绪之前不要动 B", "label": "dependency", "zone": "balance"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "重构鉴权逻辑模块", "label": "goal", "zone": "goal"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "给支付回调加上重试", "label": "goal", "zone": "goal"}
+{"text": "验收要求用例全绿", "label": "acceptance", "zone": "balance"}
+{"text": "给用户表做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "在缓存模块上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "A 完成后再做 B 的改造", "label": "dependency", "zone": "balance"}
+{"text": "把灰度比例的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "先迁移构建脚本的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "Bump the 导出功能 timeout", "label": "goal", "zone": "goal"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "更新限流阈值的文档", "label": "goal", "zone": "goal"}
+{"text": "Fix the 支付回调 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "不得影响其他服务，请据此改造", "label": "constraint", "zone": "constr"}
+{"text": "给通知服务加一层兼容层", "label": "goal", "zone": "constr_ctrl"}
+{"text": "整体感觉有点慢", "label": "none", "zone": "none"}
+{"text": "给报表服务补一份说明", "label": "goal", "zone": "goal"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "订单列表完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "给分页组件加一层兼容层", "label": "goal", "zone": "constr_ctrl"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "把搜索功能的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "给缓存模块加一层兼容层", "label": "goal", "zone": "constr_ctrl"}
+{"text": "日志不能含个人信息", "label": "constraint", "zone": "balance"}
+{"text": "各端展示逻辑同步", "label": "coordination", "zone": "balance"}
+{"text": "统计限流阈值的调用量", "label": "goal", "zone": "goal"}
+{"text": "把报表服务的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "采样率尚不确定，先留扩展点", "label": "unresolved", "zone": "unres"}
+{"text": "减小缓存模块的内存占用", "label": "goal", "zone": "constr_ctrl"}
+{"text": "必须兼容旧版本", "label": "constraint", "zone": "balance"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "把限流阈值的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "Web 与小程序的命名规范要对齐", "label": "coordination", "zone": "coord"}
+{"text": "把分页组件的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "压缩支付回调的静态资源", "label": "goal", "zone": "goal"}
+{"text": "把通知服务的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "实现回源查询的逻辑", "label": "goal", "zone": "cond_ctrl"}
+{"text": "Once the 登录接口 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "等导出功能就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "让演练零报错", "label": "goal", "zone": "acc_ctrl"}
+{"text": "在上传路径上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "减小用户表的内存占用", "label": "goal", "zone": "constr_ctrl"}
+{"text": "先迁移支付回调的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "上线限流阈值", "label": "goal", "zone": "dep_ctrl"}
+{"text": "重构通知服务模块", "label": "goal", "zone": "goal"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "B 的改造依赖 A 的输出", "label": "dependency", "zone": "balance"}
+{"text": "在用户表上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "把测试与生产的错误码改成统一格式", "label": "goal", "zone": "coord_ctrl"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "这样改可以吗", "label": "none", "zone": "balance"}
+{"text": "压测导出功能并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "排查登录接口报错的原因", "label": "goal", "zone": "goal"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "把报表服务部署到预发", "label": "goal", "zone": "goal"}
+{"text": "Bump the 构建脚本 timeout", "label": "goal", "zone": "goal"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "上线用户表", "label": "goal", "zone": "dep_ctrl"}
+{"text": "把配置加载模块部署到预发", "label": "goal", "zone": "goal"}
+{"text": "把限流阈值的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "Add retry to 日志级别", "label": "goal", "zone": "goal"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "需要先弄清楚服务商选型的依据", "label": "unresolved", "zone": "unres"}
+{"text": "异常时暂停放量", "label": "condition", "zone": "balance"}
+{"text": "排查灰度比例报错的原因", "label": "goal", "zone": "goal"}
+{"text": "修复搜索功能的分页问题", "label": "goal", "zone": "goal"}
+{"text": "给通知服务的日志做脱敏", "label": "goal", "zone": "constr_ctrl"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "把支付回调的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "给限流阈值加上重试", "label": "goal", "zone": "goal"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "验收标准是全部用例通过", "label": "acceptance", "zone": "acc"}
+{"text": "上线支付回调", "label": "goal", "zone": "dep_ctrl"}
+{"text": "先迁移通知服务的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "给搜索功能加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "迁移分页组件", "label": "goal", "zone": "dep_ctrl"}
+{"text": "必须兼容旧版本", "label": "constraint", "zone": "balance"}
+{"text": "超限时启用降级", "label": "condition", "zone": "balance"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "删除订单列表里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "把通知服务的地址换掉", "label": "goal", "zone": "goal"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "Once the 配置加载模块 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "确保各端状态一致", "label": "goal", "zone": "acc_ctrl"}
+{"text": "缓存失效则回源", "label": "condition", "zone": "balance"}
+{"text": "给测试与生产补一份字段说明", "label": "goal", "zone": "coord_ctrl"}
+{"text": "把登录接口的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "细则有待明确", "label": "unresolved", "zone": "balance"}
+{"text": "等上传路径就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "日志不能含个人信息", "label": "constraint", "zone": "balance"}
+{"text": "Bump the 用户表 timeout", "label": "goal", "zone": "goal"}
+{"text": "日志不能含个人信息", "label": "constraint", "zone": "balance"}
+{"text": "给鉴权逻辑加上重试", "label": "goal", "zone": "goal"}
+{"text": "支付回调的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "排查上传路径报错的原因", "label": "goal", "zone": "goal"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "在通知服务上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "验收看压测无异常", "label": "acceptance", "zone": "balance"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "Add retry to 搜索功能", "label": "goal", "zone": "goal"}
+{"text": "在登录接口上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "给支付回调做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "Add retry to 缓存模块", "label": "goal", "zone": "goal"}
+{"text": "把登录接口的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "采样率还需要确认", "label": "unresolved", "zone": "unres"}
+{"text": "等搜索功能就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "修复登录接口的分页问题", "label": "goal", "zone": "goal"}
+{"text": "必须兼容旧版本", "label": "constraint", "zone": "balance"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "内存不得超限", "label": "constraint", "zone": "balance"}
+{"text": "如果错误率上升就立即回滚", "label": "condition", "zone": "cond"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "登录接口完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "把配置加载模块的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "前后端的配置保持同步", "label": "coordination", "zone": "coord"}
+{"text": "失败则重试三次", "label": "condition", "zone": "balance"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "必须兼容旧版本", "label": "constraint", "zone": "balance"}
+{"text": "Bump the 订单列表 timeout", "label": "goal", "zone": "goal"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "上线分页组件", "label": "goal", "zone": "dep_ctrl"}
+{"text": "修复配置加载模块的分页问题", "label": "goal", "zone": "goal"}
+{"text": "减小导出功能的内存占用", "label": "goal", "zone": "constr_ctrl"}
+{"text": "给分页组件做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "要不要先问一下", "label": "none", "zone": "balance"}
+{"text": "需要先弄清楚采样率的依据", "label": "unresolved", "zone": "unres"}
+{"text": "导出功能完成后压测对比基线", "label": "dependency", "zone": "dep"}
+{"text": "采样率待定", "label": "unresolved", "zone": "unres"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "如果命中规则就拦截", "label": "condition", "zone": "balance"}
+{"text": "必须支持离线", "label": "constraint", "zone": "balance"}
+{"text": "不能改动公共接口", "label": "constraint", "zone": "balance"}
+{"text": "配置加载模块的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "给登录接口加上重试", "label": "goal", "zone": "goal"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "给前后端补一份字段说明", "label": "goal", "zone": "coord_ctrl"}
+{"text": "压测通知服务并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "删除用户表里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "两边字段名要对齐", "label": "coordination", "zone": "balance"}
+{"text": "统计搜索功能的调用量", "label": "goal", "zone": "goal"}
+{"text": "耗时不超过 2 秒", "label": "constraint", "zone": "balance"}
+{"text": "两套接口的字段要对齐", "label": "coordination", "zone": "balance"}
+{"text": "Once the 上传路径 schema is frozen, regenerate the models", "label": "dependency", "zone": "dep"}
+{"text": "给灰度比例加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "通过标准是 CI 全绿", "label": "acceptance", "zone": "balance"}
+{"text": "把折算比例定下来并写入文档", "label": "goal", "zone": "unres_ctrl"}
+{"text": "如果队列积压超过一万条就发送告警", "label": "condition", "zone": "cond"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "内存不得超限", "label": "constraint", "zone": "balance"}
+{"text": "减小分页组件的内存占用", "label": "goal", "zone": "constr_ctrl"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "大概要多久", "label": "none", "zone": "balance"}
+{"text": "排查鉴权逻辑报错的原因", "label": "goal", "zone": "goal"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "上线时间未确定", "label": "unresolved", "zone": "balance"}
+{"text": "不得阻塞主线程", "label": "constraint", "zone": "balance"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "先做 A，再做 B", "label": "dependency", "zone": "balance"}
+{"text": "修复支付回调的分页问题", "label": "goal", "zone": "goal"}
+{"text": "删除分页组件里的废弃代码", "label": "goal", "zone": "goal"}
+{"text": "依赖关系尚不清楚", "label": "unresolved", "zone": "balance"}
+{"text": "压测鉴权逻辑并对比基线", "label": "goal", "zone": "dep_ctrl"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "多环境变量名统一", "label": "coordination", "zone": "balance"}
+{"text": "等构建脚本就绪后再切换流量", "label": "dependency", "zone": "dep"}
+{"text": "完成标准是零报错", "label": "acceptance", "zone": "balance"}
+{"text": "给登录接口做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "在支付回调上线之前先做回归", "label": "dependency", "zone": "dep"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "方案选型还没定", "label": "unresolved", "zone": "balance"}
+{"text": "把支付回调的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "把缓存模块的颜色调一下", "label": "goal", "zone": "goal"}
+{"text": "验收依据是演练零报错", "label": "acceptance", "zone": "balance"}
+{"text": "如果灰度异常就暂停放量", "label": "condition", "zone": "cond"}
+{"text": "这块熟悉吗", "label": "none", "zone": "balance"}
+{"text": "哪个方案更好", "label": "none", "zone": "balance"}
+{"text": "阈值需要再讨论", "label": "unresolved", "zone": "balance"}
+{"text": "不得阻塞主线程", "label": "constraint", "zone": "balance"}
+{"text": "能帮我看一下吗", "label": "none", "zone": "balance"}
+{"text": "把导出功能的日志级别调成 debug", "label": "goal", "zone": "goal"}
+{"text": "重构限流阈值模块", "label": "goal", "zone": "goal"}
+{"text": "让CI 全绿", "label": "goal", "zone": "acc_ctrl"}
+{"text": "报表服务的改造依赖上游服务的输出", "label": "dependency", "zone": "dep"}
+{"text": "三处配置必须一致", "label": "coordination", "zone": "balance"}
+{"text": "视为完成的条件是状态一致", "label": "acceptance", "zone": "balance"}
+{"text": "日志里不得出现用户内容，请据此改造", "label": "constraint", "zone": "constr"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "给缓存模块补一份说明", "label": "goal", "zone": "goal"}
+{"text": "需要先弄清楚折算比例的依据", "label": "unresolved", "zone": "unres"}
+{"text": "给构建脚本做一次回归", "label": "goal", "zone": "dep_ctrl"}
+{"text": "先迁移日志级别的数据，再进行改造", "label": "dependency", "zone": "dep"}
+{"text": "文档与实现的命名规范要对齐", "label": "coordination", "zone": "coord"}
+{"text": "接口归属待确认", "label": "unresolved", "zone": "balance"}
+{"text": "文档与代码保持一致", "label": "coordination", "zone": "balance"}
+{"text": "把构建脚本的告警关掉", "label": "goal", "zone": "goal"}
+{"text": "迁移登录接口", "label": "goal", "zone": "dep_ctrl"}
+{"text": "积压超阈值就扩容", "label": "condition", "zone": "balance"}
+{"text": "Fix the 构建脚本 pagination bug", "label": "goal", "zone": "goal"}
+{"text": "完成的定义是压测下无错误", "label": "acceptance", "zone": "acc"}
+{"text": "给限流阈值加一列创建时间", "label": "goal", "zone": "goal"}
+{"text": "Bump the 灰度比例 timeout", "label": "goal", "zone": "goal"}

@@ -1,0 +1,2445 @@
+{"text": "add an API gateway.", "label": "goal", "src": "dev-weak:mg_032"}
+{"text": "迁移日志级别到新集群", "label": "goal", "src": "synthetic"}
+{"text": "如果缓存模块超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "必要时启用上传接口的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "Bump the 支付回调 timeout to webp", "label": "goal", "src": "synthetic"}
+{"text": "顺便说一句，支付回调的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是导出功能在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "构建深色模式镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "恢复网络后不得重复提交", "label": "constraint", "src": "dev-weak:mc_040"}
+{"text": "限制地址簿频率为webp", "label": "constraint", "src": "synthetic"}
+{"text": "别做鉴权逻辑了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "各环境的CI 流水线名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "如果配置文件超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "屏蔽用户表的重复告警", "label": "goal", "src": "synthetic"}
+{"text": "报表服务的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "How long did the last 深色模式 migration take?", "label": "none", "src": "synthetic"}
+{"text": "Fix the pagination bug in 日志级别", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是通知服务在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "之前的购物车方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "放弃购物车方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "完成的标准是配置文件在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "这个配置文件的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容webhook 分发器", "label": "condition", "src": "synthetic"}
+{"text": "禁止在购物车日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是鉴权逻辑在debug内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "为导出功能实现分页功能", "label": "goal", "src": "synthetic"}
+{"text": "跳过配置文件的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "如果配置文件超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：报表服务压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "把首页加载的超时改成webp", "label": "goal", "src": "synthetic"}
+{"text": "必须保持向后兼容", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是地址簿在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "限制日志级别频率为3 次", "label": "constraint", "src": "synthetic"}
+{"text": "必要时启用评论组件的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "鉴权逻辑和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果通知服务超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "搜索功能的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "目前用户表的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "搜索功能和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "keep memory usage below webp", "label": "constraint", "src": "synthetic"}
+{"text": "通知服务的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容", "label": "condition", "src": "dev-weak:cu_073"}
+{"text": "保持用户表的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "用哪个配置文件服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "验收：定时任务压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "等评论组件就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "How long did the last 鉴权逻辑 migration take?", "label": "none", "src": "synthetic"}
+{"text": "限制登录接口频率为10GB", "label": "constraint", "src": "synthetic"}
+{"text": "缓存模块和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 用户表", "label": "condition", "src": "synthetic"}
+{"text": "如果缓存模块超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是配置文件在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "首页加载和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "验收：消息队列压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "修复配置文件的分页问题", "label": "goal", "src": "synthetic"}
+{"text": "拆分评论组件为独立服务", "label": "goal", "src": "synthetic"}
+{"text": "删除废弃的深色模式代码", "label": "goal", "src": "synthetic"}
+{"text": "用户表的响应时间不得超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "必要时启用搜索功能的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "把这个模块弄好", "label": "goal", "src": "dev-weak:vg_121"}
+{"text": "我随便问问，首页加载的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "不能修改鉴权逻辑的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "验收：支付回调压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果购物车超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新评论组件", "label": "dependency", "src": "synthetic"}
+{"text": "撤销上一条关于评论组件的要求", "label": "cancel", "src": "synthetic"}
+{"text": "把配置文件部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "如果鉴权逻辑超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "删除废弃的支付回调代码", "label": "goal", "src": "synthetic"}
+{"text": "重构上传接口模块", "label": "goal", "src": "synthetic"}
+{"text": "给首页加载增加重试逻辑", "label": "goal", "src": "synthetic"}
+{"text": "用哪个搜索功能服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "不需要重构日志级别，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "限制评论组件频率为500ms", "label": "constraint", "src": "synthetic"}
+{"text": "验收：搜索功能压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "删除废弃的消息队列代码", "label": "goal", "src": "synthetic"}
+{"text": "我随便问问，消息队列的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "历史上定时任务出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "文档与webhook 分发器的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "鉴权逻辑和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "好像用户表昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是登录接口在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "Don't bother with the 定时任务 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "购物车的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "好像支付回调昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "Bump the 定时任务 timeout to 30 秒", "label": "goal", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 订单列表 models", "label": "dependency", "src": "synthetic"}
+{"text": "完成的标准是购物车在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "接入新的消息队列服务商", "label": "goal", "src": "synthetic"}
+{"text": "搜索功能的响应时间不得超过100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "给搜索功能增加重试逻辑", "label": "goal", "src": "synthetic"}
+{"text": "给CI 流水线加一列创建时间", "label": "goal", "src": "synthetic"}
+{"text": "验收：登录接口压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果日志级别超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "优化一下这个系统", "label": "none", "src": "synthetic"}
+{"text": "禁止在支付回调日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "历史上这里出过一次类似事故", "label": "none", "src": "dev-weak:pb_131"}
+{"text": "搜索功能和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "撤销上一条关于缓存模块的要求", "label": "cancel", "src": "synthetic"}
+{"text": "需要先弄清楚支付回调失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "删除废弃的订单列表代码", "label": "goal", "src": "synthetic"}
+{"text": "放弃深色模式方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "must not break the webhook 分发器 API", "label": "constraint", "src": "synthetic"}
+{"text": "跳过地址簿的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练首页加载", "label": "dependency", "src": "synthetic"}
+{"text": "在设置页加入口", "label": "goal", "src": "dev-weak:mg_023"}
+{"text": "必要时启用订单列表的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "验收：通知服务压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "现状是导出功能每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "CI 流水线内存占用不超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "配置文件内存占用不超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "不用更新报表服务，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "完成的标准是通知服务在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "购物车和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "通知服务的响应时间不得超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "把这个问题处理一下", "label": "none", "src": "synthetic"}
+{"text": "Web 端和小程序的登录接口展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "保持上传接口的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "确保日志级别在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "验收：日志级别压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "上周评审过用户表的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "验收：评论组件压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "Don't bother with the 上传接口 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "目前报表服务的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "缓存模块和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "给上传接口加一列创建时间", "label": "goal", "src": "synthetic"}
+{"text": "之前说的登录接口限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "之前说的首页加载限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "验收：上传接口压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "用哪个深色模式服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "在登录接口里加上健康检查", "label": "goal", "src": "synthetic"}
+{"text": "不用更新搜索功能，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "上传接口的响应时间不得超过3 次", "label": "constraint", "src": "synthetic"}
+{"text": "参考订单列表模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "报表服务的响应时间不得超过webp", "label": "constraint", "src": "synthetic"}
+{"text": "统计用户表的调用量", "label": "goal", "src": "synthetic"}
+{"text": "导出功能与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "如果地址簿超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "把鉴权逻辑的超时改成500ms", "label": "goal", "src": "synthetic"}
+{"text": "报表服务的响应时间不得超过100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "之前说的评论组件限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "把订单列表的日志级别调成10GB", "label": "goal", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练导出功能", "label": "dependency", "src": "synthetic"}
+{"text": "keep memory usage below debug", "label": "constraint", "src": "synthetic"}
+{"text": "如果评论组件超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "之前的webhook 分发器方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "如果鉴权逻辑超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "深色模式依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "如果通知服务超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "需要先弄清楚首页加载失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "重构日志级别模块", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是报表服务在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "目前消息队列的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "构建通知服务镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "文档与支付回调的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "在首页加载上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "构建配置文件镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "Enable compression for 用户表", "label": "goal", "src": "synthetic"}
+{"text": "不需要重构缓存模块", "label": "cancel", "src": "dev-weak:nc_149"}
+{"text": "How long did the last 登录接口 migration take?", "label": "none", "src": "synthetic"}
+{"text": "限制支付回调频率为30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是用户表在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是登录接口在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新CI 流水线", "label": "dependency", "src": "synthetic"}
+{"text": "验收：通知服务压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "Don't bother with the 登录接口 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "must not break the 用户表 API", "label": "constraint", "src": "synthetic"}
+{"text": "文档与导出功能的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "no need to migrate the 支付回调 data", "label": "cancel", "src": "synthetic"}
+{"text": "禁止在首页加载日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "参考报表服务模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "done when a 10k-row table renders under 500ms", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是首页加载在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "升级搜索功能的依赖版本", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是上传接口在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "Don't bother with the 首页加载 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "升级用户表的依赖版本", "label": "goal", "src": "synthetic"}
+{"text": "如果首页加载超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "Update the README for webhook 分发器", "label": "goal", "src": "synthetic"}
+{"text": "在报表服务上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "定时任务的响应时间不得超过100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "keep memory usage below 100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "CI 流水线的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "Bump the 报表服务 timeout to debug", "label": "goal", "src": "synthetic"}
+{"text": "CI 流水线与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "迁移购物车到新集群", "label": "goal", "src": "synthetic"}
+{"text": "鉴权逻辑内存占用不超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "如果日志级别超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "必要时启用消息队列的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "Don't bother with the 导出功能 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "需要时缓存缓存模块的草稿", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是上传接口在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "定时任务要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "CI 流水线依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "文档与搜索功能的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "不用更新购物车，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "购物车内存占用不超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "文档与评论组件的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "报错堆栈贴在群里了", "label": "none", "src": "synthetic"}
+{"text": "搜索功能的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "跳过webhook 分发器的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "构建支付回调镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "How long did the last 评论组件 migration take?", "label": "none", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新缓存模块", "label": "dependency", "src": "synthetic"}
+{"text": "禁止在配置文件日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "把支付回调的颜色调一下", "label": "goal", "src": "synthetic"}
+{"text": "不需要重构鉴权逻辑，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "别做配置文件了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "跳过缓存模块的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "如果订单列表超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "定时任务和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "保持通知服务的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "禁止在用户表日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "如果购物车超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "How long did the last 搜索功能 migration take?", "label": "none", "src": "synthetic"}
+{"text": "验收：配置文件压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "修复消息队列的分页问题", "label": "goal", "src": "synthetic"}
+{"text": "编写CI 流水线的使用说明", "label": "goal", "src": "synthetic"}
+{"text": "补充配置文件的测试用例", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是webhook 分发器在debug内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "webhook 分发器要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "迁移用户表到新集群", "label": "goal", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容登录接口", "label": "condition", "src": "synthetic"}
+{"text": "验收：搜索功能压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "屏蔽日志级别的重复告警", "label": "goal", "src": "synthetic"}
+{"text": "must not break the 支付回调 API", "label": "constraint", "src": "synthetic"}
+{"text": "等鉴权逻辑就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "是否保留支付回调待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "验收：日志级别压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "重建订单列表的失败索引", "label": "goal", "src": "synthetic"}
+{"text": "keep memory usage below 10GB", "label": "constraint", "src": "synthetic"}
+{"text": "各服务的超时时间统一改成 5 秒", "label": "coordination", "src": "dev-weak:co_063"}
+{"text": "keep memory usage below v2", "label": "constraint", "src": "synthetic"}
+{"text": "如果地址簿超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：鉴权逻辑压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "历史上登录接口出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "如果导出功能超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "各环境的定时任务名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "放弃缓存模块方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "为地址簿实现分页功能", "label": "goal", "src": "synthetic"}
+{"text": "Update the README for 定时任务", "label": "goal", "src": "synthetic"}
+{"text": "深色模式的响应时间不得超过100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "订单列表和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "是否保留定时任务待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "如果缓存模块超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "是否保留鉴权逻辑待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "验收：消息队列压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "给购物车加一列创建时间", "label": "goal", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布订单列表", "label": "dependency", "src": "synthetic"}
+{"text": "好像报表服务昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "好像通知服务昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "顺便说一句，CI 流水线的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "我随便问问，支付回调的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "评论组件的响应时间不得超过100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "屏蔽首页加载的重复告警", "label": "goal", "src": "synthetic"}
+{"text": "现状是webhook 分发器每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "不需要重构定时任务，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "顺便说一句，webhook 分发器的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "导出功能内存占用不超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "目前CI 流水线的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "验收：用户表压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "must not break the 通知服务 API", "label": "constraint", "src": "synthetic"}
+{"text": "验收：报表服务压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "Dark mode 不用做了，需求砍掉", "label": "cancel", "src": "synthetic"}
+{"text": "Update the README for 评论组件", "label": "goal", "src": "synthetic"}
+{"text": "顺便说一句，上传接口的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "补充购物车的测试用例", "label": "goal", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新消息队列", "label": "dependency", "src": "synthetic"}
+{"text": "跳过用户表的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "在配置文件上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "如果报表服务超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新定时任务", "label": "dependency", "src": "synthetic"}
+{"text": "历史上评论组件出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练深色模式", "label": "dependency", "src": "synthetic"}
+{"text": "需要时缓存导出功能的草稿", "label": "condition", "src": "synthetic"}
+{"text": "上线后 CI 必须全绿", "label": "acceptance", "src": "synthetic"}
+{"text": "历史上导出功能出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "需要时缓存配置文件的草稿", "label": "condition", "src": "synthetic"}
+{"text": "之前说的支付回调限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "日志级别的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "目前支付回调的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "搜索功能和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新订单列表", "label": "dependency", "src": "synthetic"}
+{"text": "编写支付回调的使用说明", "label": "goal", "src": "synthetic"}
+{"text": "支付回调与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是上传接口在debug内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "重建评论组件的失败索引", "label": "goal", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 定时任务 models", "label": "dependency", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容日志级别", "label": "condition", "src": "synthetic"}
+{"text": "旧版本下个月停止维护", "label": "none", "src": "dev-weak:pb_129"}
+{"text": "支付回调内存占用不超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "首页加载的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "需要先弄清楚消息队列失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "放弃导出功能方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "验收：上传接口压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "done when a 10k-row table renders under 30 秒", "label": "acceptance", "src": "synthetic"}
+{"text": "我随便问问，缓存模块的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "导出功能和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新用户表", "label": "dependency", "src": "synthetic"}
+{"text": "限制购物车频率为100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "构建订单列表镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "文档与CI 流水线的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "迁移配置文件到新集群", "label": "goal", "src": "synthetic"}
+{"text": "需要时缓存地址簿的草稿", "label": "condition", "src": "synthetic"}
+{"text": "拆分导出功能为独立服务", "label": "goal", "src": "synthetic"}
+{"text": "如果CI 流水线超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "在原任务基础上追加：移动端也要适配深色模式", "label": "goal", "src": "dev-weak:rv_163"}
+{"text": "完成的标准是webhook 分发器在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：用户表压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果定时任务超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "重构评论组件模块", "label": "goal", "src": "synthetic"}
+{"text": "把报表服务的颜色调一下", "label": "goal", "src": "synthetic"}
+{"text": "我随便问问，深色模式的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "如果深色模式超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "之前的上传接口方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容报表服务", "label": "condition", "src": "synthetic"}
+{"text": "Web 端和小程序的深色模式展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果鉴权逻辑超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：报表服务压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "当时用的是v2的超时配置", "label": "none", "src": "synthetic"}
+{"text": "评论组件的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "Wait for the 通知服务 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "完成的标准是webhook 分发器在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布日志级别", "label": "dependency", "src": "synthetic"}
+{"text": "放弃定时任务方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "报表服务内存占用不超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "上传接口内存占用不超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "把定时任务的超时改成10GB", "label": "goal", "src": "synthetic"}
+{"text": "如果CI 流水线超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "如果购物车超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "需要时缓存日志级别的草稿", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是通知服务在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "顺便说一句，配置文件的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "屏蔽地址簿的重复告警", "label": "goal", "src": "synthetic"}
+{"text": "文档与鉴权逻辑的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "撤销上一条关于导出功能的要求", "label": "cancel", "src": "synthetic"}
+{"text": "验收：支付回调压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "支付回调和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果登录接口超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "上传接口与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "通知服务依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "如果定时任务超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是webhook 分发器在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "确保报表服务在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "之前说的通知服务限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "之前的用户表方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "如果报表服务超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "Web 端和小程序的评论组件展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "不需要重构缓存模块，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "为定时任务实现分页功能", "label": "goal", "src": "synthetic"}
+{"text": "压缩搜索功能的静态资源", "label": "goal", "src": "synthetic"}
+{"text": "部署最新构建", "label": "goal", "src": "dev-weak:mg_034"}
+{"text": "must not break the 搜索功能 API", "label": "constraint", "src": "synthetic"}
+{"text": "需要先弄清楚地址簿失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "之前说的配置文件限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "完成的标准是购物车在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "之前的登录接口方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "历史上深色模式出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是首页加载在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "需要时缓存webhook 分发器的草稿", "label": "condition", "src": "synthetic"}
+{"text": "验收：webhook 分发器压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "文档与用户表的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "补充缓存模块的测试用例", "label": "goal", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布webhook 分发器", "label": "dependency", "src": "synthetic"}
+{"text": "接入新的地址簿服务商", "label": "goal", "src": "synthetic"}
+{"text": "导出功能和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "Web 端和小程序的导出功能展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "放弃日志级别方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "完成的标准是导出功能在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "如果导出功能超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "看看监控", "label": "none", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容订单列表", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是日志级别在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "如果订单列表超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "订单列表和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是上传接口在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "定时任务依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "把定时任务部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "压缩支付回调的静态资源", "label": "goal", "src": "synthetic"}
+{"text": "验收：上传接口压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果定时任务超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：报表服务压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "通知服务的响应时间不得超过webp", "label": "constraint", "src": "synthetic"}
+{"text": "Remove the deprecated 评论组件 helper", "label": "goal", "src": "synthetic"}
+{"text": "如果缓存模块超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "限制首页加载频率为500ms", "label": "constraint", "src": "synthetic"}
+{"text": "验收：定时任务压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果定时任务超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "上周评审过搜索功能的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "Web 端和小程序的日志级别展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "鉴权逻辑和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "验收：深色模式压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "不能修改报表服务的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "通知服务和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "之前说的消息队列限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "更新配置文档", "label": "goal", "src": "dev-weak:pp_185"}
+{"text": "Fix the pagination bug in 上传接口", "label": "goal", "src": "synthetic"}
+{"text": "如果鉴权逻辑超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "定时任务的响应时间不得超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布配置文件", "label": "dependency", "src": "synthetic"}
+{"text": "用哪个通知服务服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "webhook 分发器的响应时间不得超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "如果CI 流水线超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "Add retry logic to 用户表", "label": "goal", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 日志级别 models", "label": "dependency", "src": "synthetic"}
+{"text": "鉴权逻辑依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "验收：通知服务压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "接入新的搜索功能服务商", "label": "goal", "src": "synthetic"}
+{"text": "Enable compression for webhook 分发器", "label": "goal", "src": "synthetic"}
+{"text": "跳过上传接口的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "Enable compression for 报表服务", "label": "goal", "src": "synthetic"}
+{"text": "消息队列和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "参见首页加载部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "历史上订单列表出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "消息队列内存占用不超过webp", "label": "constraint", "src": "synthetic"}
+{"text": "重建登录接口的失败索引", "label": "goal", "src": "synthetic"}
+{"text": "验收：订单列表压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是鉴权逻辑在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是购物车在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "必要时启用购物车的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是用户表在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "支付回调内存占用不超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "如果消息队列超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：购物车压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果日志级别超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "等购物车就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "需要先弄清楚用户表失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "升级构建镜像", "label": "goal", "src": "dev-weak:ac_084"}
+{"text": "完成的标准是用户表在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "需要先弄清楚购物车失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "webhook 分发器依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "必要时启用缓存模块的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "如果消息队列超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "必要时启用导出功能的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "Don't bother with the 鉴权逻辑 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "消息队列内存占用不超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "如果购物车超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练支付回调", "label": "dependency", "src": "synthetic"}
+{"text": "把深色模式的超时改成30 秒", "label": "goal", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新首页加载", "label": "dependency", "src": "synthetic"}
+{"text": "CI 流水线和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "不需要重构订单列表，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "验收：评论组件压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "消息队列内存占用不超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "限制缓存模块频率为500ms", "label": "constraint", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容缓存模块", "label": "condition", "src": "synthetic"}
+{"text": "Don't bother with the 深色模式 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "完成的标准是报表服务在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "多语言文件的键结构必须一致", "label": "coordination", "src": "synthetic"}
+{"text": "缓存模块的响应时间不得超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "禁止在深色模式日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是地址簿在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "把评论组件部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "验收：评论组件压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "这个导出功能的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "Fix the pagination bug in 订单列表", "label": "goal", "src": "synthetic"}
+{"text": "限制webhook 分发器频率为30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "历史上日志级别出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "在定时任务里加上健康检查", "label": "goal", "src": "synthetic"}
+{"text": "如果鉴权逻辑超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "用户表和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "之前说的定时任务限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "导出功能的响应时间不得超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "支付回调和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "不用更新鉴权逻辑，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "How long did the last 报表服务 migration take?", "label": "none", "src": "synthetic"}
+{"text": "如果用户表超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "如果用户表超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "如果CI 流水线超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "之前的地址簿方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "如果消息队列超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "配置文件内存占用不超过3 次", "label": "constraint", "src": "synthetic"}
+{"text": "Remove the deprecated 日志级别 helper", "label": "goal", "src": "synthetic"}
+{"text": "验收：webhook 分发器压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "日志级别和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "配置文件要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "当时用的是debug的超时配置", "label": "none", "src": "synthetic"}
+{"text": "必要时启用登录接口的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "需要时缓存CI 流水线的草稿", "label": "condition", "src": "synthetic"}
+{"text": "参考缓存模块模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "保持webhook 分发器的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是缓存模块在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "例如：`POST /v1/orders` 返回 201", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是用户表在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "报表服务的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "确保导出功能在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "地址簿的响应时间不得超过3 次", "label": "constraint", "src": "synthetic"}
+{"text": "验收：消息队列压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "编写导出功能的使用说明", "label": "goal", "src": "synthetic"}
+{"text": "修复登录接口", "label": "goal", "src": "dev-weak:mg_021"}
+{"text": "需要兼容旧版客户端", "label": "constraint", "src": "synthetic"}
+{"text": "CI 流水线内存占用不超过3 次", "label": "constraint", "src": "synthetic"}
+{"text": "no need to migrate the webhook 分发器 data", "label": "cancel", "src": "synthetic"}
+{"text": "在定时任务上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "完成的标准是报表服务在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "参见定时任务部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "迁移期间不能丢消息", "label": "constraint", "src": "dev-weak:fm_086"}
+{"text": "现状是消息队列每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "上传接口和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "配置文件与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "顺便说一句，搜索功能的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "上周评审过报表服务的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "如果报表服务超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是消息队列在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "评论组件的响应时间不得超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "支付回调和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 缓存模块", "label": "condition", "src": "synthetic"}
+{"text": "当通知服务积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 首页加载", "label": "condition", "src": "synthetic"}
+{"text": "如果日志级别超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "压缩消息队列的静态资源", "label": "goal", "src": "synthetic"}
+{"text": "上周评审过订单列表的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "需要时缓存支付回调的草稿", "label": "condition", "src": "synthetic"}
+{"text": "在CI 流水线上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "must not break the 上传接口 API", "label": "constraint", "src": "synthetic"}
+{"text": "验收：CI 流水线压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "禁止在订单列表日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "如果消息队列超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "用户表的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "如果通知服务超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "好像登录接口昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "确保缓存模块在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "消息队列和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是消息队列在debug内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "登录接口和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "验收：CI 流水线压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "排查通知服务报错的原因", "label": "goal", "src": "synthetic"}
+{"text": "如果报表服务超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：订单列表压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练配置文件", "label": "dependency", "src": "synthetic"}
+{"text": "不用更新通知服务，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "先搭个实验框架", "label": "goal", "src": "dev-weak:cu_072"}
+{"text": "支付回调的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "验收：上传接口压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "禁止在webhook 分发器日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "好像鉴权逻辑昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "消息队列和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "构建购物车镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "如果定时任务超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "保持深色模式的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 日志级别", "label": "condition", "src": "synthetic"}
+{"text": "撤销上一条关于webhook 分发器的要求", "label": "cancel", "src": "synthetic"}
+{"text": "Wait for the 鉴权逻辑 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练评论组件", "label": "dependency", "src": "synthetic"}
+{"text": "配置文件的响应时间不得超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "如果深色模式超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "今天的构建怎么又红了", "label": "none", "src": "dev-weak:qc_198"}
+{"text": "当支付回调积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容通知服务", "label": "condition", "src": "synthetic"}
+{"text": "参考通知服务模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "验收：评论组件压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "之前说的webhook 分发器限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "配置文件内存占用不超过100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "目前搜索功能的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "验收：登录接口压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "目前购物车的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "接入新的评论组件服务商", "label": "goal", "src": "synthetic"}
+{"text": "是否保留深色模式待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "keep memory usage below 3 次", "label": "constraint", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练定时任务", "label": "dependency", "src": "synthetic"}
+{"text": "拆分用户表为独立服务", "label": "goal", "src": "synthetic"}
+{"text": "如果上传接口超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "缓存模块内存占用不超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "用哪个日志级别服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "之前说的CI 流水线限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "等订单列表就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "需要时缓存报表服务的草稿", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是订单列表在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "各环境的日志级别名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是日志级别在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：地址簿压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果地址簿超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "如果搜索功能超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "Fix the pagination bug in 报表服务", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是评论组件在debug内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "不用更新订单列表，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "如果日志级别超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "不用更新支付回调，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "定时任务内存占用不超过3 次", "label": "constraint", "src": "synthetic"}
+{"text": "我随便问问，地址簿的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "验收：地址簿压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "购物车与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "需要时缓存登录接口的草稿", "label": "condition", "src": "synthetic"}
+{"text": "Web 端和小程序的webhook 分发器展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "别做CI 流水线了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "迁移报表服务到新集群", "label": "goal", "src": "synthetic"}
+{"text": "在支付回调上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "no need to migrate the 订单列表 data", "label": "cancel", "src": "synthetic"}
+{"text": "上周评审过配置文件的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "等缓存模块就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "禁止在地址簿日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "需要时缓存购物车的草稿", "label": "condition", "src": "synthetic"}
+{"text": "登录接口与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "屏蔽支付回调的重复告警", "label": "goal", "src": "synthetic"}
+{"text": "验收：CI 流水线压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "参考消息队列模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "导出功能和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "统计评论组件的调用量", "label": "goal", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容支付回调", "label": "condition", "src": "synthetic"}
+{"text": "别做webhook 分发器了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "现状是订单列表每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "Add retry logic to 上传接口", "label": "goal", "src": "synthetic"}
+{"text": "接入新的报表服务服务商", "label": "goal", "src": "synthetic"}
+{"text": "支付回调和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "补充登录接口的测试用例", "label": "goal", "src": "synthetic"}
+{"text": "限制缓存模块频率为debug", "label": "constraint", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容首页加载", "label": "condition", "src": "synthetic"}
+{"text": "好像搜索功能昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "不用更新导出功能，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "更新导出功能文档", "label": "goal", "src": "synthetic"}
+{"text": "如果配置文件超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "当日志级别积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "压缩登录接口的静态资源", "label": "goal", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布购物车", "label": "dependency", "src": "synthetic"}
+{"text": "不用更新消息队列，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "支付回调和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果导出功能超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "目前评论组件的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "验收：webhook 分发器压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "之前说的报表服务限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "完成的标准是日志级别在debug内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "跳过登录接口的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "定时任务与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "报表服务与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "如果上传接口超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是配置文件在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "钉钉群里的告警先静音", "label": "goal", "src": "dev-weak:al_211"}
+{"text": "压缩深色模式的静态资源", "label": "goal", "src": "synthetic"}
+{"text": "验收：搜索功能压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "搜索功能和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "首页加载的响应时间不得超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "不能修改购物车的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "如果深色模式超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "上周评审过购物车的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "构建webhook 分发器镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "验收：定时任务压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：日志级别压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "不需要重构通知服务，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "日志级别要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "验收：深色模式压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练登录接口", "label": "dependency", "src": "synthetic"}
+{"text": "等用户表就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "如果灰度期间错误率上升", "label": "condition", "src": "dev-weak:cu_074"}
+{"text": "需要先弄清楚webhook 分发器失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "用户表和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "历史上报表服务出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "配置文件内存占用不超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "CI 流水线要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "如果导出功能超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布评论组件", "label": "dependency", "src": "synthetic"}
+{"text": "等消息队列就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "搜索功能的响应时间不得超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "购物车的响应时间不得超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "限制上传接口频率为webp", "label": "constraint", "src": "synthetic"}
+{"text": "报表服务和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "Fix the pagination bug in 消息队列", "label": "goal", "src": "synthetic"}
+{"text": "压缩日志级别的静态资源", "label": "goal", "src": "synthetic"}
+{"text": "仓库根目录的 README 与 docs 保持一致", "label": "coordination", "src": "dev-weak:co_064"}
+{"text": "验收：首页加载压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "用户表内存占用不超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "放弃登录接口方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容深色模式", "label": "condition", "src": "synthetic"}
+{"text": "导出功能的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "Wait for the 评论组件 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "完成的标准是深色模式在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布CI 流水线", "label": "dependency", "src": "synthetic"}
+{"text": "之前的支付回调方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "如果配置文件超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "撤销上一条关于上传接口的要求", "label": "cancel", "src": "synthetic"}
+{"text": "背景：系统目前采用单体架构", "label": "none", "src": "dev-weak:pb_124"}
+{"text": "别做首页加载了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "需要时缓存深色模式的草稿", "label": "condition", "src": "synthetic"}
+{"text": "How long did the last 地址簿 migration take?", "label": "none", "src": "synthetic"}
+{"text": "文档与购物车的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "放弃webhook 分发器方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "完成的标准是配置文件在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "配置文件和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "失败率升高的根因有待调查", "label": "unresolved", "src": "synthetic"}
+{"text": "之前的首页加载方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是地址簿在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 地址簿 models", "label": "dependency", "src": "synthetic"}
+{"text": "深色模式的响应时间不得超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布支付回调", "label": "dependency", "src": "synthetic"}
+{"text": "限制缓存模块频率为100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "需要时缓存搜索功能的草稿", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是日志级别在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "如果搜索功能超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "重建日志级别的失败索引", "label": "goal", "src": "synthetic"}
+{"text": "必要时启用鉴权逻辑的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "上传接口内存占用不超过3 次", "label": "constraint", "src": "synthetic"}
+{"text": "把鉴权逻辑部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "上传接口和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "更新地址簿文档", "label": "goal", "src": "synthetic"}
+{"text": "删除废弃的webhook 分发器代码", "label": "goal", "src": "synthetic"}
+{"text": "如果地址簿超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "导出功能和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新支付回调", "label": "dependency", "src": "synthetic"}
+{"text": "放弃地址簿方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "How long did the last 首页加载 migration take?", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是地址簿在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "拆分搜索功能为独立服务", "label": "goal", "src": "synthetic"}
+{"text": "上次已经完成了部署", "label": "none", "src": "dev-weak:pb_123"}
+{"text": "目前webhook 分发器的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "不需要重构支付回调，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练webhook 分发器", "label": "dependency", "src": "synthetic"}
+{"text": "等通知服务就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "目前定时任务的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "不用更新日志级别，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "不能修改用户表的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 缓存模块 models", "label": "dependency", "src": "synthetic"}
+{"text": "必要时启用配置文件的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "看看监控", "label": "none", "src": "dev-weak:vg_119"}
+{"text": "通知服务要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "取消支付回调迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "完成的标准是深色模式在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "用户表的响应时间不得超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是CI 流水线在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "如果购物车超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是首页加载在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "禁止在缓存模块日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布消息队列", "label": "dependency", "src": "synthetic"}
+{"text": "如果缓存模块超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "评论组件的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "must not break the CI 流水线 API", "label": "constraint", "src": "synthetic"}
+{"text": "用哪个报表服务服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "取消优化启动时间的计划", "label": "cancel", "src": "dev-weak:nc_160"}
+{"text": "限制用户表频率为debug", "label": "constraint", "src": "synthetic"}
+{"text": "好像订单列表昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "所有新接口必须有降级开关", "label": "constraint", "src": "synthetic"}
+{"text": "跳过导出功能的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "如果支付回调超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "文档与订单列表的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "如果登录接口超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是地址簿在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "重构地址簿模块", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是订单列表在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "webhook 分发器和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "取消配置文件迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "验收：消息队列压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "需要时缓存首页加载的草稿", "label": "condition", "src": "synthetic"}
+{"text": "上传接口和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是地址簿在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是缓存模块在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "如果首页加载超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：配置文件压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "统计webhook 分发器的调用量", "label": "goal", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 通知服务", "label": "condition", "src": "synthetic"}
+{"text": "配置文件依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "must not break the 购物车 API", "label": "constraint", "src": "synthetic"}
+{"text": "支付回调和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布导出功能", "label": "dependency", "src": "synthetic"}
+{"text": "等报表服务就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "no need to migrate the 日志级别 data", "label": "cancel", "src": "synthetic"}
+{"text": "地址簿与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "验收：登录接口压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是订单列表在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "把缓存模块部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "如果CI 流水线超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：定时任务压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是缓存模块在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "地址簿要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "Enable compression for 登录接口", "label": "goal", "src": "synthetic"}
+{"text": "Wait for the 报表服务 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容配置文件", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是鉴权逻辑在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "Fix the pagination bug in 鉴权逻辑", "label": "goal", "src": "synthetic"}
+{"text": "Fix the pagination bug in 配置文件", "label": "goal", "src": "synthetic"}
+{"text": "Don't bother with the 配置文件 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "跳过定时任务的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练搜索功能", "label": "dependency", "src": "synthetic"}
+{"text": "今天的构建怎么又红了？", "label": "none", "src": "synthetic"}
+{"text": "keep memory usage below 500ms", "label": "constraint", "src": "synthetic"}
+{"text": "如果日志级别超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "日志级别的响应时间不得超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "验收：缓存模块压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "How long did the last 导出功能 migration take?", "label": "none", "src": "synthetic"}
+{"text": "如果导出功能超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "统计配置文件的调用量", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是报表服务在debug内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是用户表在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "缓存模块内存占用不超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "限流阈值设多少合适？", "label": "none", "src": "synthetic"}
+{"text": "CI 流水线和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "CI 流水线的响应时间不得超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "上周我们重构过这一块，当时方案是 A", "label": "none", "src": "synthetic"}
+{"text": "之前说的鉴权逻辑限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "把地址簿的颜色调一下", "label": "goal", "src": "synthetic"}
+{"text": "验收：消息队列压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "删除废弃的鉴权逻辑代码", "label": "goal", "src": "synthetic"}
+{"text": "撤销上一条关于CI 流水线的要求", "label": "cancel", "src": "synthetic"}
+{"text": "验收：日志级别压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "Bump the 评论组件 timeout to debug", "label": "goal", "src": "synthetic"}
+{"text": "如果配置文件超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "报表服务要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "日志级别和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "是否保留报表服务待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "用哪个用户表服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "保持地址簿的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "需要时缓存上传接口的草稿", "label": "condition", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新通知服务", "label": "dependency", "src": "synthetic"}
+{"text": "Wait for the 日志级别 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "如果报表服务超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "Don't bother with the 地址簿 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "用哪个首页加载服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "webhook 分发器内存占用不超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "webhook 分发器内存占用不超过webp", "label": "constraint", "src": "synthetic"}
+{"text": "排查消息队列报错的原因", "label": "goal", "src": "synthetic"}
+{"text": "别做地址簿了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "验收：报表服务压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "顺便说一句，导出功能的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "当消息队列积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "参见深色模式部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容搜索功能", "label": "condition", "src": "synthetic"}
+{"text": "首页加载和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "给用户表加一列生日", "label": "goal", "src": "dev-weak:sg_005"}
+{"text": "给地址簿增加重试逻辑", "label": "goal", "src": "synthetic"}
+{"text": "验收：支付回调压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "这个地址簿的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 定时任务", "label": "condition", "src": "synthetic"}
+{"text": "构建日志级别镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "清理支付回调里的临时开关", "label": "goal", "src": "synthetic"}
+{"text": "Web 端和小程序的通知服务展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "验收：日志级别压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：购物车压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 配置文件 models", "label": "dependency", "src": "synthetic"}
+{"text": "放弃用户表方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新购物车", "label": "dependency", "src": "synthetic"}
+{"text": "定时任务的响应时间不得超过webp", "label": "constraint", "src": "synthetic"}
+{"text": "取消缓存模块迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "如果配置文件超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "迁移鉴权逻辑到新集群", "label": "goal", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新搜索功能", "label": "dependency", "src": "synthetic"}
+{"text": "登录接口和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "之前的订单列表方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "评论组件要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "不能修改搜索功能的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "如果日志级别超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "把配置文件的颜色调一下", "label": "goal", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布缓存模块", "label": "dependency", "src": "synthetic"}
+{"text": "README 需要更新", "label": "goal", "src": "dev-weak:rd_190"}
+{"text": "Add retry logic to 深色模式", "label": "goal", "src": "synthetic"}
+{"text": "别做订单列表了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "如果CI 流水线超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "如果评论组件超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "好像CI 流水线昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "购物车和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "需要时缓存用户表的草稿", "label": "condition", "src": "synthetic"}
+{"text": "新版协议与旧版协议的响应字段保持对齐", "label": "coordination", "src": "dev-weak:co_062"}
+{"text": "给 `orders`、`users`、`payments` 三张表补上 created_at 索引", "label": "goal", "src": "dev-weak:ro_109"}
+{"text": "帮我盯一下夜间的备份任务", "label": "goal", "src": "dev-weak:al_205"}
+{"text": "评论组件的响应时间不得超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "webhook 分发器和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是支付回调在debug内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "确保消息队列在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "等定时任务就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "验收：缓存模块压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "取消上传接口迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "Wait for the migration to finish", "label": "dependency", "src": "dev-weak:xd_052"}
+{"text": "缓存模块和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "CI 流水线和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "把导出功能的超时改成30 秒", "label": "goal", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容消息队列", "label": "condition", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 订单列表", "label": "condition", "src": "synthetic"}
+{"text": "地址簿和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "Bump the 上传接口 timeout to /healthz", "label": "goal", "src": "synthetic"}
+{"text": "如果支付回调超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 用户表 models", "label": "dependency", "src": "synthetic"}
+{"text": "验收：搜索功能压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "消息队列依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "不需要重构用户表，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "限制地址簿频率为500ms", "label": "constraint", "src": "synthetic"}
+{"text": "在购物车上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "这个上传接口的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "Web 端和小程序的消息队列展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "统计导出功能的调用量", "label": "goal", "src": "synthetic"}
+{"text": "上周评审过登录接口的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "把搜索功能的日志级别调成3 次", "label": "goal", "src": "synthetic"}
+{"text": "拆分上传接口为独立服务", "label": "goal", "src": "synthetic"}
+{"text": "Wait for the 上传接口 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "是否保留导出功能待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "跳过鉴权逻辑的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "当配置文件积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "别做登录接口了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "完成的标准是支付回调在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "是否保留上传接口待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "评论组件和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "Remove the deprecated 搜索功能 helper", "label": "goal", "src": "synthetic"}
+{"text": "报错信息：", "label": "none", "src": "dev-weak:pc_142"}
+{"text": "我随便问问，日志级别的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是报表服务在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：用户表压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：缓存模块压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "Bump the CI 流水线 timeout to 30 秒", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是深色模式在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "把购物车的日志级别调成3 次", "label": "goal", "src": "synthetic"}
+{"text": "这个支付回调的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "must not break the 缓存模块 API", "label": "constraint", "src": "synthetic"}
+{"text": "等搜索功能就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "跳过深色模式的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "验收：订单列表压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "当用户表积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "限制搜索功能频率为webp", "label": "constraint", "src": "synthetic"}
+{"text": "参考搜索功能模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "之前的报表服务方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "限制消息队列频率为3 次", "label": "constraint", "src": "synthetic"}
+{"text": "通知服务内存占用不超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "好像深色模式昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "在登录接口上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "把订单列表的超时改成v2", "label": "goal", "src": "synthetic"}
+{"text": "接入新的用户表服务商", "label": "goal", "src": "synthetic"}
+{"text": "Enable compression for CI 流水线", "label": "goal", "src": "synthetic"}
+{"text": "如果上传接口超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "撤销上一条关于搜索功能的要求", "label": "cancel", "src": "synthetic"}
+{"text": "Bump the 日志级别 timeout to v2", "label": "goal", "src": "synthetic"}
+{"text": "是否保留搜索功能待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "验收：配置文件压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "文档与深色模式的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "不需要重构导出功能，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "取消登录接口迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "如果用户表超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：webhook 分发器压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "深色模式的响应时间不得超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "通知服务和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "消息队列要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "放弃搜索功能方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "等上传接口就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "压缩通知服务的静态资源", "label": "goal", "src": "synthetic"}
+{"text": "no need to migrate the CI 流水线 data", "label": "cancel", "src": "synthetic"}
+{"text": "如果上传接口超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是支付回调在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "如果上传接口超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "Web 端和小程序的价格展示逻辑保持同步", "label": "coordination", "src": "dev-weak:co_061"}
+{"text": "给配置面板加上键盘导航支持", "label": "goal", "src": "dev-weak:sg_011"}
+{"text": "完成的标准是通知服务在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "之前说的订单列表限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "鉴权逻辑的响应时间不得超过webp", "label": "constraint", "src": "synthetic"}
+{"text": "把鉴权逻辑的超时改成10GB", "label": "goal", "src": "synthetic"}
+{"text": "不能修改定时任务的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "确保订单列表在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "别做用户表了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "定时任务的响应时间不得超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "must not break the 导出功能 API", "label": "constraint", "src": "synthetic"}
+{"text": "参见订单列表部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "在订单列表里加上健康检查", "label": "goal", "src": "synthetic"}
+{"text": "是否保留日志级别待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "must not break the 配置文件 API", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是首页加载在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "用户表的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "压缩首页加载的静态资源", "label": "goal", "src": "synthetic"}
+{"text": "在用户表里加上健康检查", "label": "goal", "src": "synthetic"}
+{"text": "之前说的缓存模块限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "如果评论组件超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "必要时启用日志级别的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 鉴权逻辑", "label": "condition", "src": "synthetic"}
+{"text": "验收：深色模式压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "导出功能和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "Split the monolith into two services", "label": "goal", "src": "dev-weak:mg_032"}
+{"text": "如果登录接口超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "如果报表服务超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "支付回调的响应时间不得超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "报表服务内存占用不超过webp", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是搜索功能在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练日志级别", "label": "dependency", "src": "synthetic"}
+{"text": "如果订单列表超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "上周评审过导出功能的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "验收：购物车压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "把定时任务的日志级别调成100 QPS", "label": "goal", "src": "synthetic"}
+{"text": "取消首页加载迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "完成的标准是鉴权逻辑在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "把首页加载部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "当时用的是100 QPS的超时配置", "label": "none", "src": "synthetic"}
+{"text": "必要时启用地址簿的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "地址簿和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果搜索功能超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "如果日志级别超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "限制通知服务频率为100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "购物车和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果通知服务超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "no need to migrate the 用户表 data", "label": "cancel", "src": "synthetic"}
+{"text": "no need to migrate the 搜索功能 data", "label": "cancel", "src": "synthetic"}
+{"text": "不能修改webhook 分发器的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "离线时必须缓存草稿", "label": "constraint", "src": "dev-weak:mc_040"}
+{"text": "Add retry logic to 日志级别", "label": "goal", "src": "synthetic"}
+{"text": "如果鉴权逻辑超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "之前的搜索功能方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "no need to migrate the 通知服务 data", "label": "cancel", "src": "synthetic"}
+{"text": "撤销上一条关于深色模式的要求", "label": "cancel", "src": "synthetic"}
+{"text": "统计定时任务的调用量", "label": "goal", "src": "synthetic"}
+{"text": "定时任务和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "地址簿和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "验收：搜索功能压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布登录接口", "label": "dependency", "src": "synthetic"}
+{"text": "购物车和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "历史上上传接口出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "done when a 10k-row table renders under debug", "label": "acceptance", "src": "synthetic"}
+{"text": "订单列表内存占用不超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是定时任务在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "缓存模块内存占用不超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "如果深色模式超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "当CI 流水线积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "好像评论组件昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "好像配置文件昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "如果用户表超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "文档与报表服务的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "撤销上一条关于消息队列的要求", "label": "cancel", "src": "synthetic"}
+{"text": "如果消息队列超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "修复地址簿的分页问题", "label": "goal", "src": "synthetic"}
+{"text": "为配置文件实现分页功能", "label": "goal", "src": "synthetic"}
+{"text": "搜索功能与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "How long did the last 购物车 migration take?", "label": "none", "src": "synthetic"}
+{"text": "历史上CI 流水线出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "验收：登录接口压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "当报表服务积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "验收：缓存模块压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "禁止在登录接口日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "验收：通知服务压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是日志级别在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "不能修改支付回调的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "各环境的搜索功能名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the CI 流水线 models", "label": "dependency", "src": "synthetic"}
+{"text": "上周评审过深色模式的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "顺便说一句，定时任务的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新鉴权逻辑", "label": "dependency", "src": "synthetic"}
+{"text": "Enable compression for 搜索功能", "label": "goal", "src": "synthetic"}
+{"text": "取消评论组件迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "确保地址簿在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "验收：购物车压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "上周评审过鉴权逻辑的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "限制购物车频率为/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "不用更新登录接口，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "构建CI 流水线镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "历史上地址簿出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "如果消息队列超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "如果深色模式超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是登录接口在debug内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "Don't bother with the webhook 分发器 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "地址簿的响应时间不得超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "放弃鉴权逻辑方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "确保搜索功能在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "用哪个订单列表服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "深色模式和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "通知服务和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果消息队列超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "运行方式：\n```bash\nmake test\n```", "label": "none", "src": "synthetic"}
+{"text": "Web 端和小程序的鉴权逻辑展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是鉴权逻辑在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "之前的定时任务方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "验收：上传接口压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是CI 流水线在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练上传接口", "label": "dependency", "src": "synthetic"}
+{"text": "补充鉴权逻辑的测试用例", "label": "goal", "src": "synthetic"}
+{"text": "保持订单列表的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "消息队列内存占用不超过100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "上传接口的响应时间不得超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "文档与登录接口的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "统计缓存模块的调用量", "label": "goal", "src": "synthetic"}
+{"text": "不能修改CI 流水线的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "取消通知服务迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "完成的标准是登录接口在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "拆分CI 流水线为独立服务", "label": "goal", "src": "synthetic"}
+{"text": "Remove the deprecated 购物车 helper", "label": "goal", "src": "synthetic"}
+{"text": "构建地址簿镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "放弃首页加载方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "现状是CI 流水线每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "Fix the pagination bug in 购物车", "label": "goal", "src": "synthetic"}
+{"text": "webhook 分发器和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布搜索功能", "label": "dependency", "src": "synthetic"}
+{"text": "修复日志级别的分页问题", "label": "goal", "src": "synthetic"}
+{"text": "如果定时任务超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "webhook 分发器和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是地址簿在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "深色模式和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "不需要重构深色模式，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "当前版本号：", "label": "none", "src": "dev-weak:pc_145"}
+{"text": "接入新的CI 流水线服务商", "label": "goal", "src": "synthetic"}
+{"text": "等深色模式就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "深色模式与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "上传接口要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "我们是不是应该先做迁移？", "label": "none", "src": "synthetic"}
+{"text": "如果订单列表超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是导出功能在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：导出功能压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果评论组件超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "保持导出功能的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "鉴权逻辑和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容购物车", "label": "condition", "src": "synthetic"}
+{"text": "放弃订单列表方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "登录接口的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "完成的标准是报表服务在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "如果订单列表超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "编写定时任务的使用说明", "label": "goal", "src": "synthetic"}
+{"text": "禁止在定时任务日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "缓存模块和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "当时用的是webp的超时配置", "label": "none", "src": "synthetic"}
+{"text": "别做报表服务了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "等配置文件就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "具体用哪个方案待定", "label": "unresolved", "src": "dev-weak:cu_072"}
+{"text": "参见webhook 分发器部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "补充测试和文档", "label": "goal", "src": "dev-weak:mg_021"}
+{"text": "支付回调的响应时间不得超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "如果上传接口超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "支付回调内存占用不超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "各环境的深色模式名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "在消息队列上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "现状是鉴权逻辑每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "Wait for the CI 流水线 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "如果评论组件超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "屏蔽评论组件的重复告警", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是缓存模块在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "上传接口的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "不用更新配置文件，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "上周评审过评论组件的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布首页加载", "label": "dependency", "src": "synthetic"}
+{"text": "当时用的是500ms的超时配置", "label": "none", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 消息队列", "label": "condition", "src": "synthetic"}
+{"text": "订单列表和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是地址簿在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：首页加载压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "Don't bother with the CI 流水线 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "如果评论组件超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是鉴权逻辑在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "评论组件的响应时间不得超过webp", "label": "constraint", "src": "synthetic"}
+{"text": "别做支付回调了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "保持CI 流水线的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "不能修改导出功能的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "补充定时任务的测试用例", "label": "goal", "src": "synthetic"}
+{"text": "需要先弄清楚报表服务失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "重构webhook 分发器模块", "label": "goal", "src": "synthetic"}
+{"text": "在webhook 分发器上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "CI 流水线和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果登录接口超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "背景：系统目前采用单体架构", "label": "none", "src": "synthetic"}
+{"text": "Don't bother with the CLI refactor", "label": "cancel", "src": "dev-weak:nc_158"}
+{"text": "验收：登录接口压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "配置文件和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "搜索功能要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "排查报表服务报错的原因", "label": "goal", "src": "synthetic"}
+{"text": "重建上传接口的失败索引", "label": "goal", "src": "synthetic"}
+{"text": "此前的工作都已合并", "label": "none", "src": "dev-weak:pb_125"}
+{"text": "搜索功能和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "验收：导出功能压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果通知服务超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "订单列表要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "清理地址簿里的临时开关", "label": "goal", "src": "synthetic"}
+{"text": "这个消息队列的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "消息队列的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练缓存模块", "label": "dependency", "src": "synthetic"}
+{"text": "拆分首页加载为独立服务", "label": "goal", "src": "synthetic"}
+{"text": "Wait for the 用户表 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "Bump the 首页加载 timeout to 500ms", "label": "goal", "src": "synthetic"}
+{"text": "CI 流水线的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "当webhook 分发器积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "Bump the 消息队列 timeout to 500ms", "label": "goal", "src": "synthetic"}
+{"text": "好像缓存模块昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "限制消息队列频率为500ms", "label": "constraint", "src": "synthetic"}
+{"text": "上周评审过地址簿的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "参考地址簿模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "验收：日志级别压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是CI 流水线在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "参见报表服务部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "各环境的缓存模块名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "不得影响其他服务的调用", "label": "constraint", "src": "synthetic"}
+{"text": "文档与首页加载的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "如果用户表超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "整体感觉有点慢，处理下", "label": "none", "src": "synthetic"}
+{"text": "我随便问问，鉴权逻辑的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "构建鉴权逻辑镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "限制上传接口频率为500ms", "label": "constraint", "src": "synthetic"}
+{"text": "如果购物车超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "no need to migrate the 鉴权逻辑 data", "label": "cancel", "src": "synthetic"}
+{"text": "验收：webhook 分发器压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "在搜索功能上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "这个缓存模块的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "如果定时任务超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new CI 流水线", "label": "condition", "src": "synthetic"}
+{"text": "撤销上一条关于订单列表的要求", "label": "cancel", "src": "synthetic"}
+{"text": "别做通知服务了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "是否保留通知服务待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "深色模式内存占用不超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "等CI 流水线就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "上周评审过消息队列的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练用户表", "label": "dependency", "src": "synthetic"}
+{"text": "迁移完成后", "label": "goal", "src": "dev-weak:co_064"}
+{"text": "完成的标准是支付回调在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "若灰度期间错误率上升立即回滚", "label": "condition", "src": "synthetic"}
+{"text": "done when a 10k-row table renders under /healthz", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是导出功能在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "Wait for the 配置文件 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "重建定时任务的失败索引", "label": "goal", "src": "synthetic"}
+{"text": "如果首页加载超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "把通知服务部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "首页加载和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 搜索功能", "label": "condition", "src": "synthetic"}
+{"text": "地址簿的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "给深色模式增加重试逻辑", "label": "goal", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 地址簿", "label": "condition", "src": "synthetic"}
+{"text": "迁移搜索功能到新集群", "label": "goal", "src": "synthetic"}
+{"text": "验收：定时任务压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果登录接口超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "登录接口依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "当时用的是30 秒的超时配置", "label": "none", "src": "synthetic"}
+{"text": "在日志级别上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "跳过订单列表的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "样例输出：", "label": "none", "src": "dev-weak:pc_147"}
+{"text": "压缩定时任务的静态资源", "label": "goal", "src": "synthetic"}
+{"text": "确保首页加载在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "保持购物车的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "Bump the 导出功能 timeout to v2", "label": "goal", "src": "synthetic"}
+{"text": "把导出功能的超时改成webp", "label": "goal", "src": "synthetic"}
+{"text": "历史上鉴权逻辑出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 登录接口 models", "label": "dependency", "src": "synthetic"}
+{"text": "上传接口的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "完成的标准是登录接口在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "报表服务依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "给通知服务增加重试逻辑", "label": "goal", "src": "synthetic"}
+{"text": "重建支付回调的失败索引", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是评论组件在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "完成定义是各端状态一致", "label": "acceptance", "src": "synthetic"}
+{"text": "no need to migrate the 导出功能 data", "label": "cancel", "src": "synthetic"}
+{"text": "用户表和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "验收：用户表压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：深色模式压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "历史上支付回调出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "如果CI 流水线超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是支付回调在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "参见地址簿部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "视为完成的标志是演练零报错", "label": "acceptance", "src": "dev-weak:ac_082"}
+{"text": "购物车的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "如果登录接口超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "Bump the 消息队列 timeout to 30 秒", "label": "goal", "src": "synthetic"}
+{"text": "如果鉴权逻辑超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "各环境的消息队列名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "如果webhook 分发器超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "好像首页加载昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "Fix the pagination bug in 搜索功能", "label": "goal", "src": "synthetic"}
+{"text": "Fix the pagination bug in 地址簿", "label": "goal", "src": "synthetic"}
+{"text": "Should we migrate now or later?", "label": "none", "src": "synthetic"}
+{"text": "如果鉴权逻辑超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "把订单列表的超时改成/healthz", "label": "goal", "src": "synthetic"}
+{"text": "验收：鉴权逻辑压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "是否保留地址簿待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "报表服务和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "这个通知服务的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "用哪个评论组件服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "是否保留订单列表待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "如果webhook 分发器超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布鉴权逻辑", "label": "dependency", "src": "synthetic"}
+{"text": "辛苦帮我看下这个方案靠不靠谱", "label": "none", "src": "synthetic"}
+{"text": "如果评论组件超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "通知服务的响应时间不得超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "为通知服务实现分页功能", "label": "goal", "src": "synthetic"}
+{"text": "我已经把分支推上去了", "label": "none", "src": "dev-weak:pb_125"}
+{"text": "评论组件的响应时间不得超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "禁止在评论组件日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是评论组件在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "为什么当时选了这个方案？", "label": "none", "src": "synthetic"}
+{"text": "限制CI 流水线频率为100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "跳过CI 流水线的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "现有的够用", "label": "none", "src": "dev-weak:nc_154"}
+{"text": "如果CI 流水线超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "Don't bother with the 评论组件 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "当上传接口积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "验收：webhook 分发器压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果支付回调超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "订单列表的响应时间不得超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "增加限流", "label": "goal", "src": "dev-weak:mg_021"}
+{"text": "如果地址簿超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "深色模式的响应时间不得超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "验收：配置文件压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "在鉴权逻辑上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "完成的标准是webhook 分发器在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "这个登录接口的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "配置文件的响应时间不得超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "不用更新上传接口，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "地址簿的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "Web 端和小程序的地址簿展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "辛苦帮忙看下这个方案靠不靠谱", "label": "none", "src": "dev-weak:qc_202"}
+{"text": "搜索功能内存占用不超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "顺便说一句，登录接口的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "如果上传接口超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "跳过日志级别的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "在消息队列里加上健康检查", "label": "goal", "src": "synthetic"}
+{"text": "这个订单列表的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "各环境的用户表名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "顺便说一句，地址簿的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "别做缓存模块了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 购物车", "label": "condition", "src": "synthetic"}
+{"text": "当鉴权逻辑积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "购物车和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "需要先弄清楚通知服务失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "拆分深色模式为独立服务", "label": "goal", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布报表服务", "label": "dependency", "src": "synthetic"}
+{"text": "限制导出功能频率为v2", "label": "constraint", "src": "synthetic"}
+{"text": "确保评论组件在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新登录接口", "label": "dependency", "src": "synthetic"}
+{"text": "keep memory usage below 30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "上传接口和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "给购物车增加重试逻辑", "label": "goal", "src": "synthetic"}
+{"text": "我随便问问，购物车的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "缓存模块依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "消息队列的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "Wait for the webhook 分发器 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "导出功能依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "通知 QA 验证", "label": "goal", "src": "dev-weak:mg_034"}
+{"text": "如果订单列表超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "把webhook 分发器的日志级别调成debug", "label": "goal", "src": "synthetic"}
+{"text": "上周评审过缓存模块的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "为webhook 分发器实现分页功能", "label": "goal", "src": "synthetic"}
+{"text": "不需要重构搜索功能，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "配置文件和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是深色模式在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "登录接口和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "文档与通知服务的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "我随便问问，webhook 分发器的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 深色模式 models", "label": "dependency", "src": "synthetic"}
+{"text": "文档与配置文件的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "用哪个地址簿服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "重建导出功能的失败索引", "label": "goal", "src": "synthetic"}
+{"text": "限制报表服务频率为10GB", "label": "constraint", "src": "synthetic"}
+{"text": "现状是支付回调每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是缓存模块在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "如果缓存模块超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "需要时缓存消息队列的草稿", "label": "condition", "src": "synthetic"}
+{"text": "验收：webhook 分发器压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是订单列表在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "导出功能的响应时间不得超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 支付回调 models", "label": "dependency", "src": "synthetic"}
+{"text": "参见缓存模块部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "不需要重构webhook 分发器，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "验收：搜索功能压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "撤销上一条关于鉴权逻辑的要求", "label": "cancel", "src": "synthetic"}
+{"text": "定时任务内存占用不超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "目前配置文件的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "别做定时任务了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "这个用户表的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "如果导出功能超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "先升级消息队列到 v3", "label": "dependency", "src": "dev-weak:fm_086"}
+{"text": "需要先弄清楚深色模式失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "迁移webhook 分发器到新集群", "label": "goal", "src": "synthetic"}
+{"text": "把首页加载的超时改成/healthz", "label": "goal", "src": "synthetic"}
+{"text": "历史上用户表出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "重构深色模式模块", "label": "goal", "src": "synthetic"}
+{"text": "完成后压测对比基线", "label": "dependency", "src": "dev-weak:fm_086"}
+{"text": "把用户表部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "no need to migrate the 报表服务 data", "label": "cancel", "src": "synthetic"}
+{"text": "no need to migrate the 购物车 data", "label": "cancel", "src": "synthetic"}
+{"text": "其他照旧", "label": "none", "src": "dev-weak:nc_155"}
+{"text": "验收：首页加载压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是首页加载在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "清理日志级别里的临时开关", "label": "goal", "src": "synthetic"}
+{"text": "定时任务和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "How long did the last 支付回调 migration take?", "label": "none", "src": "synthetic"}
+{"text": "别做深色模式了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "must not break the 报表服务 API", "label": "constraint", "src": "synthetic"}
+{"text": "之前说的限流先不做了", "label": "none", "src": "dev-weak:nc_155"}
+{"text": "当首页加载积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "Wait for the 导出功能 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "验收：订单列表压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：webhook 分发器压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：首页加载压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "给报表服务加一列创建时间", "label": "goal", "src": "synthetic"}
+{"text": "How long did the last 配置文件 migration take?", "label": "none", "src": "synthetic"}
+{"text": "顺便说一句，鉴权逻辑的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "跳过支付回调的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "缓存模块要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "参见CI 流水线部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "必要时启用支付回调的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "不用写新文档", "label": "cancel", "src": "dev-weak:nc_154"}
+{"text": "之前说的搜索功能限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布深色模式", "label": "dependency", "src": "synthetic"}
+{"text": "验收：鉴权逻辑压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "用户表的响应时间不得超过webp", "label": "constraint", "src": "synthetic"}
+{"text": "实现导出 JSON 功能", "label": "goal", "src": "dev-weak:mg_023"}
+{"text": "重建通知服务的失败索引", "label": "goal", "src": "synthetic"}
+{"text": "深色模式的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "never block the UI thread", "label": "constraint", "src": "synthetic"}
+{"text": "评论组件与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "验收：消息队列压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新上传接口", "label": "dependency", "src": "synthetic"}
+{"text": "构建上传接口镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "如果评论组件超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "需要先弄清楚上传接口失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "Add retry logic to 支付回调", "label": "goal", "src": "synthetic"}
+{"text": "各环境的通知服务名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "需要先弄清楚鉴权逻辑失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "完成的标准是webhook 分发器在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "no need to migrate the 上传接口 data", "label": "cancel", "src": "synthetic"}
+{"text": "不能修改地址簿的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新配置文件", "label": "dependency", "src": "synthetic"}
+{"text": "顺便说一句，通知服务的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "历史上购物车出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "排查CI 流水线报错的原因", "label": "goal", "src": "synthetic"}
+{"text": "在上传接口上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "搭建 staging 环境", "label": "goal", "src": "dev-weak:mg_034"}
+{"text": "配置文件的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "参考配置文件模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "屏蔽配置文件的重复告警", "label": "goal", "src": "synthetic"}
+{"text": "编写搜索功能的使用说明", "label": "goal", "src": "synthetic"}
+{"text": "用户表依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "之前说的购物车限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "现状是上传接口每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "Fix the pagination bug in 导出功能", "label": "goal", "src": "synthetic"}
+{"text": "上传接口内存占用不超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "no need to migrate the 定时任务 data", "label": "cancel", "src": "synthetic"}
+{"text": "放弃支付回调方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "Stack trace:\n```\nFile \"app.py\", line 42\n```", "label": "none", "src": "synthetic"}
+{"text": "如果购物车超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "删除废弃的上传接口代码", "label": "goal", "src": "synthetic"}
+{"text": "好像地址簿昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "在深色模式上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "Web 端和小程序的支付回调展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "需要先弄清楚导出功能失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "删除废弃的 `legacy_api.py`", "label": "goal", "src": "dev-weak:sg_003"}
+{"text": "视压测结果决定是否扩容上传接口", "label": "condition", "src": "synthetic"}
+{"text": "是否保留首页加载待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "好像购物车昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "webhook 分发器的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "日志级别的响应时间不得超过webp", "label": "constraint", "src": "synthetic"}
+{"text": "登录接口内存占用不超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "鉴权逻辑的响应时间不得超过100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "缓存模块与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是订单列表在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "更新 README", "label": "goal", "src": "dev-weak:rd_190"}
+{"text": "完成的标准是订单列表在debug内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "通知服务内存占用不超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "用户表和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是深色模式在debug内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "接入新的鉴权逻辑服务商", "label": "goal", "src": "synthetic"}
+{"text": "放弃评论组件方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "目前通知服务的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "重建CI 流水线的失败索引", "label": "goal", "src": "synthetic"}
+{"text": "不能修改订单列表的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "首页加载要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "指标清单待评审", "label": "unresolved", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布上传接口", "label": "dependency", "src": "synthetic"}
+{"text": "前后端的错误码要保持一致", "label": "coordination", "src": "synthetic"}
+{"text": "验收：报表服务压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "需要先弄清楚订单列表失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "Update the README for 登录接口", "label": "goal", "src": "synthetic"}
+{"text": "评论组件和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "确保支付回调在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "日志级别依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "地址簿和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果通知服务超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "禁止在导出功能日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "保持鉴权逻辑的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "Add retry logic to 消息队列", "label": "goal", "src": "synthetic"}
+{"text": "keep the CLI flags in sync with the API", "label": "coordination", "src": "synthetic"}
+{"text": "用哪个上传接口服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "如果导出功能超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：搜索功能压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "搜索功能的响应时间不得超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "验收：定时任务压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "跳过通知服务的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "确保通知服务在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "如果webhook 分发器超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "深色模式的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "迁移脚本写完后在预发库演练一遍", "label": "goal", "src": "dev-weak:ac_082"}
+{"text": "目前首页加载的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "限制搜索功能频率为10GB", "label": "constraint", "src": "synthetic"}
+{"text": "不需要重构上传接口，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "现状是评论组件每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "验收：缓存模块压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "各环境的鉴权逻辑名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "别做评论组件了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "如果webhook 分发器超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "不需要重构配置文件，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "顺便说一句，日志级别的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "各环境的购物车名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "导出功能里补一个进度条", "label": "goal", "src": "dev-weak:al_208"}
+{"text": "当缓存模块积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "编写首页加载的使用说明", "label": "goal", "src": "synthetic"}
+{"text": "上周评审过支付回调的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "如果上传接口超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "订单列表内存占用不超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "订单列表的响应时间不得超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "Wait for the 支付回调 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "禁止在CI 流水线日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容CI 流水线", "label": "condition", "src": "synthetic"}
+{"text": "缓存模块和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "评论组件内存占用不超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "参见配置文件部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是订单列表在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "Remove the deprecated 缓存模块 helper", "label": "goal", "src": "synthetic"}
+{"text": "是否保留登录接口待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "Web 端和小程序的用户表展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果webhook 分发器超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收标准是全部用例通过", "label": "acceptance", "src": "synthetic"}
+{"text": "must not break the 日志级别 API", "label": "constraint", "src": "synthetic"}
+{"text": "如果搜索功能超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "排查webhook 分发器报错的原因", "label": "goal", "src": "synthetic"}
+{"text": "保留账号密码登录", "label": "coordination", "src": "dev-weak:mg_024"}
+{"text": "撤销上一条关于购物车的要求", "label": "cancel", "src": "synthetic"}
+{"text": "如果webhook 分发器超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "参考上传接口模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "验收：配置文件压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "跳过消息队列的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "验收：地址簿压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "no need to migrate the 登录接口 data", "label": "cancel", "src": "synthetic"}
+{"text": "Remove the deprecated 配置文件 helper", "label": "goal", "src": "synthetic"}
+{"text": "当搜索功能积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "当时用的是3 次的超时配置", "label": "none", "src": "synthetic"}
+{"text": "参见导出功能部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "如果支付回调超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "no need to migrate the 配置文件 data", "label": "cancel", "src": "synthetic"}
+{"text": "用哪个消息队列服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "验收：通知服务压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "具体用哪个方案待定", "label": "unresolved", "src": "synthetic"}
+{"text": "现状是首页加载每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "Bump the 订单列表 timeout to debug", "label": "goal", "src": "synthetic"}
+{"text": "修复通知服务的分页问题", "label": "goal", "src": "synthetic"}
+{"text": "must not break the 鉴权逻辑 API", "label": "constraint", "src": "synthetic"}
+{"text": "把缓存模块的日志级别调成v2", "label": "goal", "src": "synthetic"}
+{"text": "验收：登录接口压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "鉴权逻辑和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "各环境的登录接口名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "消息队列和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "样例输出：\n```text\ntotal: 42\n```", "label": "none", "src": "synthetic"}
+{"text": "修复购物车的分页问题", "label": "goal", "src": "synthetic"}
+{"text": "之前的日志级别方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "搜索功能和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果深色模式超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "Web 端和小程序的CI 流水线展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "撤销上一条关于日志级别的要求", "label": "cancel", "src": "synthetic"}
+{"text": "Web 端和小程序的报表服务展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "把配置文件的日志级别调成3 次", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是搜索功能在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "给登录接口加一列创建时间", "label": "goal", "src": "synthetic"}
+{"text": "评论组件内存占用不超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "文档与消息队列的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "不用更新用户表，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "如果支付回调超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "不用更新评论组件，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "等导出功能就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "放弃消息队列方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "webhook 分发器的响应时间不得超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "排查登录接口报错的原因", "label": "goal", "src": "synthetic"}
+{"text": "限制通知服务频率为3 次", "label": "constraint", "src": "synthetic"}
+{"text": "现状是用户表每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "不需要重构地址簿，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "完成的标准是支付回调在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布安装包", "label": "dependency", "src": "dev-weak:xd_050"}
+{"text": "验收：CI 全绿", "label": "acceptance", "src": "dev-weak:ac_084"}
+{"text": "等地址簿就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "当导出功能积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "限制鉴权逻辑频率为10GB", "label": "constraint", "src": "synthetic"}
+{"text": "首页加载和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "屏蔽缓存模块的重复告警", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是深色模式在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：导出功能压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "保持缓存模块的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是日志级别在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "限制首页加载频率为v2", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是评论组件在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是用户表在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "Wait for the 搜索功能 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "Wait for the 定时任务 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练消息队列", "label": "dependency", "src": "synthetic"}
+{"text": "done when a 10k-row table renders under 100 QPS", "label": "acceptance", "src": "synthetic"}
+{"text": "接入新的通知服务服务商", "label": "goal", "src": "synthetic"}
+{"text": "不需要重构报表服务，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容地址簿", "label": "condition", "src": "synthetic"}
+{"text": "顺便说一句，用户表的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "用户表要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "缓存模块内存占用不超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新地址簿", "label": "dependency", "src": "synthetic"}
+{"text": "撤销上一条关于首页加载的要求", "label": "cancel", "src": "synthetic"}
+{"text": "目前地址簿的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "在用户表上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "保持报表服务的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "为首页加载实现分页功能", "label": "goal", "src": "synthetic"}
+{"text": "购物车的响应时间不得超过3 次", "label": "constraint", "src": "synthetic"}
+{"text": "不能修改通知服务的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "必要时启用定时任务的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "取消报表服务迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "各环境的支付回调名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "Web 端和小程序的购物车展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "验收：地址簿压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "How long did the last webhook 分发器 migration take?", "label": "none", "src": "synthetic"}
+{"text": "订单列表与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "参考购物车模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 导出功能", "label": "condition", "src": "synthetic"}
+{"text": "各环境的上传接口名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "CI 流水线和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "地址簿的响应时间不得超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "把临时开关移除", "label": "goal", "src": "dev-weak:pp_186"}
+{"text": "must not break the 消息队列 API", "label": "constraint", "src": "synthetic"}
+{"text": "不用更新首页加载，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "must not break the 评论组件 API", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是日志级别在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：购物车压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果搜索功能超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "需要时缓存定时任务的草稿", "label": "condition", "src": "synthetic"}
+{"text": "缓存模块和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "webhook 分发器的响应时间不得超过webp", "label": "constraint", "src": "synthetic"}
+{"text": "那个计划取消了", "label": "cancel", "src": "dev-weak:nc_149"}
+{"text": "Don't bother with the 缓存模块 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 通知服务 models", "label": "dependency", "src": "synthetic"}
+{"text": "webhook 分发器内存占用不超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "如果深色模式超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "现状是购物车每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "视为完成的标志是演练零报错", "label": "acceptance", "src": "synthetic"}
+{"text": "之前说的日志级别限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "限制上传接口频率为30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "撤销上一条关于通知服务的要求", "label": "cancel", "src": "synthetic"}
+{"text": "构建首页加载镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "首页加载依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "webhook 分发器与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "不能修改评论组件的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "Update the README for CI 流水线", "label": "goal", "src": "synthetic"}
+{"text": "当深色模式积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "更新日志级别文档", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是通知服务在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "缓存模块的响应时间不得超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "如果深色模式超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "给webhook 分发器加一列创建时间", "label": "goal", "src": "synthetic"}
+{"text": "上周评审过上传接口的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "如果用户表超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是报表服务在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the webhook 分发器 models", "label": "dependency", "src": "synthetic"}
+{"text": "现状是通知服务每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "排查购物车报错的原因", "label": "goal", "src": "synthetic"}
+{"text": "在通知服务里加上健康检查", "label": "goal", "src": "synthetic"}
+{"text": "用哪个webhook 分发器服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "must not break the 深色模式 API", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是搜索功能在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "现状是日志级别每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "构建评论组件镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "如果搜索功能超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：消息队列压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "重构报表服务模块", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是评论组件在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "顺带一提，旧版本下个月停止维护", "label": "none", "src": "synthetic"}
+{"text": "Wait for the 首页加载 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "完成的标准是上传接口在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "别做购物车了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新导出功能", "label": "dependency", "src": "synthetic"}
+{"text": "webhook 分发器和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "参考CI 流水线模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "限制CI 流水线频率为10GB", "label": "constraint", "src": "synthetic"}
+{"text": "限制定时任务频率为3 次", "label": "constraint", "src": "synthetic"}
+{"text": "修复上传接口的分页问题", "label": "goal", "src": "synthetic"}
+{"text": "如果搜索功能超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "之前说的地址簿限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "如果消息队列超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "Bump the 日志级别 timeout to debug", "label": "goal", "src": "synthetic"}
+{"text": "接入新的订单列表服务商", "label": "goal", "src": "synthetic"}
+{"text": "支付回调内存占用不超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "删除废弃的缓存模块代码", "label": "goal", "src": "synthetic"}
+{"text": "CI 流水线内存占用不超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是CI 流水线在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "Web 端和小程序的搜索功能展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "这个定时任务的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "验收：地址簿压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果首页加载超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "好像导出功能昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 报表服务 models", "label": "dependency", "src": "synthetic"}
+{"text": "Bump the 支付回调 timeout to 100 QPS", "label": "goal", "src": "synthetic"}
+{"text": "构建消息队列镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "定时任务内存占用不超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "验收：登录接口压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：缓存模块压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "把订单列表部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "参考首页加载模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "现状是配置文件每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "Remove the deprecated 报表服务 helper", "label": "goal", "src": "synthetic"}
+{"text": "Wait for the 地址簿 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "构建导出功能镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "放弃配置文件方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "参见用户表部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "给登录接口增加重试逻辑", "label": "goal", "src": "synthetic"}
+{"text": "Wait for the 订单列表 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "Bump the 登录接口 timeout to 500ms", "label": "goal", "src": "synthetic"}
+{"text": "在缓存模块上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "Wait for the 缓存模块 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "深色模式要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练地址簿", "label": "dependency", "src": "synthetic"}
+{"text": "现状是缓存模块每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "之前的深色模式方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "目前鉴权逻辑的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "构建登录接口镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "各环境的配置文件名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "迁移顺序还需要和平台组确认", "label": "unresolved", "src": "synthetic"}
+{"text": "配置文件和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "先把正确性问题修完", "label": "goal", "src": "dev-weak:nc_160"}
+{"text": "保持搜索功能的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "Remove the deprecated 上传接口 helper", "label": "goal", "src": "synthetic"}
+{"text": "构建用户表镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "日志级别和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "通知服务和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "限制定时任务频率为30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新webhook 分发器", "label": "dependency", "src": "synthetic"}
+{"text": "配置文件的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "升级鉴权逻辑的依赖版本", "label": "goal", "src": "synthetic"}
+{"text": "CI 流水线的响应时间不得超过3 次", "label": "constraint", "src": "synthetic"}
+{"text": "订单列表和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果报表服务超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "不需要重构CI 流水线，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容评论组件", "label": "condition", "src": "synthetic"}
+{"text": "删除废弃的导出功能代码", "label": "goal", "src": "synthetic"}
+{"text": "多语言文件的键结构必须一致", "label": "coordination", "src": "dev-weak:co_067"}
+{"text": "跳过首页加载的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "上传接口和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "验收：搜索功能压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "编写通知服务的使用说明", "label": "goal", "src": "synthetic"}
+{"text": "拆分webhook 分发器为独立服务", "label": "goal", "src": "synthetic"}
+{"text": "必要时启用webhook 分发器的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "验收：购物车压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "评论组件内存占用不超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "目前已经上线的是 v2 接口", "label": "none", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布地址簿", "label": "dependency", "src": "synthetic"}
+{"text": "完成的标准是CI 流水线在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "鉴权逻辑和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "撤销上一条关于用户表的要求", "label": "cancel", "src": "synthetic"}
+{"text": "验收：地址簿压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "把评论组件的超时改成debug", "label": "goal", "src": "synthetic"}
+{"text": "深色模式和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "之前的CI 流水线方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "接入新的webhook 分发器服务商", "label": "goal", "src": "synthetic"}
+{"text": "通知服务与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "压缩上传接口的静态资源", "label": "goal", "src": "synthetic"}
+{"text": "no need to migrate the 深色模式 data", "label": "cancel", "src": "synthetic"}
+{"text": "must not break the 地址簿 API", "label": "constraint", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 报表服务", "label": "condition", "src": "synthetic"}
+{"text": "we cancelled it.", "label": "none", "src": "dev-weak:nc_158"}
+{"text": "验收：登录接口压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "好像定时任务昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "地址簿和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "报表服务和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "导出功能内存占用不超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "订单列表和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "需要先弄清楚登录接口失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "限制地址簿频率为10GB", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是登录接口在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "目前登录接口的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "地址簿内存占用不超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "缓存模块的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "Stack trace:", "label": "none", "src": "dev-weak:pc_146"}
+{"text": "取消地址簿迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "不需要重构评论组件，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "地址簿和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "在报表服务里加上健康检查", "label": "goal", "src": "synthetic"}
+{"text": "文档与定时任务的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "为缓存模块实现分页功能", "label": "goal", "src": "synthetic"}
+{"text": "把报表服务部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "如果搜索功能超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "如果缓存模块超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "别做消息队列了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "完成的标准是消息队列在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：首页加载压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果缓存模块超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "我随便问问，通知服务的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "订单列表依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "Remove the deprecated 支付回调 helper", "label": "goal", "src": "synthetic"}
+{"text": "如果支付回调超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "为深色模式实现分页功能", "label": "goal", "src": "synthetic"}
+{"text": "no need to migrate the 消息队列 data", "label": "cancel", "src": "synthetic"}
+{"text": "完成的标准是定时任务在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "如果支付回调超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "脚本在 scripts/ 下", "label": "none", "src": "dev-weak:pb_123"}
+{"text": "把评论组件的超时改成/healthz", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是缓存模块在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "用户表内存占用不超过3 次", "label": "constraint", "src": "synthetic"}
+{"text": "the exact rollout percentage is TBD", "label": "unresolved", "src": "synthetic"}
+{"text": "文档与地址簿的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "Remove the deprecated webhook 分发器 helper", "label": "goal", "src": "synthetic"}
+{"text": "现状是深色模式每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "验收：首页加载压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "评论组件和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "消息队列与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "Don't bother with the 用户表 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "验收：深色模式压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "我随便问问，配置文件的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "顺便说一句，报表服务的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "验收：通知服务压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "参考登录接口模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "不能修改上传接口的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "购物车的响应时间不得超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "验收：上传接口压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "修复深色模式的分页问题", "label": "goal", "src": "synthetic"}
+{"text": "验收：订单列表压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "导出功能内存占用不超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "首页加载和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "是否保留CI 流水线待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "完成的标准是评论组件在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "重建首页加载的失败索引", "label": "goal", "src": "synthetic"}
+{"text": "报表服务和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "上周评审过CI 流水线的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "排查首页加载报错的原因", "label": "goal", "src": "synthetic"}
+{"text": "必要时启用深色模式的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "CI 流水线和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "done when a 10k-row table renders under 10GB", "label": "acceptance", "src": "synthetic"}
+{"text": "更新首页加载文档", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是消息队列在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "首页加载与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "把首页加载的日志级别调成/healthz", "label": "goal", "src": "synthetic"}
+{"text": "不能修改配置文件的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "通知服务和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "取消CI 流水线迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "导出功能的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "必要时启用CI 流水线的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "如果通知服务超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "迁移登录接口到新集群", "label": "goal", "src": "synthetic"}
+{"text": "保持旧客户端兼容", "label": "constraint", "src": "dev-weak:mg_021"}
+{"text": "Don't bother with the 消息队列 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "当定时任务积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "各环境的订单列表名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "验收：支付回调压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "支付回调依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "拆分定时任务为独立服务", "label": "goal", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练购物车", "label": "dependency", "src": "synthetic"}
+{"text": "参考评论组件模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "排查定时任务报错的原因", "label": "goal", "src": "synthetic"}
+{"text": "跳过搜索功能的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "Remove the deprecated 订单列表 helper", "label": "goal", "src": "synthetic"}
+{"text": "Bump the webhook 分发器 timeout to 3 次", "label": "goal", "src": "synthetic"}
+{"text": "放弃CI 流水线方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "如果用户表超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "是否保留购物车待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "鉴权逻辑的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "我随便问问，导出功能的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "参考定时任务模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 深色模式", "label": "condition", "src": "synthetic"}
+{"text": "日志级别的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "验收：配置文件压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "把订单列表的超时改成debug", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是日志级别在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是配置文件在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "不用更新CI 流水线，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "如果订单列表超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "深色模式和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "参考导出功能模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "评论组件和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "把上传接口部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "之前的评论组件方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是购物车在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "好像上传接口昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "How long did the last 定时任务 migration take?", "label": "none", "src": "synthetic"}
+{"text": "配置文档也更新一下", "label": "goal", "src": "dev-weak:pp_186"}
+{"text": "如果导出功能超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "登录接口和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "验收：报表服务压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "webhook 分发器的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "验收：缓存模块压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是首页加载在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "Update the README for 报表服务", "label": "goal", "src": "synthetic"}
+{"text": "How long did the last migration take", "label": "none", "src": "dev-weak:qc_201"}
+{"text": "如果登录接口超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "如果webhook 分发器超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "是否保留缓存模块待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "缓存模块的响应时间不得超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "补充导出功能的测试用例", "label": "goal", "src": "synthetic"}
+{"text": "取消导出功能迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "需要先弄清楚搜索功能失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布用户表", "label": "dependency", "src": "synthetic"}
+{"text": "完成的标准是首页加载在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "上周评审过webhook 分发器的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "如果上传接口超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是用户表在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：购物车压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "订单列表的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "验收：导出功能压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果支付回调超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "实现导出 CSV 功能", "label": "goal", "src": "dev-weak:mg_023"}
+{"text": "完成的标准是报表服务在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是消息队列在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "webhook 分发器和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "之前的导出功能方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "撤销上一条关于支付回调的要求", "label": "cancel", "src": "synthetic"}
+{"text": "确保配置文件在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "如果通知服务超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "禁止在上传接口日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "目前缓存模块的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "把消息队列部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布定时任务", "label": "dependency", "src": "synthetic"}
+{"text": "升级缓存模块的依赖版本", "label": "goal", "src": "synthetic"}
+{"text": "当评论组件积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "这个深色模式的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "升级地址簿的依赖版本", "label": "goal", "src": "synthetic"}
+{"text": "之前说的上传接口限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "验收：消息队列压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "参见通知服务部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "升级支付回调的依赖版本", "label": "goal", "src": "synthetic"}
+{"text": "在支付回调里加上健康检查", "label": "goal", "src": "synthetic"}
+{"text": "验收：CI 流水线压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "参见购物车部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "搜索功能的响应时间不得超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "支付回调内存占用不超过3 次", "label": "constraint", "src": "synthetic"}
+{"text": "如果webhook 分发器超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "深色模式和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "Don't bother with the 报表服务 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "取消订单列表迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "no need to migrate the 评论组件 data", "label": "cancel", "src": "synthetic"}
+{"text": "上传接口依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "鉴权逻辑要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "屏蔽报表服务的重复告警", "label": "goal", "src": "synthetic"}
+{"text": "keep memory usage below /healthz", "label": "constraint", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练鉴权逻辑", "label": "dependency", "src": "synthetic"}
+{"text": "禁止在日志级别日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "保持消息队列的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "验收：导出功能压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "补充日志级别的测试用例", "label": "goal", "src": "synthetic"}
+{"text": "webhook 分发器内存占用不超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "登录接口要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new webhook 分发器", "label": "condition", "src": "synthetic"}
+{"text": "构建定时任务镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新深色模式", "label": "dependency", "src": "synthetic"}
+{"text": "消息队列的响应时间不得超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "我随便问问，定时任务的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "目前导出功能的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "不用更新定时任务，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "迁移期间不能丢消息", "label": "constraint", "src": "synthetic"}
+{"text": "webhook 分发器的响应时间不得超过3 次", "label": "constraint", "src": "synthetic"}
+{"text": "购物车和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "参见消息队列部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "目前上传接口的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "定时任务的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "must not break the 首页加载 API", "label": "constraint", "src": "synthetic"}
+{"text": "如果购物车超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "限制订单列表频率为3 次", "label": "constraint", "src": "synthetic"}
+{"text": "如果登录接口超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "这个日志级别的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是定时任务在debug内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "我随便问问，登录接口的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "参考用户表模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "如果定时任务超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "Remove the deprecated 首页加载 helper", "label": "goal", "src": "synthetic"}
+{"text": "升级登录接口的依赖版本", "label": "goal", "src": "synthetic"}
+{"text": "缓存模块内存占用不超过3 次", "label": "constraint", "src": "synthetic"}
+{"text": "文档与上传接口的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "缓存模块内存占用不超过100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是上传接口在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "done when a 10k-row table renders under webp", "label": "acceptance", "src": "synthetic"}
+{"text": "如果地址簿超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "拆分通知服务为独立服务", "label": "goal", "src": "synthetic"}
+{"text": "重建用户表的失败索引", "label": "goal", "src": "synthetic"}
+{"text": "把用户表的颜色调一下", "label": "goal", "src": "synthetic"}
+{"text": "验收：导出功能压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "屏蔽通知服务的重复告警", "label": "goal", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练报表服务", "label": "dependency", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新报表服务", "label": "dependency", "src": "synthetic"}
+{"text": "前端的loading态和后端的超时时间保持一致", "label": "coordination", "src": "dev-weak:pp_179"}
+{"text": "如果用户表超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "用哪个定时任务服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "用哪个购物车服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "验收：评论组件压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是报表服务在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "限制通知服务频率为10GB", "label": "constraint", "src": "synthetic"}
+{"text": "Wait for the 登录接口 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "导出功能的响应时间不得超过webp", "label": "constraint", "src": "synthetic"}
+{"text": "不能修改消息队列的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "鉴权逻辑的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "保持首页加载的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "消息队列和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "之前的缓存模块方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "验收：支付回调压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：首页加载压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "必要时启用报表服务的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "日志级别和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果搜索功能超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "各环境的首页加载名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "如果首页加载超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：通知服务压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果消息队列超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "接入新的定时任务服务商", "label": "goal", "src": "synthetic"}
+{"text": "配置文件和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "别做上传接口了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "顺便说一句，缓存模块的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "各环境的地址簿名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "通知服务和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "保持支付回调的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容定时任务", "label": "condition", "src": "synthetic"}
+{"text": "首页加载和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "订单列表的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "不用更新缓存模块，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "把导出功能部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "更新通知服务文档", "label": "goal", "src": "synthetic"}
+{"text": "上传接口的响应时间不得超过100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "删除废弃的CI 流水线代码", "label": "goal", "src": "synthetic"}
+{"text": "好像日志级别昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "等webhook 分发器就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "日志级别的响应时间不得超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "不能修改首页加载的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "如果支付回调超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "日志级别和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "参考日志级别模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "确保上传接口在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "登录接口内存占用不超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "验收：报表服务压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如前所述，方案保持不变", "label": "none", "src": "synthetic"}
+{"text": "限制登录接口频率为v2", "label": "constraint", "src": "synthetic"}
+{"text": "必要时启用用户表的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "顺便说一句，首页加载的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "取消日志级别迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "保持配置文件的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "确保登录接口在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "清理报表服务里的临时开关", "label": "goal", "src": "synthetic"}
+{"text": "How long did the last 用户表 migration take?", "label": "none", "src": "synthetic"}
+{"text": "How long did the last 消息队列 migration take?", "label": "none", "src": "synthetic"}
+{"text": "不需要重构登录接口，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "迁移支付回调到新集群", "label": "goal", "src": "synthetic"}
+{"text": "别做搜索功能了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "导出功能内存占用不超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "用哪个支付回调服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "上传接口和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "清理CI 流水线里的临时开关", "label": "goal", "src": "synthetic"}
+{"text": "更新报表服务文档", "label": "goal", "src": "synthetic"}
+{"text": "如果首页加载超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "报表服务的响应时间不得超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "Don't bother with the 通知服务 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "参考支付回调模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "我随便问问，订单列表的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "如果webhook 分发器超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "构建搜索功能镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "把地址簿部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "现状是登录接口每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "历史上通知服务出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是搜索功能在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "消息队列的响应时间不得超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "更新webhook 分发器文档", "label": "goal", "src": "synthetic"}
+{"text": "保持日志级别的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是缓存模块在debug内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "如果地址簿超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "编写鉴权逻辑的使用说明", "label": "goal", "src": "synthetic"}
+{"text": "购物车内存占用不超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "这个CI 流水线的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "把CI 流水线的超时改成10GB", "label": "goal", "src": "synthetic"}
+{"text": "如果首页加载超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "接入新的缓存模块服务商", "label": "goal", "src": "synthetic"}
+{"text": "no need to migrate the 地址簿 data", "label": "cancel", "src": "synthetic"}
+{"text": "配置文件的响应时间不得超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "Remove the deprecated 消息队列 helper", "label": "goal", "src": "synthetic"}
+{"text": "目前订单列表的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "现状是地址簿每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "定时任务内存占用不超过webp", "label": "constraint", "src": "synthetic"}
+{"text": "这个首页加载的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是消息队列在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "为订单列表实现分页功能", "label": "goal", "src": "synthetic"}
+{"text": "限制定时任务频率为500ms", "label": "constraint", "src": "synthetic"}
+{"text": "把报表服务的日志级别调成500ms", "label": "goal", "src": "synthetic"}
+{"text": "在评论组件上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "Fix the pagination bug on the orders page.", "label": "goal", "src": "dev-weak:sge_013"}
+{"text": "各环境的导出功能名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "必要时启用首页加载的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "消息队列和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "不用更新地址簿，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 评论组件", "label": "condition", "src": "synthetic"}
+{"text": "限制导出功能频率为500ms", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是消息队列在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "报表服务和数据库索引的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是配置文件在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "购物车的响应时间不得超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 支付回调", "label": "condition", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练通知服务", "label": "dependency", "src": "synthetic"}
+{"text": "Fix the pagination bug in 评论组件", "label": "goal", "src": "synthetic"}
+{"text": "必要时启用通知服务的降级开关", "label": "condition", "src": "synthetic"}
+{"text": "当地址簿积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "限制深色模式频率为/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "确保用户表在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "Web 端和小程序的上传接口展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "保持定时任务的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "升级日志级别的依赖版本", "label": "goal", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 配置文件", "label": "condition", "src": "synthetic"}
+{"text": "如果用户表超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：订单列表压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "拆分报表服务为独立服务", "label": "goal", "src": "synthetic"}
+{"text": "参见文档《部署手册》第三章", "label": "none", "src": "dev-weak:pr_136"}
+{"text": "放弃上传接口方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "如果深色模式超过500ms就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "补充订单列表的测试用例", "label": "goal", "src": "synthetic"}
+{"text": "是否保留webhook 分发器待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "不能修改日志级别的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "如果登录接口超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "需要先弄清楚评论组件失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "在订单列表上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "验收：订单列表压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "如果导出功能超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：支付回调压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：配置文件压测webp下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "之前的配置文件方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "Web 端和小程序的缓存模块展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "评论组件依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "取消用户表迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "验收：通知服务压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "有人看过这份性能报告吗", "label": "none", "src": "dev-weak:qc_199"}
+{"text": "Web 端和小程序的配置文件展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "放弃通知服务方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "限制购物车频率为10GB", "label": "constraint", "src": "synthetic"}
+{"text": "深色模式和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "限制鉴权逻辑频率为debug", "label": "constraint", "src": "synthetic"}
+{"text": "需要先弄清楚配置文件失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "限制地址簿频率为30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "限制配置文件频率为100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "如果购物车超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "历史上缓存模块出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "支持离线模式", "label": "goal", "src": "dev-weak:mc_040"}
+{"text": "验收：评论组件压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "历史上首页加载出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "删除废弃的购物车代码", "label": "goal", "src": "synthetic"}
+{"text": "如果首页加载超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是首页加载在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "这个鉴权逻辑的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "购物车内存占用不超过3 次", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是购物车在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "地址簿的响应时间不得超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "取消鉴权逻辑迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "先把数据库迁移跑完，再更新日志级别", "label": "dependency", "src": "synthetic"}
+{"text": "登录接口和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "这个购物车的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "上周评审过通知服务的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "顺便说一句，深色模式的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "有人看过这份性能报告吗？", "label": "none", "src": "synthetic"}
+{"text": "好像消息队列昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容导出功能", "label": "condition", "src": "synthetic"}
+{"text": "参见支付回调部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "当时用的是/healthz的超时配置", "label": "none", "src": "synthetic"}
+{"text": "我随便问问，评论组件的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "如果报表服务超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是通知服务在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "Enable compression for 上传接口", "label": "goal", "src": "synthetic"}
+{"text": "How long did the last 通知服务 migration take?", "label": "none", "src": "synthetic"}
+{"text": "撤销上一条关于定时任务的要求", "label": "cancel", "src": "synthetic"}
+{"text": "The service was migrated last year, as discussed", "label": "none", "src": "synthetic"}
+{"text": "保持评论组件的现有行为不变", "label": "constraint", "src": "synthetic"}
+{"text": "把消息队列的日志级别调成500ms", "label": "goal", "src": "synthetic"}
+{"text": "需要时缓存订单列表的草稿", "label": "condition", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 消息队列 models", "label": "dependency", "src": "synthetic"}
+{"text": "缺省语言要同步补全", "label": "coordination", "src": "dev-weak:co_067"}
+{"text": "Remove the deprecated 导出功能 helper", "label": "goal", "src": "synthetic"}
+{"text": "上传接口的响应时间不得超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "这个webhook 分发器的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "参见上传接口部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "现状是搜索功能每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "Enable compression for 消息队列", "label": "goal", "src": "synthetic"}
+{"text": "搜索功能内存占用不超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "Don't bother with the 日志级别 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "限制日志级别频率为10GB", "label": "constraint", "src": "synthetic"}
+{"text": "等支付回调就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "搜索功能内存占用不超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "我随便问问，报表服务的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 首页加载 models", "label": "dependency", "src": "synthetic"}
+{"text": "完成的标准是支付回调在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "给消息队列增加重试逻辑", "label": "goal", "src": "synthetic"}
+{"text": "这个搜索功能的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "之前的鉴权逻辑方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "用户表的响应时间不得超过100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "限制订单列表频率为100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "顺便说一句，订单列表的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是鉴权逻辑在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "之前的通知服务方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "跳过购物车的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "需要先弄清楚定时任务失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "把日志级别的颜色调一下", "label": "goal", "src": "synthetic"}
+{"text": "参考鉴权逻辑模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "这个报表服务的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "定时任务和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果鉴权逻辑超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "补充验收条件：并发 1000 时响应时间不超过 500ms", "label": "acceptance", "src": "dev-weak:rv_165"}
+{"text": "这个 bug 上周不是修过了吗？", "label": "none", "src": "synthetic"}
+{"text": "需要时缓存评论组件的草稿", "label": "condition", "src": "synthetic"}
+{"text": "新协议与旧协议的响应字段保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "评论组件和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "参考深色模式模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "各环境的webhook 分发器名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "地址簿依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "删除临时开关", "label": "goal", "src": "dev-weak:pp_185"}
+{"text": "限制搜索功能频率为debug", "label": "constraint", "src": "synthetic"}
+{"text": "顺便说一句，评论组件的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "上传接口的响应时间不得超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "把首页加载的颜色调一下", "label": "goal", "src": "synthetic"}
+{"text": "更新购物车文档", "label": "goal", "src": "synthetic"}
+{"text": "限制深色模式频率为30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "限制鉴权逻辑频率为3 次", "label": "constraint", "src": "synthetic"}
+{"text": "需要先弄清楚日志级别失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "历史上搜索功能出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "消息队列内存占用不超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "no need to migrate the 首页加载 data", "label": "cancel", "src": "synthetic"}
+{"text": "目前深色模式的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "统计鉴权逻辑的调用量", "label": "goal", "src": "synthetic"}
+{"text": "登录接口内存占用不超过100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "支付回调要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 鉴权逻辑 models", "label": "dependency", "src": "synthetic"}
+{"text": "Should we migrate now or later", "label": "none", "src": "dev-weak:qc_200"}
+{"text": "验收：定时任务压测100 QPS下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "不用更新webhook 分发器，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "验收：上传接口压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "确保webhook 分发器在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "如果CI 流水线超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "验收：地址簿压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 导出功能 models", "label": "dependency", "src": "synthetic"}
+{"text": "Don't bother with the 搜索功能 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "搜索功能依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "验收：上传接口压测debug下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "禁止在搜索功能日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "禁止在报表服务日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "定时任务的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "取消搜索功能迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "Add retry logic to 登录接口", "label": "goal", "src": "synthetic"}
+{"text": "no need to migrate the 缓存模块 data", "label": "cancel", "src": "synthetic"}
+{"text": "Wait for the 购物车 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "如果缓存模块超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "在地址簿上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "撤销上一条关于登录接口的要求", "label": "cancel", "src": "synthetic"}
+{"text": "文档与日志级别的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "现状是报表服务每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "文档与缓存模块的实际行为保持对齐", "label": "coordination", "src": "synthetic"}
+{"text": "上传接口的响应时间不得超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "用哪个CI 流水线服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "用哪个缓存模块服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "取消定时任务迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "缓存键的结构尚不确定，先留扩展点", "label": "unresolved", "src": "synthetic"}
+{"text": "Wait for the 消息队列 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "评论组件和客户端 SDK的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "之前说的导出功能限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "需要时缓存通知服务的草稿", "label": "condition", "src": "synthetic"}
+{"text": "补充消息队列的测试用例", "label": "goal", "src": "synthetic"}
+{"text": "修复鉴权逻辑的分页问题", "label": "goal", "src": "synthetic"}
+{"text": "参见鉴权逻辑部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "跳过报表服务的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "我随便问问，用户表的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "构建缓存模块镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "定时任务和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是购物车在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "Web 端和小程序的定时任务展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 购物车 models", "label": "dependency", "src": "synthetic"}
+{"text": "Web 端和小程序的订单列表展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "如果地址簿超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "We already migrated the tokens previously", "label": "none", "src": "synthetic"}
+{"text": "How long did the last 缓存模块 migration take?", "label": "none", "src": "synthetic"}
+{"text": "上周评审过首页加载的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "日志级别和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "用哪个登录接口服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "Wait for the 深色模式 migration to finish, then redeploy", "label": "dependency", "src": "synthetic"}
+{"text": "登录接口的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "参见评论组件部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "报表服务和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "确保定时任务在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "如果配置文件超过debug就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "产物大小不超过原来的 1.1 倍", "label": "constraint", "src": "dev-weak:ac_084"}
+{"text": "Update the README for 首页加载", "label": "goal", "src": "synthetic"}
+{"text": "之前的消息队列方案文档在 wiki 上", "label": "none", "src": "synthetic"}
+{"text": "限制订单列表频率为/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "确保示例与实际行为一致", "label": "coordination", "src": "dev-weak:co_068"}
+{"text": "历史上webhook 分发器出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练CI 流水线", "label": "dependency", "src": "synthetic"}
+{"text": "把定时任务的颜色调一下", "label": "goal", "src": "synthetic"}
+{"text": "目前日志级别的日活是一万", "label": "none", "src": "synthetic"}
+{"text": "购物车依赖配置模块的输出", "label": "dependency", "src": "synthetic"}
+{"text": "撤销上一条关于报表服务的要求", "label": "cancel", "src": "synthetic"}
+{"text": "当用户未绑定手机号时先引导绑定", "label": "condition", "src": "synthetic"}
+{"text": "用哪个鉴权逻辑服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "不能修改深色模式的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "目前已经上线的是 v2 接口", "label": "none", "src": "dev-weak:pb_126"}
+{"text": "must not break the 定时任务 API", "label": "constraint", "src": "synthetic"}
+{"text": "如果日志级别超过30 秒就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "Don't bother with the 支付回调 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "撤销上一条关于配置文件的要求", "label": "cancel", "src": "synthetic"}
+{"text": "之前说的深色模式限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "不用更新深色模式，现有的够用", "label": "cancel", "src": "synthetic"}
+{"text": "must not break the 登录接口 API", "label": "constraint", "src": "synthetic"}
+{"text": "消息队列内存占用不超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "别做日志级别了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "首页加载的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "是否保留用户表待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "用户表和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "用户表的响应时间不得超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "done when a 10k-row table renders under v2", "label": "acceptance", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 评论组件 models", "label": "dependency", "src": "synthetic"}
+{"text": "把缓存模块的超时改成debug", "label": "goal", "src": "synthetic"}
+{"text": "Enable compression for 首页加载", "label": "goal", "src": "synthetic"}
+{"text": "通知服务的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "首页加载内存占用不超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "我随便问问，CI 流水线的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "历史上消息队列出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "统计支付回调的调用量", "label": "goal", "src": "synthetic"}
+{"text": "支付回调的响应时间不得超过500ms", "label": "constraint", "src": "synthetic"}
+{"text": "把搜索功能的超时改成500ms", "label": "goal", "src": "synthetic"}
+{"text": "如果首页加载超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "禁止在通知服务日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "购物车要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "完成的标准是定时任务在webp内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "等日志级别就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "把消息队列的日志级别调成debug", "label": "goal", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 上传接口 models", "label": "dependency", "src": "synthetic"}
+{"text": "Bump the CI 流水线 timeout to webp", "label": "goal", "src": "synthetic"}
+{"text": "验收：导出功能压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "取消webhook 分发器迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "鉴权逻辑的响应时间不得超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "验收：地址簿压测500ms下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：用户表压测/healthz下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：评论组件压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "验收：购物车压测10GB下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "How long did the last 订单列表 migration take?", "label": "none", "src": "synthetic"}
+{"text": "撤销上一条关于地址簿的要求", "label": "cancel", "src": "synthetic"}
+{"text": "统计上传接口的调用量", "label": "goal", "src": "synthetic"}
+{"text": "上周评审过日志级别的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "禁止在消息队列日志里打印用户内容", "label": "constraint", "src": "synthetic"}
+{"text": "如果定时任务超过/healthz就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "done when a 10k-row table renders under 3 次", "label": "acceptance", "src": "synthetic"}
+{"text": "顺便说一句，消息队列的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "顺带一提", "label": "none", "src": "dev-weak:pb_129"}
+{"text": "报表服务的响应时间不得超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "把首页加载的超时改成10GB", "label": "goal", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容用户表", "label": "condition", "src": "synthetic"}
+{"text": "配置文件和运营后台的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "在通知服务上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "Don't bother with the 购物车 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "重建配置文件的失败索引", "label": "goal", "src": "synthetic"}
+{"text": "导出功能和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "鉴权逻辑与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "限制日志级别频率为100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "导出功能要等数仓任务完成后再开发", "label": "dependency", "src": "synthetic"}
+{"text": "订单列表的响应时间不得超过v2", "label": "constraint", "src": "synthetic"}
+{"text": "确保鉴权逻辑在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "各环境的评论组件名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "完成的标准是日志级别在500ms内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "需要先弄清楚缓存模块失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "验收：CI 流水线压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "当订单列表积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "好像webhook 分发器昨天抖了一下，后来自己恢复了", "label": "none", "src": "synthetic"}
+{"text": "验收：消息队列压测3 次下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "webhook 分发器内存占用不超过100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "如果报表服务超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "参见搜索功能部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "完成的标准是购物车在3 次内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "不需要重构消息队列，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "等首页加载就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "评论组件的响应时间不得超过3 次", "label": "constraint", "src": "synthetic"}
+{"text": "立即回滚发布", "label": "goal", "src": "dev-weak:cu_074"}
+{"text": "验收：定时任务压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是导出功能在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "登录接口和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "不能修改登录接口的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "需要时缓存鉴权逻辑的草稿", "label": "condition", "src": "synthetic"}
+{"text": "日志级别与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "把定时任务的超时改成500ms", "label": "goal", "src": "synthetic"}
+{"text": "Don't bother with the 订单列表 refactor, we cancelled it", "label": "cancel", "src": "synthetic"}
+{"text": "地址簿的响应时间不得超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "数据清洗完成后，再训练订单列表", "label": "dependency", "src": "synthetic"}
+{"text": "缓存模块的命名规则还不确定", "label": "unresolved", "src": "synthetic"}
+{"text": "取消购物车迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "更新用户表文档", "label": "goal", "src": "synthetic"}
+{"text": "需要先弄清楚CI 流水线失败的原因", "label": "unresolved", "src": "synthetic"}
+{"text": "验收：深色模式压测30 秒下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "视压测结果决定是否扩容鉴权逻辑", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是首页加载在debug内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "如果地址簿超过10GB就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "Add retry logic to 订单列表", "label": "goal", "src": "synthetic"}
+{"text": "Enable compression for 定时任务", "label": "goal", "src": "synthetic"}
+{"text": "放弃报表服务方案，直接用第三方组件", "label": "cancel", "src": "synthetic"}
+{"text": "当登录接口积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "限制webhook 分发器频率为500ms", "label": "constraint", "src": "synthetic"}
+{"text": "更新登录接口文档", "label": "goal", "src": "synthetic"}
+{"text": "取消深色模式迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "不需要重构购物车，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "用哪个导出功能服务商还没定", "label": "unresolved", "src": "synthetic"}
+{"text": "如果通知服务超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "如果配置文件超过webp就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "How long did the last 日志级别 migration take?", "label": "none", "src": "synthetic"}
+{"text": "我随便问问，上传接口的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "编写日志级别的使用说明", "label": "goal", "src": "synthetic"}
+{"text": "为日志级别实现分页功能", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是评论组件在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "取消消息队列迁移的要求", "label": "cancel", "src": "synthetic"}
+{"text": "深色模式的响应时间不得超过30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "支付回调的升级窗口待讨论", "label": "unresolved", "src": "synthetic"}
+{"text": "在导出功能上线之前先做回归", "label": "dependency", "src": "synthetic"}
+{"text": "前端 loading 态要和后端超时时间对齐", "label": "coordination", "src": "dev-weak:pp_180"}
+{"text": "配置如下：\n```yaml\nretry: 3\n```", "label": "none", "src": "synthetic"}
+{"text": "不能修改缓存模块的对外签名", "label": "constraint", "src": "synthetic"}
+{"text": "排查上传接口报错的原因", "label": "goal", "src": "synthetic"}
+{"text": "如果订单列表超过3 次就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "无需迁移旧数据，那个计划作废", "label": "cancel", "src": "synthetic"}
+{"text": "是否保留配置文件待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "跳过评论组件的适配，本期不做", "label": "cancel", "src": "synthetic"}
+{"text": "当时用的是10GB的超时配置", "label": "none", "src": "synthetic"}
+{"text": "当购物车积压超过一万条时发送告警", "label": "condition", "src": "synthetic"}
+{"text": "把 Jenkins 的构建超时延长到 30 分钟", "label": "goal", "src": "dev-weak:sg_004"}
+{"text": "限制CI 流水线频率为30 秒", "label": "constraint", "src": "synthetic"}
+{"text": "定时任务和API 文档的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "Once the schema is frozen, generate the 搜索功能 models", "label": "dependency", "src": "synthetic"}
+{"text": "用户表和网关路由的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 上传接口", "label": "condition", "src": "synthetic"}
+{"text": "是否保留评论组件待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "不需要重构首页加载，那个计划取消了", "label": "cancel", "src": "synthetic"}
+{"text": "别做导出功能了，砍掉这个需求", "label": "cancel", "src": "synthetic"}
+{"text": "如果订单列表超过v2就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "完成的标准是支付回调在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "我随便问问，搜索功能的收费模式是怎样的？", "label": "none", "src": "synthetic"}
+{"text": "之前说的用户表限流先不做了", "label": "cancel", "src": "synthetic"}
+{"text": "等登录接口就绪后再切换流量", "label": "dependency", "src": "synthetic"}
+{"text": "在搜索功能里加上健康检查", "label": "goal", "src": "synthetic"}
+{"text": "How long did the last 上传接口 migration take?", "label": "none", "src": "synthetic"}
+{"text": "把深色模式部署到预发环境", "label": "goal", "src": "synthetic"}
+{"text": "参考webhook 分发器模块的写法即可", "label": "none", "src": "synthetic"}
+{"text": "CI 流水线的响应时间不得超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是缓存模块在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "构建报表服务镜像之前先提交锁文件", "label": "dependency", "src": "synthetic"}
+{"text": "这个评论组件的问题之前讨论过", "label": "none", "src": "synthetic"}
+{"text": "更新接口文档", "label": "goal", "src": "dev-weak:co_068"}
+{"text": "限制支付回调频率为/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "生成签名文件之后才能发布通知服务", "label": "dependency", "src": "synthetic"}
+{"text": "顺便说一句，购物车的负责人换了", "label": "none", "src": "synthetic"}
+{"text": "如果评论组件超过100 QPS就分批处理", "label": "condition", "src": "synthetic"}
+{"text": "参见登录接口部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "确保深色模式在离线时可用", "label": "constraint", "src": "synthetic"}
+{"text": "How long did the last CI 流水线 migration take?", "label": "none", "src": "synthetic"}
+{"text": "定时任务内存占用不超过10GB", "label": "constraint", "src": "synthetic"}
+{"text": "完成的标准是webhook 分发器在10GB内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "If the feature flag is on, use the new 登录接口", "label": "condition", "src": "synthetic"}
+{"text": "支付回调的响应时间不得超过100 QPS", "label": "constraint", "src": "synthetic"}
+{"text": "现状是定时任务每天有一万条请求", "label": "none", "src": "synthetic"}
+{"text": "压缩CI 流水线的静态资源", "label": "goal", "src": "synthetic"}
+{"text": "Web 端和小程序的首页加载展示逻辑同步", "label": "coordination", "src": "synthetic"}
+{"text": "把支付回调的日志级别调成100 QPS", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是支付回调在v2内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "fix the memory leak.", "label": "goal", "src": "dev-weak:ds_101"}
+{"text": "支持微信扫码登录", "label": "goal", "src": "dev-weak:mg_024"}
+{"text": "迁移评论组件到新集群", "label": "goal", "src": "synthetic"}
+{"text": "我们是不是应该先做迁移", "label": "none", "src": "dev-weak:qc_197"}
+{"text": "各环境的报表服务名称统一", "label": "coordination", "src": "synthetic"}
+{"text": "定时任务的响应时间不得超过debug", "label": "constraint", "src": "synthetic"}
+{"text": "参见日志级别部署手册第三章", "label": "none", "src": "synthetic"}
+{"text": "接入新的深色模式服务商", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是导出功能在100 QPS内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "上周评审过定时任务的设计，结论是继续观察", "label": "none", "src": "synthetic"}
+{"text": "订单列表的响应时间不得超过webp", "label": "constraint", "src": "synthetic"}
+{"text": "订单列表和小程序端的配置保持同步", "label": "coordination", "src": "synthetic"}
+{"text": "给定时任务增加重试逻辑", "label": "goal", "src": "synthetic"}
+{"text": "完成的标准是登录接口在/healthz内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "完成的标准是缓存模块在30 秒内渲染完成", "label": "acceptance", "src": "synthetic"}
+{"text": "导出功能的响应时间不得超过/healthz", "label": "constraint", "src": "synthetic"}
+{"text": "编写配置文件的使用说明", "label": "goal", "src": "synthetic"}
+{"text": "用户表与实体类的命名规范要对齐", "label": "coordination", "src": "synthetic"}
+{"text": "环境信息：\n```ini\npython = 3.12\nnode = 22\n```", "label": "none", "src": "synthetic"}
+{"text": "给订单列表加一列创建时间", "label": "goal", "src": "synthetic"}
+{"text": "压测脚本需要提前准备好", "label": "goal", "src": "dev-weak:cu_073"}
+{"text": "是否保留消息队列待确认", "label": "unresolved", "src": "synthetic"}
+{"text": "限制用户表频率为v2", "label": "constraint", "src": "synthetic"}
+{"text": "历史上配置文件出过一次类似事故", "label": "none", "src": "synthetic"}
+{"text": "把缓存模块的超时改成10GB", "label": "goal", "src": "synthetic"}
+{"text": "接入新的支付回调服务商", "label": "goal", "src": "synthetic"}
+{"text": "验收：上传接口压测v2下无错误", "label": "acceptance", "src": "synthetic"}
+{"text": "限制通知服务频率为500ms", "label": "constraint", "src": "synthetic"}
+{"text": "如果配置文件超过/healthz就分批处理", "label": "condition", "src": "synthetic"}

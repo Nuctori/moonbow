@@ -1,0 +1,41 @@
+{
+  "_comment": "Moonbow 统一语义匹配运行时示例配置。backend.type=fake|slm；slm 需要本地 HF 缓存与 torch（见 docs/semantic_runtime_progress.md P4）。启动：python -m moonbow.semantic.http --config config/semantic_runtime.example.json",
+  "server": {
+    "host": "127.0.0.1",
+    "port": 18500,
+    "max_body_bytes": 2097152
+  },
+  "runtime": {
+    "queue_capacity": 8,
+    "deadline_seconds": 5.0,
+    "max_retries": 2,
+    "max_batch": 16,
+    "warmup": true
+  },
+  "backend": {
+    "type": "fake",
+    "model_revision": "fake-rev-1",
+    "fault": null,
+    "delay": 0.0,
+    "rules": {
+      "completion.asserted@1": {
+        "matched": true,
+        "score": 0.9,
+        "quotes": ["应该修好了"],
+        "relation": "supports"
+      },
+      "process.unresolved@1": {
+        "abstain": true,
+        "reason_code": "insufficient_context"
+      }
+    }
+  },
+  "_slm_example": {
+    "type": "slm",
+    "model_id": "Qwen/Qwen3.5-0.8B",
+    "revision": null,
+    "device": "cpu",
+    "dtype": null,
+    "max_new_tokens": 256
+  }
+}

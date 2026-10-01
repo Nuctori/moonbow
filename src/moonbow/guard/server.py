@@ -6,16 +6,49 @@
 """
 import json
 import logging
+import os
 from typing import Optional
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 from .verifier import ProgressGuard, Decision
+from .process_audit import audit_stage_payload
+from .convergence import (
+    CONVERGENCE_ENV,
+    AdvisoryBudget,
+    ConvergenceShadow,
+    convergence_mode_from_env,
+)
+from .semantic_provider import (
+    PROVIDER_ENV,
+    SEMANTIC_CONFIG_ENV,
+    env_provider_key,
+)
 
 logger = logging.getLogger("progress_guard.server")
 
 
 class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
     guard: ProgressGuard = None  # 类属性，在启动时注入
+    # 可选：语义 provider（P2 SemanticMatcher 经 adapter）。None = 未配置，
+    # /check 请求 semantic_provider="semantic" 时明确 400，不静默回退。
+    semantic_provider = None
+    # R5：/check 未显式指定 semantic_provider 时的缺省值。默认 "legacy"
+    # （既有行为零变化）；MOONBOW_GUARD_PROVIDER=semantic 启动时置为
+    # "semantic"（配置激活，代码就绪）。
+    default_provider_key = "legacy"
+    # Phase 1：收敛信号 shadow 观察者（/v1/stage-check 的
+    # enable_convergence_shadow=true 时惰性构造、类级复用。
+    # ConvergenceShadow.compute 是块流纯函数、无跨请求状态，复用安全。
+    # 缺省 None：不传 flag 的请求行为与之前逐字节一致）。
+    convergence_shadow = None
+    # Phase 2：收敛提示 advisory 门控。MOONBOW_GUARD_CONVERGENCE：
+    # off（默认，现状）| shadow（只记录）| advisory（触发命中且预算未用时
+    # reminder 可投递收敛提示）。env 仅在 start_server 读取一次；类属性
+    # 缺省 off 保证测试/直启进程零变化。advisory 状态查询：
+    # GET /v1/convergence-status（只读，不改变行为）。
+    convergence_mode = "off"
+    # advisory 模式的独立预算（每任务最多 2 次，按 (task_id|req哈希, signal) 记）
+    convergence_advisory = None
 
     def _send_json(self, status_code: int, data: dict):
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
@@ -28,6 +61,20 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path in ("/health", "/", "/ping"):
             self._send_json(200, {"status": "ok", "service": "progress-guard"})
+        elif self.path == "/v1/convergence-status":
+            # 只读状态：收敛通道模式与预算用量（advisory 观测/冒烟验证用）
+            advisory = self.convergence_advisory
+            self._send_json(200, {
+                "mode": self.convergence_mode,
+                "tasks_with_delivery": (len(advisory._counts) if advisory else 0),
+            })
+        elif self.path == "/v1/semantic-status":
+            # 只读状态：当前语义 provider kind / backend / calibrated 声明。
+            if self.semantic_provider is not None:
+                status = dict(self.semantic_provider.describe())
+            else:
+                status = self.guard.semantic_status()
+            self._send_json(200, status)
         else:
             self._send_json(404, {"error": "Not Found"})
 
@@ -46,6 +93,62 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
 
         if not isinstance(payload, dict):
             self._send_json(400, {"error": "JSON payload must be an object"})
+            return
+
+        # ---- 阶段审计端点（过程审计；与收尾 /check 分离，不影响其语义）----
+        if self.path in ("/v1/stage-check", "/stage-check"):
+            try:
+                # Phase 1：可选收敛 shadow 通道（只记录、零投递）。
+                # payload 缺省不带 enable_convergence_shadow → 走原路径，
+                # 响应不含 shadow_convergence 键（零行为变化）。
+                conv_flag = payload.get("enable_convergence_shadow", False)
+                if not isinstance(conv_flag, bool):
+                    raise ValueError("enable_convergence_shadow must be a boolean")
+                if conv_flag:
+                    if GuardHTTPRequestHandler.convergence_shadow is None:
+                        GuardHTTPRequestHandler.convergence_shadow = ConvergenceShadow()
+                    # Phase 2：advisory 门控——仅 server env=advisory 时注入
+                    # 预算（触发命中 → reminder 可投递）；off/shadow 注入
+                    # None，与 Phase 1 逐字节一致。
+                    conv_advisory = (GuardHTTPRequestHandler.convergence_advisory
+                                     if GuardHTTPRequestHandler.convergence_mode == "advisory"
+                                     else None)
+                    result = audit_stage_payload(
+                        payload,
+                        convergence_shadow=GuardHTTPRequestHandler.convergence_shadow,
+                        convergence_advisory=conv_advisory)
+                else:
+                    result = audit_stage_payload(payload)
+                logger.info("/v1/stage-check findings=%d reminder=%s",
+                            len(result.get("findings", [])),
+                            bool(result.get("reminder")))
+                self._send_json(200, result)
+            except (ValueError, TypeError) as e:
+                self._send_json(400, {"error": str(e)})
+            except Exception as e:
+                logger.exception("阶段审计发生内部异常")
+                self._send_json(500, {"error": f"Internal Stage Audit Error: {e}"})
+            return
+
+        # ---- 任务结构顾问端点（独立能力；lazy import + 异常完全隔离，
+        #      不触达守卫的任何状态与判定；/check 语义不变）----
+        if self.path in ("/v1/task-structure", "/task-structure"):
+            try:
+                from ..task_structure.service import analyze_payload
+                result = analyze_payload(payload)
+                logger.info("/v1/task-structure level=%s goals=%s abstain=%s",
+                            result.get("level"),
+                            (result.get("vector") or {}).get("goals"),
+                            result.get("abstain"))
+                self._send_json(200, result)
+            except (ValueError, TypeError) as e:
+                self._send_json(400, {"error": str(e)})
+            except ImportError as e:
+                logger.warning("task_structure 模块不可用: %s", e)
+                self._send_json(503, {"error": "task_structure unavailable"})
+            except Exception as e:
+                logger.exception("任务结构分析发生内部异常")
+                self._send_json(500, {"error": f"Internal Task Structure Error: {e}"})
             return
 
         ext_success = payload.get("external_tool_success", None)
@@ -67,6 +170,18 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
             self._send_json(400, {"error": "rounds must be an integer"})
             return
 
+        # P6/R5：可选语义 provider 选择。缺省值由部署配置决定
+        # （MOONBOW_GUARD_PROVIDER=semantic 时默认 semantic；缺省 legacy，
+        # 与既有 /check 行为一致）。请求显式指定时覆盖缺省。
+        provider_key = payload.get("semantic_provider", self.default_provider_key)
+        if provider_key not in ("legacy", "semantic"):
+            self._send_json(400, {"error": "semantic_provider must be 'legacy' or 'semantic'"})
+            return
+        if provider_key == "semantic" and self.semantic_provider is None:
+            self._send_json(400, {"error": "semantic_provider='semantic' requested but semantic runtime is not configured on this server"})
+            return
+        check_provider = self.semantic_provider if provider_key == "semantic" else None
+
         try:
             verdict = self.guard.check(
                 req=req,
@@ -75,6 +190,7 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
                 external_tool_success=ext_success,
                 mode=mode,
                 semantic_review_used=review_used,
+                provider=check_provider,
             )
             # 裁决遥测：stdout 可见（CI / 安装验证以这行 log 为投递证据）
             logger.info("/check verdict=%s is_closed=%s skeleton=%s",
@@ -96,17 +212,63 @@ def start_server(
     models_dir: Optional[str] = None,
     device: str = "cpu",
     lazy: bool = False,
+    semantic_provider=None,
 ):
     """启动本地守卫微服务并常驻监听。
 
     lazy=True：骨架模式，无权重可运行（协议/硬信号/工具证据层；
     权重缺失时定性信号自动降级，见 verifier）。
+    semantic_provider：可选 SemanticProviderAdapter（P6）。None = 仅 legacy，
+    /check 请求 semantic_provider="semantic" 时明确 400。
+
+    R5 默认切换（配置驱动，缺省 legacy 零变化）：
+    - MOONBOW_GUARD_PROVIDER=semantic 启动时按
+      MOONBOW_GUARD_SEMANTIC_CONFIG（缺省 config/semantic_runtime_lora.json）
+      构建白名单 semantic provider，/check 与 SDK 默认走 semantic；
+      构建失败记 warning 并保持 legacy。
+    - 一键回滚 = 移除该环境变量 + 重启（verdict 与 legacy 基线逐字段一致，
+      见 P10 回滚演练 results/semantic-runtime/p9-host/rollback_drill.md）。
+
+    Phase 2 收敛通道（MOONBOW_GUARD_CONVERGENCE=off|shadow|advisory，默认
+    off = Phase 1 现状）：advisory 时 /v1/stage-check 的收敛触发命中可在
+    reminder 投递收敛提示（独立预算，每任务最多 2 次）。
     """
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
     logger.info("正在初始化 Progress Guard 模型 (%s @ %s, lazy=%s)...", models_dir or "default", device, lazy)
 
+    mode = convergence_mode_from_env()
+    if mode != "off":
+        GuardHTTPRequestHandler.convergence_mode = mode
+        if mode == "advisory":
+            GuardHTTPRequestHandler.convergence_advisory = AdvisoryBudget()
+        logger.info("%s=%s：收敛通道开启（advisory=触发命中可投递收敛提示；"
+                    "一键回滚 = 移除该环境变量并重启）", CONVERGENCE_ENV, mode)
+    else:
+        GuardHTTPRequestHandler.convergence_mode = "off"
+        GuardHTTPRequestHandler.convergence_advisory = None
+        if os.environ.get(CONVERGENCE_ENV):
+            logger.warning("%s=%r 非法（合法值 off/shadow/advisory）：保持 off",
+                           CONVERGENCE_ENV, os.environ[CONVERGENCE_ENV])
+
+    env_key = env_provider_key()
+    if semantic_provider is None and env_key == "semantic":
+        try:
+            from .semantic_provider import semantic_provider_from_config
+            semantic_provider = semantic_provider_from_config(
+                os.environ.get(SEMANTIC_CONFIG_ENV))
+            GuardHTTPRequestHandler.default_provider_key = "semantic"
+            logger.info("MOONBOW_GUARD_PROVIDER=semantic: /check 默认走 "
+                        "semantic provider（白名单；回滚 = 移除该环境变量并重启）")
+        except Exception as e:
+            logger.warning("semantic provider 构建失败（%s: %s），保持 legacy 默认",
+                           type(e).__name__, e)
+    elif env_key is None:
+        GuardHTTPRequestHandler.default_provider_key = "legacy"
+        logger.info("%s 未设置或非法：/check 默认 legacy（既有行为零变化）", PROVIDER_ENV)
+
     guard = ProgressGuard(models_dir=models_dir, device=device, lazy_load=lazy)
     GuardHTTPRequestHandler.guard = guard
+    GuardHTTPRequestHandler.semantic_provider = semantic_provider
 
     server = HTTPServer((host, port), GuardHTTPRequestHandler)
     logger.info("Progress Guard 服务已启动: http://%s:%d", host, port)

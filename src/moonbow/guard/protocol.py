@@ -47,9 +47,102 @@ MANIFEST_TEMPLATE = (
 )
 
 PROMPT_REQUIRE_MANIFEST = (
-    "你是执行代理。结束任务前必须申报闭合清单，只输出以下三行，不要输出其他内容：\n\n"
-    f"{MANIFEST_TEMPLATE}"
+    "你是执行代理。请先按下述三行格式申报当前闭合状态：\n\n"
+    f"{MANIFEST_TEMPLATE}\n\n"
+    # 措辞两处刻意设计（2026-09-22 实测）：
+    # 1) 不留"报未完成即可收工"的出口 —— 弱主动性模型会据此提前投降；
+    # 2) 不要求"只输出三行，不要输出其他内容" —— 旧措辞被模型当成一个
+    #    必须完成的独立子任务，申报完就停止，把正在推进的工作丢了。
+    #    改为：申报包含在正常回复中，随后立即继续未完成的工作。
+    "申报后就继续执行：若 REMAINING 非空或 STATUS 不是 A，"
+    "你必须接着调用工具把剩余事项做完，不要以申报作为回复的结尾。"
 )
+
+
+# ---------------------------------------------------------------------------
+# 阶段审计（过程审计）数据结构：观察块、审计发现。
+# 与收尾清单协议严格分离 —— 中间汇报不得套用 STATUS/REMAINING/EVIDENCE 门禁。
+# ---------------------------------------------------------------------------
+
+STAGE_BLOCK_KINDS = ("thinking", "text", "toolCall", "toolResult")
+
+FINDING_STATUSES = (
+    "candidate",     # 片段疑点，不足以提醒
+    "actionable",    # 阶段结束后仍成立，值得介入
+    "addressed",     # 模型已回应（不代表实际修复）
+    "resolved",      # 有足够新记录支持问题解决
+    "withdrawn",     # 原判断不成立，撤销
+    "unverified",    # 信息不足，保留未知（不是失败）
+)
+
+
+@dataclass
+class StageBlock:
+    """一条已完成的观察块（来自 Pi 流式事件组装）。"""
+    seq: int
+    kind: str                       # thinking / text / toolCall / toolResult
+    text: str = ""
+    tool_call_id: Optional[str] = None
+    tool_name: Optional[str] = None
+    is_error: bool = False
+
+    def __post_init__(self):
+        if self.kind not in STAGE_BLOCK_KINDS:
+            raise ValueError(f"stage block kind must be one of {STAGE_BLOCK_KINDS}")
+        if type(self.seq) is not int:
+            raise TypeError("seq must be int")
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "seq": self.seq, "kind": self.kind, "text": self.text,
+            "tool_call_id": self.tool_call_id, "tool_name": self.tool_name,
+            "is_error": self.is_error,
+        }
+
+    @classmethod
+    def from_dict(cls, d: Dict[str, Any]) -> "StageBlock":
+        return cls(
+            seq=d.get("seq", 0), kind=d.get("kind", "text"),
+            text=str(d.get("text", "") or ""),
+            tool_call_id=d.get("tool_call_id"), tool_name=d.get("tool_name"),
+            is_error=bool(d.get("is_error", False)),
+        )
+
+
+@dataclass
+class StageFinding:
+    """阶段审计发现：声明/观察与用户要求之间的差异。"""
+    fingerprint: str
+    kind: str                       # evidence-order / contradiction / unverified-claim / thinking-concern
+    status: str                     # FINDING_STATUSES 之一
+    summary: str = ""
+    evidence: List[Dict[str, Any]] = field(default_factory=list)  # [{seq, kind, excerpt}]
+    snapshot_version: int = 0
+    updated_at: int = 0
+
+    def __post_init__(self):
+        if self.status not in FINDING_STATUSES:
+            raise ValueError(f"finding status must be one of {FINDING_STATUSES}")
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "fingerprint": self.fingerprint, "kind": self.kind, "status": self.status,
+            "summary": self.summary, "evidence": self.evidence,
+            "snapshot_version": self.snapshot_version, "updated_at": self.updated_at,
+        }
+
+    @classmethod
+    def from_dict(cls, d: Dict[str, Any]) -> "StageFinding":
+        status = d.get("status", "candidate")
+        if status not in FINDING_STATUSES:
+            status = "candidate"
+        return cls(
+            fingerprint=str(d.get("fingerprint", "")), kind=str(d.get("kind", "")),
+            status=status, summary=str(d.get("summary", "") or ""),
+            evidence=list(d.get("evidence", []) or []),
+            snapshot_version=int(d.get("snapshot_version", 0) or 0),
+            updated_at=int(d.get("updated_at", 0) or 0),
+        )
 
 
 def parse_manifest(text: str) -> ClosureManifest:

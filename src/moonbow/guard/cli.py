@@ -81,17 +81,23 @@ def cmd_parse(args):
 def cmd_install_pi(args):
     target_dir = args.target or os.path.expanduser("~/.pi/agent/extensions")
     os.makedirs(target_dir, exist_ok=True)
-    
-    src_ext = os.path.abspath(os.path.join(os.path.dirname(__file__), "extensions", "progress-guard.ts"))
-    if not os.path.exists(src_ext):
-        # 尝试查找项目目录
-        cand = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../pi-extension/progress-guard.ts"))
-        if os.path.exists(cand):
-            src_ext = cand
 
-    dest = os.path.join(target_dir, "progress-guard.ts")
-    shutil.copyfile(src_ext, dest)
-    print(f"✓ 已成功将 progress-guard 插件安装至: {dest}")
+    # 扩展入口 + 阶段审计采集/调度模块（缺一不可，均需安装到同目录）
+    ext_names = ["progress-guard.ts", "process-events.ts", "process-task.ts", "process-audit.ts"]
+    src_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "extensions"))
+    installed = []
+    for name in ext_names:
+        src_ext = os.path.join(src_dir, name)
+        if not os.path.exists(src_ext):
+            cand = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                "../../pi-extension", name))
+            src_ext = cand if os.path.exists(cand) else None
+        if src_ext is None:
+            print(f"✗ 缺少扩展文件: {name}（安装中止，避免装出不完整插件）")
+            sys.exit(1)
+        shutil.copyfile(src_ext, os.path.join(target_dir, name))
+        installed.append(name)
+    print(f"✓ progress-guard 插件已安装至 {target_dir}：{', '.join(installed)}")
 
 
 def _skill_src_dir() -> str:

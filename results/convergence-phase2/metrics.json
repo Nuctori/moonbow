@@ -1,0 +1,88 @@
+{
+  "total_runs": 30,
+  "arms": {
+    "control": {
+      "n": 15,
+      "completed": 3,
+      "completion_rate": 0.2,
+      "partial_mean": 0.2444,
+      "turns_mean": 3.87,
+      "pytest_runs_mean": 1.47,
+      "env_error_runs": 14,
+      "api_error_runs": 1,
+      "truncated_runs": 14,
+      "pg_error_runs": 0,
+      "clean_completed": 0,
+      "clean_n": 1,
+      "clean_completion_rate": 0.0,
+      "advised_runs": 0,
+      "advisory_total": 0,
+      "outcome_hist": {
+        "failed": 8,
+        "partial_stop": 2,
+        "no_verify": 2,
+        "completed": 3
+      },
+      "silent_stop_runs": 10,
+      "spin_runs": 0,
+      "mid_other_runs": 2
+    },
+    "convergence": {
+      "n": 15,
+      "completed": 5,
+      "completion_rate": 0.3333,
+      "partial_mean": 0.3333,
+      "turns_mean": 4.2,
+      "pytest_runs_mean": 1.33,
+      "env_error_runs": 14,
+      "api_error_runs": 1,
+      "truncated_runs": 14,
+      "pg_error_runs": 0,
+      "clean_completed": 1,
+      "clean_n": 1,
+      "clean_completion_rate": 1.0,
+      "advised_runs": 7,
+      "advisory_total": 7,
+      "outcome_hist": {
+        "advised_fail": 3,
+        "failed": 6,
+        "completed": 5,
+        "no_verify": 1
+      },
+      "silent_stop_runs": 10,
+      "spin_runs": 0,
+      "mid_other_runs": 0
+    }
+  },
+  "clean_arms": {
+    "control": {
+      "n": 1,
+      "completed": 0,
+      "completion_rate": 0.0,
+      "partial_mean": 0.0
+    },
+    "convergence": {
+      "n": 1,
+      "completed": 1,
+      "completion_rate": 1.0,
+      "partial_mean": 1.0
+    }
+  },
+  "delivery": {
+    "runs_with_delivery": 7,
+    "delivery_rate": 0.4667,
+    "delivery_turn_mean": 3.29,
+    "post_delivery_verify_success": 1,
+    "post_delivery_conversion": 0.1429,
+    "advise_then_complete": 4
+  },
+  "comparison": {
+    "delta_completion": 0.1333,
+    "delta_partial_mean": 0.0889,
+    "fisher_p_two_sided": 0.6817,
+    "vs_history_12_of_30": {
+      "control_completion": 0.2,
+      "convergence_completion": 0.3333
+    }
+  }
+}

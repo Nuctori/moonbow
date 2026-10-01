@@ -1,0 +1,2 @@
+recursive-include src/moonbow/guard/extensions *.ts *.py
+recursive-include src/moonbow/skills *

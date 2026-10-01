@@ -1,0 +1,65 @@
+{
+  "_comment": "R4/R5：LoRA 接入配置 + 默认 provider 声明。SLM 后端 = openjev NLI 交叉编码器底座（model_kind=sequence，XPU only），启动时加载基座一次并注册适配器（仅登记，不加载权重；请求带 adapter 时按需热挂载，~ms 级）。semantic HTTP 启动：.venv_xpu/Scripts/python.exe -m moonbow.semantic.http --config config/semantic_runtime_lora.json。guard 默认切换：MOONBOW_GUARD_PROVIDER=semantic 时 /check 与 SDK 默认走 semantic（读本文件 provider 段）；缺省 legacy，行为零变化。一键回滚 = 移除该环境变量 + 重启。",
+  "provider": {
+    "default": "semantic",
+    "activation_env": "MOONBOW_GUARD_PROVIDER",
+    "matcher_url": "http://127.0.0.1:18501",
+    "whitelist_pass_signals": {
+      "completion.asserted": "completion-lora-v2 (final-test PASS)",
+      "task.object.alignment": "alignment-lora-v1 (final-test PASS)",
+      "process.unresolved": "process-lora-v2 (holdout_v2 gate PASS P=0.8571 R=0.9474 @t=0.90, pass-preliminary)"
+    },
+    "shadow_signals": {},
+    "no_go": [
+      "modality.assertive (base zero-shot, uncalibrated)",
+      "ts.capture (走 rule)"
+    ],
+    "rollback": "移除 MOONBOW_GUARD_PROVIDER 环境变量 + 重启 guard 服务"
+  },
+  "server": {
+    "host": "127.0.0.1",
+    "port": 18501,
+    "max_body_bytes": 2097152
+  },
+  "runtime": {
+    "queue_capacity": 8,
+    "deadline_seconds": 30.0,
+    "max_retries": 2,
+    "max_batch": 16,
+    "warmup": true
+  },
+  "backend": {
+    "type": "slm",
+    "model_kind": "sequence",
+    "model_id": "C:/Users/Nuctori/.cache/huggingface/hub/models--AlexWortega--openjev/snapshots/26de23c44b67586b4bea31c0ef2e016e3068ae66/qwen3.5-0.8b-nli-v2s-long",
+    "device": "xpu",
+    "dtype": "bfloat16",
+    "adapters": {
+      "process-lora-v1": {
+        "path": "M:/AI/spark-4b/models/semantic_lora/process-unresolved-v1/best",
+        "pattern": "process.unresolved@1",
+        "r3_status": "pass (calib P=0.971 R=0.805 F1=0.880 @t=0.66)；R6b 起被 process-lora-v2 取代（v1 在 holdout_v2 同口径 P=0.6486 R=0.6316）"
+      },
+      "alignment-lora-v1": {
+        "path": "M:/AI/spark-4b/models/semantic_lora/task-object-alignment-v1/best",
+        "pattern": "task.object.alignment@1",
+        "r3_status": "pass (calib P=0.868 R=0.868 F1=0.868 @t=0.75)"
+      },
+      "completion-lora-v2": {
+        "path": "M:/AI/spark-4b/models/semantic_lora/completion-asserted-v2/best",
+        "pattern": "completion.asserted@1",
+        "r3b_status": "pass (calib P=0.9615 R=0.8333 F1=0.8929 @t=0.50；训练数据 = dev 300 + dev_extension_r4 120，pos_weight=2.75)"
+      },
+      "completion-lora-v1": {
+        "path": "M:/AI/spark-4b/models/semantic_lora/completion-asserted-v1/best",
+        "pattern": "completion.asserted@1",
+        "r3_status": "no-go (calib P=0.846 R=0.733 F1=0.786，差线；已被 v2 取代，注册保留)"
+      },
+      "process-lora-v2": {
+        "path": "M:/AI/spark-4b/models/semantic_lora/process-unresolved-v2/best",
+        "pattern": "process.unresolved@1",
+        "r6b_status": "pass-preliminary (holdout_v2 P=0.8571 R=0.9474 F1=0.900 @t=0.90 fixed calib threshold；v1 同口径基线 P=0.6486 R=0.6316 F1=0.640；训练数据 = dev 300 + process_extension_r5 132，pos_weight=1.683)"
+      }
+    }
+  }
+}
