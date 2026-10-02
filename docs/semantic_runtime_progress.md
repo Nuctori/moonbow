@@ -1324,3 +1324,26 @@ completion.asserted / task.object.alignment PASS，process.unresolved R=0.764
   tests/test_jev_backend.py。
 - 命令 exit code：hf download=0、pip --no-deps=0、load_smoke.py=0、
   run_jev_eval.py --limit 3=0、run_jev_eval.py 全量=0、pytest（.venv_xpu）=0。
+
+## 2026-10-03 夜间双线（Track 1 评测门禁 + Track 2 modality 终局迭代）
+### Track 2：Jev+LoRA modality 第三次（最终）迭代 — NO-GO（结论稳定）
+- 底座：Jev-4B DecisionEngine 官方训练构造器原生支持 LoRA（未走退化路线）；
+  parity 门通过（t0.75 与零样本逐位一致）
+- 结果：F1 0.738→0.8246（+8.7 点），ECE 0.226→0.114；**门禁 FAIL**
+  （R≥0.80 下 maxP=0.782<0.85）；正负中位差 0.044→0.977——R3c 塌缩病灶根治，
+  P 平台 ~0.78（14 FP 为"指令/规定式陈述"口径边界）
+- 处置：不注册 adapter，no-go 维持；checkpoint 留档 models/semantic_lora/
+  modality-jev-v1/。未来重启杠杆=jev-template-v2 口径对齐，非换底座/加数据
+- 工程教训（4B hybrid）：无梯度检查点 B=4 即 segfault；整批 pad+阈值 empty_cache
+### Track 1：guard-effect-v2 评测 — 停在门禁报告（难度带门禁不过）
+- 基础设施通过：ge2_proxy(8901)+runner+身份断言+judge 逐测试；32 run 冒烟
+- 伪调用门禁空泛通过：gemini 全走真实 toolCall 通道（mimo 伪调用为模型/网关特有）
+- **难度带门禁 FAIL（天花板）**：gemini 对 V/S 全部任务（含 s5/s6/s7 与
+  h1_quad_interact/h2_multi_file/h3_naive_trap 三个加难探针）28+6/34 全 100%——
+  uplift 在唯一可用模型上不可测
+- 备用模型全灭：workbuddy 通道封工具请求、commandcode 池无额度、
+  zhushu 通道同样拦截；deepseek-v4.1 两路由均死
+- 处置：按预登记停下写报告，主实验未启动；合法结局=免费渠道无法测 uplift，
+  需 mimo（充值）或更强/更弱模型才可入带
+### morning 收尾
+- L1 无害性顺带获得正面数据：34 run 中守卫/收敛通道零误投递、C 族全过
