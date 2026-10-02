@@ -57,3 +57,4 @@ mined/
 # guard-effect-v2 运行时数据（会话与工作区，本地留存）
 results/guard-effect-v2/agent_home/
 results/guard-effect-v2/ws/
+results/convergence-phase2/agent_home/
