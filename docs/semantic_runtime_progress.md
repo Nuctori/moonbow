@@ -1252,3 +1252,75 @@ completion.asserted / task.object.alignment PASS，process.unresolved R=0.764
   ②真实 agent A/B 实验（伪调用 run 的编辑落盘率是否改善）由 Phase 3
   实验负责，本阶段只做 harness 修复与单测；③publish_repo 镜像树待
   主代理同步。
+
+## Jev：NeoHorse-Jev-4B 判定后端接入与评测（2026-10-03，完成；1/4 模式过预登记门禁）
+
+计划 §2.2 可替换后端首次真实换装验证。报告：
+`results/semantic-runtime/jev-eval/report.md`。独占 XPU，全部推理
+`.venv_xpu/Scripts/python.exe`（bf16），命令全部 exit 0，test split 未触碰。
+
+- **模型**：TokenRhythm/NeoHorse-Jev-4B（Apache-2.0，4B 非自回归决策模型，
+  prefill-only 单次前向，直接在应用定义候选上输出概率；3 种决策类型
+  Choice/Score/Noul）。revision `434cb21d3a994a953d3ae5788405fcb2c4970554`，
+  下载量 2288/月（HF API 实查）。`hf download` → exit 0（~9.1GB 权重）。
+- **加载（一次成功，无需 workaround）**：官方 wheel `neohorse_decision-1.0.0`
+  `pip install --no-deps` 装入 .venv_xpu（torch 2.14.0+xpu / transformers
+  5.17.0 零改动；pydantic 已在环境内）；官方 API
+  `DecisionEngine(model_dir, device="xpu")` 原生接受 device 参数。
+  加载 16.4s，显存 12.44→12.98GB / 15.56GB（16GB 卡放得下，余 ~2.6GB）。
+  causal_conv1d/flash-linear-attention 未装走参考实现（同 0.8B 各轮条件），
+  600 次前向零 segfault 零卡死。
+- **交付**：`src/moonbow/semantic/backends/jev.py`（JevBackend，注册名
+  `jev`，Backend 协议：构造加载一次/幂等/出口过 validate_response）+
+  `tools/run_jev_eval.py`（XPU 断言、每 25 条 flush、断点续跑）+
+  `tests/test_jev_backend.py`（12 例 fake engine 全绿）。模板版本化
+  **jev-template-v1**：completion/process= Noul（score=P(true)，
+  score_type=noul_probability）；**modality=Choice 三类 assert/promise/
+  question（模型原生用法，score=P(assert)）**；alignment=Noul + state 拼装
+  模板（task+text），缺 context.task → abstain insufficient_context；
+  ts.capture → abstain unsupported（生成式任务，prefill-only 不支持）。
+  用户文本只进 state 数据区（官方 user_tokens 中和特殊定界 token），
+  instructions/criteria 为版本化常量；calibration_id=
+  "template:jev-template-v1"；概率缺失/非法 → invalid_output，无编造路径。
+- **calib 150×4=600 行**（0 abstain/0 error/validate 失败 0；续跑 588 行
+  一次完成）。对比（各自扫描最优 P/R/F1@t）：
+
+  | pattern | 0.8B zero-shot v1 | openjev | Jev 4B zero-shot |
+  |---|---|---|---|
+  | completion.asserted | 0.239/0.700/0.356 (0.97) | 0.688/0.367/0.478 (0.50) | 0.733/0.367/0.489 (0.53) |
+  | modality.assertive | 0.406/0.981/0.575 (0.70) | 0.356/0.679/0.467 (0.57) | 0.652/0.849/0.738 (0.75) |
+  | task.object.alignment | 0.757/0.982/0.855 (diff>0) | 0.913/0.553/0.689 (0.50) | 0.789/0.983/0.875 (0.78) |
+  | process.unresolved | 0.277/1.000/0.434 (0.95) | 0.875/0.341/0.491 (0.53) | **0.875/0.854/0.864 (0.52)** |
+
+  ECE/Brier：process 0.055/0.070（全部系统中最优）、completion 0.133/0.149、
+  modality 0.226/0.200、alignment 0.222/0.218（分数双类饱和 ~0.99）。
+  延迟 p50 174-182ms（0.8B 的 ~1.3x、openjev 的 ~1.6x）；显存 12.5-13.3GB
+  （0.8B/openjev 为 2-3GB；4B 驻留使同卡共存第二底座不可行）。
+- **门禁判定（预登记 P>=0.85 且 R>=0.80/calib 扫描）**：
+  **process.unresolved PASS**（t=0.52：P=0.875/R=0.854；t=0.5 亦过线；
+  正负中位差 0.882）——唯一 zero-shot 即过线的底座，与 0.8B 微调后的
+  process-lora-v2（0.895/0.829）同档。completion FAIL（R 全表 max 0.367，
+  FN 集中在"收官+遗留外置"形态 = 模板 "fully complete" 字面义与标签口径
+  冲突，正例中位 0.088）；modality FAIL（R>=0.80 下 maxP=0.662；但
+  F1 0.738 为该信号全部已测方案最好，正负中位差 0.788 首次出现实质排序，
+  FP=指令/规定式陈述被宽口径 assert 定义吞入）；alignment FAIL
+  （R>=0.80 下 maxP=0.798，分数饱和判别力不足）。
+- **处置（未改任何默认配置）**：不注册进 semantic_runtime_lora.json，
+  R5_PASS_SIGNALS 不动；不建议用 Jev 替换任何现役达标信号（process-lora-v2
+  有 holdout_v2 验收 R=0.947 更强）。Jev 定位：zero-shot 冷启动 fallback
+  候选（process 类）+ 未来 modality 微调的排序底座候选（4B 表示层首次
+  可分，对照 R3c 0.8B 两次训崩）；接入需如实声明 candidate_probability
+  语义、模板版本、ts.capture unsupported、显存独占约束。
+- **回归**：`.venv_xpu` pytest tests/test_semantic_adapters.py
+  tests/test_semantic_contract.py -q → **190 passed, exit 0**（含
+  test_jev_backend.py 合跑 202 passed）；默认行为零改动。
+- **遗留**：jev-template-v1 单版本未消融，completion 措辞与标签口径冲突
+  是最大失分点（jev-template-v2 有界迭代候选，本轮按预登记纪律不做）；
+  指标对 provisional 标签；13GB 显存使其无法与 0.8B 底座同卡共存；
+  test split 未触碰（无切换动议不消耗）。
+- 证据索引：results/semantic-runtime/jev-eval/{report.md,metrics_calib.json,
+  predictions_calib.jsonl,load_smoke.py,load_smoke.json,run_full.log}；
+  src/moonbow/semantic/backends/jev.py；tools/run_jev_eval.py；
+  tests/test_jev_backend.py。
+- 命令 exit code：hf download=0、pip --no-deps=0、load_smoke.py=0、
+  run_jev_eval.py --limit 3=0、run_jev_eval.py 全量=0、pytest（.venv_xpu）=0。
