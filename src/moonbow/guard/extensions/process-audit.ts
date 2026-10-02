@@ -22,11 +22,40 @@ export function processMode(): ProcessMode {
   return v === "shadow" || v === "advisory" ? (v as ProcessMode) : "off";
 }
 
+// Phase 2：收敛通道透传。MOONBOW_GUARD_CONVERGENCE=off|shadow|advisory
+// （默认 off）。非 off 时 stage-check 请求带 enable_convergence_shadow=true，
+// 服务端据此计算 shadow_convergence；是否投递收敛提示由**服务端**同名
+// env 门控（advisory），客户端只负责开通道与透传。
+export type ConvergenceMode = "off" | "shadow" | "advisory";
+
+export function convergenceMode(): ConvergenceMode {
+  const v = (process.env.MOONBOW_GUARD_CONVERGENCE || "off").toLowerCase();
+  return v === "shadow" || v === "advisory" ? (v as ConvergenceMode) : "off";
+}
+
+// 可选命名目标注入（逗号分隔）：启用服务端逐测试撤回与部分得分口径
+// （ConvergenceShadow target_tests）。缺省不发键 → 服务端默认口径零变化。
+export function convergenceTargets(): string[] | null {
+  const raw = (process.env.MOONBOW_GUARD_CONVERGENCE_TARGETS || "").trim();
+  if (!raw) return null;
+  const parts = Array.from(new Set(raw.split(",").map((s) => s.trim()).filter(Boolean)));
+  return parts.length ? parts : null;
+}
+
+export interface ConvergenceShadowEntry {
+  signal: string;
+  matched?: boolean | null;
+  abstain_reason?: string | null;
+  delivered?: boolean;
+  detail?: Record<string, unknown>;
+}
+
 export interface StageCheckResponse {
   findings?: Finding[];
   reminder?: { summary: string; evidence: string[]; suggestion: string } | null;
   semantic?: boolean;           // 属昂贵语义复核范畴（与收尾共享每任务一次预算）
   based_on?: number;            // 服务端回显，遥测用
+  shadow_convergence?: ConvergenceShadowEntry[];  // Phase 2：只透传不消费（观测在服务端）
 }
 
 const MAX_CONSECUTIVE_FAILURES = 2;
@@ -35,11 +64,14 @@ export class StageAuditor {
   private url: string;
   private doFetch: typeof fetch;
   private timeoutMs: number;
+  private withConvergence: boolean;
 
-  constructor(url: string, doFetch: typeof fetch, timeoutMs = 10000) {
+  constructor(url: string, doFetch: typeof fetch, timeoutMs = 10000,
+              withConvergence = false) {
     this.url = url;
     this.doFetch = doFetch;
     this.timeoutMs = timeoutMs;
+    this.withConvergence = withConvergence;
   }
 
   private hasUnaudited(state: ProcessState): boolean {
@@ -94,6 +126,8 @@ export class StageAuditor {
     // （2026-09-22：竞态实测——agent_end 的终止审计被空增量检查吞掉）。
     if (!fresh.length && !streamEnded) return null;
     const window = state.blocks.slice();
+    const conv = this.withConvergence ? convergenceMode() : "off";
+    const targets = conv !== "off" ? convergenceTargets() : null;
     const body = JSON.stringify({
       task_id: state.taskId, branch_id: state.branchId,
       snapshot_version: state.snapshotVersion,
@@ -102,6 +136,9 @@ export class StageAuditor {
       // "运行真的结束了"——缺这个信号会把中途状态误报成终止缺口。
       stream_ended: streamEnded,
       req: state.req,
+      // Phase 2：收敛通道开灯（off 时两键均不发 → 服务端路径零变化）
+      ...(conv !== "off" ? { enable_convergence_shadow: true } : {}),
+      ...(targets ? { convergence_target_tests: targets } : {}),
       blocks: window.map((b) => ({
         seq: b.seq, kind: b.kind, text: b.text,
         tool_call_id: b.toolCallId, tool_name: b.toolName, is_error: b.isError ?? false,

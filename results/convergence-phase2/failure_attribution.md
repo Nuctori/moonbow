@@ -145,3 +145,36 @@ pi 对这种消息按正常文本收尾（stopReason=stop），**动作永远不
 - `truncated` = 真超时(1: conv-r11) ∪ 伪调用签名(28) ∪ last_stop=toolUse(1: control-r5)；≠ 时间预算耗尽。
 - `env_error` = api|pg|truncated 的衍生的衍生标志，26/30 为 true，不构成独立故障证据。
 - "真实编辑"指 toolCall 通道的 edit/write 且收到 toolResult；"伪调用"指 text 内 `[tool_call ...]` 文本。
+
+## 附 2：伪调用文本形态清单（2026-09-30 证据提取，供 PseudoCallGuard 检测器）
+
+对 `agent_home/sessions/` 31 个会话逐条 assistant 消息扫描：35 条消息命中
+`[tool_call <id>]` 签名（28 个文件），其中 34 条无任何真实 toolCall 伴随
+（stopReason=stop 按正常文本收尾），1 条混合消息（bracket 伪 read 文本 +
+真实 toolCall 并存，stopReason=toolUse）。形态归纳与脱敏样本：
+
+| # | 形态 | 占比（n=35） | 说明 |
+|---|---|---|---|
+| F1 | 叙述前缀 + 单条 bracket 伪调用，JSON 体单行紧凑 | 27/35 | 编辑被吞的主形态；`edit`/`read`/`bash`/`write` 均有 |
+| F2 | 纯伪调用消息（整条消息就是 1 个 bracket 调用，无叙述） | 8/35 | 多为验证性 bash/read |
+| F3 | 单消息多个伪调用（换行分隔或无分隔直接相连，实测最多 3 个） | 8/35 | 并行 read/bash 意图 |
+| F4 | harness 残渣变体：bracket 调用尾随 `</arg_value>` 等标签 | 历史 1 例（2026-09-22） | 本批未复现，保留签名 |
+| F5 | XML 标签形态 `<tool_call>...</tool_call>` | 本批 0 例 | 其他 harness 常见，防御性覆盖 |
+
+变体备注：全部观测样本的 JSON 体为**单行紧凑**（字符串内含 `\n` 转义，
+JSON 本身不跨行）；未观测到代码围栏（```）包裹与多行 JSON 体形态。
+stopReason 分布：34/35 为 stop（会话随即正常收尾、零反馈），1/35 为
+toolUse（混合消息，真实调用在执行——检测器对此必须让位，否则误报）。
+
+脱敏样本（路径规整为 `ws/runX/app.py`，call id 截短）：
+
+- F1：`Two bugs: \`half\` uses floor division and \`add_tag\` has a mutable default argument. Fixing both.\n[tool_call call_dcf8f00e] edit {"path":"ws/run01/app.py","edits":[{"oldText":"    return n // 2","newText":"    return n / 2"}]}`
+- F2：`[tool_call call_5a85619d] bash {"command":"python -m pytest test_app.py -v"}`
+- F3：`Both files read. Running pytest to confirm.\n[tool_call call_a6f04b9b] bash {"command":"python -m pytest -v"}\n[tool_call call_2c5bd588] bash {"command":"python --version"}`；无分隔变体：`先读两个文件再修复。[tool_call call_d42511a8] read {"path":"app.py"}[tool_call call_d42511a9] read {"path":"test_app.py"}`
+- F4：`[tool_call call_3f37886c] read {"path":"src/flask/blueprints.py"}</arg_value>`
+- F5（防御性，未观测）：`<tool_call>\n{"name": "bash", "arguments": {"command": "pytest -q"}}\n</tool_call>`
+
+修复落地：`src/moonbow/guard/extensions/pseudo-call-guard.ts`（检测 +
+每任务 3 次预算的 followUp 反馈 + `MOONBOW_PSEUDO_CALL_FEEDBACK=off`
+杀开关 + 遥测，失败隔离；不参与 guard 判定路径），挂载于
+`progress-guard.ts` 的 `message_end`。测试 `tests/test_pseudo_call_guard.mjs`。
