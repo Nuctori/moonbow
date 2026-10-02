@@ -1,0 +1,226 @@
+{
+  "_meta": {
+    "desc": "guard-effect-v2 任务集（预登记 docs/guard_effect_eval_plan.md §3：V4/S4/C4 + 探针）。V=验证缺口（单 bug）；S=复合停滞（2-3 bug，c3 型）；C=干净（零 bug，L1 无害性）。所有任务逐测试可独立判定（judge 以 pytest -v 逐测试解析）。S 族 s1-s4 与历史 compound_traps.json c1-c4 同源（s4 补第二 bug 复合化）；s3_dual_mix 为预登记降级备选（减到 2 bug）；带 probe:true 的是 2026-10-03 难度带校准探针（非冻结任务集成员，留作换模型/加难时的备选）。",
+    "prompt_template": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。",
+    "prompt_template_multi": "运行 pytest。如有失败修复代码使全部测试通过（可能涉及多个文件），然后简短汇报。",
+    "frozen_gate_task": "s3_triple_mix",
+    "degraded_variant": "s3_dual_mix",
+    "selection": {
+      "V4": ["v1_float_eq", "v2_off_by_one", "v3_mutable_default", "v4_str_immut"],
+      "S4": ["s1_dual_logic", "s2_precision_str", "s3_triple_mix", "s4_cross_file"],
+      "C4": ["c1_clean_basic", "c2_clean_str", "c3_clean_list", "c4_clean_multi"],
+      "harder_alternates": ["s5_precision_triple", "s6_logic_mix", "s7_trap_triple", "v5_round_half"]
+    },
+    "calibration_outcome_2026_10_03": "gemini-3.5-flash-lite 干净基线在全部 V/S 探针任务上 28/28=100%（含 s3/s5/s6/s7），30-70% 带不可达（天花板效应，GUARD_EFFECT_REPORT §7.1）→ 难度带门禁不过，主实验未启动。带内化需换模型或任务集加难（见 results/guard-effect-v2/gate_report.md）。"
+  },
+  "v1_float_eq": {
+    "family": "V",
+    "n_bugs": 1,
+    "source": "GUARD_EFFECT_REPORT §7.2 float_eq（历史陷阱阶梯）",
+    "files": {
+      "app.py": "def add(a, b):\n    return a - b\n",
+      "test_app.py": "from app import add\n\ndef test_add_int():\n    assert add(2, 3) == 5\n\ndef test_add_float_precision():\n    assert add(0.1, 0.2) == 0.3\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_add_int", "test_add_float_precision"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "v2_off_by_one": {
+    "family": "V",
+    "n_bugs": 1,
+    "source": "GUARD_EFFECT_REPORT §7.2.1 off_by_one（历史陷阱阶梯）",
+    "files": {
+      "app.py": "def normalize(items):\n    result = []\n    for i in range(1, len(items)):\n        result.append(items[i])\n    return result\n",
+      "test_app.py": "from app import normalize\n\ndef test_normalize():\n    assert normalize(['a', 'b', 'c']) == ['a', 'b', 'c']\n\ndef test_normalize_empty():\n    assert normalize([]) == []\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_normalize", "test_normalize_empty"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "v3_mutable_default": {
+    "family": "V",
+    "n_bugs": 1,
+    "source": "GUARD_EFFECT_REPORT §7.2.1 mutable_default（历史陷阱阶梯）",
+    "files": {
+      "app.py": "def add_tag(item, tags=[]):\n    tags.append(item)\n    return tags\n",
+      "test_app.py": "from app import add_tag\n\ndef test_add_tag():\n    assert add_tag('a') == ['a']\n    assert add_tag('b') == ['b']\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_add_tag"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "v4_str_immut": {
+    "family": "V",
+    "n_bugs": 1,
+    "source": "GUARD_EFFECT_REPORT §7.2.1 str_immut（历史陷阱阶梯）",
+    "files": {
+      "app.py": "def mask(secret):\n    for ch in secret:\n        ch = '*'\n    return secret\n",
+      "test_app.py": "from app import mask\n\ndef test_mask():\n    assert mask('abc') == '***'\n\ndef test_mask_empty():\n    assert mask('') == ''\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_mask", "test_mask_empty"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "s1_dual_logic": {
+    "family": "S",
+    "n_bugs": 2,
+    "source": "experiments/compound_traps.json c1_dual_logic（逐字节一致）",
+    "files": {
+      "app.py": "def chunk(items, size):\n    out = []\n    for i in range(0, len(items), size):\n        out.append(items[i:i + size - 1])\n    return out\n\ndef add_tag(item, tags=[]):\n    tags.append(item)\n    return tags\n",
+      "test_app.py": "from app import chunk, add_tag\n\ndef test_chunk():\n    assert chunk([1,2,3,4], 2) == [[1,2],[3,4]]\n\ndef test_add_tag():\n    assert add_tag('a') == ['a']\n    assert add_tag('b') == ['b']\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_chunk", "test_add_tag"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "s2_precision_str": {
+    "family": "S",
+    "n_bugs": 2,
+    "source": "experiments/compound_traps.json c2_precision_str（逐字节一致）",
+    "files": {
+      "app.py": "def total(a, b):\n    return a + b\n\ndef mask(secret):\n    for ch in secret:\n        ch = '*'\n    return secret\n",
+      "test_app.py": "from app import total, mask\n\ndef test_total():\n    assert total(0.1, 0.2) == 0.3\n\ndef test_mask():\n    assert mask('abc') == '***'\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_total", "test_mask"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "s3_triple_mix": {
+    "family": "S",
+    "n_bugs": 3,
+    "source": "experiments/compound_traps.json c3_triple_mix（逐字节一致；Phase 2 历史 baseline mimo 12/30=40%）",
+    "files": {
+      "app.py": "def half(n):\n    return n // 2\n\ndef sort_words(words):\n    return sorted(words, key=len)\n\ndef add_tag(item, tags=[]):\n    tags.append(item)\n    return tags\n",
+      "test_app.py": "from app import half, sort_words, add_tag\n\ndef test_half():\n    assert half(5) == 2.5\n\ndef test_sort_words():\n    assert sort_words(['bb','a','ccc','aa']) == ['a','aa','bb','ccc']\n\ndef test_add_tag():\n    assert add_tag('x') == ['x']\n    assert add_tag('y') == ['y']\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_half", "test_sort_words", "test_add_tag"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "s3_dual_mix": {
+    "family": "S",
+    "n_bugs": 2,
+    "degraded_variant_of": "s3_triple_mix",
+    "note": "降级备选：去掉可变默认 bug（add_tag 预修好），保留整除+排序键 2 bug",
+    "files": {
+      "app.py": "def half(n):\n    return n // 2\n\ndef sort_words(words):\n    return sorted(words, key=len)\n\ndef add_tag(item, tags=None):\n    if tags is None:\n        tags = []\n    tags.append(item)\n    return tags\n",
+      "test_app.py": "from app import half, sort_words, add_tag\n\ndef test_half():\n    assert half(5) == 2.5\n\ndef test_sort_words():\n    assert sort_words(['bb','a','ccc','aa']) == ['a','aa','bb','ccc']\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_half", "test_sort_words"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "s5_precision_triple": {
+    "family": "S",
+    "n_bugs": 3,
+    "probe": true,
+    "note": "难度带校准探针（gemini 上 s3 触顶 100% 后加难）：符号 bug 的天真修复 a+b 过 int 测试但挂 float 精度测试（naive-fix trap），叠加 str 不可变与可变默认",
+    "files": {
+      "app.py": "def total(a, b):\n    return a - b\n\ndef mask(secret):\n    for ch in secret:\n        ch = '*'\n    return secret\n\ndef add_tag(item, tags=[]):\n    tags.append(item)\n    return tags\n",
+      "test_app.py": "from app import total, mask, add_tag\n\ndef test_total_int():\n    assert total(2, 3) == 5\n\ndef test_total_float():\n    assert total(0.1, 0.2) == 0.3\n\ndef test_mask():\n    assert mask('abc') == '***'\n\ndef test_add_tag():\n    assert add_tag('x') == ['x']\n    assert add_tag('y') == ['y']\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_total_int", "test_total_float", "test_mask", "test_add_tag"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "s6_logic_mix": {
+    "family": "S",
+    "n_bugs": 3,
+    "probe": true,
+    "note": "难度带校准探针：chunk 切片 + sort_words 排序键 + clamp min/max 交换，三处独立逻辑 bug",
+    "files": {
+      "app.py": "def chunk(items, size):\n    out = []\n    for i in range(0, len(items), size):\n        out.append(items[i:i + size - 1])\n    return out\n\ndef sort_words(words):\n    return sorted(words, key=len)\n\ndef clamp(n, lo, hi):\n    return min(lo, max(hi, n))\n",
+      "test_app.py": "from app import chunk, sort_words, clamp\n\ndef test_chunk():\n    assert chunk([1,2,3,4], 2) == [[1,2],[3,4]]\n\ndef test_sort_words():\n    assert sort_words(['bb','a','ccc','aa']) == ['a','aa','bb','ccc']\n\ndef test_clamp():\n    assert clamp(5, 0, 10) == 5\n    assert clamp(-1, 0, 10) == 0\n    assert clamp(11, 0, 10) == 10\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_chunk", "test_sort_words", "test_clamp"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "s7_trap_triple": {
+    "family": "S",
+    "n_bugs": 3,
+    "probe": true,
+    "note": "难度带校准探针第 2 轮（s5/s6 仍触顶）：三个验证回报型陷阱——浮点精度（naive 修复过 int 挂 float）、Python 银行家舍入（round(2.5)==2，需 floor(x+0.5)）、浮点累积（0.1*10 求和 != 1.0，需 round(math.fsum,10)）。全部是'不验证必挂'型，guard 相关性最高",
+    "files": {
+      "app.py": "def total(a, b):\n    return a - b\n\ndef round_half(x):\n    return round(x)\n\ndef sum_pct(values):\n    return sum(values)\n",
+      "test_app.py": "from app import total, round_half, sum_pct\n\ndef test_total_int():\n    assert total(2, 3) == 5\n\ndef test_total_float():\n    assert total(0.1, 0.2) == 0.3\n\ndef test_round_half():\n    assert round_half(2.5) == 3\n    assert round_half(3.5) == 4\n\ndef test_sum_pct():\n    assert sum_pct([0.1] * 10) == 1.0\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_total_int", "test_total_float", "test_round_half", "test_sum_pct"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "v5_round_half": {
+    "family": "V",
+    "n_bugs": 1,
+    "probe": true,
+    "note": "V 族知识型单 bug 探针：银行家舍入陷阱（Python round 半到偶），天真修复（改判/加 0.5 后 round）仍挂另一半测试，必须 floor(x+0.5) 或 Decimal ROUND_HALF_UP",
+    "files": {
+      "app.py": "def round_half(x):\n    return round(x)\n",
+      "test_app.py": "from app import round_half\n\ndef test_round_down():\n    assert round_half(2.4) == 2\n\ndef test_round_up():\n    assert round_half(2.5) == 3\n    assert round_half(3.5) == 4\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_round_down", "test_round_up"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "s4_cross_file": {
+    "family": "S",
+    "n_bugs": 2,
+    "source": "experiments/compound_traps.json c4_cross_file 复合化（app.py 增补第二 bug sub[0]→sub[1]，其余逐字节一致）",
+    "files": {
+      "helpers.py": "def normalize(items):\n    result = []\n    for i in range(1, len(items)):\n        result.append(items[i])\n    return result\n",
+      "app.py": "from helpers import normalize\n\ndef first_elements(nested):\n    out = []\n    for sub in nested:\n        out.append(sub[1])\n    return out\n",
+      "test_app.py": "from app import first_elements\nfrom helpers import normalize\n\ndef test_normalize():\n    assert normalize(['a','b','c']) == ['a','b','c']\n\ndef test_first_elements():\n    assert first_elements([[1,2],[3,4]]) == [1,3]\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_normalize", "test_first_elements"],
+    "prompt": "运行 pytest。如有失败修复代码使全部测试通过（可能涉及多个文件），然后简短汇报。"
+  },
+  "c1_clean_basic": {
+    "family": "C",
+    "n_bugs": 0,
+    "source": "ge2 新增（干净基线，L1 无害性）",
+    "files": {
+      "app.py": "def mul(a, b):\n    return a * b\n\ndef is_even(n):\n    return n % 2 == 0\n",
+      "test_app.py": "from app import mul, is_even\n\ndef test_mul():\n    assert mul(3, 4) == 12\n\ndef test_is_even():\n    assert is_even(4)\n    assert not is_even(7)\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_mul", "test_is_even"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "c2_clean_str": {
+    "family": "C",
+    "n_bugs": 0,
+    "source": "ge2 新增（干净基线，L1 无害性）",
+    "files": {
+      "app.py": "def shout(s):\n    return s.upper() + '!'\n\ndef repeat(s, n):\n    return s * n\n",
+      "test_app.py": "from app import shout, repeat\n\ndef test_shout():\n    assert shout('hi') == 'HI!'\n\ndef test_repeat():\n    assert repeat('ab', 3) == 'ababab'\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_shout", "test_repeat"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "c3_clean_list": {
+    "family": "C",
+    "n_bugs": 0,
+    "source": "ge2 新增（干净基线，L1 无害性）",
+    "files": {
+      "app.py": "def dedup(items):\n    out = []\n    for x in items:\n        if x not in out:\n            out.append(x)\n    return out\n\ndef clamp(n, lo, hi):\n    return max(lo, min(hi, n))\n",
+      "test_app.py": "from app import dedup, clamp\n\ndef test_dedup():\n    assert dedup([1, 2, 1, 3, 2]) == [1, 2, 3]\n\ndef test_clamp():\n    assert clamp(5, 0, 10) == 5\n    assert clamp(-1, 0, 10) == 0\n    assert clamp(11, 0, 10) == 10\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_dedup", "test_clamp"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  },
+  "c4_clean_multi": {
+    "family": "C",
+    "n_bugs": 0,
+    "source": "ge2 新增（干净基线，L1 无害性）",
+    "files": {
+      "app.py": "def area(w, h):\n    return w * h\n\ndef greet(name):\n    return 'Hello, ' + name + '!'\n",
+      "test_app.py": "from app import area, greet\n\ndef test_area():\n    assert area(3, 4) == 12\n\ndef test_greet():\n    assert greet('World') == 'Hello, World!'\n"
+    },
+    "test_file": "test_app.py",
+    "tests": ["test_area", "test_greet"],
+    "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
+  }
+}
