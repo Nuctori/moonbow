@@ -21,7 +21,14 @@ from typing import Dict, List, Optional
 
 from .protocol import StageBlock, StageFinding
 from .audit_semantic import ShadowObservation
-from .convergence import unavailable_entry
+from .convergence import (
+    FAIL_STREAK_SIGNAL,
+    STALL_SIGNAL,
+    AdvisoryBudget,
+    build_advisory_reminder,
+    req_hash_of,
+    unavailable_entry,
+)
 
 # 完成声明（中间汇报里的"已做完"语气；注意排除"准备/计划/将"）
 _CLAIM_PAT = re.compile(
@@ -352,11 +359,70 @@ class StageAuditor:
         }
 
 
-def audit_stage_payload(payload: Dict, convergence_shadow=None) -> Dict:
+def _apply_convergence_advisory(result: Dict, task_key: str,
+                                advisory: "AdvisoryBudget") -> None:
+    """Phase 2：advisory 模式下把命中的收敛触发包装成 reminder 投递。
+
+    - 只包装、不改触发规则：命中判定完全来自 shadow_convergence 条目；
+    - 主审计已有 reminder 时让位（单一 reminder 通道，不覆盖不打架）；
+    - 投递状态写回条目（delivered: true 仅命中的那条）；预算由
+      AdvisoryBudget 独立计数（每任务最多 2 次，按 (task_key, signal) 记）。
+    """
+    entries = result.get("shadow_convergence")
+    if not isinstance(entries, list):
+        return
+    for e in entries:
+        if isinstance(e, dict):
+            e.setdefault("delivered", False)
+    if result.get("reminder"):
+        return                     # 主审计过程提醒优先
+    order = {STALL_SIGNAL: 0, FAIL_STREAK_SIGNAL: 1}
+    trig = sorted((e for e in entries
+                   if isinstance(e, dict) and e.get("matched") is True),
+                  key=lambda e: order.get(e.get("signal"), 9))
+    if not trig:
+        return
+    signal = trig[0]["signal"]
+    if not advisory.allow(task_key, signal):
+        return
+    advisory.record(task_key, signal)
+    for e in entries:
+        if isinstance(e, dict) and e.get("signal") == signal:
+            e["delivered"] = True
+    result["reminder"] = build_advisory_reminder(signal, task_key, trig[0])
+
+
+def _convergence_shadow_for(payload: Dict, default):
+    """可选收敛目标注入：payload 可带 convergence_goals_total（int>=1）/
+    convergence_target_tests（非空唯一字符串列表）构造对应观察者；
+    均缺省时用 server 级默认实例（Phase 1 行为，零变化）。非法即 400。"""
+    goals = payload.get("convergence_goals_total")
+    targets = payload.get("convergence_target_tests")
+    if goals is None and targets is None:
+        return default
+    from .convergence import ConvergenceShadow
+    if targets is not None:
+        if (not isinstance(targets, list) or not targets
+                or not all(isinstance(t, str) and t.strip() for t in targets)
+                or len(set(targets)) != len(targets)):
+            raise ValueError("convergence_target_tests must be a non-empty list "
+                             "of unique non-empty strings")
+        return ConvergenceShadow(target_tests=[t.strip() for t in targets])
+    if not isinstance(goals, int) or isinstance(goals, bool) or goals < 1:
+        raise ValueError("convergence_goals_total must be an integer >= 1")
+    return ConvergenceShadow(goals_total=goals)
+
+
+def audit_stage_payload(payload: Dict, convergence_shadow=None,
+                        convergence_advisory: "AdvisoryBudget" = None) -> Dict:
     """HTTP 层入口：解析/校验 payload 并执行审计。校验失败抛 ValueError。
 
     convergence_shadow：可选收敛 shadow 观察者（Phase 1，server 层按
     enable_convergence_shadow 显式开启后注入）；缺省 None = 零行为变化。
+    convergence_advisory：可选收敛提示预算（Phase 2，server 仅在
+    MOONBOW_GUARD_CONVERGENCE=advisory 时注入）；缺省 None = shadow 原样
+    （off/shadow 行为与现状逐字节一致）。注入后触发命中可进 reminder，
+    投递状态写进 shadow_convergence 条目的 delivered 键。
     """
     blocks_raw = payload.get("blocks", [])
     if not isinstance(blocks_raw, list):
@@ -377,5 +443,11 @@ def audit_stage_payload(payload: Dict, convergence_shadow=None) -> Dict:
         for b in blocks:
             print("[audit-debug]   seq=%s kind=%s tool=%s text=%r" % (
                 b.seq, b.kind, b.tool_name, b.text[:70]), file=_sys.stderr, flush=True)
-    return StageAuditor(convergence_shadow=convergence_shadow).audit(
+    shadow = _convergence_shadow_for(payload, convergence_shadow)
+    result = StageAuditor(convergence_shadow=shadow).audit(
         req, blocks, prior, ver, stream_ended)
+    if convergence_advisory is not None:
+        # task_id 优先（同 req 文本的多个任务实例预算独立）；缺省回退 req 哈希
+        task_key = str(payload.get("task_id") or "") or req_hash_of(req)
+        _apply_convergence_advisory(result, task_key, convergence_advisory)
+    return result
