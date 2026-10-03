@@ -161,3 +161,40 @@ Gemini 3.5 Flash 于中档任务实测 ~22.8%，Terminus-2 harness）表明
   2 seeds = 24 run。全部需在免费窗口内执行；窗口外零模型调用。
 - 本修订案登记于任何 ge5 模型运行之前。任务设计的确定性验证
   （朴素实现 V 全绿 + H 部分挂）属本地 pytest，不算模型运行。
+
+## 修订案 v1.4（正式）（2026-10-03 注册于基线失败集构建之前）
+
+依据：ge4 校准（gemini 对 5/6 移植任务 100% 触顶，唯一例外 eigen 为时间
+预算伪影）与 ge5 设计的共同教训——baseline 全过的任务上守卫没有触发
+空间，uplift 恒为 0（§2.2 历史教训）。Tier A 证据要求的形态是
+"原来解不出 → 加守卫后可解"，因此任务集必须**先验地**对基线失败，
+而不是事后从混合结果里找子群。
+
+- **新 Tier A 主终点：基线失败集完成率**。任务集 = 基线 gemini（control，
+  无任何干预）经 1-2 run 确认无法完成的任务，失败机制三型：纯阅读停滞
+  （长程无编辑打转，参照 eigen run1 的 150 轮纯阅读停滞样本）、时间
+  预算耗尽、算法缺口。干预臂（both：收尾 advisory + 收敛 advisory +
+  PseudoCallGuard）检验守卫能否将失败转为完成或部分完成。
+  终点指标 = 干预臂相对基线（0）的完成/部分得分提升；每任务独立报告
+  "失败机制 × 转化结果"，n≤3/臂不做跨任务合并显著性声明（方向性证据）。
+- **任务来源**：terminal-bench original-tasks 硬题移植（键前缀 tb2_，
+  Apache-2.0，canary GUID 保留；移植纪律同 ge4：初始态从 Dockerfile/
+  setup 提取，无法可靠提取则弃用换备用，本地 pytest 确定性 + 预失败
+  验证先行）。首批 3 任务：cross-entropy-method、huarong-dao-solver、
+  largest-eigenval（time_budget_s=900）。
+- **降级**：ge5 隐藏套件通过率（H pass fraction）从主指标降为 Tier B
+  次要终点；ge5 任务集保留，窗口充裕时执行，判定口径仍按 v1.3，
+  v1.3 文本不修改。
+- **不变**：judge=任务自带测试 pytest -v 逐测试解析、排除规则
+  （env_error/model_polluted 不入 clean 分母）、结论模板三选一、
+  L1-L4 分层、model_identity 断言。
+- **预算（今晚免费窗口）**：基线确认每任务 1 run + both 臂每任务
+  2-3 run，总 ≤20 run；窗口外零模型调用。基线确认 run 若被解出 →
+  该任务出局，不追补 run（防"再跑到失败为止"的事后选择）。
+- **Tier A 记账双轨（预登记澄清）**：对以时间预算为失败机制的任务，
+  900s 预算耗尽的 run 在 Tier A 逐任务转化统计中按"预算内未转化"计入
+  （披露 truncated 标志），不因 env_error 从 Tier A 证据中抹去；
+  冻结的排除规则（env_error/model_polluted 不入 clean 分母）继续适用
+  于一切合并/跨任务结论与 L2/L3 指标——两类口径并列报告，不得混用。
+- 本修订案登记于任何 v1.4 基线失败集模型运行之前。任务移植与本地
+  pytest 确定性验证属本地工作，不算模型运行。
