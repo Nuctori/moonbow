@@ -1356,3 +1356,57 @@ completion.asserted / task.object.alignment PASS，process.unresolved R=0.764
 - 首次观测到"150 轮 0 编辑 0 验证"阅读打转停滞新形态（收敛信号的目标案例）
 - 遗留：eigen 入主集需预算 ≥900s；kimi-k3 需 proxy developer→system 改写；
   up-stream 可回馈 golden 自比对 bug
+
+## 守卫收敛规则集 v2：attribution 驱动的 converge.repeat / perf_retest / stall 缩放（2026-10-04，纯逻辑改造，不训练不推理不占 XPU）
+- 背景：eigen 8 失败 run 归因（`results/guard-effect-v2/eigen_failure_attribution.md`
+  §7 干预点标注）：control r3 = 945 轮中 **877 次重复同一条 timeit 命令**的退化
+  循环（被 runner 超时处决）；control r1 = 30 次写入在 2–3 个变体间**振荡约
+  8 回合**；both r4/r6/r9 = 会内 27 passed、如实申报 STATUS:A → **judge 复测
+  翻转 ≤1µs 平局项**。为 2026-10-04 夜间三臂复测落地两条对应守卫规则。
+- 实现（ruleset 版本化；v1 缺省 = Phase 1/2 现状，零变化）：
+  - **converge.repeat**（新触发器，v2）：a) consecutive_identical——连续
+    ≥12 条"归一化后相同"的工具调用（归一化 = 去数字/路径/空白后的命令核心；
+    仅数字不同的 timeit 循环逐条同核）；b) edit_oscillation——同一文件 ≥4 次
+    写入且每次写入后 pytest 结果集合不变（修了没效果；"结果集合" = coverage
+    事件 + goals_passed，与覆盖度同源口径）。任一命中 matched=True，
+    detail 含 kind/count/command（同命令）或 file/count（同文件振荡）。
+  - **converge.perf_retest**（新触发器，v2）：块流出现 "STATUS: A" 收尾申报
+    （`\bSTATUS\s*[:：]\s*A\b`，与 verifier STATUS 门同形的确定性识别）→
+    matched；投递另需 perf 门控（`MOONBOW_GUARD_PERF_RETEST=1`，或目标含
+    speedup/perf 字样——`MOONBOW_GUARD_CONVERGENCE_TARGETS` env 或 payload
+    `convergence_target_tests` 透传均可；`_convergence_shadow_for` 经
+    `with_targets` 派生，payload 带目标不降级 v1）+ 独立预算键（AdvisoryBudget
+    allow_solo/record_solo：每任务 1 次，不占 MAX_PER_TASK、不计 used()，
+    与既有提醒预算互不占额）。固定话术要求"重复运行性能测试至少 2 次确认
+    计时稳定，并在 EVIDENCE 中附各档耗时数据"。
+  - **stall 轮次线缩放**（v2）：`min(100, max(30, budget_s // 15))`，
+    budget_s 来自新 env `MOONBOW_GUARD_CONVERGENCE_BUDGET`（缺省 900 →
+    60 轮；≥1500 封顶 100、≤450 保底 30、非法回退缺省）。实证动机 =
+    tierA_eigen_final §5（900s 预算下固定高轮次线永不触发，触发线必须随
+    预算缩放）。v1 的 4 轮线与既有 detail schema 不动（既有测试锁定）。
+  - **门控与标识**：两新规则 shadow 只记录、advisory 才投递、off 零变化；
+    `/v1/convergence-status` 增加 `ruleset` / `budget_s` / `stall_round_line`
+    键；`start_server` 在通道非 off 时装配 ruleset=v2 并落日志；类属性缺省
+    v1（测试/直连进程不经 start_server → 旧行为逐字节不变）。
+- 文件：`src/moonbow/guard/convergence.py`（检测纯函数 + Shadow v2 +
+  AdvisoryBudget.solo）、`process_audit.py`（advisory 装配 + with_targets）、
+  `server.py`（ruleset 装配 + 状态端点）；`progress-guard.ts` **无需改动**
+  （预算/perf 门控全在服务端 env，客户端既有透传已够用）；
+  `tests/test_convergence_shadow.py` 追加 29 例（v2 全部新行为 + v1 不变锁）。
+- 测试（exit code 0）：`python -m pytest tests/test_convergence_shadow.py
+  tests/test_process_audit.py tests/test_server_stage.py
+  tests/test_guard_semantic_provider.py -q` → **163 passed**；
+  `tests/test_convergence_advisory.py` → 24 passed（advisory 路径回归）；
+  `node --test tests/test_pseudo_call_guard.mjs` → **19 pass**；
+  `tests/test_pi_process.mjs` → 20 pass。默认路径零变化证明：缺省
+  ConvergenceShadow()=v1、server 类属性缺省 v1/off，Phase 1/2 既有 55 例
+  收敛测试不改一字全绿。
+- 冒烟（start_server 实装配）：`MOONBOW_GUARD_CONVERGENCE=advisory` 启动 →
+  status `{ruleset: v2, budget_s: 900, stall_round_line: 60}`；4 轮失败流 →
+  4 条目 + stall abstain `rounds<60` + fail_streak 正常投递。
+- 遗留：①派发文本"budget 缺省 100 轮行为不变"与规则文本"缺省 900 → 60 轮"
+  冲突，按公式实现——cap=100 保留旧高线形态（budget≥1500 回到 100 轮），
+  v1 缺省路径不变由既有测试证明；②perf_retest 的 STATUS:A 识别是确定性
+  正则（块级证据），语义级申报分类仍归 matcher 对齐判定范畴，本规则不做
+  语义判定；③edit_oscillation 暂不识别跨变体语义等价（"修了没效果"以
+  pytest 结果集合不变为准），变体间振荡的语义等价判定留待 matcher 对齐。

@@ -13,10 +13,13 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from .verifier import ProgressGuard, Decision
 from .process_audit import audit_stage_payload
 from .convergence import (
+    BUDGET_ENV,
     CONVERGENCE_ENV,
     AdvisoryBudget,
     ConvergenceShadow,
+    convergence_budget_from_env,
     convergence_mode_from_env,
+    stall_line_from_budget,
 )
 from .semantic_provider import (
     PROVIDER_ENV,
@@ -49,6 +52,12 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
     convergence_mode = "off"
     # advisory 模式的独立预算（每任务最多 2 次，按 (task_id|req哈希, signal) 记）
     convergence_advisory = None
+    # 收敛规则集版本（2026-10-04）：v1 = Phase 1/2 现状（stall 4 轮 +
+    # fail_streak）；v2 = +converge.repeat +converge.perf_retest +stall
+    # 轮次线缩放。缺省 v1（既有测试/直连零变化）；start_server 在
+    # MOONBOW_GUARD_CONVERGENCE!=off 时装配 v2。经
+    # /v1/convergence-status 的 ruleset 键暴露。
+    convergence_ruleset = "v1"
 
     def _send_json(self, status_code: int, data: dict):
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
@@ -62,11 +71,17 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
         if self.path in ("/health", "/", "/ping"):
             self._send_json(200, {"status": "ok", "service": "progress-guard"})
         elif self.path == "/v1/convergence-status":
-            # 只读状态：收敛通道模式与预算用量（advisory 观测/冒烟验证用）
+            # 只读状态：收敛通道模式/规则集版本/预算用量（advisory 观测/
+            # 冒烟验证用）。ruleset：v1 = 旧规则（stall 4 轮 + fail_streak）；
+            # v2 = +repeat +perf_retest +stall 轮次线缩放（预算驱动）。
             advisory = self.convergence_advisory
+            budget_s = convergence_budget_from_env()
             self._send_json(200, {
                 "mode": self.convergence_mode,
-                "tasks_with_delivery": (len(advisory._counts) if advisory else 0),
+                "ruleset": self.convergence_ruleset,
+                "budget_s": budget_s,
+                "stall_round_line": stall_line_from_budget(budget_s),
+                "tasks_with_delivery": (advisory.task_count() if advisory else 0),
             })
         elif self.path == "/v1/semantic-status":
             # 只读状态：当前语义 provider kind / backend / calibrated 声明。
@@ -106,7 +121,8 @@ class GuardHTTPRequestHandler(BaseHTTPRequestHandler):
                     raise ValueError("enable_convergence_shadow must be a boolean")
                 if conv_flag:
                     if GuardHTTPRequestHandler.convergence_shadow is None:
-                        GuardHTTPRequestHandler.convergence_shadow = ConvergenceShadow()
+                        GuardHTTPRequestHandler.convergence_shadow = ConvergenceShadow(
+                            ruleset=GuardHTTPRequestHandler.convergence_ruleset)
                     # Phase 2：advisory 门控——仅 server env=advisory 时注入
                     # 预算（触发命中 → reminder 可投递）；off/shadow 注入
                     # None，与 Phase 1 逐字节一致。
@@ -232,6 +248,11 @@ def start_server(
     Phase 2 收敛通道（MOONBOW_GUARD_CONVERGENCE=off|shadow|advisory，默认
     off = Phase 1 现状）：advisory 时 /v1/stage-check 的收敛触发命中可在
     reminder 投递收敛提示（独立预算，每任务最多 2 次）。
+
+    规则集 v2（2026-10-04，eigen 归因驱动）：通道非 off 时装配 ruleset=v2
+    （+converge.repeat +converge.perf_retest +stall 轮次线缩放，预算来自
+    MOONBOW_GUARD_CONVERGENCE_BUDGET 缺省 900 → 60 轮）；off 保持 v1。
+    perf_retest 投递另需 MOONBOW_GUARD_PERF_RETEST=1 或目标含 speedup/perf。
     """
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
     logger.info("正在初始化 Progress Guard 模型 (%s @ %s, lazy=%s)...", models_dir or "default", device, lazy)
@@ -239,16 +260,23 @@ def start_server(
     mode = convergence_mode_from_env()
     if mode != "off":
         GuardHTTPRequestHandler.convergence_mode = mode
+        GuardHTTPRequestHandler.convergence_ruleset = "v2"
         if mode == "advisory":
             GuardHTTPRequestHandler.convergence_advisory = AdvisoryBudget()
-        logger.info("%s=%s：收敛通道开启（advisory=触发命中可投递收敛提示；"
-                    "一键回滚 = 移除该环境变量并重启）", CONVERGENCE_ENV, mode)
+        logger.info("%s=%s：收敛通道开启（ruleset=v2：converge.repeat + "
+                    "converge.perf_retest + stall 轮次线缩放；advisory=触发命中"
+                    "可投递收敛提示；一键回滚 = 移除该环境变量并重启）",
+                    CONVERGENCE_ENV, mode)
     else:
         GuardHTTPRequestHandler.convergence_mode = "off"
+        GuardHTTPRequestHandler.convergence_ruleset = "v1"
         GuardHTTPRequestHandler.convergence_advisory = None
         if os.environ.get(CONVERGENCE_ENV):
             logger.warning("%s=%r 非法（合法值 off/shadow/advisory）：保持 off",
                            CONVERGENCE_ENV, os.environ[CONVERGENCE_ENV])
+    budget_s = convergence_budget_from_env()
+    logger.info("%s=%s → stall 轮次线 %d 轮（v2）",
+                BUDGET_ENV, budget_s, stall_line_from_budget(budget_s))
 
     env_key = env_provider_key()
     if semantic_provider is None and env_key == "semantic":

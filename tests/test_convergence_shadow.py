@@ -465,3 +465,445 @@ def test_stage_check_flag_must_be_bool(base_url):
     with pytest.raises(urllib.error.HTTPError) as e:
         _post(base_url, "/v1/stage-check", _stage_payload(flag=1))
     assert e.value.code == 400
+
+
+# =====================================================================
+# 规则集 v2（2026-10-04，eigen 归因驱动）：
+# converge.repeat / converge.perf_retest / stall 轮次线缩放
+# （归因依据：results/guard-effect-v2/eigen_failure_attribution.md §7——
+#  control r3 = 877 次同命令退化循环；control r1 = 同文件变体 30 写振荡；
+#  both r4/r6/r9 = 会内 27 passed 如实申报 A → judge 复测翻转 ≤1µs 平局项）
+# =====================================================================
+
+from moonbow.guard.convergence import (  # noqa: E402
+    BUDGET_ENV, DEFAULT_CONVERGENCE_BUDGET_S, FAIL_STREAK_SIGNAL,
+    OSCILLATION_MIN_WRITES, PERF_RETEST_ENV, PERF_RETEST_SIGNAL,
+    REPEAT_IDENTICAL_MIN, REPEAT_SIGNAL, RULESET_V1, RULESET_V2,
+    STALL_FLOOR_ROUND, STALL_MAX_ROUND, STALL_SIGNAL, TARGETS_ENV,
+    AdvisoryBudget, advisory_fingerprint, convergence_budget_from_env,
+    normalized_command_core, perf_retest_enabled, stall_line_from_budget,
+)
+
+V2_SIGNALS = [STALL_SIGNAL, FAIL_STREAK_SIGNAL, REPEAT_SIGNAL,
+              PERF_RETEST_SIGNAL]
+
+
+def _v2(**kw):
+    kw.setdefault("ruleset", RULESET_V2)
+    return ConvergenceShadow(**kw)
+
+
+def _signal(entries, sig):
+    return [e for e in entries if e["signal"] == sig][0]
+
+
+# 877 次退化循环的归一化形态：同一条 timeit 命令（仅 number 数字不同，
+# 归一化 = 去数字/路径/空白后逐条相同）
+TIMEIT_CMD = ('python -c "import timeit, numpy as np; A = np.random.randn(2, 2); '
+              'print(timeit.timeit(lambda: np.linalg.eig(A), number=%d))"')
+
+
+def _timeit_rounds(n, start_seq=1):
+    blocks = []
+    for i in range(n):
+        cid = "c%d" % (start_seq + i)
+        blocks.append(_call(start_seq + 2 * i, TIMEIT_CMD % (10000 + i), cid))
+        blocks.append(_tr(start_seq + 2 * i + 1, "0.12", cid))
+    return blocks
+
+
+def _write_rounds(path, results, start_seq=1):
+    """每轮 3 块：write path（内容逐版不同）→ pytest 调用 → pytest 结果。"""
+    blocks = []
+    seq = start_seq
+    for i, r in enumerate(results):
+        blocks.append(StageBlock(
+            seq=seq, kind="toolCall", tool_call_id="w%d" % i, tool_name="write",
+            text=json.dumps({"name": "write",
+                             "arguments": {"path": path, "content": "v%d" % i}})))
+        seq += 1
+        blocks.append(_call(seq, "pytest -q", "p%d" % i))
+        seq += 1
+        blocks.append(_tr(seq, r, "p%d" % i))
+        seq += 1
+    return blocks
+
+
+# ---- 规则集版本：v1 缺省零变化，v2 纯追加 ----
+
+def test_ruleset_validation_and_v1_default():
+    with pytest.raises(ValueError):
+        ConvergenceShadow(ruleset="v9")
+    s = ConvergenceShadow()
+    assert s.ruleset == RULESET_V1
+    assert s.stall_min_round == 4            # v1 口径（既有测试锁定）
+
+
+def test_v1_shape_unchanged_and_v2_pure_append():
+    blocks = _failing_rounds(4)
+    v1 = ConvergenceShadow().compute("x", blocks)
+    assert [e["signal"] for e in v1] == [STALL_SIGNAL, FAIL_STREAK_SIGNAL]
+    v2 = _v2().compute("x", blocks)
+    assert [e["signal"] for e in v2] == V2_SIGNALS
+    assert v2[1] == v1[1]                    # fail_streak 逐字节一致
+    # stall 缩放生效：4 轮在 v2（线 60）下未达线 abstain，v1 下 matched
+    assert v2[0]["matched"] is None
+    assert v2[0]["abstain_reason"] == "rounds<60"
+    assert v1[0]["matched"] is True
+
+
+def test_v2_ruleset_via_env_budget_only_affects_v2(monkeypatch):
+    monkeypatch.setenv(BUDGET_ENV, "300")    # 300//15=20 → 保底 30
+    assert ConvergenceShadow().stall_min_round == 4
+    assert _v2().stall_min_round == 30
+
+
+# ---- converge.repeat a) consecutive_identical ----
+
+def test_normalized_command_core_strips_digits_paths_whitespace():
+    assert (normalized_command_core("pytest -q tests/test_a.py")
+            == normalized_command_core("pytest -q tests/test_b.py"))
+    assert "timeit" in normalized_command_core(TIMEIT_CMD % 987654)
+
+
+def test_repeat_identical_fires_at_12_normalized_same_calls():
+    """877 次循环形态：第 12 条连续同（归一化）命令即触发。"""
+    e = _v2().compute("x", _timeit_rounds(12))
+    rep = _signal(e, REPEAT_SIGNAL)
+    assert rep["matched"] is True
+    assert rep["detail"]["kind"] == "identical_calls"
+    assert rep["detail"]["count"] == REPEAT_IDENTICAL_MIN
+    assert "timeit" in rep["detail"]["command"]
+
+
+def test_repeat_below_12_does_not_fire():
+    e = _v2().compute("x", _timeit_rounds(11))
+    rep = _signal(e, REPEAT_SIGNAL)
+    assert rep["matched"] is False
+    assert rep["detail"]["max_identical_calls"] == 11
+
+
+def test_repeat_non_consecutive_does_not_fire():
+    """非连续重复（同命令与其它命令交替）：最大连击 1 → 不触发。"""
+    blocks = []
+    seq = 1
+    for i in range(8):
+        blocks.append(_call(seq, TIMEIT_CMD % 10000, "a%d" % i)); seq += 1
+        blocks.append(_tr(seq, "0.12", "a%d" % i)); seq += 1
+        blocks.append(_call(seq, "ls -la", "b%d" % i)); seq += 1
+        blocks.append(_tr(seq, "files", "b%d" % i)); seq += 1
+    e = _v2().compute("x", blocks)
+    rep = _signal(e, REPEAT_SIGNAL)
+    assert rep["matched"] is False
+    assert rep["detail"]["max_identical_calls"] == 1
+
+
+# ---- converge.repeat b) edit_oscillation ----
+
+def test_edit_oscillation_fires_4_writes_same_pytest_result():
+    """control r1 形态：同文件 4 写 + 每写后 pytest 结果集合不变。"""
+    e = _v2().compute("x", _write_rounds("eigen.py", ["1 failed in 0.01s"] * 4))
+    rep = _signal(e, REPEAT_SIGNAL)
+    assert rep["matched"] is True
+    assert rep["detail"]["kind"] == "edit_oscillation"
+    assert rep["detail"]["file"] == "eigen.py"
+    assert rep["detail"]["count"] == OSCILLATION_MIN_WRITES
+
+
+def test_edit_oscillation_not_when_pytest_result_changes():
+    """修了有效果（结果集合有变化）→ 不触发。"""
+    e = _v2().compute("x", _write_rounds(
+        "eigen.py", ["1 failed", "1 failed", "3 passed", "3 passed"]))
+    assert _signal(e, REPEAT_SIGNAL)["matched"] is False
+
+
+def test_edit_oscillation_not_below_4_writes_or_across_files():
+    e = _v2().compute("x", _write_rounds("eigen.py", ["1 failed"] * 3))
+    assert _signal(e, REPEAT_SIGNAL)["matched"] is False
+    blocks = (_write_rounds("a.py", ["1 failed"] * 2)
+              + _write_rounds("b.py", ["1 failed"] * 2, start_seq=100))
+    e = _v2().compute("x", blocks)
+    assert _signal(e, REPEAT_SIGNAL)["matched"] is False
+
+
+def test_repeat_identical_takes_12_regardless_of_writes():
+    """identical 与 oscillation 独立计数；identical 达 12 优先呈现。"""
+    blocks = _write_rounds("eigen.py", ["1 failed"] * 4) + _timeit_rounds(12, start_seq=100)
+    rep = _signal(_v2().compute("x", blocks), REPEAT_SIGNAL)
+    assert rep["matched"] is True
+    assert rep["detail"]["kind"] == "identical_calls"
+
+
+# ---- stall 轮次线缩放 ----
+
+def test_v2_stall_line_scales_with_budget_900_to_60(monkeypatch):
+    monkeypatch.setenv(BUDGET_ENV, "900")
+    s = _v2()
+    assert s.stall_min_round == 60
+    stall = _signal(s.compute("x", _failing_rounds(60)), STALL_SIGNAL)
+    assert stall["matched"] is True
+    assert stall["detail"]["round"] == 60
+    assert stall["detail"]["stall_line"] == 60
+    # 59 轮不触发（v1 口径 4 轮即触发 —— 缩放生效）
+    stall59 = _signal(_v2().compute("x", _failing_rounds(59)), STALL_SIGNAL)
+    assert stall59["matched"] is None
+    assert stall59["abstain_reason"] == "rounds<60"
+
+
+def test_v2_default_budget_900_when_env_unset(monkeypatch):
+    monkeypatch.delenv(BUDGET_ENV, raising=False)
+    assert convergence_budget_from_env({}) == DEFAULT_CONVERGENCE_BUDGET_S
+    assert _v2().stall_min_round == 60
+
+
+def test_v2_stall_line_formula_bounds(monkeypatch):
+    assert stall_line_from_budget(1500) == STALL_MAX_ROUND        # 封顶 100
+    assert stall_line_from_budget(3000) == STALL_MAX_ROUND
+    assert stall_line_from_budget(150) == STALL_FLOOR_ROUND       # 保底 30
+    assert stall_line_from_budget("abc") == 60                    # 非法 → 缺省 900
+    monkeypatch.setenv(BUDGET_ENV, "1500")
+    assert _v2().stall_min_round == 100
+    stall = _signal(_v2().compute("x", _failing_rounds(100)), STALL_SIGNAL)
+    assert stall["matched"] is True and stall["detail"]["round"] == 100
+    monkeypatch.setenv(BUDGET_ENV, "150")
+    assert _v2().stall_min_round == 30
+    stall30 = _signal(_v2().compute("x", _failing_rounds(30)), STALL_SIGNAL)
+    assert stall30["matched"] is True
+
+
+def test_v1_stall_untouched_by_budget_env(monkeypatch):
+    monkeypatch.setenv(BUDGET_ENV, "900")
+    s = ConvergenceShadow()
+    assert s.stall_min_round == 4
+    e = s.compute("x", _failing_rounds(4))
+    assert e[0]["matched"] is True
+    assert "stall_line" not in e[0]["detail"]
+
+
+def test_v2_stall_still_abstains_without_pytest(monkeypatch):
+    monkeypatch.setenv(BUDGET_ENV, "900")
+    # 60 轮非 pytest 结果（达线但无 pytest 证据 → "无证据"而非"失败证据"）
+    blocks = [_tr(i, "readme 内容", name="read") for i in range(1, 61)]
+    e = _v2().compute("x", blocks)
+    stall = _signal(e, STALL_SIGNAL)
+    assert stall["matched"] is None
+    assert stall["abstain_reason"] == "no_pytest_evidence"
+
+
+# ---- converge.perf_retest（块级证据 + env 门控 + 独立预算键）----
+
+def _perf_blocks(claim="STATUS: A 全部完成"):
+    # 写入已验证（pytest pass 在写入之后）→ 主审计零 actionable，reminder 空缺
+    return [
+        _tr(1, "ok", name="write"),
+        _call(2, "pytest -q", "p1"), _tr(3, "27 passed in 3.12s", "p1"),
+        StageBlock(seq=4, kind="text", text=claim),
+    ]
+
+
+def _perf_payload(task_id="perf-1", blocks=None, **extra):
+    p = {"req": "求最大特征值并跑赢参考实现", "snapshot_version": 1,
+         "task_id": task_id,
+         "blocks": [b.to_dict() for b in
+                    (blocks if blocks is not None else _perf_blocks())]}
+    p.update(extra)
+    return p
+
+
+def test_perf_retest_enabled_gate():
+    assert perf_retest_enabled({}) is False
+    assert perf_retest_enabled({PERF_RETEST_ENV: "1"}) is True
+    assert perf_retest_enabled({PERF_RETEST_ENV: "0"}) is False
+    assert perf_retest_enabled({TARGETS_ENV: "test_speedup[3],test_half"}) is True
+    assert perf_retest_enabled({TARGETS_ENV: "test_half,test_sort"}) is False
+    assert perf_retest_enabled({}, target_tests=["test_perf_x"]) is True
+
+
+def test_perf_retest_claim_detection():
+    e = _v2().compute("x", _perf_blocks(claim="STATUS: B 部分完成"))
+    assert _signal(e, PERF_RETEST_SIGNAL)["matched"] is False
+    e = _v2().compute("x", _perf_blocks(claim="评估：STATUS: ABORTED"))
+    assert _signal(e, PERF_RETEST_SIGNAL)["matched"] is False
+    e = _v2().compute("x", _perf_blocks(claim="status: a 全部完成"))
+    perf = _signal(e, PERF_RETEST_SIGNAL)
+    assert perf["matched"] is True
+    assert perf["detail"]["declared_seq"] == 4
+
+
+def test_perf_retest_delivers_once_with_independent_budget(monkeypatch):
+    monkeypatch.setenv(PERF_RETEST_ENV, "1")
+    monkeypatch.delenv(TARGETS_ENV, raising=False)
+    budget = AdvisoryBudget()
+    p = _perf_payload()
+    r = audit_stage_payload(p, convergence_shadow=_v2(),
+                            convergence_advisory=budget)
+    rem = r["reminder"]
+    assert rem and "性能目标类收尾" in rem["suggestion"]
+    assert "至少 2 次" in rem["suggestion"] and "EVIDENCE" in rem["suggestion"]
+    assert rem["fingerprint"] == advisory_fingerprint(PERF_RETEST_SIGNAL, "perf-1")
+    perf = _signal(r["shadow_convergence"], PERF_RETEST_SIGNAL)
+    assert perf["matched"] is True and perf["delivered"] is True
+    # 独立预算键：不占既有提醒预算（used=0，stall 仍可投）
+    assert budget.used("perf-1") == 0
+    assert budget.allow("perf-1", STALL_SIGNAL)
+    # 同任务重审：仅一次，不重投
+    r2 = audit_stage_payload(_perf_payload(), convergence_shadow=_v2(),
+                             convergence_advisory=budget)
+    assert r2["reminder"] is None
+    assert _signal(r2["shadow_convergence"], PERF_RETEST_SIGNAL)["delivered"] is False
+
+
+def test_perf_retest_silent_for_non_perf_task(monkeypatch):
+    monkeypatch.delenv(PERF_RETEST_ENV, raising=False)
+    monkeypatch.delenv(TARGETS_ENV, raising=False)
+    budget = AdvisoryBudget()
+    r = audit_stage_payload(_perf_payload(task_id="perf-2"),
+                            convergence_shadow=_v2(),
+                            convergence_advisory=budget)
+    assert r["reminder"] is None
+    perf = _signal(r["shadow_convergence"], PERF_RETEST_SIGNAL)
+    assert perf["matched"] is True            # 块级证据照记（shadow 只记录）
+    assert perf["delivered"] is False
+    assert budget.used("perf-2") == 0 and budget.task_count() == 0
+
+
+def test_perf_retest_via_targets_env(monkeypatch):
+    monkeypatch.delenv(PERF_RETEST_ENV, raising=False)
+    monkeypatch.setenv(TARGETS_ENV, "test_speedup[3],test_speedup[4]")
+    r = audit_stage_payload(_perf_payload(task_id="perf-3"),
+                            convergence_shadow=_v2(),
+                            convergence_advisory=AdvisoryBudget())
+    assert r["reminder"] and "性能目标类收尾" in r["reminder"]["suggestion"]
+
+
+def test_perf_retest_via_payload_targets_preserves_v2(monkeypatch):
+    """ge2 链路：TARGETS env 由客户端透传成 payload 键；with_targets 保 v2
+    不降级 v1（否则 perf_retest/repeat 条目消失）。"""
+    monkeypatch.delenv(PERF_RETEST_ENV, raising=False)
+    monkeypatch.delenv(TARGETS_ENV, raising=False)
+    p = _perf_payload(task_id="perf-4",
+                      convergence_target_tests=["test_speedup[3]"])
+    r = audit_stage_payload(p, convergence_shadow=_v2(),
+                            convergence_advisory=AdvisoryBudget())
+    perf = _signal(r["shadow_convergence"], PERF_RETEST_SIGNAL)
+    assert perf["matched"] is True and perf["delivered"] is True
+    assert r["reminder"]["fingerprint"].endswith(":perf-4")
+
+
+def test_perf_retest_shadow_or_no_advisory_never_delivers():
+    # advisory 未注入（off/shadow 路径）：与 Phase 1 一致，无 delivered 键
+    r = audit_stage_payload(_perf_payload(), convergence_shadow=_v2())
+    assert all("delivered" not in e for e in r["shadow_convergence"])
+    assert r["reminder"] is None
+
+
+def test_perf_retest_not_delivered_without_status_a(monkeypatch):
+    monkeypatch.setenv(PERF_RETEST_ENV, "1")
+    budget = AdvisoryBudget()
+    blocks = [b for b in _perf_blocks() if b.kind != "text"]
+    blocks.append(StageBlock(seq=4, kind="text", text="继续优化实现。"))
+    r = audit_stage_payload(_perf_payload(blocks=blocks),
+                            convergence_shadow=_v2(),
+                            convergence_advisory=budget)
+    assert r["reminder"] is None
+    assert _signal(r["shadow_convergence"], PERF_RETEST_SIGNAL)["matched"] is False
+
+
+def test_perf_retest_yields_when_capped_signal_delivered(monkeypatch):
+    """顶信号（fail_streak）命中时占用 reminder 通道；perf 本轮不投。"""
+    monkeypatch.setenv(PERF_RETEST_ENV, "1")
+    budget = AdvisoryBudget()
+    blocks = ([_perf_blocks()[0]]                     # write ok（seq1）
+              + [_call(3, "pytest -q", "q1"),
+                 _tr(4, "3 passed in 0.01s", "q1")]   # 写入后验证成功（闭环）
+              + _failing_rounds(2, start_seq=10)      # 之后连续 2 次 pytest 失败
+              + [StageBlock(seq=50, kind="text", text="STATUS: A 全部完成")])
+    r = audit_stage_payload(_perf_payload(task_id="perf-5", blocks=blocks),
+                            convergence_shadow=_v2(),
+                            convergence_advisory=budget)
+    assert r["reminder"]
+    assert "converge.fail_streak" in r["reminder"]["fingerprint"]
+    perf = _signal(r["shadow_convergence"], PERF_RETEST_SIGNAL)
+    assert perf["matched"] is True and perf["delivered"] is False
+    assert budget.allow_solo("perf-5", PERF_RETEST_SIGNAL)   # 未被占用
+
+
+def test_repeat_advisory_delivered_once(monkeypatch):
+    monkeypatch.delenv(PERF_RETEST_ENV, raising=False)
+    monkeypatch.delenv(TARGETS_ENV, raising=False)
+    budget = AdvisoryBudget()
+    p = {"req": "基准测试", "snapshot_version": 1, "task_id": "rep-1",
+         "blocks": [b.to_dict() for b in _timeit_rounds(12)]}
+    r = audit_stage_payload(p, convergence_shadow=_v2(),
+                            convergence_advisory=budget)
+    assert r["reminder"]
+    assert "converge.repeat" in r["reminder"]["fingerprint"]
+    assert "换方法" in r["reminder"]["suggestion"]
+    assert _signal(r["shadow_convergence"], REPEAT_SIGNAL)["delivered"] is True
+    assert budget.used("rep-1") == 1
+    r2 = audit_stage_payload(dict(p), convergence_shadow=_v2(),
+                             convergence_advisory=budget)
+    assert r2["reminder"] is None
+
+
+# ---- AdvisoryBudget 独立预算键 ----
+
+def test_budget_solo_independent_of_capped_budget():
+    b = AdvisoryBudget()
+    b.record("t", STALL_SIGNAL)
+    b.record("t", FAIL_STREAK_SIGNAL)
+    assert b.used("t") == 2
+    assert b.allow_solo("t", PERF_RETEST_SIGNAL)     # 不受 MAX_PER_TASK 影响
+    b.record_solo("t", PERF_RETEST_SIGNAL)
+    assert not b.allow_solo("t", PERF_RETEST_SIGNAL)  # 每任务 1 次
+    assert b.used("t") == 2                           # solo 不计入既有预算
+    assert b.task_count() == 1
+
+
+# ---- HTTP：状态端点 ruleset 标识 + v2 装配 ----
+
+def test_convergence_status_reports_ruleset_v1_by_default(base_url, monkeypatch):
+    monkeypatch.delenv(BUDGET_ENV, raising=False)
+    with urllib.request.urlopen(base_url + "/v1/convergence-status",
+                                timeout=10) as w:
+        st = json.loads(w.read().decode("utf-8"))
+    assert st["mode"] == "off"
+    assert st["ruleset"] == "v1"
+    assert st["budget_s"] == 900
+    assert st["stall_round_line"] == 60
+    assert st["tasks_with_delivery"] == 0
+
+
+def test_http_v2_ruleset_assembly_and_delivery(base_url, monkeypatch):
+    """模拟 start_server 在 MOONBOW_GUARD_CONVERGENCE!=off 下的装配：
+    ruleset=v2 → 4 条目、stall 缩放生效、fail_streak 照常投递。"""
+    monkeypatch.delenv(BUDGET_ENV, raising=False)
+    old = (GuardHTTPRequestHandler.convergence_ruleset,
+           GuardHTTPRequestHandler.convergence_mode,
+           GuardHTTPRequestHandler.convergence_advisory,
+           GuardHTTPRequestHandler.convergence_shadow)
+    try:
+        GuardHTTPRequestHandler.convergence_ruleset = "v2"
+        GuardHTTPRequestHandler.convergence_mode = "advisory"
+        GuardHTTPRequestHandler.convergence_advisory = AdvisoryBudget()
+        GuardHTTPRequestHandler.convergence_shadow = None   # 触发按 v2 重建
+        resp = _post(base_url, "/v1/stage-check", _stage_payload(flag=True))
+        assert [e["signal"] for e in resp["shadow_convergence"]] == V2_SIGNALS
+        stall = resp["shadow_convergence"][0]
+        assert stall["abstain_reason"] == "rounds<60"       # 缩放生效（4<60）
+        fs = resp["shadow_convergence"][1]
+        assert fs["matched"] is True and fs["delivered"] is True
+        assert resp["reminder"]
+        assert resp["reminder"]["fingerprint"].startswith(
+            "convergence:converge.fail_streak:")
+        with urllib.request.urlopen(base_url + "/v1/convergence-status",
+                                    timeout=10) as w:
+            st = json.loads(w.read().decode("utf-8"))
+        assert st["ruleset"] == "v2"
+        assert st["mode"] == "advisory"
+        assert st["tasks_with_delivery"] == 1
+    finally:
+        (GuardHTTPRequestHandler.convergence_ruleset,
+         GuardHTTPRequestHandler.convergence_mode,
+         GuardHTTPRequestHandler.convergence_advisory,
+         GuardHTTPRequestHandler.convergence_shadow) = old

@@ -58,21 +58,76 @@ docs/semantic_runtime_progress.md 的 Phase 0 / Phase 0.5 段，
 零投递（硬约束）：本模块结果只进入 audit() 返回值的
 shadow_convergence 键；绝不产生 reminder、绝不参与 findings /
 semantic 判定、绝不新增用户投递。
+
+规则集 v2（2026-10-04，eigen_failure_attribution.md 归因驱动；先经
+results/guard-effect-v2/eigen_failure_attribution.md §7 的干预点标注）：
+- converge.repeat（新触发器）：a) consecutive_identical——连续 N>=12 条
+  "归一化后相同"的工具调用（归一化 = 去数字/路径/空白后的命令核心；
+  归因样本 = control r3 的 877 次同命令 timeit 退化循环）；
+  b) edit_oscillation——同一文件被写入 >=4 次且每次写入后 pytest 结果
+  集合未变化（修了没效果；归因样本 = control r1 的同文件变体 30 写
+  振荡、约 8 个来回）。任一命中 → matched=True。
+- converge.stall 轮次线缩放：v2 下 STALL_MIN_ROUND(4) 替换为
+  min(100, max(30, budget_s // 15))，budget_s 来自
+  MOONBOW_GUARD_CONVERGENCE_BUDGET（缺省 900 → 60 轮）。实证动机：
+  tierA_eigen_final.md §5——900s 预算下固定高轮次线永不触发，
+  触发线必须随预算缩放。v1 不受影响（既有测试锁定 4 轮口径）。
+- converge.perf_retest（新触发器）：块流中出现 "STATUS: A" 收尾申报 →
+  matched=True（归因样本 = both r4/r6/r9：会内 27 passed、如实申报 A、
+  judge 复测翻掉 <=1µs 平局项）。投递另有 env 门控（perf_retest_enabled：
+  MOONBOW_GUARD_PERF_RETEST=1，或 MOONBOW_GUARD_CONVERGENCE_TARGETS /
+  payload convergence_target_tests 含 speedup/perf 字样）与独立预算键
+  （每任务 1 次，不占既有提醒预算）。
+- 门控与标识：两新规则 shadow 模式只记录；advisory 模式才可投递；
+  off 模式零变化。ruleset 版本（v1/v2）由 server 装配决定并经
+  /v1/convergence-status 的 ruleset 键暴露；ConvergenceShadow 缺省
+  ruleset="v1"（既有调用零变化）。
 """
 import hashlib
+import json
+import os
 import re
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from .protocol import StageBlock
 
-# 触发阈值：G2 时间视角 = 第 4 轮观测时刻（Phase 0.5 口径）
+# 触发阈值：G2 时间视角 = 第 4 轮观测时刻（Phase 0.5 口径；v1 固定，
+# v2 由预算缩放替换，见 stall_line_from_budget）
 STALL_MIN_ROUND = 4
 # fail_streak 触发线（Phase 0 基线规则 pytest_fail_streak>=2）
 FAIL_STREAK_MIN = 2
 
 STALL_SIGNAL = "converge.stall"
 FAIL_STREAK_SIGNAL = "converge.fail_streak"
+# 规则集 v2 新触发器（2026-10-04，eigen 归因驱动）
+REPEAT_SIGNAL = "converge.repeat"
+PERF_RETEST_SIGNAL = "converge.perf_retest"
+
+# v2 repeat 阈值：连续同命令 >=12 条（877 次循环在第 12 次即应被打断，
+# 远早于预算耗尽）；同文件写入 >=4 次且 pytest 结果不变（修了没效果）。
+REPEAT_IDENTICAL_MIN = 12
+OSCILLATION_MIN_WRITES = 4
+
+# 规则集版本：v1 = Phase 1/2 现状（stall 4 轮 + fail_streak）；
+# v2 = 上述 + repeat + perf_retest + stall 轮次线缩放。
+RULESET_V1 = "v1"
+RULESET_V2 = "v2"
+RULESETS = (RULESET_V1, RULESET_V2)
+
+# v2 stall 轮次线缩放（tierA_eigen_final.md §5 的实证必要性）：
+# min(100, max(30, budget_s // 15))；budget 缺省 900s → 60 轮。
+BUDGET_ENV = "MOONBOW_GUARD_CONVERGENCE_BUDGET"
+DEFAULT_CONVERGENCE_BUDGET_S = 900
+STALL_MAX_ROUND = 100
+STALL_FLOOR_ROUND = 30
+
+# perf_retest 投递门控（与 ruleset 独立；缺省关闭）
+PERF_RETEST_ENV = "MOONBOW_GUARD_PERF_RETEST"
+TARGETS_ENV = "MOONBOW_GUARD_CONVERGENCE_TARGETS"
+_PERF_KEYWORDS = ("speedup", "perf")
+# STATUS=A 收尾申报（perf_retest 的块级证据；与 verifier 的 STATUS 门同形）
+_PERF_CLAIM_RE = re.compile(r"\bSTATUS\s*[:：]\s*A\b", re.IGNORECASE)
 
 # ---- pytest 摘要解析（移植自 tools/goal_coverage_study.py）----
 
@@ -208,6 +263,211 @@ def pytest_fail_streak(events: Sequence[StageBlock]) -> int:
     return streak
 
 
+# ---- 规则集 v2：repeat / perf_retest / stall 缩放（2026-10-04）----
+#
+# 全部为块流纯函数（compute 的幂等性质保持）；env 只在构造器 /
+# 显式 helper 里读取。归因依据见模块 docstring 与
+# results/guard-effect-v2/eigen_failure_attribution.md §7。
+
+# 路径形态 token（含 / 或 \ 的连续段；用于"去路径"归一化与写文件名提取）
+_PATH_TOKEN_RE = re.compile(r"(?:[A-Za-z]:)?(?:[\w.\-]+[\\/])+[\w.\-]*")
+_DIGIT_RE = re.compile(r"\d+")
+# bash 重定向写文件（`> f` / `>> f` / `tee f` / `tee -a f`）
+_REDIRECT_RE = re.compile(r">>?\s*([^\s;|&]+)")
+_TEE_RE = re.compile(r"\btee\s+(?:-a\s+)?([^\s;|&]+)")
+# 写入类工具名（与 process_audit._WRITE_TOOLS 同集；此处独立定义防环导入）
+_WRITE_TOOL_NAMES = frozenset({"edit", "write", "apply_patch", "multiedit",
+                               "str_replace", "create", "notebook_edit"})
+
+
+def stall_line_from_budget(budget_s) -> int:
+    """v2 stall 轮次线：min(100, max(30, budget_s // 15))。
+
+    预算 900s（缺省）→ 60 轮；>=1500s 封顶 100 轮（旧高线形态）；
+    <=450s 保底 30 轮。非法/非正值按缺省 900 处理。
+    """
+    try:
+        b = int(budget_s)
+    except (TypeError, ValueError):
+        b = DEFAULT_CONVERGENCE_BUDGET_S
+    if b <= 0:
+        b = DEFAULT_CONVERGENCE_BUDGET_S
+    return min(STALL_MAX_ROUND, max(STALL_FLOOR_ROUND, b // 15))
+
+
+def convergence_budget_from_env(environ=None) -> int:
+    """读 MOONBOW_GUARD_CONVERGENCE_BUDGET（秒）；缺省/非法 → 900。"""
+    env = environ if environ is not None else os.environ
+    raw = (env.get(BUDGET_ENV) or "").strip()
+    try:
+        v = int(raw)
+    except ValueError:
+        return DEFAULT_CONVERGENCE_BUDGET_S
+    return v if v > 0 else DEFAULT_CONVERGENCE_BUDGET_S
+
+
+def perf_retest_enabled(environ=None, target_tests=None) -> bool:
+    """perf_retest 投递门控：MOONBOW_GUARD_PERF_RETEST=1（宽松真值），
+    或性能目标字样出现在 MOONBOW_GUARD_CONVERGENCE_TARGETS / payload
+    注入的 target_tests 中（ge2 链路：客户端 env 透传成 payload 键，
+    服务端 env 未必带 TARGETS，故两处都认）。"""
+    env = environ if environ is not None else os.environ
+    raw = (env.get(PERF_RETEST_ENV) or "").strip().lower()
+    if raw in ("1", "true", "on", "yes"):
+        return True
+    if target_tests:
+        joined = ",".join(target_tests)
+    else:
+        joined = env.get(TARGETS_ENV) or ""
+    low = joined.lower()
+    return any(k in low for k in _PERF_KEYWORDS)
+
+
+def _parse_tool_call(text: str) -> Tuple[Optional[str], Optional[dict]]:
+    """toolCall 块文本 → (tool_name, arguments dict)；非 JSON → (None, None)。"""
+    try:
+        obj = json.loads(text or "")
+    except (ValueError, TypeError):
+        return None, None
+    if not isinstance(obj, dict):
+        return None, None
+    name = obj.get("name") if isinstance(obj.get("name"), str) else None
+    args = obj.get("arguments")
+    return name, (args if isinstance(args, dict) else {})
+
+
+def normalized_command_core(text: str) -> str:
+    """归一化 = 去数字/路径/空白后的命令核心（小写）。
+
+    toolCall 文本优先取 arguments.command；非 bash 类调用退化为全部
+    字符串参数拼接（write 的 content 参与核心 → 内容不同的写入不误判
+    为"同命令"）。877 次循环样本：仅 number=NNNNN 数字不同 → 归一化后
+    逐条相同。
+    """
+    t = text or ""
+    _, args = _parse_tool_call(t)
+    if isinstance(args, dict):
+        picked = None
+        for k in ("command", "cmd", "script"):
+            v = args.get(k)
+            if isinstance(v, str) and v.strip():
+                picked = v
+                break
+        if picked is None:
+            parts = [v for v in args.values() if isinstance(v, str) and v.strip()]
+            picked = " ".join(parts)
+        t = picked if picked is not None else t
+    t = _PATH_TOKEN_RE.sub(" ", t)      # 去路径
+    t = _DIGIT_RE.sub(" ", t)           # 去数字
+    t = re.sub(r"\s+", "", t)           # 去空白
+    return t.lower()
+
+
+def _write_events(ordered: Sequence[StageBlock]) -> List[Tuple[int, str]]:
+    """(seq, 文件路径) 写入事件：写入类工具名（或 bash 重定向）且能
+    解析出目标文件。解析不出文件的事件不参与（无同一文件可言）。"""
+    out: List[Tuple[int, str]] = []
+    for b in ordered:
+        if b.kind != "toolCall":
+            continue
+        name = (b.tool_name or "").lower()
+        tool, args = _parse_tool_call(b.text)
+        if name is None and tool:
+            name = tool.lower()
+        path: Optional[str] = None
+        cmd: Optional[str] = None
+        if isinstance(args, dict):
+            for k in ("path", "file_path", "notebook_path", "file"):
+                v = args.get(k)
+                if isinstance(v, str) and v.strip():
+                    path = v.strip()
+                    break
+            v = args.get("command")
+            if isinstance(v, str):
+                cmd = v
+        is_write = name in _WRITE_TOOL_NAMES
+        if path is None and cmd:
+            m = _REDIRECT_RE.search(cmd) or _TEE_RE.search(cmd)
+            if m:
+                is_write = True
+                path = m.group(1)
+        if is_write and path:
+            out.append((b.seq, path))
+    return out
+
+
+def max_identical_run(ordered: Sequence[StageBlock]) -> Tuple[int, str, str]:
+    """工具调用序列上"归一化后相同"的最大连续段。
+
+    返回 (最长连击数, 归一化核心, 达峰调用的原始文本摘录)。
+    空核心（无法解析/空文本）不算重复也不打断计数基线（重置）。
+    """
+    run_core: Optional[str] = None
+    run = 0
+    best = (0, "", "")
+    for b in ordered:
+        if b.kind != "toolCall":
+            continue
+        core = normalized_command_core(b.text)
+        if not core:
+            run_core = None
+            run = 0
+            continue
+        if core == run_core:
+            run += 1
+        else:
+            run_core, run = core, 1
+        if run > best[0]:
+            best = (run, core, (b.text or "")[:120])
+    return best
+
+
+def edit_oscillation_hit(
+    ordered: Sequence[StageBlock],
+    seq_sig: Dict[int, Tuple[str, int]],
+    min_writes: int = OSCILLATION_MIN_WRITES,
+) -> Optional[Tuple[int, str]]:
+    """同文件写入 >= min_writes 次，且每次写入后到下次写入（或流尾）的
+    pytest 结果集合（coverage 事件 + 已落地目标数二元组序列）完全相同
+    且非空 → (写入次数, 文件)。修了没效果的振荡循环。
+
+    seq_sig：pytest 事件 seq → (coverage 事件, goals_passed)，由
+    compute() 的 events/traj 对齐得到（口径与覆盖度同源）。
+    """
+    by_file: Dict[str, List[int]] = {}
+    for seq, path in _write_events(ordered):
+        by_file.setdefault(path, []).append(seq)
+    for path, seqs in by_file.items():
+        if len(seqs) < min_writes:
+            continue
+        intervals: List[Tuple[Tuple[str, int], ...]] = []
+        for i, s in enumerate(seqs):
+            nxt = seqs[i + 1] if i + 1 < len(seqs) else None
+            sigs = tuple(v for seq, v in sorted(seq_sig.items())
+                         if s < seq and (nxt is None or seq < nxt))
+            intervals.append(sigs)
+        if all(intervals) and len(set(intervals)) == 1:
+            return len(seqs), path
+    return None
+
+
+def max_same_file_writes(ordered: Sequence[StageBlock]) -> int:
+    """单文件最大写入次数（未命中时的观测计数）。"""
+    counts: Dict[str, int] = {}
+    for _, path in _write_events(ordered):
+        counts[path] = counts.get(path, 0) + 1
+    return max(counts.values()) if counts else 0
+
+
+def last_perf_claim_seq(ordered: Sequence[StageBlock]) -> Optional[int]:
+    """最后一个 "STATUS: A" 收尾申报文本块的 seq（无则 None）。"""
+    seq: Optional[int] = None
+    for b in ordered:
+        if b.kind == "text" and _PERF_CLAIM_RE.search(b.text or ""):
+            seq = b.seq
+    return seq
+
+
 @dataclass
 class ShadowEntry:
     """一条收敛 shadow 信号。matched 三态：True/False=已判定；None=未判定
@@ -241,14 +501,28 @@ class ConvergenceShadow:
 
     compute() 是 (req, blocks) 的纯函数：无实例级可变状态，同一块流重复
     计算同结果（幂等）。实例因此可跨请求安全复用。
+
+    ruleset（2026-10-04）："v1"（缺省，Phase 1/2 现状，既有测试锁定）或
+    "v2"（repeat + perf_retest + stall 轮次线缩放）。budget_s 仅 v2 使用
+    （stall 轮次线缩放的预算秒数；None → 读 MOONBOW_GUARD_CONVERGENCE_BUDGET，
+    缺省 900）。
     """
 
     kind = "convergence"
 
-    def __init__(self, goals_total: int = 1, target_tests: Optional[Sequence[str]] = None):
+    def __init__(self, goals_total: int = 1, target_tests: Optional[Sequence[str]] = None,
+                 ruleset: str = RULESET_V1, budget_s: Optional[int] = None):
         total = int(goals_total)
         if total < 1:
             raise ValueError("goals_total must be >= 1")
+        if ruleset not in RULESETS:
+            raise ValueError("ruleset must be one of %s" % (RULESETS,))
+        self.ruleset = ruleset
+        if ruleset == RULESET_V2 and budget_s is None:
+            budget_s = convergence_budget_from_env()
+        self.budget_s = budget_s
+        self.stall_min_round = (stall_line_from_budget(budget_s)
+                                if ruleset == RULESET_V2 else STALL_MIN_ROUND)
         self.target_tests = tuple(target_tests) if target_tests else None
         if self.target_tests:
             if len(set(self.target_tests)) != len(self.target_tests):
@@ -258,15 +532,51 @@ class ConvergenceShadow:
         else:
             self.goals_total = total
 
+    def with_targets(self, goals_total: Optional[int] = None,
+                     target_tests: Optional[Sequence[str]] = None) -> "ConvergenceShadow":
+        """派生同配置实例：payload 注入目标时保留 ruleset/budget
+        （v2 装配不因 payload 带目标而降级 v1）。"""
+        kwargs: Dict[str, Any] = {"ruleset": self.ruleset, "budget_s": self.budget_s}
+        if target_tests is not None:
+            kwargs["target_tests"] = target_tests
+        elif goals_total is not None:
+            kwargs["goals_total"] = goals_total
+        return ConvergenceShadow(**kwargs)
+
+    # ---- v2 触发器（块流纯函数）----
+
+    def _repeat_entry(self, ordered: List[StageBlock],
+                      seq_sig: Dict[int, Tuple[str, int]]) -> ShadowEntry:
+        run, core, raw = max_identical_run(ordered)
+        if run >= REPEAT_IDENTICAL_MIN:
+            return ShadowEntry(REPEAT_SIGNAL, True, {
+                "kind": "identical_calls", "count": run,
+                "command": raw or core[:120]})
+        osc = edit_oscillation_hit(ordered, seq_sig)
+        if osc is not None:
+            count, path = osc
+            return ShadowEntry(REPEAT_SIGNAL, True, {
+                "kind": "edit_oscillation", "count": count, "file": path})
+        return ShadowEntry(REPEAT_SIGNAL, False, {
+            "max_identical_calls": run,
+            "max_same_file_writes": max_same_file_writes(ordered)})
+
+    def _perf_retest_entry(self, ordered: List[StageBlock]) -> ShadowEntry:
+        seq = last_perf_claim_seq(ordered)
+        return ShadowEntry(PERF_RETEST_SIGNAL, seq is not None,
+                           {"declared_seq": seq})
+
     def compute(self, req: str, blocks: List[StageBlock]) -> List[Dict[str, Any]]:
-        """从块流确定性计算两条收敛信号。req 第一版不使用（不从 req 提取
-        目标），保留在签名里以对齐 audit() 调用点与后续 matcher 对齐扩展。"""
+        """从块流确定性计算收敛信号。req 第一版不使用（不从 req 提取
+        目标），保留在签名里以对齐 audit() 调用点与后续 matcher 对齐扩展。
+        v2 追加 converge.repeat / converge.perf_retest 两条（v1 两条不变）。"""
         events = _pytest_events(blocks)
         round_no = sum(1 for b in blocks if b.kind == "toolResult")
         traj = coverage_trajectory(events, self.goals_total, self.target_tests)
         goals_passed = traj[-1]["goals_passed"] if traj else 0
         coverage = round(goals_passed / self.goals_total, 4)
         streak = pytest_fail_streak(events)
+        ordered = sorted(blocks, key=lambda x: x.seq)
 
         stall_detail = {
             "round": round_no,
@@ -275,9 +585,11 @@ class ConvergenceShadow:
             "coverage": coverage,
             "pytest_rounds": len(events),
         }
-        if round_no < STALL_MIN_ROUND:
+        if self.ruleset == RULESET_V2:
+            stall_detail["stall_line"] = self.stall_min_round
+        if round_no < self.stall_min_round:
             stall = ShadowEntry(STALL_SIGNAL, None, stall_detail,
-                                abstain_reason="rounds<%d" % STALL_MIN_ROUND)
+                                abstain_reason="rounds<%d" % self.stall_min_round)
         elif not events:
             # 无 pytest 痕迹：coverage==0 只是"无证据"，不判停滞
             stall = ShadowEntry(STALL_SIGNAL, None, stall_detail,
@@ -292,7 +604,13 @@ class ConvergenceShadow:
         }
         fail_streak = ShadowEntry(FAIL_STREAK_SIGNAL, streak >= FAIL_STREAK_MIN,
                                   streak_detail)
-        return [stall.to_dict(), fail_streak.to_dict()]
+        entries = [stall, fail_streak]
+        if self.ruleset == RULESET_V2:
+            seq_sig = {e.seq: (t["event"], t["goals_passed"])
+                       for e, t in zip(events, traj)}
+            entries.append(self._repeat_entry(ordered, seq_sig))
+            entries.append(self._perf_retest_entry(ordered))
+        return [e.to_dict() for e in entries]
 
 
 # ---- Phase 2：advisory 投递包装（只包装，不改上面两条触发规则本体）----
@@ -314,10 +632,19 @@ ADVISORY_TEXT = {
     STALL_SIGNAL: ("你已连续多轮修改但没有一次验证成功。建议收窄范围："
                    "先把其中一个问题修到测试通过，其余如实列入 REMAINING。"),
     FAIL_STREAK_SIGNAL: ("同一验证反复失败，建议先聚焦让单个测试通过，再扩展。"),
+    # v2（2026-10-04）。perf_retest 文案为实验固定话术（归因：both r4/r6/r9
+    # 会内 27 passed 即申报 A → judge 复测翻转 ≤1µs 平局项）。
+    REPEAT_SIGNAL: ("检测到重复/振荡循环：连续多次执行相同操作且验证结果没有变化。"
+                    "建议先做一次最小对照实验确认最近改动是否真的有效，"
+                    "再决定继续当前路线还是换方法。"),
+    PERF_RETEST_SIGNAL: ("性能目标类收尾：请在申报完成前重复运行性能测试至少 2 次"
+                         "确认计时稳定，并在 EVIDENCE 中附各档耗时数据。"),
 }
 ADVISORY_SUMMARY = {
     STALL_SIGNAL: "多轮修改无一次验证成功（coverage==0）",
     FAIL_STREAK_SIGNAL: "同一验证连续多轮失败",
+    REPEAT_SIGNAL: "重复/振荡循环（同命令或同文件反复无进展）",
+    PERF_RETEST_SIGNAL: "性能目标类收尾缺少复测证据",
 }
 # 复用过程提醒的守卫标记前缀：客户端采集层据此跳过守卫自己的反馈正文，
 # 防自我审计循环（process-task.GUARD_MARK = "【进度守卫"）。
@@ -354,6 +681,17 @@ def build_advisory_reminder(signal: str, task_key: str, entry: Dict[str, Any]) -
                                             detail.get("goals_total")))
         if detail.get("pytest_rounds"):
             ev.append("pytest 证据 %s 次" % detail["pytest_rounds"])
+    elif signal == REPEAT_SIGNAL:
+        if detail.get("kind") == "identical_calls":
+            ev.append("连续相同调用 %s 次" % detail.get("count"))
+            if detail.get("command"):
+                ev.append("命令核心：%s" % detail["command"])
+        elif detail.get("kind") == "edit_oscillation":
+            ev.append("%s 已写入 %s 次且 pytest 结果未变化"
+                      % (detail.get("file"), detail.get("count")))
+    elif signal == PERF_RETEST_SIGNAL:
+        if detail.get("declared_seq") is not None:
+            ev.append("第%s块申报 STATUS: A" % detail["declared_seq"])
     else:
         if "streak" in detail:
             ev.append("连续失败 %s 轮" % detail["streak"])
@@ -387,6 +725,9 @@ class AdvisoryBudget:
 
     def __init__(self, max_tasks: int = 4096):
         self._counts: Dict[str, Dict[str, int]] = {}
+        # 独立预算键（v2 converge.perf_retest 专用）：与 _counts 完全分离，
+        # 不计入 used() / MAX_PER_TASK —— "每任务 1 次，不影响既有提醒预算"。
+        self._solo_counts: Dict[str, Dict[str, int]] = {}
         self._max_tasks = int(max_tasks)
 
     def _task(self, task_key: str) -> Dict[str, int]:
@@ -407,3 +748,21 @@ class AdvisoryBudget:
     def record(self, task_key: str, signal: str) -> None:
         task = self._task(task_key)
         task[signal] = task.get(signal, 0) + 1
+
+    def allow_solo(self, task_key: str, signal: str) -> bool:
+        """独立预算键：同 (task_key, signal) 至多 1 次，不受 MAX_PER_TASK
+        与既有信号用量影响（perf_retest 语义："每任务 1 次，不影响既有
+        提醒预算"）。"""
+        return self._solo_counts.get(task_key, {}).get(signal, 0) == 0
+
+    def record_solo(self, task_key: str, signal: str) -> None:
+        if task_key not in self._solo_counts:
+            if len(self._solo_counts) >= self._max_tasks:
+                self._solo_counts.pop(next(iter(self._solo_counts)))
+            self._solo_counts[task_key] = {}
+        task = self._solo_counts[task_key]
+        task[signal] = task.get(signal, 0) + 1
+
+    def task_count(self) -> int:
+        """出现过投递记账的任务数（含独立预算键任务；状态端点用）。"""
+        return len(set(self._counts) | set(self._solo_counts))
