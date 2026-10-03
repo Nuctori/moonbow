@@ -1,0 +1,389 @@
+{
+ "pool": "terminal-bench original-tasks (Apache-2.0)",
+ "commit": "shallow 2026-10-03",
+ "candidates": [
+  {
+   "task": "add-benchmark-lm-eval-harness",
+   "n_tests": 3
+  },
+  {
+   "task": "aimo-airline-departures",
+   "n_tests": 3
+  },
+  {
+   "task": "amuse-install",
+   "n_tests": 3
+  },
+  {
+   "task": "blind-maze-explorer-5x5",
+   "n_tests": 2
+  },
+  {
+   "task": "blind-maze-explorer-algorithm",
+   "n_tests": 2
+  },
+  {
+   "task": "bn-fit-modify",
+   "n_tests": 9
+  },
+  {
+   "task": "broken-python",
+   "n_tests": 2
+  },
+  {
+   "task": "build-cython-ext",
+   "n_tests": 11
+  },
+  {
+   "task": "cancel-async-tasks",
+   "n_tests": 6
+  },
+  {
+   "task": "cartpole-rl-training",
+   "n_tests": 5
+  },
+  {
+   "task": "causal-inference-r",
+   "n_tests": 10
+  },
+  {
+   "task": "chem-property-targeting",
+   "n_tests": 2
+  },
+  {
+   "task": "chem-rf",
+   "n_tests": 3
+  },
+  {
+   "task": "cobol-modernization",
+   "n_tests": 3
+  },
+  {
+   "task": "conda-env-conflict-resolution",
+   "n_tests": 3
+  },
+  {
+   "task": "cprofiling-python",
+   "n_tests": 2
+  },
+  {
+   "task": "cross-entropy-method",
+   "n_tests": 3
+  },
+  {
+   "task": "csv-to-parquet",
+   "n_tests": 2
+  },
+  {
+   "task": "debug-long-program",
+   "n_tests": 2
+  },
+  {
+   "task": "deterministic-tarball",
+   "n_tests": 12
+  },
+  {
+   "task": "distribution-search",
+   "n_tests": 4
+  },
+  {
+   "task": "enemy-grid-escape",
+   "n_tests": 3
+  },
+  {
+   "task": "extract-elf",
+   "n_tests": 2
+  },
+  {
+   "task": "fibonacci-server",
+   "n_tests": 6
+  },
+  {
+   "task": "filter-js-from-html",
+   "n_tests": 2
+  },
+  {
+   "task": "financial-document-processor",
+   "n_tests": 7
+  },
+  {
+   "task": "find-official-code",
+   "n_tests": 2
+  },
+  {
+   "task": "fix-pandas-version",
+   "n_tests": 3
+  },
+  {
+   "task": "flood-monitoring-basic",
+   "n_tests": 3
+  },
+  {
+   "task": "form-filling",
+   "n_tests": 4
+  },
+  {
+   "task": "get-bitcoin-nodes",
+   "n_tests": 5
+  },
+  {
+   "task": "grid-pattern-transform",
+   "n_tests": 3
+  },
+  {
+   "task": "heterogeneous-dates",
+   "n_tests": 3
+  },
+  {
+   "task": "hf-lora-adapter",
+   "n_tests": 4
+  },
+  {
+   "task": "hf-model-inference",
+   "n_tests": 4
+  },
+  {
+   "task": "hf-train-lora-adapter",
+   "n_tests": 5
+  },
+  {
+   "task": "huarong-dao-solver",
+   "n_tests": 2
+  },
+  {
+   "task": "hydra-debug-slurm-mode",
+   "n_tests": 7
+  },
+  {
+   "task": "incompatible-python-fasttext",
+   "n_tests": 3
+  },
+  {
+   "task": "interactive-maze-game",
+   "n_tests": 2
+  },
+  {
+   "task": "intrusion-detection",
+   "n_tests": 6
+  },
+  {
+   "task": "kv-store-grpc",
+   "n_tests": 7
+  },
+  {
+   "task": "large-scale-text-editing",
+   "n_tests": 5
+  },
+  {
+   "task": "largest-eigenval",
+   "n_tests": 3
+  },
+  {
+   "task": "leelachess0-pytorch-conversion",
+   "n_tests": 2
+  },
+  {
+   "task": "llm-inference-batching-scheduler",
+   "n_tests": 6
+  },
+  {
+   "task": "llm-spec-decoding",
+   "n_tests": 9
+  },
+  {
+   "task": "log-summary",
+   "n_tests": 3
+  },
+  {
+   "task": "log-summary-date-ranges",
+   "n_tests": 2
+  },
+  {
+   "task": "mahjong-winninghand",
+   "n_tests": 2
+  },
+  {
+   "task": "mailman",
+   "n_tests": 3
+  },
+  {
+   "task": "matlab-python-conversion",
+   "n_tests": 5
+  },
+  {
+   "task": "mcmc-sampling-stan",
+   "n_tests": 6
+  },
+  {
+   "task": "merge-diff-arc-agi-task",
+   "n_tests": 5
+  },
+  {
+   "task": "modernize-scientific-stack",
+   "n_tests": 2
+  },
+  {
+   "task": "movie-helper",
+   "n_tests": 2
+  },
+  {
+   "task": "mteb-eval",
+   "n_tests": 2
+  },
+  {
+   "task": "multi-source-data-merger",
+   "n_tests": 3
+  },
+  {
+   "task": "multistep-definite-integral",
+   "n_tests": 2
+  },
+  {
+   "task": "npm-conflict-resolution",
+   "n_tests": 5
+  },
+  {
+   "task": "openssl-selfsigned-cert",
+   "n_tests": 6
+  },
+  {
+   "task": "optimal-transport",
+   "n_tests": 8
+  },
+  {
+   "task": "organization-json-generator",
+   "n_tests": 4
+  },
+  {
+   "task": "pandas-etl",
+   "n_tests": 3
+  },
+  {
+   "task": "pcap-to-netflow",
+   "n_tests": 4
+  },
+  {
+   "task": "portfolio-optimization",
+   "n_tests": 4
+  },
+  {
+   "task": "predict-customer-churn",
+   "n_tests": 7
+  },
+  {
+   "task": "processing-pipeline",
+   "n_tests": 9
+  },
+  {
+   "task": "pytorch-model-cli",
+   "n_tests": 6
+  },
+  {
+   "task": "pytorch-model-recovery",
+   "n_tests": 5
+  },
+  {
+   "task": "raman-fitting",
+   "n_tests": 3
+  },
+  {
+   "task": "recover-accuracy-log",
+   "n_tests": 3
+  },
+  {
+   "task": "regex-chess",
+   "n_tests": 4
+  },
+  {
+   "task": "rstan-to-pystan",
+   "n_tests": 6
+  },
+  {
+   "task": "sam-cell-seg",
+   "n_tests": 9
+  },
+  {
+   "task": "schedule-vacation",
+   "n_tests": 6
+  },
+  {
+   "task": "setup-custom-dev-env",
+   "n_tests": 7
+  },
+  {
+   "task": "shell-deobfuscation",
+   "n_tests": 3
+  },
+  {
+   "task": "simple-sheets-put",
+   "n_tests": 3
+  },
+  {
+   "task": "simple-web-scraper",
+   "n_tests": 5
+  },
+  {
+   "task": "slurm-simple-node-monitoring",
+   "n_tests": 5
+  },
+  {
+   "task": "solana-data",
+   "n_tests": 5
+  },
+  {
+   "task": "solve-maze-challenge",
+   "n_tests": 8
+  },
+  {
+   "task": "spinning-up-rl",
+   "n_tests": 7
+  },
+  {
+   "task": "sudo-llvm-ir",
+   "n_tests": 2
+  },
+  {
+   "task": "tmux-advanced-workflow",
+   "n_tests": 5
+  },
+  {
+   "task": "train-bpe-tokenizer",
+   "n_tests": 5
+  },
+  {
+   "task": "tree-directory-parser",
+   "n_tests": 8
+  },
+  {
+   "task": "triton-interpret",
+   "n_tests": 6
+  },
+  {
+   "task": "tune-mjcf",
+   "n_tests": 4
+  },
+  {
+   "task": "vertex-solver",
+   "n_tests": 2
+  },
+  {
+   "task": "video-processing",
+   "n_tests": 5
+  },
+  {
+   "task": "vimscript-vim-quine",
+   "n_tests": 8
+  },
+  {
+   "task": "vul-flask",
+   "n_tests": 3
+  },
+  {
+   "task": "word2vec-from-scratch",
+   "n_tests": 8
+  }
+ ],
+ "count": 95,
+ "note": "Medium 档社区定义=分辨率率 33.3%-66.7%（Terminal-Bench ICLR 2026）；Gemini 3.5 Flash 中档实测 ~22.8%（Terminus-2 harness, Terminal Tasks v1.0）——落带证据来自社区自身测量",
+ "selection": "下窗口流程：按社区分辨率数据/自测校准选 4-6 个落带任务 → 移植为 ge2 格式（files=任务初始态, tests→judge）→ 2 run 校准 → 16-48 run 主实验"
+}
