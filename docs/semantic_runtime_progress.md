@@ -1447,3 +1447,19 @@ completion.asserted / task.object.alignment PASS，process.unresolved R=0.764
   v2 规则臂干预效果仍需 eigen 复测补样；②Phase 2 截断噪声提示 fail_streak
   宜消费 toolResult.is_error 标记（规则侧待后续版本）；③edit_oscillation
   端态可逆（both r8 中途命中后恢复），历史峰值口径需块流携带轮边界。
+
+## 通宵双线终判（2026-10-04 晨）
+### Track 1：三臂终判（eigen，n=9/9/9）
+- control 56% / v1(旧规则) 56% / v2(新规则) **78%**（+22pts，Fisher p=0.62 欠功效）
+- 停滞：control 2（含 945 轮巨 stall）/ v1 0 / v2 1（113 轮）
+- 预登记模板 (b) 变体结论：方向为正、统计不可分；**规则参战证据缺失**
+  （run 级触发/投递计数为 0——投递链路或记录口径待核查，guard_v2.log 留存）
+- 过程事故与修复：runs_smoke.jsonl 曾被归档脚本以 json.dump 写成单行数组
+  （90 条记录全部找回，零丢失）；v2 臂 run12-18 因此未执行，已补跑
+- 详见 results/guard-effect-v2/threearm_report.md
+### Track 2：jev-template-v2 — 模板有效（template-effective）
+- completion F1 0.489→**0.8214**（+33.25pts，门禁 ≥+10 ✓）、R 0.367→0.7667 ✓
+- 正/负中位分差 0.042→0.765（分离）、ECE 0.133→0.071
+- 定位：zero-shot 冷启动候补（现役 completion-lora-v2 0.893 仍更高）；
+  剩余 7 FN 为"主体 done+质量缺口未验"单一形态，需第三轮措辞消融
+- 详见 results/semantic-runtime/jev-template-v2/report.md
