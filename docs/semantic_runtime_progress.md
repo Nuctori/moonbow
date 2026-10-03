@@ -1463,3 +1463,16 @@ completion.asserted / task.object.alignment PASS，process.unresolved R=0.764
 - 定位：zero-shot 冷启动候补（现役 completion-lora-v2 0.893 仍更高）；
   剩余 7 FN 为"主体 done+质量缺口未验"单一形态，需第三轮措辞消融
 - 详见 results/semantic-runtime/jev-template-v2/report.md
+
+## 晨间补充（2026-10-04 07:30）
+- **投递链路根因确认**（guard_v2.log 5115 次 stage-check 全查）：
+  findings 全为 0 的原因 = stage-check 通道不携带工具调用/结果事件，
+  v2 三规则（吃工具流）全程"饿着"未参战。修复方案已入册
+  （threearm_report.md §8：通道补工具事件 → 离线对拍 → 三臂公平复测）。
+- **ge5 首测**：visible-pass/hidden-fail 家族校准成功（hidden-pass
+  基线 64%，三任务全落 30-70% 带）；守卫臂方向对照 n=6/6 无提升
+  （逐任务与 control 完全相同，提醒零触发=无效对照）；
+  捕获"探索-放弃"新失败形态样本。详见 ge5_directional_report.md。
+- **eigen 封卷**：n=12/9/12，完成率 uplift 收敛向 null（58/56/67），
+  任务族封存，后续样本转 ge5。
+- 服务已停（8901/18617），下窗口重启命令见 v14_baseline_set.md §4。
