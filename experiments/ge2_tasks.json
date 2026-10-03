@@ -356,5 +356,66 @@
   ],
   "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。",
   "test_file": "test_app.py"
+ },
+ "g1_rates_interact": {
+  "family": "S",
+  "n_bugs": 3,
+  "probe": true,
+  "ge3": true,
+  "source": "v1.1 修订案：浮点累加顺序×舍入策略、闭包晚绑定；诱饵文件 legacy_compat.py",
+  "test_file": "test_app.py",
+  "files": {
+   "rates.py": "def daily_total(values):\n    total = 0.0\n    for v in values:\n        total += v\n    return total\n",
+   "pricing.py": "def apply_discount(price, rate):\n    return round(price * (1 - rate), 2)\n",
+   "session_state.py": "def make_callbacks():\n    callbacks = []\n    for i in range(3):\n        callbacks.append(lambda: i)\n    return callbacks\n",
+   "legacy_compat.py": "def daily_total_legacy(values):\n    # deprecated, kept for old callers\n    return sum(values)\n",
+   "test_app.py": "from rates import daily_total\nfrom pricing import apply_discount\nfrom session_state import make_callbacks\n\ndef test_daily_total_tenth():\n    assert daily_total([0.1] * 10) == 1.0\n\ndef test_daily_total_empty():\n    assert daily_total([]) == 0.0\n\ndef test_discount_85():\n    assert apply_discount(10.10, 0.15) == 8.59\n\ndef test_discount_15():\n    assert apply_discount(0.85, 0.15) == 0.72\n\ndef test_callbacks_distinct():\n    out = [cb() for cb in make_callbacks()]\n    assert out == [0, 1, 2]\n"
+  },
+  "tests": [
+   "test_daily_total_tenth",
+   "test_discount_85",
+   "test_callbacks_distinct"
+  ],
+  "prompt": "运行 pytest。如有失败修复代码使全部测试通过（可能涉及多个文件），然后简短汇报。"
+ },
+ "g2_search_locate": {
+  "family": "S",
+  "n_bugs": 3,
+  "probe": true,
+  "ge3": true,
+  "source": "v1.1 修订案：模块级生成器耗尽、贪婪正则跨字段、大小写不敏感排序缺失；相似命名诱饵 stats2.py",
+  "test_file": "test_app.py",
+  "files": {
+   "feed.py": "_TICKS = iter([])\n\ndef bind(values):\n    global _TICKS\n    _TICKS = iter(values)\n\ndef next_tick():\n    return next(_TICKS)\n\ndef has_next():\n    try:\n        next(_TICKS)\n        return True\n    except StopIteration:\n        return False\n",
+   "fields.py": "import re\n\ndef split_fields(line):\n    return re.findall(r'\"(.+)\"', line)\n",
+   "ranking.py": "def rank(words):\n    return sorted(words)\n",
+   "stats2.py": "def rank_legacy(words):\n    return sorted(words, reverse=True)\n",
+   "test_app.py": "from feed import bind, next_tick, has_next\nfrom fields import split_fields\nfrom ranking import rank\n\ndef test_bind_then_drain():\n    bind([1, 2])\n    a = next_tick()\n    assert has_next() is True\n    b = next_tick()\n    assert (a, b) == (1, 2)\n\ndef test_has_next_does_not_consume():\n    bind([1, 2, 3])\n    next_tick()\n    assert has_next() is True\n    assert next_tick() == 2\n\ndef test_split_two_fields():\n    assert split_fields('a=1 name=\"x y\" tag=\"z\"') == ['x y', 'z']\n\ndef test_rank_casefold():\n    assert rank(['b', 'B', 'a']) == ['a', 'B', 'b']\n"
+  },
+  "tests": [
+   "test_bind_then_drain",
+   "test_has_next_does_not_consume",
+   "test_split_two_fields",
+   "test_rank_casefold"
+  ],
+  "prompt": "运行 pytest。如有失败修复代码使全部测试通过（可能涉及多个文件），然后简短汇报。"
+ },
+ "g3_rounding_policy": {
+  "family": "V",
+  "n_bugs": 1,
+  "probe": true,
+  "ge3": true,
+  "source": "v1.1 修订案：舍入策略任务——银行家舍入 vs HALF_UP 政策（naive round() 过不掉 2/4）",
+  "test_file": "test_app.py",
+  "files": {
+   "app.py": "def charge(amount):\n    return round(amount, 2)\n",
+   "test_app.py": "from app import charge\n\ndef test_no_rounding_needed():\n    assert charge(10.5) == 10.5\n\ndef test_half_up_cent():\n    assert charge(2.675) == 2.68\n\ndef test_negative_half_up():\n    assert charge(-2.675) == -2.68\n\ndef test_binary_noise():\n    assert charge(8.585) == 8.59\n"
+  },
+  "tests": [
+   "test_half_up_cent",
+   "test_negative_half_up",
+   "test_binary_noise"
+  ],
+  "prompt": "运行 pytest。如有失败修复 app.py 使全部测试通过，然后简短汇报。"
  }
 }
