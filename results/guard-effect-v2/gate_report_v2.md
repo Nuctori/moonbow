@@ -32,3 +32,9 @@ gemini-3.5-flash-lite 在本任务类上的能力上限远高于
 1. mimo 额度恢复 → ge3 任务集 + 既有四臂直接可跑（runner 就绪）。
 2. 或免费渠道再探新模型（截至本报告，端点 20+ 模型中仅 gemini 存活于
    pi 工具链路；kimi-k3 因 reasoning_content 格式未测试，可作为下个探针）。
+
+## 附记（kimi-k3 探针，2026-10-03 晨）
+kimi-k3（zhushu 路由）秒挂：400 "role 'developer' is not allowed"——pi 的
+openai-completions 适配层发送 developer 角色，kimi 上游不接受。属代理层
+格式兼容问题（proxy 把 developer 改写为 system 即可），非模型能力问题。
+免费窗口内不再修复；已列入下个窗口的首个探针。
