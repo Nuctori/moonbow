@@ -44,3 +44,26 @@ n=9/臂对 +22pts 的检出功效不足（需 ~30/臂才可能 p<0.05）。
 runs_smoke.jsonl eigen 全部 27 行（control 9 / v1 9 / v2 9），
 v2 臂 run12-18 为本夜补跑（此前因 runs 文件损坏未执行——修复记录见
 git e7fff87）；429 无效批归档 runs_v2_429exhausted.jsonl（9 run）。
+
+## 7. 根因更正（2026-10-04 晨，日志核查后）
+
+守卫日志（guard_v2.log）核查：**全部 5115 次 stage-check 的 findings=0、
+reminder=False**——v2 三条规则在整场实验中从未触发。
+
+根因不是投递抑制，而是**数据通路缺口**：stage-check 通道（process-audit.ts）
+只携带思考/汇报块，不携带工具调用/结果事件；而 v2 三规则全部依赖工具流
+（repeat 需要命令序列、stall 需要覆盖度、pytest 证据在块流中缺席→abstain）。
+规则在"饿着"的状态下跑完整场——283 run 离线回放之所以有效，正是因为
+回放直接喂了会话工具流。
+
+**结论更正**：v2 臂不是"规则无效的公平测试"，而是"规则未获得输入的空转"。
++22pts 不能归因于规则，但也不能作为规则无效的证据——规则的效果
+仍然未知，需先修通路（stage-check 携带工具事件，或守卫独立消费
+runner 会话流）再重测。
+
+## 8. 修复清单（下窗口，按序）
+
+1. process-audit.ts 的 stage-check payload 增加工具调用/结果事件
+   （或新增独立 convergence-check 端点消费完整块流）；
+2. 集成后先离线回放对拍（session 工具流 vs 线上通道，同 run 同结果）；
+3. 再跑三臂复测（此时才是规则的公平测试）。
