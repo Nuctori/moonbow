@@ -1347,3 +1347,12 @@ completion.asserted / task.object.alignment PASS，process.unresolved R=0.764
   需 mimo（充值）或更强/更弱模型才可入带
 ### morning 收尾
 - L1 无害性顺带获得正面数据：34 run 中守卫/收敛通道零误投递、C 族全过
+
+## ge4（2026-10-03 晨，terminal-bench 移植校准）
+- 6/15 候选移植成功（tb_eigen/mahjong/recover/org-json/aimo/bpe），canary 保留
+- gemini 校准：5/6 触顶 100%，eigen 为超时预算伪影（150 轮阅读停滞，非能力失败）
+- **落带 0 个**：v1.2"社区任务库可替代自设计"部分证伪——剥离容器 harness 后
+  剩余纯 Python 核心恰是任务最易部分；Medium 分层是对完整容器 harness 的测量
+- 首次观测到"150 轮 0 编辑 0 验证"阅读打转停滞新形态（收敛信号的目标案例）
+- 遗留：eigen 入主集需预算 ≥900s；kimi-k3 需 proxy developer→system 改写；
+  up-stream 可回馈 golden 自比对 bug
