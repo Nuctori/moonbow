@@ -132,6 +132,25 @@ MENTION_PAIRED = [
     "上线窗口之前还需要确认", "迁移顺序上次讨论过",
 ]
 
+# —— 全覆盖配对：补 coordination / condition 角色（端到端暴露的缺口根因）——
+# coordination 句式有强"引述感"（"要保持一致"既可读作下达要求也可读作引述），
+# 端到端实测中未配对时会整句被轴 1 吞掉。
+COORD_COND_PAIRS = [
+    # (demand, mention)
+    ("前后端错误码要保持一致", "会上确认过前后端错误码要保持一致"),
+    ("两边字段名要对齐", "之前的约定是两边字段名要对齐"),
+    ("三个环境的配置项名称必须统一", "历史文档写的三个环境配置项名称必须统一"),
+    ("文档与实现保持一致", "上次评审要求文档与实现保持一致"),
+    ("Web 端和小程序的展示逻辑保持同步", "规范里写明 Web 端和小程序的展示逻辑保持同步"),
+    ("多语言文件的键结构要一致", "上个版本约定多语言文件的键结构要一致"),
+    ("如果超限就分批处理", "文档里写的如果超限就分批处理"),
+    ("当错误率上升时回滚", "之前定义的是当错误率上升时回滚"),
+    ("失败就重试三次", "设计稿里的失败就重试三次"),
+    ("缓存失效则回源", "早先约定的缓存失效则回源"),
+    ("必要时启用降级开关", "规范提到的必要时启用降级开关"),
+    ("数据量超过阈值就分批", "上一版需求写的数据量超过阈值就分批"),
+]
+
 
 def expand():
     """槽位扩展：把成对模板 × 更多对象/参数/时间词放大规模，保持成对结构。
@@ -233,6 +252,10 @@ def build():
                          "zone": "F1"})
     for t in MENTION_ONLY + MENTION_PAIRED:
         rows.append({"text": t, "label": "mention", "zone": "only"})
+    # coordination/condition 全覆盖配对（成对进样本）
+    for d, m in COORD_COND_PAIRS:
+        rows.append({"text": d, "label": "demand", "zone": "pair_cc"})
+        rows.append({"text": m, "label": "mention", "zone": "pair_cc"})
     for t in DEMAND_ONLY:
         rows.append({"text": t, "label": "demand", "zone": "only"})
 
