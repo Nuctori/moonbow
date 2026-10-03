@@ -1,0 +1,98 @@
+[
+ {
+  "task": "g5a_textproc",
+  "arm": "control",
+  "run": 1,
+  "hidden_pass": 3,
+  "hidden_total": 8,
+  "hidden_frac": 0.375
+ },
+ {
+  "task": "g5a_textproc",
+  "arm": "control",
+  "run": 2,
+  "hidden_pass": 3,
+  "hidden_total": 8,
+  "hidden_frac": 0.375
+ },
+ {
+  "task": "g5b_pipeline",
+  "arm": "control",
+  "run": 1,
+  "hidden_pass": 3,
+  "hidden_total": 5,
+  "hidden_frac": 0.6
+ },
+ {
+  "task": "g5b_pipeline",
+  "arm": "control",
+  "run": 2,
+  "hidden_pass": 5,
+  "hidden_total": 5,
+  "hidden_frac": 1.0
+ },
+ {
+  "task": "g5c_logparse",
+  "arm": "control",
+  "run": 1,
+  "hidden_pass": 3,
+  "hidden_total": 4,
+  "hidden_frac": 0.75
+ },
+ {
+  "task": "g5c_logparse",
+  "arm": "control",
+  "run": 2,
+  "hidden_pass": 3,
+  "hidden_total": 4,
+  "hidden_frac": 0.75
+ },
+ {
+  "task": "g5a_textproc",
+  "arm": "guard",
+  "run": 1,
+  "hidden_pass": 3,
+  "hidden_total": 8,
+  "hidden_frac": 0.375
+ },
+ {
+  "task": "g5a_textproc",
+  "arm": "guard",
+  "run": 2,
+  "hidden_pass": 3,
+  "hidden_total": 8,
+  "hidden_frac": 0.375
+ },
+ {
+  "task": "g5b_pipeline",
+  "arm": "guard",
+  "run": 1,
+  "hidden_pass": 3,
+  "hidden_total": 5,
+  "hidden_frac": 0.6
+ },
+ {
+  "task": "g5b_pipeline",
+  "arm": "guard",
+  "run": 2,
+  "hidden_pass": 3,
+  "hidden_total": 5,
+  "hidden_frac": 0.6
+ },
+ {
+  "task": "g5c_logparse",
+  "arm": "guard",
+  "run": 1,
+  "hidden_pass": 3,
+  "hidden_total": 4,
+  "hidden_frac": 0.75
+ },
+ {
+  "task": "g5c_logparse",
+  "arm": "guard",
+  "run": 2,
+  "hidden_pass": 3,
+  "hidden_total": 4,
+  "hidden_frac": 0.75
+ }
+]

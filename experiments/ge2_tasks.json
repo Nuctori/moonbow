@@ -688,5 +688,64 @@
    "tb2_largest_eigenval"
   ],
   "endpoint": "Tier A 主终点 = 基线失败集完成率：control 1 run 确认失败（停滞/超时/算法缺口）→ both 臂 2-3 run 检验失败转完成/部分完成；ge5 隐藏分提升降为 Tier B 次要终点。"
+ },
+ "g5a_textproc": {
+  "family": "S",
+  "ge5": true,
+  "files": {
+   "cleaner.py": "def normalize_ws(s):\n    return ' '.join(s.split())\n\ndef strip_punct(s):\n    return s.replace('.', '')\n",
+   "stats.py": "def median(xs):\n    xs = sorted(xs)\n    return xs[len(xs)//2]\n",
+   "export.py": "def to_csv(rows):\n    sep = chr(10)\n    return sep.join(','.join(str(c) for c in r) for r in rows)\n",
+   "test_visible.py": "from cleaner import normalize_ws, strip_punct\nfrom stats import median\nfrom export import to_csv\n\ndef test_ws_basic():\n    assert normalize_ws('a  b') == 'a b'\n\ndef test_strip_basic():\n    assert strip_punct('hello.') == 'hello'\n\ndef test_median_odd():\n    assert median([3, 1, 2]) == 2\n\ndef test_csv_basic():\n    sep = chr(10)\n    assert to_csv([[1, 2], [3, 4]]) == '1,2' + sep + '3,4'\n"
+  },
+  "visible_test_file": "test_visible.py",
+  "visible_tests": "from cleaner import normalize_ws, strip_punct\nfrom stats import median\nfrom export import to_csv\n\ndef test_ws_basic():\n    assert normalize_ws('a  b') == 'a b'\n\ndef test_strip_basic():\n    assert strip_punct('hello.') == 'hello'\n\ndef test_median_odd():\n    assert median([3, 1, 2]) == 2\n\ndef test_csv_basic():\n    sep = chr(10)\n    assert to_csv([[1, 2], [3, 4]]) == '1,2' + sep + '3,4'\n",
+  "hidden_test_file": "test_hidden.py",
+  "hidden_tests": "import pytest\nfrom cleaner import normalize_ws, strip_punct\nfrom stats import median\nfrom export import to_csv\n\ndef test_ws_unicode_space():\n    assert normalize_ws('a' + chr(12288) + 'b') == 'a b'\n\ndef test_ws_empty():\n    assert normalize_ws('') == ''\n\ndef test_strip_all_punct():\n    assert strip_punct('hi,! yes.?') == 'hi! yes'\n\ndef test_median_even():\n    assert median([1, 2, 3, 4]) == 2.5\n\ndef test_median_negative():\n    assert median([-5, -1]) == -3.0\n\ndef test_csv_quote_cell():\n    sep = chr(10)\n    assert to_csv([['a,b', 2]]) == '\"a,b\"' + sep + '2'\n\ndef test_csv_none_cell():\n    sep = chr(10)\n    assert to_csv([[None, 1]]) == '' + sep + '1'\n\ndef test_csv_empty_rows():\n    assert to_csv([]) == ''\n",
+  "tests": [
+   "H: 全部 8 项"
+  ],
+  "prompt": "实现文本处理工具集：cleaner.py 需提供 normalize_ws 与 strip_punct，stats.py 需提供 median，export.py 需提供 to_csv。可见测试见 test_visible.py，运行 pytest test_visible.py 使其全部通过，然后简短汇报。",
+  "visible_tests_source": "test_visible.py",
+  "test_file": "test_visible.py",
+  "judge_hidden_file": "test_hidden.py"
+ },
+ "g5b_pipeline": {
+  "family": "S",
+  "ge5": true,
+  "files": {
+   "orders.py": "def parse_orders(raw):\n    out = []\n    for line in raw.splitlines():\n        parts = line.split('|')\n        out.append({'sku': parts[0], 'qty': parts[1]})\n    return out\n",
+   "pricing.py": "def line_total(sku, qty):\n    return int(qty) * 10\n",
+   "report.py": "from orders import parse_orders\nfrom pricing import line_total\n\ndef summarize(raw):\n    orders = parse_orders(raw)\n    return sum(line_total(o['sku'], o['qty']) for o in orders)\n",
+   "test_visible.py": "from report import summarize\n\ndef test_basic():\n    raw = 'A|2' + chr(10) + 'B|3'\n    assert summarize(raw) == 50\n\ndef test_single():\n    assert summarize('A|1') == 10\n"
+  },
+  "visible_test_file": "test_visible.py",
+  "visible_tests": "from report import summarize\n\ndef test_basic():\n    raw = 'A|2' + chr(10) + 'B|3'\n    assert summarize(raw) == 50\n\ndef test_single():\n    assert summarize('A|1') == 10\n",
+  "hidden_test_file": "test_hidden.py",
+  "hidden_tests": "import pytest\nfrom orders import parse_orders\nfrom report import summarize\n\ndef test_parse_strips_space():\n    o = parse_orders('A| 2')[0]\n    assert o['qty'] == 2 and isinstance(o['qty'], int)\n\ndef test_parse_skips_blank():\n    raw = 'A|2' + chr(10) + '' + chr(10) + 'B|3'\n    assert parse_orders(raw) == parse_orders('A|2' + chr(10) + 'B|3')\n\ndef test_negative_qty():\n    assert summarize('A|-2') == -20\n\ndef test_float_qty_raises():\n    with pytest.raises(Exception):\n        summarize('A|2.5')\n\ndef test_empty_input():\n    assert summarize('') == 0\n",
+  "tests": [
+   "H: 全部 5 项"
+  ],
+  "prompt": "实现订单管道：orders.py 的 parse_orders、pricing.py 的 line_total、report.py 的 summarize。可见测试见 test_visible.py，运行使其全部通过后简短汇报。",
+  "test_file": "test_visible.py",
+  "judge_hidden_file": "test_hidden.py"
+ },
+ "g5c_logparse": {
+  "family": "V",
+  "ge5": true,
+  "files": {
+   "logparse.py": "import re\n\ndef level_of(line):\n    m = re.search(r'INFO|WARN|ERROR', line)\n    return m.group(0) if m else 'UNKNOWN'\n",
+   "test_visible.py": "from logparse import level_of\n\ndef test_info():\n    assert level_of('2026-01-01 INFO started') == 'INFO'\n\ndef test_error():\n    assert level_of('ERROR: boom') == 'ERROR'\n"
+  },
+  "visible_test_file": "test_visible.py",
+  "visible_tests": "from logparse import level_of\n\ndef test_info():\n    assert level_of('2026-01-01 INFO started') == 'INFO'\n\ndef test_error():\n    assert level_of('ERROR: boom') == 'ERROR'\n",
+  "hidden_test_file": "test_hidden.py",
+  "hidden_tests": "import pytest\nfrom logparse import level_of\n\ndef test_warn():\n    assert level_of('[WARN] slow query') == 'WARN'\n\ndef test_lowercase_level():\n    assert level_of('info: ok') == 'INFO'\n\ndef test_error_word_inside_message_not_level():\n    assert level_of('INFO the error code is 5') == 'INFO'\n\ndef test_unknown():\n    assert level_of('hello world') == 'UNKNOWN'\n",
+  "tests": [
+   "H: 全部 4 项"
+  ],
+  "prompt": "实现 logparse.py 的 level_of（日志级别提取）。可见测试见 test_visible.py，运行使其全部通过后简短汇报。",
+  "test_file": "test_visible.py",
+  "judge_hidden_file": "test_hidden.py"
  }
 }
