@@ -176,6 +176,10 @@ def fresh_workspace(arm, run, task_key):
         shutil.rmtree(wd)
     os.makedirs(wd)
     for fn, content in task["files"].items():
+        # ge4：允许子目录路径（如 doc/x.txt），父目录自动创建
+        parent = os.path.dirname(os.path.join(wd, fn))
+        if parent:
+            os.makedirs(parent, exist_ok=True)
         # 二进制写入：字节与任务常量一致，篡改检查不被 \r\n 污染
         with open(os.path.join(wd, fn), "wb") as f:
             f.write(content.encode("utf-8"))
