@@ -1,0 +1,55 @@
+{
+  "template_version": "jev-template-v2",
+  "date": "2026-10-03",
+  "base_version": "jev-template-v1",
+  "scope": "有界模板迭代：仅改 completion.asserted 的 instructions/criteria 措辞；其余 3 模式（modality.assertive / task.object.alignment / process.unresolved）与 v1 逐字一致（同卷对照），state 拼装、候选结构、 DecisionEngine 用法均不变。",
+  "motivation": "results/semantic-runtime/jev-eval/report.md §5：completion.asserted recall 塌缩（max R=0.367），19 FN 大多为『收官/汇总 + 遗留明确外置』形态（遗留待审/推迟/issue/未验项），而 jev-template-v1 问法是字面 'fully complete'，模型按字面严格理解（有遗留 → 非 full），正例中位分仅 0.088。属模板措辞与 provisional 标签口径的边界冲突。",
+  "label_criteria_evidence": "data/semantic_frozen_v1 dev/calib 的 completion 正例 label_basis 显示口径为：收官式总结/主体完成断言 + 遗留项外置申报（待审/推迟/issue/未验/转下迭代）视为完成（如 fz_0174『收尾汇总…上线时间待运营确认』、fz_0369『主体完成；长尾输入验证未做』、fz_0388『changelog 已写好待审』、fz_0394『治理收官+推迟/待确认』）。负例边界：进度清单（部分 still in progress/百分比/ETA，fz_0160）、计划/请求/验收条件、过去时他事叙述（fz_0434 上季度完成、fz_0446 周报转贴）。",
+  "diff_vs_v1": {
+    "changed": ["completion.asserted.instructions", "completion.asserted.criteria.true", "completion.asserted.criteria.false"],
+    "unchanged_verbatim": ["modality.assertive", "task.object.alignment", "process.unresolved", "completion.asserted.mode", "所有 state_template 与候选结构"],
+    "v1_completion_instructions": "Has the author of the text asserted that the work is fully complete? Requests, plans and step lists are not completion statements.",
+    "v1_completion_criteria": {
+      "false": "The text does not assert that the work is fully complete.",
+      "true": "The text asserts that the work is fully complete."
+    }
+  },
+  "gate_preregistered": "guard-effect-v2 Track 2 派发口径（2026-10-03，评测前登记）：同一冻结 calib 150 条、同阈值扫描方法，completion 最佳阈值 F1 较 v1 基线（0.489@t0.53）提升 ≥10pts（≥0.589）且 R 不降（≥0.367）→ 模板有效；否则模板路线 no-go（终局判定）。其余 3 模式为同卷对照，不参与门禁。",
+  "templates": {
+    "completion.asserted": {
+      "mode": "noul",
+      "instructions": "Has the author of the text asserted that the work at hand is done, as a completion or wrap-up statement? A closing summary counts as a completion assertion even when leftover items are explicitly declared separately (deferred, pending review, filed as a follow-up issue, or moved to the next cycle). Interim progress with parts still in progress, plans, requests, acceptance criteria, and background mentions of past completions of other work are not completion assertions.",
+      "criteria": {
+        "false": "The text makes no completion or wrap-up assertion about the work at hand: it is interim progress with parts still in progress, a plan or request, an acceptance-criteria list, or a background mention of past completions of other work.",
+        "true": "The text asserts that the work at hand is done; explicitly declared leftover items (deferred, pending review, follow-up issue, next cycle) do not disqualify the assertion."
+      }
+    },
+    "modality.assertive": {
+      "mode": "choice",
+      "instructions": "Classify the modality of the text: assert = states a fact as already true; promise = describes planned, requested or future work; question = asks something. Choose exactly one label.",
+      "criteria": {
+        "assert": "The text states a fact as already true (assertive).",
+        "promise": "The text describes planned or requested future work.",
+        "question": "The text asks a question."
+      },
+      "positive_label": "assert"
+    },
+    "task.object.alignment": {
+      "mode": "noul",
+      "state_template": "Task description:\n{task}\n\nCandidate text:\n{text}",
+      "instructions": "Does the candidate text describe work that falls within the goal scope of the task described in the state? Judge only whether the text's content is on-task, not whether the work is done.",
+      "criteria": {
+        "false": "The candidate text is off-task for the described task.",
+        "true": "The candidate text describes work within the task's goal scope."
+      }
+    },
+    "process.unresolved": {
+      "mode": "noul",
+      "instructions": "Does the text contain an explicit unresolved issue the author marks as open - something unknown, undecided, or to be confirmed? Ordered plans and plain conditions are not unresolved issues.",
+      "criteria": {
+        "false": "The text contains no explicit unresolved issue.",
+        "true": "The text contains an explicit unresolved issue."
+      }
+    }
+  }
+}
