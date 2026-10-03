@@ -1,0 +1,657 @@
+{
+  "budget_s": 900,
+  "stall_line": 60,
+  "goals_total": 1,
+  "ruleset": "v2",
+  "semantics": "fired = end-to-end compute() matched=True（主）；first_round = incremental 首次触发守卫轮（辅）",
+  "label_diff_vs_phase0": 0,
+  "corpus": {
+    "mimo": {
+      "n_runs": 263,
+      "model_counts": {
+        "cohere/north-mini-code:free": 7,
+        "poolside/laguna-s-2.1:free": 2,
+        "poolside/laguna-xs-2.1:free": 2,
+        "inclusionai/ling-3.0-flash-sante:free": 2,
+        "xiaomi/mimo-v2.5": 250
+      },
+      "n_completed": 102,
+      "n_fail": 161,
+      "rules": {
+        "repeat": {
+          "rule": "repeat",
+          "n_fail": 161,
+          "n_success": 102,
+          "hit_on_fail": 0,
+          "miss_on_fail": 161,
+          "fp_on_success": 0,
+          "tn_success": 102,
+          "recall": 0.0,
+          "fpr": 0.0,
+          "recall_wilson95": [
+            0.0,
+            0.023
+          ],
+          "fpr_wilson95": [
+            0.0,
+            0.036
+          ],
+          "fisher_p_two_sided": null,
+          "ever_fired": {
+            "hit_on_fail": 0,
+            "fp_on_success": 0,
+            "recall": 0.0,
+            "fpr": 0.0
+          },
+          "tp_runs": [],
+          "fp_runs": [],
+          "first_fire_round_median": null
+        },
+        "stall": {
+          "rule": "stall",
+          "n_fail": 161,
+          "n_success": 102,
+          "hit_on_fail": 0,
+          "miss_on_fail": 161,
+          "fp_on_success": 0,
+          "tn_success": 102,
+          "recall": 0.0,
+          "fpr": 0.0,
+          "recall_wilson95": [
+            0.0,
+            0.023
+          ],
+          "fpr_wilson95": [
+            0.0,
+            0.036
+          ],
+          "fisher_p_two_sided": null,
+          "ever_fired": {
+            "hit_on_fail": 0,
+            "fp_on_success": 0,
+            "recall": 0.0,
+            "fpr": 0.0
+          },
+          "tp_runs": [],
+          "fp_runs": [],
+          "first_fire_round_median": null
+        },
+        "fail_streak": {
+          "rule": "fail_streak",
+          "n_fail": 161,
+          "n_success": 102,
+          "hit_on_fail": 21,
+          "miss_on_fail": 140,
+          "fp_on_success": 4,
+          "tn_success": 98,
+          "recall": 0.1304,
+          "fpr": 0.0392,
+          "recall_wilson95": [
+            0.087,
+            0.191
+          ],
+          "fpr_wilson95": [
+            0.015,
+            0.097
+          ],
+          "fisher_p_two_sided": 0.01651,
+          "ever_fired": {
+            "hit_on_fail": 21,
+            "fp_on_success": 12,
+            "recall": 0.1304,
+            "fpr": 0.1176
+          },
+          "tp_runs": [
+            "2026-09-21T17-33-02-775Z_01a0c507-43b6-71b8-8db4-a77d0f0a9a23.jsonl",
+            "2026-09-22T12-45-44-407Z_01a0c926-9656-703e-98a3-37384fd14dce.jsonl",
+            "2026-09-22T13-09-34-365Z_01a0c93c-681c-708d-976a-d1f85e130dbb.jsonl",
+            "2026-09-22T16-29-02-869Z_01a0c9f3-0814-7761-a911-c5bfa2e13528.jsonl",
+            "2026-09-22T17-07-46-539Z_01a0ca16-7cea-7559-9918-6eede78b3237.jsonl",
+            "2026-09-22T18-21-22-083Z_01a0ca59-dd23-7494-aed2-6f28dc303933.jsonl",
+            "2026-09-22T19-01-50-818Z_01a0ca7e-ec61-726f-9695-22fb3af1a8f6.jsonl",
+            "2026-09-22T19-03-36-340Z_01a0ca80-8893-702d-b44e-2902da2fd519.jsonl",
+            "2026-09-22T19-09-34-908Z_01a0ca86-013b-701c-9676-d7dbd1027002.jsonl",
+            "2026-09-22T19-10-26-464Z_01a0ca86-ca9f-7514-b0d6-6e4421d22dec.jsonl",
+            "2026-09-22T19-11-00-540Z_01a0ca87-4fbb-762b-9463-c3b9638fe61f.jsonl",
+            "2026-09-22T19-11-44-322Z_01a0ca87-fac2-749c-b902-5a35de22e312.jsonl",
+            "2026-09-22T20-16-56-812Z_01a0cac3-adeb-73a0-914b-bd256f2f1cec.jsonl",
+            "2026-09-30T10-30-34-542Z_01a0f1dd-b72e-7649-8eb8-1d617e8b7fb7.jsonl",
+            "2026-09-30T10-32-30-589Z_01a0f1df-7c7c-7149-beeb-08d2a4366a4f.jsonl",
+            "2026-09-30T10-33-55-907Z_01a0f1e0-c9c2-7686-b40c-3f4368e3e5d6.jsonl",
+            "2026-09-30T10-37-55-754Z_01a0f1e4-72a9-732a-ae2e-ef072726ffa9.jsonl",
+            "2026-09-30T10-38-14-773Z_01a0f1e4-bcf4-7503-85b9-38c9ecbbef6a.jsonl",
+            "2026-09-30T10-39-07-889Z_01a0f1e5-8c70-7096-a82a-dc10cd3e5074.jsonl",
+            "2026-09-30T10-39-35-486Z_01a0f1e5-f83e-7500-8ce8-ef93d42abf8d.jsonl",
+            "2026-09-30T10-52-39-954Z_01a0f1f1-f091-70fb-b252-a5d167ff9318.jsonl"
+          ],
+          "fp_runs": [
+            "2026-09-30T10-37-16-946Z_01a0f1e3-db11-75ea-b982-32d0ada287c4.jsonl",
+            "2026-09-30T10-43-27-473Z_01a0f1e9-8270-7159-bd3c-b31469b8c3ac.jsonl",
+            "2026-09-30T10-51-35-388Z_01a0f1f0-f45c-747a-bf05-04d8983400a0.jsonl",
+            "2026-09-30T11-05-56-412Z_01a0f1fe-17bb-75d1-a352-760235fcbc20.jsonl"
+          ],
+          "first_fire_round_median": 4
+        }
+      },
+      "combined": {
+        "definition": "任一规则触发（end-to-end）= 预测失败",
+        "confusion": {
+          "tp": 21,
+          "fn": 140,
+          "fp": 4,
+          "tn": 98
+        },
+        "precision": 0.84,
+        "precision_wilson95": [
+          0.653,
+          0.936
+        ],
+        "recall": 0.1304,
+        "fisher_p_two_sided": 0.01651
+      },
+      "diagnostics": {
+        "guard_rounds_max": 33,
+        "guard_rounds_ge_stall_line": 0,
+        "repeat_max_identical_calls_observed": 5,
+        "repeat_max_same_file_writes_observed": 3,
+        "stall_nonfire_abstain": {
+          "rounds<60": 263
+        }
+      }
+    },
+    "gemini": {
+      "n_runs": 20,
+      "model_counts": {
+        "gemini-3.5-flash-lite": 20
+      },
+      "n_completed": 10,
+      "n_fail": 10,
+      "rules": {
+        "repeat": {
+          "rule": "repeat",
+          "n_fail": 10,
+          "n_success": 10,
+          "hit_on_fail": 2,
+          "miss_on_fail": 8,
+          "fp_on_success": 0,
+          "tn_success": 10,
+          "recall": 0.2,
+          "fpr": 0.0,
+          "recall_wilson95": [
+            0.057,
+            0.51
+          ],
+          "fpr_wilson95": [
+            0.0,
+            0.278
+          ],
+          "fisher_p_two_sided": 0.47368,
+          "ever_fired": {
+            "hit_on_fail": 2,
+            "fp_on_success": 1,
+            "recall": 0.2,
+            "fpr": 0.1
+          },
+          "tp_runs": [
+            "2026-10-03T07-43-27-433Z_01a100b7-cac8-73d8-bf7a-75d20a1ff524.jsonl",
+            "2026-10-03T13-48-41-590Z_01a10206-2cf5-77e6-8c62-0a3ba376e02b.jsonl"
+          ],
+          "fp_runs": [],
+          "first_fire_round_median": 81
+        },
+        "stall": {
+          "rule": "stall",
+          "n_fail": 10,
+          "n_success": 10,
+          "hit_on_fail": 3,
+          "miss_on_fail": 7,
+          "fp_on_success": 0,
+          "tn_success": 10,
+          "recall": 0.3,
+          "fpr": 0.0,
+          "recall_wilson95": [
+            0.108,
+            0.603
+          ],
+          "fpr_wilson95": [
+            0.0,
+            0.278
+          ],
+          "fisher_p_two_sided": 0.21053,
+          "ever_fired": {
+            "hit_on_fail": 4,
+            "fp_on_success": 1,
+            "recall": 0.4,
+            "fpr": 0.1
+          },
+          "tp_runs": [
+            "2026-10-03T07-43-27-433Z_01a100b7-cac8-73d8-bf7a-75d20a1ff524.jsonl",
+            "2026-10-03T13-20-42-038Z_01a101ec-8c35-7126-acd7-182d1e174942.jsonl",
+            "2026-10-03T13-48-41-590Z_01a10206-2cf5-77e6-8c62-0a3ba376e02b.jsonl"
+          ],
+          "fp_runs": [],
+          "first_fire_round_median": 60
+        },
+        "fail_streak": {
+          "rule": "fail_streak",
+          "n_fail": 10,
+          "n_success": 10,
+          "hit_on_fail": 2,
+          "miss_on_fail": 8,
+          "fp_on_success": 0,
+          "tn_success": 10,
+          "recall": 0.2,
+          "fpr": 0.0,
+          "recall_wilson95": [
+            0.057,
+            0.51
+          ],
+          "fpr_wilson95": [
+            0.0,
+            0.278
+          ],
+          "fisher_p_two_sided": 0.47368,
+          "ever_fired": {
+            "hit_on_fail": 5,
+            "fp_on_success": 5,
+            "recall": 0.5,
+            "fpr": 0.5
+          },
+          "tp_runs": [
+            "2026-10-03T13-20-42-038Z_01a101ec-8c35-7126-acd7-182d1e174942.jsonl",
+            "2026-10-03T15-22-22-651Z_01a1025b-f239-70e1-8b8d-f94a91f50171.jsonl"
+          ],
+          "fp_runs": [],
+          "first_fire_round_median": 65
+        }
+      },
+      "combined": {
+        "definition": "任一规则触发（end-to-end）= 预测失败",
+        "confusion": {
+          "tp": 4,
+          "fn": 6,
+          "fp": 0,
+          "tn": 10
+        },
+        "precision": 1.0,
+        "precision_wilson95": [
+          0.51,
+          1.0
+        ],
+        "recall": 0.4,
+        "fisher_p_two_sided": 0.08669
+      },
+      "diagnostics": {
+        "guard_rounds_max": 945,
+        "guard_rounds_ge_stall_line": 6,
+        "repeat_max_identical_calls_observed": 877,
+        "repeat_max_same_file_writes_observed": 30,
+        "stall_nonfire_abstain": {
+          "null": 3,
+          "rounds<60": 14
+        }
+      }
+    },
+    "mimo_phase0": {
+      "n_runs": 233,
+      "n_completed": 94,
+      "rules": {
+        "repeat": {
+          "rule": "repeat",
+          "n_fail": 139,
+          "n_success": 94,
+          "hit_on_fail": 0,
+          "miss_on_fail": 139,
+          "fp_on_success": 0,
+          "tn_success": 94,
+          "recall": 0.0,
+          "fpr": 0.0,
+          "recall_wilson95": [
+            0.0,
+            0.027
+          ],
+          "fpr_wilson95": [
+            0.0,
+            0.039
+          ],
+          "fisher_p_two_sided": null,
+          "ever_fired": {
+            "hit_on_fail": 0,
+            "fp_on_success": 0,
+            "recall": 0.0,
+            "fpr": 0.0
+          },
+          "tp_runs": [],
+          "fp_runs": [],
+          "first_fire_round_median": null
+        },
+        "stall": {
+          "rule": "stall",
+          "n_fail": 139,
+          "n_success": 94,
+          "hit_on_fail": 0,
+          "miss_on_fail": 139,
+          "fp_on_success": 0,
+          "tn_success": 94,
+          "recall": 0.0,
+          "fpr": 0.0,
+          "recall_wilson95": [
+            0.0,
+            0.027
+          ],
+          "fpr_wilson95": [
+            0.0,
+            0.039
+          ],
+          "fisher_p_two_sided": null,
+          "ever_fired": {
+            "hit_on_fail": 0,
+            "fp_on_success": 0,
+            "recall": 0.0,
+            "fpr": 0.0
+          },
+          "tp_runs": [],
+          "fp_runs": [],
+          "first_fire_round_median": null
+        },
+        "fail_streak": {
+          "rule": "fail_streak",
+          "n_fail": 139,
+          "n_success": 94,
+          "hit_on_fail": 13,
+          "miss_on_fail": 126,
+          "fp_on_success": 0,
+          "tn_success": 94,
+          "recall": 0.0935,
+          "fpr": 0.0,
+          "recall_wilson95": [
+            0.055,
+            0.153
+          ],
+          "fpr_wilson95": [
+            0.0,
+            0.039
+          ],
+          "fisher_p_two_sided": 0.00106,
+          "ever_fired": {
+            "hit_on_fail": 13,
+            "fp_on_success": 7,
+            "recall": 0.0935,
+            "fpr": 0.0745
+          },
+          "tp_runs": [
+            "2026-09-21T17-33-02-775Z_01a0c507-43b6-71b8-8db4-a77d0f0a9a23.jsonl",
+            "2026-09-22T12-45-44-407Z_01a0c926-9656-703e-98a3-37384fd14dce.jsonl",
+            "2026-09-22T13-09-34-365Z_01a0c93c-681c-708d-976a-d1f85e130dbb.jsonl",
+            "2026-09-22T16-29-02-869Z_01a0c9f3-0814-7761-a911-c5bfa2e13528.jsonl",
+            "2026-09-22T17-07-46-539Z_01a0ca16-7cea-7559-9918-6eede78b3237.jsonl",
+            "2026-09-22T18-21-22-083Z_01a0ca59-dd23-7494-aed2-6f28dc303933.jsonl",
+            "2026-09-22T19-01-50-818Z_01a0ca7e-ec61-726f-9695-22fb3af1a8f6.jsonl",
+            "2026-09-22T19-03-36-340Z_01a0ca80-8893-702d-b44e-2902da2fd519.jsonl",
+            "2026-09-22T19-09-34-908Z_01a0ca86-013b-701c-9676-d7dbd1027002.jsonl",
+            "2026-09-22T19-10-26-464Z_01a0ca86-ca9f-7514-b0d6-6e4421d22dec.jsonl",
+            "2026-09-22T19-11-00-540Z_01a0ca87-4fbb-762b-9463-c3b9638fe61f.jsonl",
+            "2026-09-22T19-11-44-322Z_01a0ca87-fac2-749c-b902-5a35de22e312.jsonl",
+            "2026-09-22T20-16-56-812Z_01a0cac3-adeb-73a0-914b-bd256f2f1cec.jsonl"
+          ],
+          "fp_runs": [],
+          "first_fire_round_median": 4
+        }
+      },
+      "combined": {
+        "definition": "任一规则触发（end-to-end）= 预测失败",
+        "confusion": {
+          "tp": 13,
+          "fn": 126,
+          "fp": 0,
+          "tn": 94
+        },
+        "precision": 1.0,
+        "precision_wilson95": [
+          0.772,
+          1.0
+        ],
+        "recall": 0.0935,
+        "fisher_p_two_sided": 0.00106
+      }
+    },
+    "mimo_phase2": {
+      "n_runs": 30,
+      "n_completed": 8,
+      "rules": {
+        "repeat": {
+          "rule": "repeat",
+          "n_fail": 22,
+          "n_success": 8,
+          "hit_on_fail": 0,
+          "miss_on_fail": 22,
+          "fp_on_success": 0,
+          "tn_success": 8,
+          "recall": 0.0,
+          "fpr": 0.0,
+          "recall_wilson95": [
+            0.0,
+            0.149
+          ],
+          "fpr_wilson95": [
+            0.0,
+            0.324
+          ],
+          "fisher_p_two_sided": null,
+          "ever_fired": {
+            "hit_on_fail": 0,
+            "fp_on_success": 0,
+            "recall": 0.0,
+            "fpr": 0.0
+          },
+          "tp_runs": [],
+          "fp_runs": [],
+          "first_fire_round_median": null
+        },
+        "stall": {
+          "rule": "stall",
+          "n_fail": 22,
+          "n_success": 8,
+          "hit_on_fail": 0,
+          "miss_on_fail": 22,
+          "fp_on_success": 0,
+          "tn_success": 8,
+          "recall": 0.0,
+          "fpr": 0.0,
+          "recall_wilson95": [
+            0.0,
+            0.149
+          ],
+          "fpr_wilson95": [
+            0.0,
+            0.324
+          ],
+          "fisher_p_two_sided": null,
+          "ever_fired": {
+            "hit_on_fail": 0,
+            "fp_on_success": 0,
+            "recall": 0.0,
+            "fpr": 0.0
+          },
+          "tp_runs": [],
+          "fp_runs": [],
+          "first_fire_round_median": null
+        },
+        "fail_streak": {
+          "rule": "fail_streak",
+          "n_fail": 22,
+          "n_success": 8,
+          "hit_on_fail": 8,
+          "miss_on_fail": 14,
+          "fp_on_success": 4,
+          "tn_success": 4,
+          "recall": 0.3636,
+          "fpr": 0.5,
+          "recall_wilson95": [
+            0.197,
+            0.57
+          ],
+          "fpr_wilson95": [
+            0.215,
+            0.785
+          ],
+          "fisher_p_two_sided": 0.67795,
+          "ever_fired": {
+            "hit_on_fail": 8,
+            "fp_on_success": 5,
+            "recall": 0.3636,
+            "fpr": 0.625
+          },
+          "tp_runs": [
+            "2026-09-30T10-30-34-542Z_01a0f1dd-b72e-7649-8eb8-1d617e8b7fb7.jsonl",
+            "2026-09-30T10-32-30-589Z_01a0f1df-7c7c-7149-beeb-08d2a4366a4f.jsonl",
+            "2026-09-30T10-33-55-907Z_01a0f1e0-c9c2-7686-b40c-3f4368e3e5d6.jsonl",
+            "2026-09-30T10-37-55-754Z_01a0f1e4-72a9-732a-ae2e-ef072726ffa9.jsonl",
+            "2026-09-30T10-38-14-773Z_01a0f1e4-bcf4-7503-85b9-38c9ecbbef6a.jsonl",
+            "2026-09-30T10-39-07-889Z_01a0f1e5-8c70-7096-a82a-dc10cd3e5074.jsonl",
+            "2026-09-30T10-39-35-486Z_01a0f1e5-f83e-7500-8ce8-ef93d42abf8d.jsonl",
+            "2026-09-30T10-52-39-954Z_01a0f1f1-f091-70fb-b252-a5d167ff9318.jsonl"
+          ],
+          "fp_runs": [
+            "2026-09-30T10-37-16-946Z_01a0f1e3-db11-75ea-b982-32d0ada287c4.jsonl",
+            "2026-09-30T10-43-27-473Z_01a0f1e9-8270-7159-bd3c-b31469b8c3ac.jsonl",
+            "2026-09-30T10-51-35-388Z_01a0f1f0-f45c-747a-bf05-04d8983400a0.jsonl",
+            "2026-09-30T11-05-56-412Z_01a0f1fe-17bb-75d1-a352-760235fcbc20.jsonl"
+          ],
+          "first_fire_round_median": 4
+        }
+      },
+      "combined": {
+        "definition": "任一规则触发（end-to-end）= 预测失败",
+        "confusion": {
+          "tp": 8,
+          "fn": 14,
+          "fp": 4,
+          "tn": 4
+        },
+        "precision": 0.6667,
+        "precision_wilson95": [
+          0.391,
+          0.862
+        ],
+        "recall": 0.3636,
+        "fisher_p_two_sided": 0.67795
+      }
+    }
+  },
+  "cross_model_consistency": {
+    "repeat": {
+      "mimo": {
+        "recall": 0.0,
+        "fpr": 0.0,
+        "direction": "inactive"
+      },
+      "gemini": {
+        "recall": 0.2,
+        "fpr": 0.0,
+        "direction": "useful"
+      },
+      "consistent": false,
+      "note": "consistent=两侧同为 useful（严格口径）；一侧 useful 一侧 inactive 记为'单侧有效'，按预登记归为待复核而非可归纳证据"
+    },
+    "stall": {
+      "mimo": {
+        "recall": 0.0,
+        "fpr": 0.0,
+        "direction": "inactive"
+      },
+      "gemini": {
+        "recall": 0.3,
+        "fpr": 0.0,
+        "direction": "useful"
+      },
+      "consistent": false,
+      "note": "consistent=两侧同为 useful（严格口径）；一侧 useful 一侧 inactive 记为'单侧有效'，按预登记归为待复核而非可归纳证据"
+    },
+    "fail_streak": {
+      "mimo": {
+        "recall": 0.1304,
+        "fpr": 0.0392,
+        "direction": "useful"
+      },
+      "gemini": {
+        "recall": 0.2,
+        "fpr": 0.0,
+        "direction": "useful"
+      },
+      "consistent": true,
+      "note": "consistent=两侧同为 useful（严格口径）；一侧 useful 一侧 inactive 记为'单侧有效'，按预登记归为待复核而非可归纳证据"
+    }
+  },
+  "known_sample_checks": [
+    {
+      "sample": "gemini control run3（945 轮 / 877 次同命令循环）",
+      "expect": "repeat 必须命中（identical_calls）",
+      "pass": true,
+      "observed": {
+        "repeat_fired": true,
+        "kind": "identical_calls",
+        "count": 877,
+        "first_round": 80
+      }
+    },
+    {
+      "sample": "gemini control run1（144 轮停滞）",
+      "expect": "stall@60 命中",
+      "pass": true,
+      "observed": {
+        "stall_fired": true,
+        "abstain": null,
+        "detail": {
+          "round": 143,
+          "goals_passed": 0,
+          "goals_total": 1,
+          "coverage": 0.0,
+          "pytest_rounds": 31,
+          "stall_line": 60
+        },
+        "first_round": 60
+      }
+    },
+    {
+      "sample": "gemini ge4 run1（150 轮阅读停滞）",
+      "expect": "纳入观察（0 编辑 1 验证；stall 语义边界样本）",
+      "pass": null,
+      "observed": {
+        "repeat_fired": true,
+        "stall_fired": true,
+        "stall_abstain": null,
+        "fail_streak_fired": false,
+        "detail": {
+          "repeat": {
+            "kind": "identical_calls",
+            "count": 81,
+            "command": "{\"name\": \"bash\", \"arguments\": {\"command\": \"python -c \\\"import numpy as np, time\\nA = np.random.normal(size=(10,10))\\nt0 "
+          },
+          "stall": {
+            "round": 150,
+            "goals_passed": 0,
+            "goals_total": 1,
+            "coverage": 0.0,
+            "pytest_rounds": 1,
+            "stall_line": 60
+          },
+          "fail_streak": {
+            "streak": 1,
+            "round": 150,
+            "pytest_rounds": 1
+          }
+        }
+      }
+    },
+    {
+      "sample": "全部语料健康完成 run",
+      "expect": "repeat 零命中",
+      "pass": true,
+      "observed": {
+        "n_healthy_repeat_fired": 0,
+        "runs": []
+      }
+    }
+  ]
+}

@@ -1410,3 +1410,40 @@ completion.asserted / task.object.alignment PASS，process.unresolved R=0.764
   正则（块级证据），语义级申报分类仍归 matcher 对齐判定范畴，本规则不做
   语义判定；③edit_oscillation 暂不识别跨变体语义等价（"修了没效果"以
   pytest 结果集合不变为准），变体间振荡的语义等价判定留待 matcher 对齐。
+
+## 识别训练验证：v2 三形态签名跨模型回放（2026-10-04，纯本地分析，不跑模型不占 XPU）
+- 目的（预登记）：把 v2 三条失败形态签名（converge.repeat 退化循环 /
+  converge.stall@60 / fail_streak）在两个模型的全量历史会话上回放，验证
+  **可归纳性**——跨模型命中失败 run、健康 run 零/低误报。规则本体零重写：
+  全部经真实 `ConvergenceShadow(ruleset="v2", budget_s=900)` 计算，
+  `tests/test_convergence_shadow.py` 60 例不改一字全绿。
+- 语料（283 run，只读）：A. mimo-v2.5：Phase 0 批次 233（convergence_study
+  同过滤同标注，复算标签与 features.jsonl 基线 233/233 零偏差）+ Phase 2
+  批次 30（runs_p2a）；B. gemini-3.5-flash-lite：eigen 20（tb2×18 + ge4×2，
+  标签=runs_smoke.completed）。会话→StageBlock 转换层有损处如实记录：
+  thinking 块丢弃；轮代理=toolResult 计数（并行轮拆分，mimo 实测最大 ~2x
+  偏斜且方向固定）；goals_total=1 生产缺省（目标注入属 matcher 范畴）。
+- 结果（`results/guard-effect-v2/rule_replay_validation.md`，
+  replay_runs.jsonl / rule_replay_metrics.json 同源生成）：
+  - **总判定：可归纳性成立（判据 2：组合规则任一触发=预测失败，
+    precision mimo 0.84 [0.653,0.936] / gemini 1.0 [0.51,1.0]，均 ≥0.7）**。
+  - 已知样本 3/3：control r3 被 repeat 命中（count=877，第 80 守卫轮）、
+    control r1 被 stall@60 命中（第 60 守卫轮）、健康 run 端态 repeat 零命中；
+    额外：ge4 150 轮"阅读停滞"实为 81 连击同命令计时循环，repeat+stall 双命中。
+  - fail_streak = 唯一严格跨模型一致的单规则（mimo R=0.13/FPR=0.039，
+    gemini R=0.2/FPR=0.0；Phase 0 干净批次端态 FPR=0/94；首触中位第 4 守卫轮，
+    与 Phase 0 基线 P=0.908 口径相容）。
+  - repeat / stall@60 = **形态依赖签名**：gemini 内 2/2、3/3 精确命中且端态
+    零误报；mimo 语料形态缺席（同命令连击上界 5<12、同文件写上界 3<4、最长
+    33 守卫轮<60）→ 零触发零误报，inactive 非反证但不可作可归纳证据。
+  - 误报来源：mimo 4 FP 全在 Phase 2 批次（truncated+env_error 噪声 run，
+    标签=工作区复测 vs 会话末连续失败，属口径差非规则误判）；gemini 端态
+    FP=0，ever 口径 7 例全为中途触发后恢复（部署语义=每任务 1 次可忽略提醒）。
+  - gemini 6 FN 中 3 个正是 perf_retest 管辖形态（both r4/r6/r9 申报 A 翻车，
+    超出三签名范围）。
+- 文件：`tools/rule_replay_validation.py`（新增，转换层+真实规则回放+统计+
+  报告生成；复用 tools/convergence_study.py 解析与标注）；convergence.py
+  **零改动**。遗留：①gemini n=20 小样本，单规则 Fisher p 0.21–0.47 不显著，
+  v2 规则臂干预效果仍需 eigen 复测补样；②Phase 2 截断噪声提示 fail_streak
+  宜消费 toolResult.is_error 标记（规则侧待后续版本）；③edit_oscillation
+  端态可逆（both r8 中途命中后恢复），历史峰值口径需块流携带轮边界。
