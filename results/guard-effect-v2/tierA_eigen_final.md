@@ -56,3 +56,9 @@ b) 纯方差（n=9 下 2/9 vs 0/9 的 Fisher p≈0.43，不显著）。
 
 runs_smoke.jsonl eigen 全部 18 行（3+3 基线探索 + 9+9 正式交错）；
 会话与工作区全留存。判定全部为 judge 复测，无模型自报。
+
+## 附记：v2 规则臂首次尝试被 429 阻断（2026-10-04 01:26-01:40）
+run10-18 全部秒死于上游 429（免费窗口额度耗尽，api_errors=4/run），
+9 run 全部无效并归档至 runs_v2_429exhausted.jsonl。**非 v2 规则代码问题**
+（守卫服务 stage-check 全程正常）。v2 规则的效果判定待下个免费窗口
+重跑：`--phase main --task tb2_largest_eigenval --arm both --runs 9 --start-run 10`。

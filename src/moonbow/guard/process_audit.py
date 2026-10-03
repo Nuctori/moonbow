@@ -23,9 +23,12 @@ from .protocol import StageBlock, StageFinding
 from .audit_semantic import ShadowObservation
 from .convergence import (
     FAIL_STREAK_SIGNAL,
+    PERF_RETEST_SIGNAL,
+    REPEAT_SIGNAL,
     STALL_SIGNAL,
     AdvisoryBudget,
     build_advisory_reminder,
+    perf_retest_enabled,
     req_hash_of,
     unavailable_entry,
 )
@@ -359,14 +362,35 @@ class StageAuditor:
         }
 
 
+# 投递优先级：stall > fail_streak > repeat（v2）；perf_retest 独立预算键，
+# 排最后（收尾时刻其它触发通常不命中，不影响其可达性）。
+_DELIVERY_ORDER = {
+    STALL_SIGNAL: 0,
+    FAIL_STREAK_SIGNAL: 1,
+    REPEAT_SIGNAL: 2,
+    PERF_RETEST_SIGNAL: 3,
+}
+
+
+def _mark_delivered(entries: List, signal: str) -> None:
+    for e in entries:
+        if isinstance(e, dict) and e.get("signal") == signal:
+            e["delivered"] = True
+
+
 def _apply_convergence_advisory(result: Dict, task_key: str,
-                                advisory: "AdvisoryBudget") -> None:
+                                advisory: "AdvisoryBudget",
+                                perf_enabled: bool = False) -> None:
     """Phase 2：advisory 模式下把命中的收敛触发包装成 reminder 投递。
 
     - 只包装、不改触发规则：命中判定完全来自 shadow_convergence 条目；
     - 主审计已有 reminder 时让位（单一 reminder 通道，不覆盖不打架）；
-    - 投递状态写回条目（delivered: true 仅命中的那条）；预算由
-      AdvisoryBudget 独立计数（每任务最多 2 次，按 (task_key, signal) 记）。
+    - 投递状态写回条目（delivered: true 仅命中的那条）；既有信号预算由
+      AdvisoryBudget 独立计数（每任务最多 2 次，按 (task_key, signal) 记）；
+    - v2（2026-10-04）：converge.repeat 走既有预算；converge.perf_retest
+      走独立预算键（allow_solo/record_solo，每任务 1 次，不占 MAX_PER_TASK、
+      不计 used()），且需 perf_enabled（MOONBOW_GUARD_PERF_RETEST=1 或
+      目标含 speedup/perf 字样）才投递。
     """
     entries = result.get("shadow_convergence")
     if not isinstance(entries, list):
@@ -376,40 +400,58 @@ def _apply_convergence_advisory(result: Dict, task_key: str,
             e.setdefault("delivered", False)
     if result.get("reminder"):
         return                     # 主审计过程提醒优先
-    order = {STALL_SIGNAL: 0, FAIL_STREAK_SIGNAL: 1}
-    trig = sorted((e for e in entries
-                   if isinstance(e, dict) and e.get("matched") is True),
-                  key=lambda e: order.get(e.get("signal"), 9))
-    if not trig:
-        return
-    signal = trig[0]["signal"]
-    if not advisory.allow(task_key, signal):
-        return
-    advisory.record(task_key, signal)
-    for e in entries:
-        if isinstance(e, dict) and e.get("signal") == signal:
-            e["delivered"] = True
-    result["reminder"] = build_advisory_reminder(signal, task_key, trig[0])
+    matched = sorted((e for e in entries
+                      if isinstance(e, dict) and e.get("matched") is True),
+                     key=lambda e: _DELIVERY_ORDER.get(e.get("signal"), 9))
+    capped = [e for e in matched if e.get("signal") != PERF_RETEST_SIGNAL]
+    if capped:
+        # 既有口径：只考虑最高优先命中；其预算已用 → 本轮静默
+        # （不落到更低优先级顶信号）。
+        signal = capped[0]["signal"]
+        if advisory.allow(task_key, signal):
+            advisory.record(task_key, signal)
+            _mark_delivered(entries, signal)
+            result["reminder"] = build_advisory_reminder(signal, task_key,
+                                                         capped[0])
+            return
+    perf = next((e for e in matched if e.get("signal") == PERF_RETEST_SIGNAL),
+                None)
+    if (perf is not None and perf_enabled
+            and advisory.allow_solo(task_key, PERF_RETEST_SIGNAL)):
+        # 独立预算键：顶信号被既有预算挡下也不影响（互不占额）
+        advisory.record_solo(task_key, PERF_RETEST_SIGNAL)
+        _mark_delivered(entries, PERF_RETEST_SIGNAL)
+        result["reminder"] = build_advisory_reminder(
+            PERF_RETEST_SIGNAL, task_key, perf)
 
 
 def _convergence_shadow_for(payload: Dict, default):
     """可选收敛目标注入：payload 可带 convergence_goals_total（int>=1）/
     convergence_target_tests（非空唯一字符串列表）构造对应观察者；
-    均缺省时用 server 级默认实例（Phase 1 行为，零变化）。非法即 400。"""
+    均缺省时用 server 级默认实例（Phase 1 行为，零变化）。非法即 400。
+    default 是 ConvergenceShadow 时经 with_targets 派生，保留 ruleset/
+    budget（v2 装配不因 payload 带目标而降级 v1）；default 为 None 时维持
+    原构造路径（v1）。"""
     goals = payload.get("convergence_goals_total")
     targets = payload.get("convergence_target_tests")
     if goals is None and targets is None:
         return default
     from .convergence import ConvergenceShadow
+    derive = getattr(default, "with_targets", None)
     if targets is not None:
         if (not isinstance(targets, list) or not targets
                 or not all(isinstance(t, str) and t.strip() for t in targets)
                 or len(set(targets)) != len(targets)):
             raise ValueError("convergence_target_tests must be a non-empty list "
                              "of unique non-empty strings")
-        return ConvergenceShadow(target_tests=[t.strip() for t in targets])
+        cleaned = [t.strip() for t in targets]
+        if derive is not None:
+            return derive(target_tests=cleaned)
+        return ConvergenceShadow(target_tests=cleaned)
     if not isinstance(goals, int) or isinstance(goals, bool) or goals < 1:
         raise ValueError("convergence_goals_total must be an integer >= 1")
+    if derive is not None:
+        return derive(goals_total=goals)
     return ConvergenceShadow(goals_total=goals)
 
 
@@ -449,5 +491,11 @@ def audit_stage_payload(payload: Dict, convergence_shadow=None,
     if convergence_advisory is not None:
         # task_id 优先（同 req 文本的多个任务实例预算独立）；缺省回退 req 哈希
         task_key = str(payload.get("task_id") or "") or req_hash_of(req)
-        _apply_convergence_advisory(result, task_key, convergence_advisory)
+        # v2 perf_retest 门控：env 开关或性能目标字样（payload 注入的
+        # target_tests 是客户端 MOONBOW_GUARD_CONVERGENCE_TARGETS 的透传，
+        # 服务端 env 未必带该变量，故一并检查）。
+        perf_flag = perf_retest_enabled(
+            target_tests=getattr(shadow, "target_tests", None))
+        _apply_convergence_advisory(result, task_key, convergence_advisory,
+                                    perf_enabled=perf_flag)
     return result
