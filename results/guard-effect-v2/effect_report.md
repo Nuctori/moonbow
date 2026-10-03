@@ -82,3 +82,12 @@ gemini-3.5-flash-lite 经 pi 工具链路存活）。
 预登记文件未修改；失败/无效 run 原样留存（runs_smoke.jsonl 34 行 +
 runs_p3_invalid_credits.jsonl 30 行）；无样本删除、无子群事后切换；
 结论使用预写模板之"未证明有效（门禁阻断）"分支。
+
+## Tier A 终判段（2026-10-04 晨追加）
+
+三臂终判（eigen，n=9/9/9）：control 56% / v1 56% / **v2 78%**（+22pts，
+p=0.62 欠功效）。停滞：control 2、v1 0、v2 1。完成率 uplift **方向为正、
+统计不可分**；规则参战证据缺失（run 级触发计数为 0，投递链路待核查——
+guard_v2.log 已留存可离线核查）。详见 threearm_report.md。
+效率/稳定性结论维持：守卫在场臂无 945 轮级灾难停滞（三臂最大：
+control 945 / v1 63 / v2 115）。
