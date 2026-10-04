@@ -907,3 +907,165 @@ def test_http_v2_ruleset_assembly_and_delivery(base_url, monkeypatch):
          GuardHTTPRequestHandler.convergence_mode,
          GuardHTTPRequestHandler.convergence_advisory,
          GuardHTTPRequestHandler.convergence_shadow) = old
+
+
+# ---- v2 工具事件通道（2026-10-04，guard-effect-v2 通路补全）----
+#
+# 根因（threearm_report.md §7）：线上 5115 次 stage-check findings 全 0，
+# v2 规则整场无工具流输入。客户端现以 tool_events 数组默认携带工具事件；
+# 服务端只按 ruleset=v2 消费（v1/off 逐字节不变）。
+
+from moonbow.guard.process_audit import tool_events_to_stage_blocks  # noqa: E402
+
+
+def _te_call(seq, command, cid, name="bash"):
+    return {"seq": seq, "phase": "call", "name": name,
+            "args": json.dumps({"name": name, "arguments": {"command": command}}),
+            "tool_call_id": cid}
+
+
+def _te_result(seq, text, cid, err=False):
+    return {"seq": seq, "phase": "result", "name": "bash",
+            "is_error": err, "result": text, "tool_call_id": cid}
+
+
+def test_tool_events_to_stage_blocks_schema():
+    out = tool_events_to_stage_blocks([
+        _te_call(1, "pytest -q", "c1"),
+        _te_result(2, "1 failed", "c1", err=True),
+        {"bogus": True},                      # 非法条目逐条跳过
+        {"seq": 3, "phase": "nope"},          # 未知 phase 跳过
+    ])
+    assert [(b.kind, b.seq) for b in out] == [("toolCall", 1), ("toolResult", 2)]
+    call, res = out
+    assert call.tool_name == "bash" and call.tool_call_id == "c1"
+    assert json.loads(call.text)["arguments"]["command"] == "pytest -q"
+    assert res.is_error is True and res.text == "1 failed"
+
+
+def test_tool_events_validation_not_a_list():
+    with pytest.raises(ValueError):
+        audit_stage_payload({"blocks": [], "tool_events": "bad"})
+
+
+def _timeit_tool_events(n, start_seq=0):
+    """877 退化循环的最小线上形态：n 轮同命令（仅数字不同）timeit 事件。"""
+    ev = []
+    for i in range(n):
+        ev.append(_te_call(start_seq + 2 * i, TIMEIT_CMD % (10000 + i), "t%d" % i))
+        ev.append(_te_result(start_seq + 2 * i + 1, "0.12", "t%d" % i))
+    return ev
+
+
+def test_v2_tool_events_drive_repeat_to_fire():
+    """线上通道端到端：blocks 只有 text，工具流全在 tool_events——
+    v2 规则必须真正吃到（877 循环形态在第 12 连击触发 repeat）。"""
+    payload = {
+        "req": "性能基线", "snapshot_version": 1,
+        "blocks": [{"seq": 999, "kind": "text", "text": "正在计时。"}],
+        "tool_events": _timeit_tool_events(REPEAT_IDENTICAL_MIN),
+        "enable_convergence_shadow": True,
+    }
+    r = audit_stage_payload(payload, convergence_shadow=_v2(budget_s=900))
+    rep = _signal(r["shadow_convergence"], REPEAT_SIGNAL)
+    assert rep["matched"] is True
+    assert rep["detail"]["kind"] == "identical_calls"
+    assert rep["detail"]["count"] == REPEAT_IDENTICAL_MIN
+
+
+def test_v1_ignores_tool_events_byte_identical():
+    """v1 纪律：tool_events 在场与否，响应逐字节一致（含 shadow_convergence）。"""
+    base = {
+        "req": "x", "snapshot_version": 1,
+        "blocks": [{"seq": 1, "kind": "text", "text": "声明已完成"}],
+        "tool_events": _timeit_tool_events(20),   # 若被消费，repeat 必命中
+    }
+    r1 = audit_stage_payload(dict(base), convergence_shadow=ConvergenceShadow())
+    r2 = audit_stage_payload({k: v for k, v in base.items() if k != "tool_events"},
+                             convergence_shadow=ConvergenceShadow())
+    assert json.dumps(r1, sort_keys=True) == json.dumps(r2, sort_keys=True)
+    # v1 根本没有 repeat 条目（工具事件被忽略的直接证据）
+    assert REPEAT_SIGNAL not in [e["signal"] for e in r1["shadow_convergence"]]
+    # 无 shadow 注入（off 路径）同样零变化
+    r3 = audit_stage_payload(dict(base))
+    r4 = audit_stage_payload({k: v for k, v in base.items() if k != "tool_events"})
+    assert json.dumps(r3, sort_keys=True) == json.dumps(r4, sort_keys=True)
+    assert "shadow_convergence" not in r3
+
+
+def test_v2_tool_events_authoritative_over_blocks_tools():
+    """v2 + tool_events 在场：blocks 内的 toolCall/toolResult 条目让位
+    （防双通道重复计数），tool_events 为工具流权威来源。"""
+    ev = _timeit_tool_events(6)                    # 6 连击（低于阈值 12）
+    dup = list(ev) + [
+        # blocks 里再塞一份同 id 的工具块（若并入则 12 连击会误触发）
+        StageBlock(seq=100 + i, kind="toolCall", tool_call_id="t%d" % i,
+                   tool_name="bash", text=json.dumps(
+                       {"name": "bash", "arguments": {"command": TIMEIT_CMD % (10000 + i)}}))
+        for i in range(6)
+    ]
+    payload = {"req": "x", "blocks": dup, "tool_events": ev}
+    r = audit_stage_payload(payload, convergence_shadow=_v2(budget_s=900))
+    rep = _signal(r["shadow_convergence"], REPEAT_SIGNAL)
+    assert rep["matched"] is False                 # 权威流只有 6 连击
+    assert rep["detail"]["max_identical_calls"] == 6
+
+
+def test_v2_tool_events_stall_coverage_vs_v1_abstain():
+    """同一 tool_events：v2 消费工具流（pytest_rounds=6、fail_streak 连败
+    计到 6）；v1 忽略（no_pytest_evidence abstain、streak=0）——即 v1 不变
+    证明的对照组。（stall 不触发是 v2 轮次线 60 的正确行为，非通路缺陷。）"""
+    ev = []
+    for i in range(6):
+        ev.append(_te_call(i * 2, "pytest -q tests/", "p%d" % i))
+        ev.append(_te_result(i * 2 + 1, "1 failed in 0.01s", "p%d" % i))
+    payload = {"req": "x", "blocks": [], "tool_events": ev}
+    v2 = audit_stage_payload(dict(payload), convergence_shadow=_v2(budget_s=900))
+    stall_v2 = _signal(v2["shadow_convergence"], STALL_SIGNAL)
+    assert stall_v2["detail"]["pytest_rounds"] == 6      # 工具流已到达规则
+    assert stall_v2["matched"] is None                   # 6 < 60（v2 轮次线）
+    assert stall_v2["abstain_reason"] == "rounds<60"
+    fs_v2 = _signal(v2["shadow_convergence"], FAIL_STREAK_SIGNAL)
+    assert fs_v2["matched"] is True and fs_v2["detail"]["streak"] == 6
+    v1 = audit_stage_payload(dict(payload), convergence_shadow=ConvergenceShadow())
+    stall_v1 = _signal(v1["shadow_convergence"], STALL_SIGNAL)
+    assert stall_v1["matched"] is None
+    assert stall_v1["abstain_reason"] == "rounds<4"   # v1 看不到工具流（round=0）
+    fs_v1 = _signal(v1["shadow_convergence"], FAIL_STREAK_SIGNAL)
+    assert fs_v1["matched"] is False and fs_v1["detail"]["streak"] == 0
+
+
+def test_v2_tool_events_text_blocks_survive_for_perf_retest():
+    """v2 消费 tool_events 时 text 块保留（perf_retest 的 STATUS:A 证据）。"""
+    ev = _timeit_tool_events(3)
+    blocks = [{"seq": 99, "kind": "text", "text": "STATUS: A\nREMAINING: 无\nEVIDENCE: 计时稳定"}]
+    r = audit_stage_payload({"req": "性能", "blocks": blocks, "tool_events": ev},
+                            convergence_shadow=_v2(budget_s=900))
+    assert _signal(r["shadow_convergence"], PERF_RETEST_SIGNAL)["matched"] is True
+
+
+def test_http_stage_check_tool_events_v2_consumed_v1_ignored(base_url, monkeypatch):
+    """HTTP 层：tool_events 非法类型 400；v2 装配消费、v1 装配忽略。"""
+    with pytest.raises(urllib.error.HTTPError) as e:
+        _post(base_url, "/v1/stage-check", {"blocks": [], "tool_events": {"bad": 1}})
+    assert e.value.code == 400
+    old = (GuardHTTPRequestHandler.convergence_ruleset,
+           GuardHTTPRequestHandler.convergence_shadow)
+    try:
+        payload = {
+            "req": "x", "blocks": [], "enable_convergence_shadow": True,
+            "tool_events": _timeit_tool_events(REPEAT_IDENTICAL_MIN),
+        }
+        GuardHTTPRequestHandler.convergence_ruleset = "v1"
+        GuardHTTPRequestHandler.convergence_shadow = None
+        r1 = _post(base_url, "/v1/stage-check", payload)
+        # v1 忽略：没有 repeat 条目
+        assert REPEAT_SIGNAL not in [e["signal"] for e in r1["shadow_convergence"]]
+        GuardHTTPRequestHandler.convergence_ruleset = "v2"
+        GuardHTTPRequestHandler.convergence_shadow = None   # 按 v2 重建
+        r2 = _post(base_url, "/v1/stage-check", payload)
+        rep = _signal(r2["shadow_convergence"], REPEAT_SIGNAL)
+        assert rep["matched"] is True and rep["detail"]["count"] == REPEAT_IDENTICAL_MIN
+    finally:
+        (GuardHTTPRequestHandler.convergence_ruleset,
+         GuardHTTPRequestHandler.convergence_shadow) = old

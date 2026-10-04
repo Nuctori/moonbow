@@ -10,7 +10,7 @@
  *   → failed/unknown。queued ≠ 模型已读，更 ≠ 问题已解决。
  */
 
-import type { GuardBlock } from "./process-events.ts";
+import type { GuardBlock, ToolEvent } from "./process-events.ts";
 
 export type FindingStatus =
   | "candidate" | "actionable" | "addressed" | "resolved" | "withdrawn" | "unverified";
@@ -49,6 +49,13 @@ export interface ProcessState {
   auditedThroughSeq: number;     // 已送审游标
   blocks: GuardBlock[];
   truncatedFrom: number | null;  // 头部被环形缓冲丢弃的块数
+  // v2 工具事件通道（2026-10-04）：独立环形缓冲 + 单调版本号。
+  // toolEventsVersion 供审计游标判断"有无未审工具事件"——封顶丢头后
+  // length 饱和，不能用 length 当游标。
+  toolEvents: ToolEvent[];
+  toolEventsDropped: number;     // 头部被环形缓冲丢弃的事件数（遥测）
+  toolEventsVersion: number;     // 每次新事件入库 +1（内存态，不持久化）
+  auditedToolEventsVersion: number; // 已送审的工具事件版本游标
   findings: Finding[];
   deliveries: DeliveryRecord[];
   budgets: ProcessBudgets;
@@ -59,13 +66,42 @@ export function maxBlocks(): number {
   return Number.isFinite(n) && n >= 120 ? Math.floor(n) : 400;
 }
 
+// 工具事件封顶：缺省 4000（实测最大真实会话 1890 事件；载荷截断后
+// 单事件 ≤~0.9KB，最坏 ~3.5MB 本机 HTTP，可接受）。
+export function maxToolEvents(): number {
+  const n = Number(process.env.MOONBOW_GUARD_MAX_TOOL_EVENTS || 4000);
+  return Number.isFinite(n) && n >= 10 ? Math.floor(n) : 4000;
+}
+
 export function newProcessState(taskId: string, branchId: string, req = ""): ProcessState {
   return {
     taskId, branchId, req, snapshotVersion: 0, auditedThroughSeq: 0,
     blocks: [], truncatedFrom: null,
+    toolEvents: [], toolEventsDropped: 0,
+    toolEventsVersion: 0, auditedToolEventsVersion: 0,
     findings: [], deliveries: [],
     budgets: { semanticUsed: false, formatUsed: false, interventions: 0, processReminders: 0 },
   };
+}
+
+/** 工具事件入库：封顶丢最旧（丢头不丢尾——新事件永远入库）。
+ * 返回是否发生变化（调用方据此决定是否触发审计）。 */
+export function appendToolEvent(state: ProcessState, ev: ToolEvent): boolean {
+  if (!ev) return false;
+  state.toolEvents.push(ev);
+  state.toolEventsVersion += 1;
+  const cap = maxToolEvents();
+  if (state.toolEvents.length > cap) {
+    const drop = state.toolEvents.length - cap;
+    state.toolEvents.splice(0, drop);
+    state.toolEventsDropped += drop;
+  }
+  return true;
+}
+
+/** 是否有未送审的工具事件（审计游标推进后同版本不重发）。 */
+export function hasUnauditedToolEvents(state: ProcessState): boolean {
+  return state.toolEventsVersion > state.auditedToolEventsVersion;
 }
 
 /** 新观察入库：版本号推进、环形截断（丢最旧，留标记）。返回是否发生变化。 */

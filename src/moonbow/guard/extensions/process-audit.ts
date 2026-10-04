@@ -12,7 +12,7 @@
  */
 
 import type { GuardBlock } from "./process-events.ts";
-import { appendBlocks, mergeFinding, newProcessState,
+import { hasUnauditedToolEvents, mergeFinding, newProcessState,
          type Finding, type ProcessState } from "./process-task.ts";
 
 export type ProcessMode = "off" | "shadow" | "advisory";
@@ -76,7 +76,11 @@ export class StageAuditor {
 
   private hasUnaudited(state: ProcessState): boolean {
     const last = state.blocks[state.blocks.length - 1];
-    return last !== undefined && last.seq >= state.auditedThroughSeq;
+    // v2 工具事件通道：未审工具事件同样构成送审理由（2026-10-04）。缺这个
+    // 判据，纯工具循环（如 877 次同命令退化循环，期间无新 text/thinking 块）
+    // 在首批块审完后就再也不触发审计——工具事件永远不重发，规则照样饿着。
+    return (last !== undefined && last.seq >= state.auditedThroughSeq)
+      || hasUnauditedToolEvents(state);
   }
 
   /**
@@ -124,8 +128,13 @@ export class StageAuditor {
     // stream_ended 时即使无新增块也要发：这是一次"运行已结束，请现在裁决"
     // 的信号。若因 fresh 为空而跳过，终止缺口（改了没验证）将永远不会上报
     // （2026-09-22：竞态实测——agent_end 的终止审计被空增量检查吞掉）。
-    if (!fresh.length && !streamEnded) return null;
+    // v2（2026-10-04）：纯工具事件增量（无新块）同样要发，否则退化循环
+    // 中途永远拿不到新的工具流（见 hasUnaudited 注释）。
+    if (!fresh.length && !streamEnded && !hasUnauditedToolEvents(state)) return null;
     const window = state.blocks.slice();
+    // 发送时刻的工具事件版本快照：成功只推进到该快照——飞行期间入库的
+    // 事件保持"未审"，由尾随合并补一轮（与块游标同语义，2026-10-04）。
+    const toolEventsAtSend = state.toolEventsVersion;
     const conv = this.withConvergence ? convergenceMode() : "off";
     const targets = conv !== "off" ? convergenceTargets() : null;
     const body = JSON.stringify({
@@ -143,6 +152,17 @@ export class StageAuditor {
         seq: b.seq, kind: b.kind, text: b.text,
         tool_call_id: b.toolCallId, tool_name: b.toolName, is_error: b.isError ?? false,
       })),
+      // v2 工具事件通道（2026-10-04）：默认携带。服务端只在 ruleset=v2 时
+      // 消费（off 不启用 shadow、v1 忽略该键）→ 两条既有路径零行为变化；
+      // 体积经 ToolEventCollector 截断 + appendToolEvent 封顶约束。
+      // 携带纪律论证见 process-events.ts 的通道注释。
+      tool_events: state.toolEvents.map((ev) => ({
+        seq: ev.seq, phase: ev.phase, name: ev.name,
+        ...(ev.phase === "call"
+          ? { args: ev.args ?? "" }
+          : { is_error: ev.is_error ?? false, result: ev.result ?? "" }),
+        tool_call_id: ev.toolCallId,
+      })),
       findings: state.findings,
     });
     let resp: Response;
@@ -159,11 +179,16 @@ export class StageAuditor {
     try { data = await resp.json(); } catch { return null; }
 
     for (const f of data.findings ?? []) mergeFinding(state, { ...f, updatedAt: Date.now() });
-    const lastSeq = fresh[fresh.length - 1].seq;
-    if (lastSeq >= state.auditedThroughSeq) state.auditedThroughSeq = lastSeq + 1;
+    const lastSeq = fresh[fresh.length - 1]?.seq;
+    if (lastSeq !== undefined && lastSeq >= state.auditedThroughSeq) {
+      state.auditedThroughSeq = lastSeq + 1;
+    }
+    // 工具事件游标推进到发送快照（失败不推进 → 下轮重试；飞行期间新增
+    // 事件保持未审，尾随合并会补审计）
+    state.auditedToolEventsVersion = toolEventsAtSend;
     return data;
   }
 }
 
-export { appendBlocks, mergeFinding, newProcessState };
+export { appendBlocks, mergeFinding, newProcessState } from "./process-task.ts";
 export type { Finding, ProcessState, GuardBlock };

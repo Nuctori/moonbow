@@ -25,6 +25,8 @@ from .convergence import (
     FAIL_STREAK_SIGNAL,
     PERF_RETEST_SIGNAL,
     REPEAT_SIGNAL,
+    RULESET_V1,
+    RULESET_V2,
     STALL_SIGNAL,
     AdvisoryBudget,
     build_advisory_reminder,
@@ -81,11 +83,62 @@ def _fp(kind: str, key: str) -> str:
     return f"{kind}:{key}"
 
 
+# ---- v2 工具事件通道（2026-10-04，guard-effect-v2 通路补全）----
+#
+# 根因（results/guard-effect-v2/threearm_report.md §7）：线上 5115 次
+# stage-check findings 全 0，v2 规则（repeat/stall/fail_streak 全部依赖工具流）
+# 整场无输入。客户端（extensions/process-audit.ts 起的采集链）现以独立
+# tool_events 数组默认携带工具调用/结果事件；本端只在 ruleset=v2 时把它转成
+# ConvergenceShadow 可消费的 StageBlock——off 不启用 shadow、v1 忽略该键，
+# 两条既有路径逐字节不变。携带而非按端折叠的论证见 process-events.ts。
+
+_TOOL_EVENT_PHASES = ("call", "result")
+
+
+def tool_events_to_stage_blocks(events) -> List[StageBlock]:
+    """stage-check payload 的 tool_events（客户端工具事件通道）→ StageBlock 流。
+
+    条目 schema（客户端序列化，见 process-audit.ts once()）：
+      {"seq": int, "phase": "call"|"result", "name": str,
+       "args": str（call 相，调用 JSON 摘要）,
+       "is_error": bool, "result": str（result 相）,
+       "tool_call_id": str}
+
+    转换为同构 StageBlock：call → kind="toolCall"（text=args，与真实块采集的
+    `{"name","arguments"}` JSON 文本同构，normalized_command_core /
+    _pytest_events 配对口径不变）；result → kind="toolResult"（text=result）。
+    非法条目逐条跳过（与 blocks 的宽容口径一致）；events 非 list 由调用方校验。
+    """
+    out: List[StageBlock] = []
+    for ev in events:
+        if not isinstance(ev, dict):
+            continue
+        phase = ev.get("phase")
+        if phase not in _TOOL_EVENT_PHASES:
+            continue
+        seq = ev.get("seq", 0)
+        if isinstance(seq, bool) or not isinstance(seq, int):
+            continue
+        name = str(ev.get("name") or "?")
+        cid = ev.get("tool_call_id")
+        if phase == "call":
+            out.append(StageBlock(seq=seq, kind="toolCall",
+                                  text=str(ev.get("args") or ""),
+                                  tool_call_id=cid, tool_name=name))
+        else:
+            out.append(StageBlock(seq=seq, kind="toolResult",
+                                  text=str(ev.get("result") or ""),
+                                  tool_call_id=cid, tool_name=name,
+                                  is_error=bool(ev.get("is_error", False))))
+    return out
+
+
 class StageAuditor:
     """确定性阶段审计器。audit() 幂等：同一批块重复送审产生相同 fingerprint，
     由客户端按 fingerprint 去重合并。"""
 
-    def __init__(self, semantic_shadow=None, convergence_shadow=None):
+    def __init__(self, semantic_shadow=None, convergence_shadow=None,
+                 convergence_tool_blocks=None):
         # P7：可选语义声明检测 shadow 通道（见 audit_semantic.py）。
         # 默认 None → 零行为变化；注入时其结果只写入返回值的
         # shadow_semantic 键，绝不参与 reminder/findings/semantic 判定。
@@ -94,6 +147,27 @@ class StageAuditor:
         # 同模式：默认 None → 零行为变化；注入时结果只写入
         # shadow_convergence 键，绝不参与 reminder/findings/semantic 判定。
         self._convergence_shadow = convergence_shadow
+        # v2 工具事件通道（2026-10-04）：tool_events 解析出的 StageBlock 流。
+        # None/空 = 客户端未携带（旧客户端/直连 API）→ 收敛计算用原 blocks，
+        # 行为不变；仅当 shadow 存在且 ruleset=v2 时消费（见 _convergence_blocks）。
+        self._convergence_tool_blocks = convergence_tool_blocks
+
+    def _convergence_blocks(self, blocks: List[StageBlock]) -> List[StageBlock]:
+        """收敛计算实际消费的块流。
+
+        v2 + 客户端工具事件在场时：tool_events 是工具流的**权威来源**（部署
+        实测消息快照采集路径可能整场缺工具块，见 threearm_report.md §7），
+        blocks 内的 toolCall/toolResult 条目让位（防双通道重复计数——两通道
+        携带同一批执行事件），text/thinking 块保留（perf_retest 的 STATUS:A
+        证据在 text 块上）。v1 / 无工具事件 → 原样返回（逐字节不变）。
+        两集合 seq 共用客户端采集序空间，compute 内部按 seq 排序即全局时序。
+        """
+        if not self._convergence_tool_blocks:
+            return blocks
+        if getattr(self._convergence_shadow, "ruleset", RULESET_V1) != RULESET_V2:
+            return blocks
+        return ([b for b in blocks if b.kind in ("text", "thinking")]
+                + list(self._convergence_tool_blocks))
 
     def audit(
         self,
@@ -142,9 +216,12 @@ class StageAuditor:
         if self._convergence_shadow is not None:
             # Phase 1 收敛 shadow 通道：从块流确定性计算（纯函数、幂等），
             # 结果单独成键；计算异常同样失败隔离，绝不影响主审计结果。
+            # v2（2026-10-04）：客户端 tool_events 在场时改用权威工具流
+            # （_convergence_blocks；v1/缺省原样 → 既有行为逐字节不变）。
             try:
                 result["shadow_convergence"] = \
-                    self._convergence_shadow.compute(req, blocks)
+                    self._convergence_shadow.compute(
+                        req, self._convergence_blocks(blocks))
             except Exception as e:               # noqa: BLE001 — 失败隔离
                 result["shadow_convergence"] = [
                     unavailable_entry(f"error:{type(e).__name__}")]
@@ -470,6 +547,15 @@ def audit_stage_payload(payload: Dict, convergence_shadow=None,
     if not isinstance(blocks_raw, list):
         raise ValueError("blocks must be a list")
     blocks = [StageBlock.from_dict(b) for b in blocks_raw if isinstance(b, dict)]
+    # v2 工具事件通道（2026-10-04）：payload 缺省不带 tool_events → None，
+    # 收敛计算路径与现状逐字节一致；携带（含空数组）时才解析。仅 ruleset=v2
+    # 的 shadow 消费（StageAuditor._convergence_blocks），v1 忽略。
+    tool_events_raw = payload.get("tool_events")
+    tool_blocks = None
+    if tool_events_raw is not None:
+        if not isinstance(tool_events_raw, list):
+            raise ValueError("tool_events must be a list")
+        tool_blocks = tool_events_to_stage_blocks(tool_events_raw)
     prior_raw = payload.get("findings", [])
     if not isinstance(prior_raw, list):
         raise ValueError("findings must be a list")
@@ -486,7 +572,8 @@ def audit_stage_payload(payload: Dict, convergence_shadow=None,
             print("[audit-debug]   seq=%s kind=%s tool=%s text=%r" % (
                 b.seq, b.kind, b.tool_name, b.text[:70]), file=_sys.stderr, flush=True)
     shadow = _convergence_shadow_for(payload, convergence_shadow)
-    result = StageAuditor(convergence_shadow=shadow).audit(
+    result = StageAuditor(convergence_shadow=shadow,
+                          convergence_tool_blocks=tool_blocks).audit(
         req, blocks, prior, ver, stream_ended)
     if convergence_advisory is not None:
         # task_id 优先（同 req 文本的多个任务实例预算独立）；缺省回退 req 哈希

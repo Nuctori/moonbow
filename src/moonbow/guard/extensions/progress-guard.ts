@@ -1,10 +1,11 @@
 import { randomUUID } from "node:crypto";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
-import { BlockAssembler, type GuardBlock } from "./process-events.ts";
+import { BlockAssembler, ToolEventCollector, type GuardBlock } from "./process-events.ts";
 import { StageAuditor, processMode, type ProcessMode,
          type StageCheckResponse } from "./process-audit.ts";
-import { appendBlocks, isGuardOriginText, latestDelivery, newProcessState,
-         type DeliveryRecord, type ProcessState } from "./process-task.ts";
+import { appendBlocks, appendToolEvent, hasUnauditedToolEvents, isGuardOriginText,
+         latestDelivery, newProcessState, type DeliveryRecord,
+         type ProcessState } from "./process-task.ts";
 import { installPseudoCallGuard } from "./pseudo-call-guard.ts";
 
 const URL = process.env.MOONBOW_GUARD_URL || "http://127.0.0.1:18492";
@@ -66,11 +67,20 @@ export default function activate(pi: ExtensionAPI) {
   let task: TaskState | undefined;
   let pstate: ProcessState | undefined;
   let assembler = new BlockAssembler();
+  // v2 工具事件通道（2026-10-04）：与块采集共用同一 seq 空间；assembler
+  // 每次重置（新任务/恢复）时采集器同步重建。
+  let toolEvents = new ToolEventCollector(assembler);
   const checking = new Set<string>();       // 收尾检查单飞
   let pBusy = false;                        // 过程审计单飞（跨事件去抖）
   // 伪工具调用检测与反馈：只读观察 + 反馈投递，独立杀开关与预算，
   // 失败自隔离；不参与任何 guard 判定路径（2026-09-30 Phase 2 归因修复）。
   const pseudoGuard = installPseudoCallGuard(pi, { getTaskId: () => task?.id });
+
+  /** assembler 与工具事件采集器必须同步重建（seq 空间一致性）。 */
+  function resetAssembler(startSeq = 0) {
+    assembler = new BlockAssembler(startSeq);
+    toolEvents = new ToolEventCollector(assembler);
+  }
 
   function save() {
     if (task) pi.appendEntry(STATE, { ...task });
@@ -102,13 +112,15 @@ export default function activate(pi: ExtensionAPI) {
           findings: d.findings ?? [], deliveries: d.deliveries ?? [],
           budgets: d.budgets ?? { semanticUsed: false, formatUsed: false,
                                   interventions: 0, processReminders: 0 },
+          toolEvents: [], toolEventsDropped: 0,
+          toolEventsVersion: 0, auditedToolEventsVersion: 0,
           blocks: [],
         };
       }
     }
     if (restored && (!taskId || restored.taskId === taskId)) {
       pstate = restored;
-      assembler = new BlockAssembler(restored.auditedThroughSeq); // 续接序号，防游标失效
+      resetAssembler(restored.auditedThroughSeq); // 续接序号，防游标失效
     } else if (taskId) {
       const t = task;
       pstate = newProcessState(taskId, branchIdOf(ctx), t?.req ?? "");
@@ -128,7 +140,7 @@ export default function activate(pi: ExtensionAPI) {
       }
     }
     pstate = undefined;
-    assembler = new BlockAssembler();
+    resetAssembler();
     restoreProcess(_event, ctx, task?.id);
   }
 
@@ -142,7 +154,7 @@ export default function activate(pi: ExtensionAPI) {
     // off 模式零行为变化：不建过程状态、不写会话条目
     if (processMode() !== "off") {
       pstate = newProcessState(task.id, branchIdOf(ctx), task.req);
-      assembler = new BlockAssembler();
+      resetAssembler();
       saveProcess();
     }
   });
@@ -152,6 +164,14 @@ export default function activate(pi: ExtensionAPI) {
   function collect(blocks: GuardBlock[], ctx?: ExtensionContext) {
     if (!pstate || !blocks.length) return;
     if (appendBlocks(pstate, blocks)) maybeAudit(ctx);
+  }
+
+  /** v2 工具事件入库（独立通道；2026-10-04）。纯工具增量（无新块）同样
+   * 触发审计——否则退化循环中途工具流永不重发（process-audit.ts 游标注释）。 */
+  function collectToolEvent(ev: ReturnType<ToolEventCollector["onToolStart"]>,
+                            ctx?: ExtensionContext) {
+    if (!pstate || !ev) return;
+    if (appendToolEvent(pstate, ev)) maybeAudit(ctx);
   }
 
   // 终止请求可能在上一轮审计飞行期间到达（agent_end 恰逢 pBusy=true），
@@ -175,10 +195,12 @@ export default function activate(pi: ExtensionAPI) {
       pBusy = false;
       applyAudit(current, resp, mode, ctx);
       // 尾随合并：审计飞行期间入库的块，补一轮，确保最新状态最终被处理；
-      // 继承终止标记（终止审计若被合并进尾随轮，同样必须带 stream_ended）
+      // 继承终止标记（终止审计若被合并进尾随轮，同样必须带 stream_ended）。
+      // v2：飞行期间入库的工具事件同样构成尾随审计理由。
       if (pstate === current && (depth < 3 || pendingStreamEnd)) {
         const last = current.blocks[current.blocks.length - 1];
-        if ((last && last.seq >= current.auditedThroughSeq) || pendingStreamEnd) {
+        if ((last && last.seq >= current.auditedThroughSeq)
+            || hasUnauditedToolEvents(current) || pendingStreamEnd) {
           maybeAudit(ctx, depth + 1, pendingStreamEnd);
         }
       }
@@ -278,8 +300,20 @@ export default function activate(pi: ExtensionAPI) {
     }
   });
 
+  pi.on("tool_execution_start", (event: any, ctx: ExtensionContext) => {
+    if (processMode() === "off") return;
+    // v2 工具事件通道：调用相（参数摘要）。pi 核心执行事件，与消息快照
+    // 组装无关——这是通路补全的可靠来源（threearm_report.md §7）。
+    collectToolEvent(toolEvents.onToolStart(String(event?.toolCallId ?? ""),
+                                           String(event?.toolName ?? "?"), event?.args), ctx);
+  });
+
   pi.on("tool_execution_end", (event: any, ctx: ExtensionContext) => {
     if (processMode() === "off") return;
+    // v2 工具事件通道：结果相（是否 error + 结果摘要，pytest 摘要行保留）
+    collectToolEvent(toolEvents.onToolEnd(String(event?.toolCallId ?? ""),
+                                          String(event?.toolName ?? "?"), event?.result,
+                                          !!event?.isError), ctx);
     const b = assembler.onToolResult(String(event?.toolCallId ?? ""),
                                      typeof event?.result === "string"
                                        ? event.result : JSON.stringify(event?.result ?? ""),
