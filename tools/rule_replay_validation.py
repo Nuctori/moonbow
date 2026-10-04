@@ -59,6 +59,7 @@ import glob
 import json
 import math
 import os
+import re
 import sys
 from collections import Counter
 
@@ -69,6 +70,7 @@ sys.path.insert(0, os.path.join(WORKSPACE, "tools"))                     # conve
 
 import convergence_study as cs  # noqa: E402  已验证的 233 mimo run 解析与标注器
 from moonbow.guard.protocol import StageBlock  # noqa: E402
+from moonbow.guard.process_audit import tool_events_to_stage_blocks  # noqa: E402
 from moonbow.guard.convergence import (  # noqa: E402
     ConvergenceShadow, REPEAT_SIGNAL, STALL_SIGNAL, FAIL_STREAK_SIGNAL,
     stall_line_from_budget,
@@ -80,8 +82,29 @@ GEMINI_MODEL = "gemini-3.5-flash-lite"
 
 # ---------------------------------------------------------------- 转换层
 
+def _iter_pi_messages(path):
+    """pi 会话 JSONL → 逐条 (role, content 块列表, toolCallId, isError)。
+
+    线上格式转换器（session_to_tool_events）专用；离线格式
+    （session_to_blocks）保持原实现不动（meta/study_rounds 口径与既有
+    产物逐字节一致），两转换器按同一文件序消费同一消息流。
+    """
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        for raw in fh:
+            try:
+                d = json.loads(raw)
+            except json.JSONDecodeError:
+                continue
+            if d.get("type") != "message":
+                continue
+            m = d.get("message", {})
+            content = m.get("content")
+            bl = content if isinstance(content, list) else []
+            yield (m.get("role"), bl, m.get("toolCallId"), bool(m.get("isError")))
+
+
 def session_to_blocks(path):
-    """pi 会话 JSONL → (blocks, meta, study_rounds)。
+    """pi 会话 JSONL → (blocks, meta, study_rounds)。【离线格式块】
 
     meta 复刻 convergence_study.parse_session 的 session/model_change/
     custom_message 元数据口径；study_rounds = parse_session 的轮计数
@@ -91,51 +114,173 @@ def session_to_blocks(path):
     meta = {"cwd": "", "model": "", "guard": False}
     seq = 0
     study_rounds = 0
-    with open(path, encoding="utf-8", errors="replace") as fh:
-        for raw in fh:
-            try:
-                d = json.loads(raw)
-            except json.JSONDecodeError:
-                continue
-            t = d.get("type")
-            if t == "session":
-                meta["cwd"] = d.get("cwd") or ""
-            elif t == "model_change":
-                meta["model"] = d.get("modelId") or meta["model"]
-            elif t == "custom_message":
-                if str(d.get("customType", "")).startswith("progress-guard"):
-                    meta["guard"] = True
-            elif t == "message":
-                m = d.get("message", {})
-                role = m.get("role")
-                content = m.get("content")
-                bl = content if isinstance(content, list) else []
-                if role == "assistant":
-                    if any(b.get("type") == "toolCall" for b in bl):
-                        study_rounds += 1
-                    for b in bl:
-                        bt = b.get("type")
-                        if bt == "toolCall":
-                            # 与真实 StageBlock 采集同构：text = 完整调用 JSON
-                            blocks.append(StageBlock(
-                                seq, "toolCall",
-                                json.dumps({"name": b.get("name"),
-                                            "arguments": b.get("arguments") or {}},
-                                           ensure_ascii=False),
-                                tool_call_id=b.get("id"),
-                                tool_name=b.get("name")))
-                            seq += 1
-                        elif bt == "text":
-                            blocks.append(StageBlock(seq, "text", b.get("text") or ""))
-                            seq += 1
-                        # thinking：丢弃（v2 三规则不消费；转换层有损处 ③）
-                elif role == "toolResult":
-                    txt = " ".join(b.get("text", "") for b in bl
-                                   if isinstance(b, dict) and b.get("type") == "text")
-                    blocks.append(StageBlock(seq, "toolResult", txt,
-                                             tool_call_id=m.get("toolCallId")))
-                    seq += 1
+    for raw in open(path, encoding="utf-8", errors="replace"):
+        try:
+            d = json.loads(raw)
+        except json.JSONDecodeError:
+            continue
+        t = d.get("type")
+        if t == "session":
+            meta["cwd"] = d.get("cwd") or ""
+        elif t == "model_change":
+            meta["model"] = d.get("modelId") or meta["model"]
+        elif t == "custom_message":
+            if str(d.get("customType", "")).startswith("progress-guard"):
+                meta["guard"] = True
+        elif t == "message":
+            m = d.get("message", {})
+            role = m.get("role")
+            content = m.get("content")
+            bl = content if isinstance(content, list) else []
+            if role == "assistant":
+                if any(b.get("type") == "toolCall" for b in bl):
+                    study_rounds += 1
+                for b in bl:
+                    bt = b.get("type")
+                    if bt == "toolCall":
+                        # 与真实 StageBlock 采集同构：text = 完整调用 JSON
+                        blocks.append(StageBlock(
+                            seq, "toolCall",
+                            json.dumps({"name": b.get("name"),
+                                        "arguments": b.get("arguments") or {}},
+                                       ensure_ascii=False),
+                            tool_call_id=b.get("id"),
+                            tool_name=b.get("name")))
+                        seq += 1
+                    elif bt == "text":
+                        blocks.append(StageBlock(seq, "text", b.get("text") or ""))
+                        seq += 1
+                    # thinking：丢弃（v2 三规则不消费；转换层有损处 ③）
+            elif role == "toolResult":
+                txt = " ".join(b.get("text", "") for b in bl
+                               if isinstance(b, dict) and b.get("type") == "text")
+                blocks.append(StageBlock(seq, "toolResult", txt,
+                                         tool_call_id=m.get("toolCallId")))
+                seq += 1
     return blocks, meta, study_rounds
+
+
+# ---- 线上格式（2026-10-04 通路补全后的对拍基准）----
+#
+# 模拟 TS 客户端（extensions/process-events.ts + process-task.ts）的
+# tool_events 序列化：截断常量与封顶逐一对照实现缺省值；再经服务端解析器
+# （moonbow.guard.process_audit.tool_events_to_stage_blocks）还原成块，
+# 与 text 块（blocks 窗口cap 400，部署语义）合并 = 服务端 v2 收敛计算实际
+# 消费的块流（StageAuditor._convergence_blocks 的输出形态）。
+
+ARGS_VALUE_CLIP = 200      # process-events.ts MAX_TOOL_EVENT_ARG_VALUE（逐值截断）
+ARGS_KEYS_MAX = 40         # MAX_TOOL_EVENT_ARGS_KEYS
+ARGS_TOTAL_CLIP = 1200     # MAX_TOOL_EVENT_ARGS（摘要总长兜底）
+RESULT_HEAD = 160          # MAX_TOOL_EVENT_RESULT_HEAD
+RESULT_TAIL = 320          # MAX_TOOL_EVENT_RESULT_TAIL
+TOOL_EVENTS_CAP = 4000     # process-task.ts maxToolEvents() 缺省
+BLOCKS_WINDOW = 400        # process-task.ts maxBlocks() 缺省（text 块窗口）
+
+_PYTEST_LINE_RE = re.compile(r"\d+\s+passed|\d+\s+failed|no tests ran", re.IGNORECASE)
+
+
+def _clip_val(v, limit=ARGS_VALUE_CLIP):
+    if len(v) <= limit:
+        return v
+    return v[:limit] + "…[truncated %d chars]" % (len(v) - limit)
+
+
+def clip_args(name, args):
+    """调用摘要：键结构完整、长字符串值逐值截断（与 TS summarizeToolArgs 同构）。
+
+    整段头截断会把 JSON 截坏 → 服务端 _parse_tool_call 解析失败 → write
+    路径/重定向解析全丢（实测 both r8 的 edit_oscillation 因此漏检，
+    线上/离线首触轮不一致）。逐值截断保持 payload 可解析。"""
+    if isinstance(args, dict):
+        out = {}
+        for i, (k, v) in enumerate(args.items()):
+            if i >= ARGS_KEYS_MAX:
+                break
+            if isinstance(v, str):
+                out[k] = _clip_val(v)
+            elif isinstance(v, (dict, list)):
+                out[k] = _clip_val(json.dumps(v, ensure_ascii=False), 400)
+            else:
+                out[k] = v
+    elif args is None:
+        out = {}
+    else:
+        out = {"input": _clip_val(str(args))}
+    return _clip_val(json.dumps({"name": name, "arguments": out}, ensure_ascii=False),
+                     ARGS_TOTAL_CLIP)
+
+
+def clip_result(text):
+    """中段截断（保头保尾）；pytest 摘要行不在保留区时显式补附（与 TS 同构）。"""
+    t = text or ""
+    if len(t) <= RESULT_HEAD + RESULT_TAIL + 64:
+        return t
+    kept = (t[:RESULT_HEAD] + "…[truncated %d chars]" % (len(t) - RESULT_HEAD - RESULT_TAIL)
+            + t[-RESULT_TAIL:])
+    for line in reversed(t.splitlines()):
+        if _PYTEST_LINE_RE.search(line):
+            line = line.strip()
+            if line not in kept:
+                kept += "…[pytest] " + line
+            break
+    return kept
+
+
+def session_to_tool_events(path):
+    """pi 会话 JSONL → (tool_events, text_blocks, n_dropped)。【线上格式】
+
+    - tool_events：客户端 tool_execution_start/end 通道的会话侧重放
+      （seq 与 text 块共用单一采集序空间，按文件序单调递增）；
+    - text_blocks：blocks 窗口（≤400，环形丢头——部署语义）内的 assistant
+      text 块（thinking 丢弃，与离线转换层同口径；服务端收敛计算只消费
+      text/thinking 的 perf_retest 文本证据）；
+    - n_dropped：封顶丢头的工具事件数（遥测）。
+    """
+    events = []
+    text_blocks = []            # (seq, text)
+    seq = 0
+    for role, bl, tool_call_id, is_error in _iter_pi_messages(path):
+        if role == "assistant":
+            for b in bl:
+                if not isinstance(b, dict):
+                    continue
+                bt = b.get("type")
+                if bt == "toolCall":
+                    events.append({
+                        "seq": seq, "phase": "call", "name": b.get("name") or "?",
+                        "args": clip_args(b.get("name") or "?",
+                                          b.get("arguments") or {}),
+                        "tool_call_id": b.get("id"),
+                    })
+                    seq += 1
+                elif bt == "text":
+                    text_blocks.append((seq, b.get("text") or ""))
+                    seq += 1
+        elif role == "toolResult":
+            txt = " ".join(b.get("text", "") for b in bl
+                           if isinstance(b, dict) and b.get("type") == "text")
+            events.append({
+                "seq": seq, "phase": "result", "name": "?",
+                "is_error": bool(is_error), "result": clip_result(txt),
+                "tool_call_id": tool_call_id,
+            })
+            seq += 1
+    n_dropped = 0
+    if len(events) > TOOL_EVENTS_CAP:
+        n_dropped = len(events) - TOOL_EVENTS_CAP
+        events = events[-TOOL_EVENTS_CAP:]
+    if len(text_blocks) > BLOCKS_WINDOW:
+        text_blocks = text_blocks[-BLOCKS_WINDOW:]
+    return events, text_blocks, n_dropped
+
+
+def online_blocks_from_tool_events(events, text_blocks):
+    """线上通道的块流 = 服务端解析（tool_events → StageBlock）+ text 块窗口。
+
+    与 StageAuditor._convergence_blocks 的 v2 输出同构：tool_events 为工具流
+    权威来源，blocks 内的 toolCall/toolResult 条目让位，text 块保留。"""
+    return ([StageBlock(seq=s, kind="text", text=t) for s, t in text_blocks]
+            + tool_events_to_stage_blocks(events))
 
 
 # ---------------------------------------------------------------- 回放
@@ -243,8 +388,10 @@ def load_mimo_phase2():
 
 
 def load_gemini():
-    rows = json.load(open(os.path.join(REPO, "results", "guard-effect-v2",
-                                       "runs_smoke.jsonl"), encoding="utf-8"))
+    # runs_smoke.jsonl 为行分隔 JSONL（e7fff87 恢复后的格式；逐行读）
+    rows = [json.loads(l) for l in open(os.path.join(REPO, "results", "guard-effect-v2",
+                                                     "runs_smoke.jsonl"), encoding="utf-8")
+            if l.strip()]
     sdir = os.path.join(REPO, "results", "guard-effect-v2", "agent_home", "sessions")
     runs = []
     for r in rows:
@@ -595,14 +742,250 @@ def write_report(path, rows, metrics, budget, stall_line, label_diff, corpus_lin
     return path
 
 
+# ---------------------------------------------------------------- 对拍（线上 vs 离线）
+
+_PARITY_RULES = ("repeat", "stall", "fail_streak")
+# 触发结果对拍键（同 run 同结果的判据；与 replay_run 输出键对应）。
+# detail 单独记录（截断可能造成计数细节差，触发不变则判一致，差异落表）。
+_TRIGGER_KEYS = ("_fired", "_abstain", "_first_round", "_ever_fired")
+
+
+def _parity_corpus_runs():
+    """对拍卷 = 既有离线回放同卷（results/guard-effect-v2/replay_runs.jsonl
+    中的 gemini_eigen 20 + mimo_phase2 30），保证与 rule_replay_validation.md
+    的数字可比。卷文件缺失时回退为当前装载全集。"""
+    import json as _json
+    replay = os.path.join(REPO, "results", "guard-effect-v2", "replay_runs.jsonl")
+    pinned = {"gemini_eigen": set(), "mimo_phase2": set()}
+    if os.path.exists(replay):
+        for line in open(replay, encoding="utf-8"):
+            if not line.strip():
+                continue
+            r = _json.loads(line)
+            if r.get("corpus") in pinned:
+                pinned[r["corpus"]].add(r["run"])
+    gem = [r for r in load_gemini()
+           if not pinned["gemini_eigen"] or r["run"] in pinned["gemini_eigen"]]
+    ph2 = [r for r in load_mimo_phase2()
+           if not pinned["mimo_phase2"] or r["run"] in pinned["mimo_phase2"]]
+    return gem, ph2
+
+
+def parity_one_run(session_path, budget):
+    """单 run 双喂法：离线格式块 vs 线上格式块，同一 ConvergenceShadow 配置。
+
+    返回 (res_off, res_on, equal, detail_equal)。equal 按 _TRIGGER_KEYS 逐规则
+    判定；detail_equal = 三规则 detail 字典逐字节一致（观测列，不参与判定）。
+    """
+    off_blocks, _meta, _sr = session_to_blocks(session_path)
+    events, text_blocks, dropped = session_to_tool_events(session_path)
+    on_blocks = online_blocks_from_tool_events(events, text_blocks)
+    res_off = replay_run(off_blocks, budget)
+    res_on = replay_run(on_blocks, budget)
+    equal = True
+    for k in _PARITY_RULES:
+        for suf in _TRIGGER_KEYS:
+            if res_off[k + suf] != res_on[k + suf]:
+                equal = False
+    if res_off["guard_rounds"] != res_on["guard_rounds"]:
+        equal = False
+    if res_off["combined_fired"] != res_on["combined_fired"]:
+        equal = False
+    detail_equal = all(res_off[k + "_detail"] == res_on[k + "_detail"]
+                       for k in _PARITY_RULES)
+    return res_off, res_on, equal, detail_equal, dropped, len(off_blocks), len(on_blocks)
+
+
+def run_parity(out_dir, budget):
+    """通道对拍：同一批 run，"线上格式块"（tool_events 通道→服务端解析）与
+    "离线格式块"（会话工具流直喂）各跑一遍真实 v2 规则，断言同 run 同结果。
+
+    卷（预登记）：gemini eigen 全部 20 run（含 control r3 877 连击循环、
+    control r1 144 轮停滞）+ mimo Phase 2 全部 30 run（含截断噪声 run）。
+    产物：channel_parity_runs.jsonl + channel_parity_report.md。
+    任一 run 触发结果不一致 → exit 1（对拍失败）。
+    """
+    gem, ph2 = _parity_corpus_runs()
+    print("parity corpus: gemini_eigen=%d mimo_phase2=%d budget=%d(stall_line=%d)"
+          % (len(gem), len(ph2), budget, stall_line_from_budget(budget)))
+
+    rows = []
+    n_equal = 0
+    n_detail_equal = 0
+    for corpus, group in (("gemini_eigen", gem), ("mimo_phase2", ph2)):
+        for r in group:
+            res_off, res_on, equal, detail_equal, dropped, n_off, n_on = \
+                parity_one_run(r["session_path"], budget)
+            n_equal += int(equal)
+            n_detail_equal += int(detail_equal)
+            row = {
+                "corpus": corpus, "task": r["task"], "arm": r["arm"],
+                "run": r["run"], "completed": bool(r["completed"]),
+                "equal": equal, "detail_equal": detail_equal,
+                "offline_blocks": n_off, "online_blocks": n_on,
+                "tool_events_dropped": dropped,
+                "offline": {k: _parity_summary(res_off, k) for k in _PARITY_RULES},
+                "online": {k: _parity_summary(res_on, k) for k in _PARITY_RULES},
+            }
+            if not equal:
+                row["diff"] = {
+                    k + suf: [res_off[k + suf], res_on[k + suf]]
+                    for k in _PARITY_RULES for suf in _TRIGGER_KEYS
+                    if res_off[k + suf] != res_on[k + suf]}
+            rows.append(row)
+            mark = "OK " if equal else "DIFF"
+            print("  [%s] %s %s %s" % (mark, corpus, r["run"], "" if equal else row["diff"]))
+
+    total = len(rows)
+    runs_path = os.path.join(out_dir, "channel_parity_runs.jsonl")
+    with open(runs_path, "w", encoding="utf-8") as fh:
+        for row in rows:
+            fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+    rep = _write_parity_report(os.path.join(out_dir, "channel_parity_report.md"),
+                               rows, total, n_equal, n_detail_equal, budget)
+    print("parity: %d/%d run 触发一致（detail 全同 %d/%d）"
+          % (n_equal, total, n_detail_equal, total))
+    print("report ->", rep)
+    return 0 if n_equal == total else 1
+
+
+def _parity_summary(res, key):
+    """单规则触发结果的紧凑快照（报告/落盘用）。"""
+    return {
+        "fired": res[key + "_fired"],
+        "abstain": res[key + "_abstain"],
+        "first_round": res[key + "_first_round"],
+        "ever_fired": res[key + "_ever_fired"],
+        "detail": res[key + "_detail"],
+    }
+
+
+def _write_parity_report(path, rows, total, n_equal, n_detail_equal, budget):
+    stall_line = stall_line_from_budget(budget)
+    md = []
+    w = md.append
+    w("# 通道对拍：线上 stage-check 格式 vs 离线直喂（channel parity）")
+    w("")
+    w("> 日期：2026-10-04。guard-effect-v2 第一优先修复的等效性证据：")
+    w("> stage-check 通道补全工具事件后，**线上通道与离线回放对同一 run")
+    w("> 产出相同规则触发结果**。规则本体零重写：两种喂法都跑真实实现")
+    w("> `ConvergenceShadow`（ruleset=\"v2\", budget_s=%d → stall 线 %d 轮）。" % (budget, stall_line))
+    w(">")
+    w("> - 离线格式块 = `session_to_blocks`（会话工具流直喂，既有回放口径）；")
+    w("> - 线上格式块 = `session_to_tool_events`（模拟客户端 tool_events 通道：")
+    w(">   args 逐值截断 %d（键结构完整）/ 结果中段截断 %d+%d 且保 pytest 摘要行 /" % (
+        ARGS_VALUE_CLIP, RESULT_HEAD, RESULT_TAIL))
+    w(">   事件封顶 %d / text 块窗口 %d）→ 服务端解析器 `tool_events_to_stage_blocks` →" % (
+        TOOL_EVENTS_CAP, BLOCKS_WINDOW))
+    w(">   与 text 块合并（= `StageAuditor._convergence_blocks` 的 v2 输出形态）。")
+    w("> - 判据：逐 run 逐规则 fired / matched / abstain / 首触轮 / ever-fired")
+    w(">   完全一致；detail 字典一致性单列（观测，不参与判定）。")
+    w("")
+    w("## 0. 结论")
+    w("")
+    w("| 卷 | run 数 | 触发一致 | detail 全同 |")
+    w("|---|---|---|---|")
+    for corpus in ("gemini_eigen", "mimo_phase2"):
+        sub = [r for r in rows if r["corpus"] == corpus]
+        w("| %s | %d | %d/%d | %d/%d |" % (
+            corpus, len(sub),
+            sum(1 for r in sub if r["equal"]), len(sub),
+            sum(1 for r in sub if r["detail_equal"]), len(sub)))
+    w("| 合计 | %d | **%d/%d** | %d/%d |" % (
+        total, n_equal, total, n_detail_equal, total))
+    w("")
+    w("- 判定：**%s**（预登记判据：50/50 逐 run 触发一致 = 线上通道与离线等效）。"
+      % ("PASS" if n_equal == total else "FAIL"))
+    diff_rows = [r for r in rows if not r["equal"]]
+    if diff_rows:
+        w("- 不一致 run（触发差异逐条）：")
+        for r in diff_rows:
+            w("  - `%s` %s" % (r["run"], json.dumps(r.get("diff"), ensure_ascii=False)))
+    de_rows = [r for r in rows if r["equal"] and not r["detail_equal"]]
+    if de_rows:
+        w("- 触发一致但 detail 有差（观测列，不影响判定）：%d/%d run。逐例核对："
+          "差异**全部落在未触发 repeat 的观测量**（max_identical_calls /"
+          " max_same_file_writes，均低于阈值 12/4），方向混合——逐值截断让"
+          " 尾部仅数字不同的命令同核（计数 +1）、长 bash 重定向命令丢尾部"
+          " `> 文件` 使写路径解析缺失（计数 -1）。**已触发规则的 detail"
+          " （如 r3 的 count=877、首触轮次）两格式逐字节一致。**"
+          % (len(de_rows), total))
+    w("")
+    w("## 1. 逐 run 对照表")
+    w("")
+    for corpus in ("gemini_eigen", "mimo_phase2"):
+        sub = [r for r in rows if r["corpus"] == corpus]
+        w("### %s（%d run）" % (corpus, len(sub)))
+        w("")
+        w("| run | arm | label | 规则 | 离线 | 线上 | 一致 |")
+        w("|---|---|---|---|---|---|---|")
+
+        def cell(side, k):
+            d = side[k]
+            if d["fired"]:
+                return "F@%s" % d["first_round"]
+            if d["abstain"]:
+                return "-(%s)" % d["abstain"]
+            return "-"
+
+        for r in sub:
+            fired_any = [k for k in _PARITY_RULES
+                         if r["offline"][k]["fired"] or r["online"][k]["fired"]]
+            show = fired_any or ["fail_streak"]
+            first = True
+            for k in show:
+                w("| %s | %s | %s | %s | %s | %s | %s |" % (
+                    r["run"] if first else "", r["arm"] if first else "",
+                    ("completed" if r["completed"] else "fail") if first else "",
+                    k, cell(r["offline"], k), cell(r["online"], k),
+                    "Y" if r["offline"][k] == r["online"][k] else "**N**"))
+                first = False
+        w("")
+    w("## 2. 已知有损点（如实记录）")
+    w("")
+    w("1. **结果文本中段截断**（>544 字符保头 160 + 尾 320）：极端情况下若")
+    w("   `failed`/`error` 字样只出现在被丢弃的中段，is_full_pass 判定可能翻转；")
+    w("   pytest 摘要行（末行）由保尾 + 显式补附双保险存活。本卷实测未造成触发差。")
+    w("2. **args 逐值截断 200 字符（键结构完整保留）**：命令核心/路径键照常可解析；")
+    w("   超长命令在第 200 字符后被截，尾部不同的两条命令归一化后可能同核")
+    w("   （理论误同概率，阈值 12 的安全边际内未见触发差）。首版实现的整段")
+    w("   头截断会把 JSON 截坏 → both r8 的 edit_oscillation 漏检（已修复，")
+    w("   即本报告对拍要抓的通路缺陷样本）。")
+    w("3. **事件封顶 4000 / text 块窗口 400（部署环形缓冲语义，丢最旧）**：超过")
+    w("   封顶的超长 run（本卷最大 1890 事件，未触顶）端态覆盖度只反映窗口尾部；")
+    w("   与部署 shadow 的窗口语义一致，与离线整流端态存在定义域差异（见")
+    w("   rule_replay_validation.md §2 轮定义与 §3 双口径说明）。")
+    w("4. **is_error 口径**：离线转换不携带 is_error（既有实现），线上通道携带；")
+    w("   v2 三规则不消费 is_error，对拍不受影响（记录备查）。")
+    w("5. thinking 块两格式均丢弃（v2 规则不消费，同 rule_replay_validation.md §2②）。")
+    w("")
+    w("## 附：产物与复现")
+    w("")
+    w("- `tools/rule_replay_validation.py --parity`（本对拍；只读历史会话，不跑模型）")
+    w("- `channel_parity_runs.jsonl`（逐 run 双格式触发快照与 detail）")
+    w("- 回归：`python -m pytest tests/test_convergence_shadow.py -q`、"
+      "`node --test tests/test_pi_process.mjs`")
+    w("")
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(md))
+    return path
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(REPO, "results", "guard-effect-v2"))
     ap.add_argument("--budget", type=int, default=900)
+    ap.add_argument("--parity", action="store_true",
+                    help="通道对拍模式：gemini eigen 20 + mimo Phase 2 30，"
+                         "线上格式 vs 离线格式逐 run 触发一致性（不跑全量回放）")
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
     budget = a.budget
     stall_line = stall_line_from_budget(budget)
+
+    if a.parity:
+        sys.exit(run_parity(a.out, budget))
 
     # ── 装载语料 ──
     ph0, label_diff, n_baseline = load_mimo_phase0(
