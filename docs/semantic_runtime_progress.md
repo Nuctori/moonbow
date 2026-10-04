@@ -1476,3 +1476,105 @@ completion.asserted / task.object.alignment PASS，process.unresolved R=0.764
 - **eigen 封卷**：n=12/9/12，完成率 uplift 收敛向 null（58/56/67），
   任务族封存，后续样本转 ge5。
 - 服务已停（8901/18617），下窗口重启命令见 v14_baseline_set.md §4。
+
+## jev-template-v2 模板落地（2026-10-04，纯逻辑改造，未跑模型）
+
+- **落地方式**：Track 2 验证有效的 v2 模板由实验期进程内 monkeypatch 改为
+  `src/moonbow/semantic/backends/jev.py` 原生版本化常量。`_COMPLETION_ASSERTED_V2`
+  = completion.asserted 的 instructions/criteria.false/criteria.true 三段，
+  自 `experiments/jev-template-v2.json` 逐字移植（单测对照该 JSON 校验逐字
+  一致）；模板版本注册表 `_JEV_TEMPLATE_SETS`（v1 全集 / v2 仅覆写
+  completion.asserted，其余 3 模式与 state 拼装回退 v1 同卷对照）；
+  `_JEV_TEMPLATES` 保留为 v1 全集（tools/r4_jev_modality.py 等既有引用不受
+  影响）。
+- **版本选择机制**：`_template_version(pattern)` 按 `_JEV_PATTERN_VERSIONS`
+  解析（completion.asserted=jev-template-v2，其余=jev-template-v1）；回退
+  开关 env `JEV_TEMPLATE_PIN=v1` 强制全模式回 v1（未知值显式 ValueError，
+  不静默忽略；缺省不设=新版本）。provenance.calibration_id =
+  "template:<该模式版本>" 按请求模式回填；capabilities 新增
+  template_versions（逐模式）与 template_pin_env；diagnostics.template_version
+  随实际所用版本。
+- **测试**：tests/test_jev_backend.py 新增 6 例（completion=v2 / 其余=v1 的
+  provenance 与 diagnostics 回填、v2 措辞对实验 JSON 的逐字一致性、pin=v1
+  全模式回退、缺省=新版本、未知 pin 报错、capabilities 逐模式版本表）。
+  全绿：`python -m pytest tests/test_jev_backend.py -q` → **18 passed
+  （exit 0）**；`python -m pytest tests/test_convergence_shadow.py -q` →
+  **60 passed（exit 0）**，无意外。
+- **兼容性**：jev_template_v2_eval.py 重跑语义不变（其 monkeypatch 现为
+  no-op，原生路径产出与实验期同一模板/版本）；modality/alignment/process
+  模板零改动；实验产物与冻结数据未触碰。
+- **遗留**：①XPU 实测复跑（原生 v2 常量路径端到端验证）留待下窗口（本轮
+  按约束零模型零 XPU）；②completion 剩余 7 FN（"主体 done+质量缺口未验"
+  形态）未修，第三轮措辞消融未启动；③test split 仍未触碰（留最终验收）；
+  ④按派发约束未 git commit。
+
+## guard-effect-v2 投递链路补全：stage-check 通道携带工具事件 + 离线对拍（2026-10-04，纯逻辑改造，不跑模型不占 XPU）
+- 背景：threearm_report.md §7 根因确认——线上 5115 次 stage-check findings
+  全 0，v2 三规则（repeat/stall/fail_streak 全部依赖工具流）整场"饿着"：
+  部署运行时里依赖消息快照组装的块采集路径未把工具调用/结果送进观察流
+  （离线回放直接喂会话工具流则全部有效）。本节落地修复清单 §8.1/§8.2：
+  ①通道补全；②离线对拍（session 工具流 vs 线上通道，同 run 同结果）。
+- **客户端**（extensions/process-events.ts / process-task.ts /
+  process-audit.ts / progress-guard.ts）：
+  - 工具事件改走 pi 核心执行事件 `tool_execution_start/end`（与消息快照
+    组装无关、每次工具执行必发），经 `ToolEventCollector` 按 (phase,
+    toolCallId) 去重、与块共用同一 seq 发号器（全局时序可合并）；
+  - stage-check payload 新增 `tool_events` 数组（默认携带）。**携带纪律
+    论证**：客户端不知道服务端 ruleset，按端开关折叠会把 v2 装配判据漏到
+    客户端；体积可控（实测最大会话 1890 事件约 210KB 原文，截断后更小，
+    本机 HTTP）；off 模式根本不发 stage-check、v1 服务端忽略该键——两条
+    既有路径零行为变化；
+  - 判定载荷纪律（最小字段）：args 摘要**逐值截断**（单值 200 字符、键数
+    40、总长 1200 兜底）——键结构完整保留，服务端 `_parse_tool_call` 照常
+    解析 command/path（整段头截断会把 JSON 截坏，实测 both r8 的
+    edit_oscillation 因此漏检，对拍抓出后修复）；结果摘要中段截断
+    （头 160 + 尾 320）且 pytest 摘要行保尾 + 显式补附双保险；
+  - 封顶与游标：`tool_events` 环形缓冲 4000（env
+    `MOONBOW_GUARD_MAX_TOOL_EVENTS`，丢最旧）；**纯工具增量（无新
+    text/thinking 块）同样触发审计**——877 同命令循环形态中途无文本块，
+    缺此判据则退化循环中途工具流永不重发；游标按发送时刻版本快照推进
+    （飞行期间新增事件保持未审，尾随合并补审计）。
+- **服务端**（process_audit.py）：`tool_events_to_stage_blocks` 解析
+  payload 键（非法类型 ValueError → HTTP 400；非法条目逐条跳过）；
+  `StageAuditor._convergence_blocks`：**仅 ruleset=v2 且 tool_events 在场
+  时**，收敛计算改用 tool_events 为工具流权威来源（blocks 内工具条目让位
+  防双通道重复计数，text/thinking 保留供 perf_retest）；v1 / 未携带 →
+  原样（逐字节不变）。主审计 findings/reminder 路径完全不消费该键。
+- **离线对拍**（`tools/rule_replay_validation.py --parity`，同卷 =
+  既有 replay_runs.jsonl 的 gemini eigen 20（含 control r3 877 连击、
+  r1 144 轮停滞）+ mimo Phase 2 30（含截断噪声 run））：转换层同时产出
+  "离线格式块"（会话工具流直喂）与"线上格式块"（客户端 tool_events 序列化
+  模拟 → 服务端解析器 → 与 text 块窗口合并 = `_convergence_blocks` 的 v2
+  输出形态），同一 run 两种喂法跑真实 `ConvergenceShadow`（v2, budget=900）。
+- **对拍结果：50/50 逐 run 触发一致（一致率 1.0），exit 0**——逐规则
+  fired / abstain / 首触轮 / ever-fired 全同；已知样本全对齐（r3 repeat
+  count=877 首触第 80 守卫轮、r1 stall 首触第 60 轮两格式一致）。
+  detail 全同 34/50：其余 16 run 差异**全部落在未触发 repeat 的观测量**
+  （max_identical_calls / max_same_file_writes，低于阈值 12/4，方向混合：
+  逐值截断让尾部仅数字不同的命令同核 +1、长重定向命令丢尾部 `> 文件` 使
+  写路径解析缺失 -1）；已触发规则的 detail（如 count=877）逐字节一致。
+  逐 run 对照表：`results/guard-effect-v2/channel_parity_report.md` +
+  `channel_parity_runs.jsonl`。
+- 测试（全部 exit 0）：`python -m pytest tests/test_convergence_shadow.py
+  tests/test_process_audit.py tests/test_server_stage.py
+  tests/test_guard_semantic_provider.py -q` → **171 passed**（新增 8 例：
+  转换 schema、payload 校验、v2 线上 repeat 877 形态触发、v1 tool_events
+  逐字节不变、v2 权威流去重、v1/v2 消费对照、perf_retest 文本证据、HTTP
+  v1 忽略/v2 消费 + 400）；`node --test tests/test_pi_process.mjs
+  tests/test_pseudo_call_guard.mjs` → **42 pass / 0 fail**（新增 3 例：
+  payload 携带与去重、截断 + JSON 可解析 + pytest 行存活、封顶 + 纯工具
+  增量补审计）；`--parity` 对拍脚本全绿（50/50）。
+- v1 不变证明：①`test_v1_ignores_tool_events_byte_identical`——同一
+  payload 带/不带 tool_events 在 v1 shadow 与无 shadow（off 路径）下响应
+  逐字节一致（json.dumps sort_keys 相等）；②既有 163 例收敛/审计/HTTP 测试
+  不改一字全绿（其中含 v1 形状锁定例）；③对拍卷 50 run 的离线格式触发
+  结果与既有 rule_replay_validation.md 一致（同卷同规则）。
+- 顺带修复：`load_gemini` 读 runs_smoke.jsonl 改回逐行 JSONL（e7fff87 恢复
+  格式后 `json.load` 已失效）；`once()` 空 fresh 块列表时 cursor 推进的
+  潜在 TypeError（optional chaining）。
+- 遗留：①对拍等价于"线上通道喂法 = 离线整流喂法"在端态口径下的证明，
+  部署窗口语义（blocks 400 / events 4000 环形）对超长 run 的端态覆盖度
+  只反映窗口尾部（方向固定、与部署一致，见报告 §2.3）；②修通路后的
+  三臂复测（threearm §8.3）待下窗口，本节不改变 ge2_runner 与三臂数据口径；
+  ③tool_events 与 blocks 双通道并存的唯一性由"tool_events 权威、blocks
+  工具条目让位"保证，若未来客户端只发单通道需同步收敛。

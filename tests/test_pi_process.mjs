@@ -491,3 +491,93 @@ test('agent_end sends stream_ended=true audit', async (t) => {
   const withFlag = stage.filter((x) => x.body.stream_ended === true);
   assert.ok(withFlag.length >= 1, '终止审计必须携带 stream_ended=true');
 });
+
+// —— 21. v2 工具事件通道（2026-10-04，guard-effect-v2 通路补全）——
+// 根因：线上 5115 次 stage-check 全 findings=0，v2 规则整场无工具流输入。
+// 修复：tool_execution_start/end → 独立 tool_events 数组随 stage-check 携带。
+
+test('tool events ride the stage-check payload (call+result, deduped, shared seq space)', async (t) => {
+  process.env.MOONBOW_GUARD_PROCESS = 'shadow';
+  const h = harness();
+  t.mock.method(globalThis, 'fetch', async (_, options) => {
+    h.calls.push(JSON.parse(options.body));
+    return { ok: true, json: async () => ({ findings: [], reminder: null }) };
+  });
+  h.input();
+  h.handlers.tool_execution_start({ toolCallId: 't1', toolName: 'bash',
+    args: { command: 'python -m pytest tests/test_a.py -q' } }, h.ctx);
+  h.handlers.tool_execution_start({ toolCallId: 't1', toolName: 'bash',
+    args: { command: 'python -m pytest tests/test_a.py -q' } }, h.ctx);  // 重复 start 去重
+  h.handlers.tool_execution_end({ toolCallId: 't1', toolName: 'bash',
+    result: '3 passed in 0.12s', isError: false }, h.ctx);
+  h.handlers.tool_execution_end({ toolCallId: 't1', toolName: 'bash',
+    result: '3 passed in 0.12s', isError: false }, h.ctx);  // 重复 end 去重
+  await flush();
+  const withEvents = h.calls.filter((c) => (c.tool_events || []).length);
+  assert.ok(withEvents.length >= 1, 'stage-check payload 必须携带 tool_events');
+  const ev = withEvents.at(-1).tool_events;
+  assert.equal(ev.length, 2, 'call+result 各一条（start/end 重复事件去重）');
+  assert.deepEqual(ev.map((e) => e.phase), ['call', 'result']);
+  assert.equal(ev[0].name, 'bash');
+  assert.ok(ev[0].args.includes('pytest tests/test_a.py'), '调用摘要须含命令核心');
+  assert.equal(ev[1].is_error, false);
+  assert.ok(ev[1].result.includes('3 passed'), '结果摘要须含 pytest 摘要行');
+  assert.equal(ev[0].tool_call_id, 't1');
+  assert.ok(ev[1].seq > ev[0].seq, '工具事件与块共用单调采集序');
+});
+
+test('long tool output clipped but pytest summary line survives; args JSON stays parseable', async (t) => {
+  process.env.MOONBOW_GUARD_PROCESS = 'shadow';
+  const h = harness();
+  t.mock.method(globalThis, 'fetch', async (_, options) => {
+    h.calls.push(JSON.parse(options.body));
+    return { ok: true, json: async () => ({ findings: [], reminder: null }) };
+  });
+  h.input();
+  const longOutput = 'x'.repeat(5000) + '\n===============================\n'
+    + '2 failed, 27 passed in 1.23s\n';
+  h.handlers.tool_execution_end({ toolCallId: 't9', toolName: 'bash',
+    result: longOutput, isError: false }, h.ctx);
+  // 超长 content 的 write 调用：整段截断会截坏 JSON（服务端解析不到 path）
+  const bigContent = 'c'.repeat(3000);
+  h.handlers.tool_execution_start({ toolCallId: 't10', toolName: 'write',
+    args: { content: bigContent, path: 'src/mod.py' } }, h.ctx);
+  await flush();
+  const ev = h.calls.flatMap((c) => c.tool_events || []);
+  const res = ev.find((e) => e.tool_call_id === 't9');
+  assert.ok(res.result.length < 1000, `结果摘要应有界，实际 ${res.result.length}`);
+  assert.ok(res.result.includes('2 failed, 27 passed'), 'pytest 摘要行必须存活');
+  const call = ev.find((e) => e.tool_call_id === 't10');
+  const parsed = JSON.parse(call.args);          // 逐值截断后必须仍是合法 JSON
+  assert.equal(parsed.name, 'write');
+  assert.equal(parsed.arguments.path, 'src/mod.py', '路径键必须完整保留');
+  assert.ok(parsed.arguments.content.length < 300, '长字符串值应逐值截断');
+  assert.ok(call.args.length < 1500, '调用摘要应有界');
+});
+
+test('tool events capped (oldest dropped) and pure-tool increments re-audit', async (t) => {
+  process.env.MOONBOW_GUARD_PROCESS = 'shadow';
+  process.env.MOONBOW_GUARD_MAX_TOOL_EVENTS = '10';
+  const h = harness();
+  t.mock.method(globalThis, 'fetch', async (_, options) => {
+    h.calls.push(JSON.parse(options.body));
+    return { ok: true, json: async () => ({ findings: [], reminder: null }) };
+  });
+  h.input();
+  for (let i = 0; i < 12; i++) {
+    h.handlers.tool_execution_start({ toolCallId: `k${i}`, toolName: 'bash',
+      args: { command: `python -c "print(timeit.timeit(lambda: x, number=${10000 + i}))"` } }, h.ctx);
+    h.handlers.tool_execution_end({ toolCallId: `k${i}`, toolName: 'bash',
+      result: '0.12', isError: false }, h.ctx);
+  }
+  await flush();
+  process.env.MOONBOW_GUARD_MAX_TOOL_EVENTS = '';
+  // 封顶：最后一次审计载荷只保留最近 10 条（丢最旧）。24 事件
+  // （k0-call/result … k11-call/result）→ 保留 k7…k11 双相。
+  const last = h.calls.at(-1);
+  assert.equal(last.tool_events.length, 10, `封顶后应保留 10 条，实际 ${last.tool_events.length}`);
+  assert.equal(last.tool_events[0].tool_call_id, 'k7', '丢的是最旧（k0–k6 被丢弃）');
+  assert.equal(last.tool_events.at(-1).tool_call_id, 'k11');
+  // 纯工具增量（期间无新 text/thinking 块）也要触发审计——877 循环形态
+  assert.ok(h.calls.length >= 2, '纯工具事件增量必须触发后续审计');
+});

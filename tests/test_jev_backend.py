@@ -3,7 +3,9 @@
 
 覆盖：4 模式模板路由与概率语义、缺 context.task 弃权、ts.capture
 unsupported、概率非法按 invalid_output 拒绝（不编造分数）、出口必过
-validate_response、provenance（backend=jev / template 版本 / revision 回填）。
+validate_response、provenance（backend=jev / template 版本 / revision 回填）、
+模板版本按模式选择（completion=v2，其余=v1；JEV_TEMPLATE_PIN=v1 全模式
+回退）与 v2 措辞对 experiments/jev-template-v2.json 的逐字一致性。
 真实权重路径由 run_jev_eval.py 端到端覆盖（XPU 断言在脚本内）。
 """
 import os
@@ -16,7 +18,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(
 
 from moonbow.semantic.backends.base import BackendInvalidOutput
 from moonbow.semantic.backends.jev import (
-    DEFAULT_MODEL_ID, JEV_TEMPLATE_VERSION, JevBackend,
+    DEFAULT_MODEL_ID, JEV_TEMPLATE_PIN_ENV, JEV_TEMPLATE_VERSION, JevBackend,
 )
 from moonbow.semantic.schema import MatchRequest, validate_response
 
@@ -159,3 +161,84 @@ def test_all_ok_responses_pass_validate():
 
 def test_model_id_default():
     assert DEFAULT_MODEL_ID == "TokenRhythm/NeoHorse-Jev-4B"
+
+
+# --- 模板版本化（jev-template-v2 落地，2026-10-04）-------------------------
+
+_V1_PATTERNS = [("process.unresolved@1", {}),
+                ("modality.assertive@1", {}),
+                ("task.object.alignment@1", {"task": "tt"})]
+
+
+def test_completion_provenance_template_v2(monkeypatch):
+    """completion 模式缺省用 v2：provenance 与 diagnostics 均回填 v2。"""
+    monkeypatch.delenv(JEV_TEMPLATE_PIN_ENV, raising=False)
+    b = _backend()
+    r = b.match(MatchRequest(text="x", pattern="completion.asserted@1"))
+    assert r.provenance.calibration_id == "template:jev-template-v2"
+    assert b.diagnostics[-1]["template_version"] == "jev-template-v2"
+    # payload 用 v2 措辞（"wrap-up statement" v2 独有；v1 是 "fully complete"）
+    q = b.engine.calls[-1]["questions"]["q"]
+    assert "wrap-up statement" in q["instructions"]
+    assert "fully complete" not in q["instructions"]
+
+
+def test_other_patterns_provenance_template_v1():
+    """其余 3 模式维持各自身版本 v1（同卷对照措辞不动）。"""
+    b = _backend(noul_p=0.9)
+    for p, ctx in _V1_PATTERNS:
+        r = b.match(MatchRequest(text="x", pattern=p, context=ctx))
+        assert r.provenance.calibration_id == "template:jev-template-v1", p
+        assert b.diagnostics[-1]["template_version"] == \
+            "jev-template-v1", p
+
+
+def test_v2_completion_template_verbatim_from_experiment_json():
+    """落地的 v2 三段措辞与 experiments/jev-template-v2.json 逐字一致，
+    且 v2 集内其余模式仍为 v1 措辞（同卷对照）。"""
+    import json
+    from pathlib import Path
+    spec = json.loads((Path(__file__).resolve().parent.parent /
+                       "experiments" / "jev-template-v2.json")
+                      .read_text(encoding="utf-8"))
+    from moonbow.semantic.backends import jev as jev_mod
+    v2 = jev_mod._JEV_TEMPLATE_SETS["jev-template-v2"]
+    assert v2["completion.asserted"] == spec["templates"]["completion.asserted"]
+    for name in ("modality.assertive", "task.object.alignment",
+                 "process.unresolved"):
+        assert v2[name] == spec["templates"][name], name
+
+
+def test_pin_v1_rolls_back_all_patterns(monkeypatch):
+    """env JEV_TEMPLATE_PIN=v1：全模式（含 completion）回退 v1 措辞与版本。"""
+    monkeypatch.setenv(JEV_TEMPLATE_PIN_ENV, "v1")
+    b = _backend(noul_p=0.9)
+    r = b.match(MatchRequest(text="x", pattern="completion.asserted@1"))
+    assert r.provenance.calibration_id == "template:jev-template-v1"
+    q = b.engine.calls[-1]["questions"]["q"]
+    assert "fully complete" in q["instructions"]  # 回到 v1 字面问法
+    for p, ctx in _V1_PATTERNS:
+        r2 = b.match(MatchRequest(text="x", pattern=p, context=ctx))
+        assert r2.provenance.calibration_id == "template:jev-template-v1", p
+
+
+def test_pin_unset_defaults_to_new_version(monkeypatch):
+    """缺省（env 未设）= 新版本：completion=v2，其余模式=v1。"""
+    monkeypatch.delenv(JEV_TEMPLATE_PIN_ENV, raising=False)
+    caps = _backend().capabilities()
+    assert caps["template_version"] == JEV_TEMPLATE_VERSION == \
+        "jev-template-v2"
+    tv = caps["template_versions"]
+    assert tv["completion.asserted"] == "jev-template-v2"
+    assert all(v == "jev-template-v1" for k, v in tv.items()
+               if k != "completion.asserted")
+    assert set(tv) == {"completion.asserted", "process.unresolved",
+                       "modality.assertive", "task.object.alignment"}
+
+
+def test_pin_unknown_value_raises(monkeypatch):
+    """未知 pin 值显式报错，不静默忽略（配置错误必须可见）。"""
+    monkeypatch.setenv(JEV_TEMPLATE_PIN_ENV, "v9")
+    with pytest.raises(ValueError):
+        _backend().match(
+            MatchRequest(text="x", pattern="completion.asserted@1"))

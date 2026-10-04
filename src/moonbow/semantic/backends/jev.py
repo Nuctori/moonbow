@@ -20,8 +20,12 @@ revision 434cb21d3a994a953d3ae5788405fcb2c4970554）。
   特殊定界 token `<|name|>` 重写为 `<¦name¦>`（_vendor.model.user_tokens，
   option 边界不可伪造）。instructions/criteria 全部来自版本化模板常量，
   用户文本永不进入指令/候选槽位。
-- 模板版本化：JEV_TEMPLATE_VERSION = "jev-template-v1"，经
-  provenance.calibration_id = "template:jev-template-v1" 记录。
+- 模板版本化（按模式选择）：completion.asserted 用 jev-template-v2
+  （guard-effect-v2 Track 2 门禁双过线后于 2026-10-04 正式落地，依据
+  results/semantic-runtime/jev-template-v2/report.md），其余 3 模式措辞
+  未动、维持 jev-template-v1。版本经 provenance.calibration_id =
+  "template:<该模式版本>" 记录；env JEV_TEMPLATE_PIN=v1 可全模式回退
+  v1（回退开关，缺省不设=新版本）。
 - XPU 强制（用户硬约束）：真实权重只加载 torch.device("xpu")；
   `torch.xpu.is_available()` 为 False 时抛 BackendUnavailable 拒绝运行。
 - ts.capture 不支持：结构抽取是生成式任务，非该模型能力（prefill-only
@@ -32,6 +36,7 @@ revision 434cb21d3a994a953d3ae5788405fcb2c4970554）。
 """
 from __future__ import annotations
 
+import os
 import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -48,7 +53,18 @@ from moonbow.semantic.schema import (
 )
 
 BACKEND_NAME = "jev"
-JEV_TEMPLATE_VERSION = "jev-template-v1"
+# 缺省（当前）模板版本：completion.asserted 已升级 v2；版本按模式选择见
+# _JEV_PATTERN_VERSIONS / _template_version()。
+JEV_TEMPLATE_VERSION = "jev-template-v2"
+# v1 回退开关（用户硬开关，非默认路径）：JEV_TEMPLATE_PIN=v1 时全模式回退
+# v1 措辞；未设或其他合法值不生效。未知值显式报错，不静默忽略。
+JEV_TEMPLATE_PIN_ENV = "JEV_TEMPLATE_PIN"
+_JEV_PATTERN_VERSIONS: Dict[str, str] = {
+    "completion.asserted": "jev-template-v2",
+    "process.unresolved": "jev-template-v1",
+    "modality.assertive": "jev-template-v1",
+    "task.object.alignment": "jev-template-v1",
+}
 DEFAULT_MODEL_ID = "TokenRhythm/NeoHorse-Jev-4B"
 DEFAULT_MODEL_DIR = (
     "C:/Users/Nuctori/.cache/huggingface/hub/"
@@ -127,11 +143,73 @@ _JEV_TEMPLATES: Dict[str, Dict[str, Any]] = {
 
 _AVAILABLE_PATTERNS = tuple(sorted(_JEV_TEMPLATES))
 
+# ---------------------------------------------------------------------------
+# jev-template-v2（completion.asserted 专用，2026-10-03 Track 2 实验，
+# 2026-10-04 落地）：三段措辞自 experiments/jev-template-v2.json 逐字移植，
+# mode（noul）与候选结构不变。有效性证据：冻结 calib 150 条 completion
+# 最佳阈值 F1 0.489→0.8214（+33.25pts）、R 0.367→0.7667，双过预登记门禁
+# （results/semantic-runtime/jev-template-v2/report.md）。其余 3 模式与
+# state 拼装沿用 v1（同卷对照逐行一致）。
+# ---------------------------------------------------------------------------
 
-def _state_for(pattern: str, text: str, task: Optional[str]) -> str:
+_COMPLETION_ASSERTED_V2: Dict[str, Any] = {
+    "mode": "noul",
+    "instructions": (
+        "Has the author of the text asserted that the work at hand is "
+        "done, as a completion or wrap-up statement? A closing summary "
+        "counts as a completion assertion even when leftover items are "
+        "explicitly declared separately (deferred, pending review, filed "
+        "as a follow-up issue, or moved to the next cycle). Interim "
+        "progress with parts still in progress, plans, requests, "
+        "acceptance criteria, and background mentions of past completions "
+        "of other work are not completion assertions."),
+    "criteria": {
+        "false": (
+            "The text makes no completion or wrap-up assertion about the "
+            "work at hand: it is interim progress with parts still in "
+            "progress, a plan or request, an acceptance-criteria list, or "
+            "a background mention of past completions of other work."),
+        "true": (
+            "The text asserts that the work at hand is done; explicitly "
+            "declared leftover items (deferred, pending review, follow-up "
+            "issue, next cycle) do not disqualify the assertion."),
+    },
+}
+
+# 模板版本注册表：v2 仅覆写 completion.asserted，其余模式回退 v1 同卷对照
+# （措辞逐字一致）。_JEV_TEMPLATES 保持为 v1 全集（既有实验/工具脚本引用）。
+_JEV_TEMPLATE_SETS: Dict[str, Dict[str, Dict[str, Any]]] = {
+    "jev-template-v1": _JEV_TEMPLATES,
+    "jev-template-v2": {
+        **_JEV_TEMPLATES,
+        "completion.asserted": _COMPLETION_ASSERTED_V2,
+    },
+}
+
+
+def _template_version(pattern: str) -> str:
+    """按模式解析模板版本；env JEV_TEMPLATE_PIN=v1 强制全模式回 v1。
+
+    未知 pin 值显式报错（配置错误不静默吞掉）；缺省未设时按
+    _JEV_PATTERN_VERSIONS 取当前版本（completion=v2，其余=v1）。
+    """
+    pin = os.environ.get(JEV_TEMPLATE_PIN_ENV, "").strip().lower()
+    if pin == "v1":
+        return "jev-template-v1"
+    if pin not in ("", "v2", "latest"):
+        raise ValueError(
+            f"unsupported {JEV_TEMPLATE_PIN_ENV}={pin!r}; "
+            "only 'v1' (full rollback) or empty (default) allowed")
+    return _JEV_PATTERN_VERSIONS[pattern]
+
+
+def _state_for(pattern: str, text: str, task: Optional[str],
+               templates: Optional[Dict[str, Dict[str, Any]]] = None
+               ) -> str:
     """state 槽位拼装：普通模式 state=原文；alignment 用 task 拼装模板。"""
+    tpl_set = templates if templates is not None else _JEV_TEMPLATES
     if pattern == "task.object.alignment":
-        return _JEV_TEMPLATES[pattern]["state_template"].format(
+        return tpl_set[pattern]["state_template"].format(
             task=task, text=text)
     return text
 
@@ -227,6 +305,9 @@ class JevBackend(Backend):
             "model_revision": self._revision,
             "device": self.device,
             "template_version": JEV_TEMPLATE_VERSION,
+            "template_versions": {p: _template_version(p)
+                                  for p in _JEV_TEMPLATES},
+            "template_pin_env": JEV_TEMPLATE_PIN_ENV,
             "patterns": [
                 {"ref": f"{p}@1", "operation": "match",
                  "decision_type": t["mode"],
@@ -245,12 +326,14 @@ class JevBackend(Backend):
     # -- 响应组装 -------------------------------------------------------------
 
     def _provenance(self, pattern_ref: str) -> Provenance:
+        # 模板版本按请求模式回填（completion=v2，其余=v1；pin=v1 时全 v1）。
+        version = _template_version(pattern_ref.rpartition("@")[0])
         return Provenance(
             backend=BACKEND_NAME,
             model_revision=self._revision,
             pattern_version=pattern_ref,
             calibrated=False,
-            calibration_id=f"template:{JEV_TEMPLATE_VERSION}",
+            calibration_id=f"template:{version}",
         )
 
     def _finish(self, req: MatchRequest, resp: MatchResponse) -> MatchResponse:
@@ -278,9 +361,12 @@ class JevBackend(Backend):
 
     def _match_with_template(self, req: MatchRequest, name: str,
                              task: Optional[str]) -> MatchResponse:
-        tpl = _JEV_TEMPLATES[name]
+        # 模板按模式版本选择（completion=v2，其余=v1；pin=v1 全回退）。
+        version = _template_version(name)
+        templates = _JEV_TEMPLATE_SETS[version]
+        tpl = templates[name]
         text, clipped = _clip(req.text, _TEXT_WINDOW)
-        state = _state_for(name, text, task)
+        state = _state_for(name, text, task, templates)
         qkey = "q"
         question: Dict[str, Any] = {
             "type": tpl["mode"],
@@ -317,7 +403,7 @@ class JevBackend(Backend):
         self.diagnostics.append({
             "pattern": req.pattern, "kind": tpl["mode"],
             "score": score, "probabilities": probs,
-            "threshold": threshold, "template_version": JEV_TEMPLATE_VERSION,
+            "threshold": threshold, "template_version": version,
         })
         return self._finish(req, MatchResponse(
             status="ok", matched=bool(matched), score=score,
