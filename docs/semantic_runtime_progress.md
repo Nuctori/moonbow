@@ -1578,3 +1578,17 @@ completion.asserted / task.object.alignment PASS，process.unresolved R=0.764
   三臂复测（threearm §8.3）待下窗口，本节不改变 ge2_runner 与三臂数据口径；
   ③tool_events 与 blocks 双通道并存的唯一性由"tool_events 权威、blocks
   工具条目让位"保证，若未来客户端只发单通道需同步收敛。
+
+## 跨模型迁移负结果（2026-10-04 晨，loop_dataset v1）
+- 283 run 切成 2771 个逐轮 (前缀特征, 终局) 样本，numpy 逻辑回归跨模型考试：
+  朴素全特征迁移**强反转**（mimo→gemini AUC 0.283，反向预测）；
+  仅比率特征 0.516/0.620 接近随机；同模型内 0.691/0.738 中等真实。
+- 根因：**任务混杂**——mimo 语料=易陷阱任务，gemini 语料=硬优化任务，
+  同一行为特征（如验证次数多）在两语料中指向相反结局。
+- 启示：①行为形状特征的迁移必须在**同任务族内配对**进行（ge5 家族
+  正是为此设计）；②跨模型可归纳的只有"形状签名"（退化循环、读停滞
+  的规则级检测——回放已验证），连续特征的学习版迁移需要任务条件化；
+  ③这不影响 283 run 作为 Scene/Goal/Outcome 语料的后训练价值。
+- 产物：tools/loop_dataset.py（根仓与发布仓各一份）、
+  results/convergence-phase0/loop_dataset_summary.json（根仓，
+  含全部 AUC 与根因）
