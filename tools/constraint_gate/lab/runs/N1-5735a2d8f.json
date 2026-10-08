@@ -1,0 +1,121 @@
+{
+ "verdict": "FLAG",
+ "finding_count": 18,
+ "findings": [
+  {
+   "rule": "wordlist-identifier",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1032,
+   "span": "for (const [destination, aliases] of Object.entries(DESTINATION_ALIASES)) {"
+  },
+  {
+   "rule": "wordlist-identifier",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1034,
+   "span": "let bestAlias: string | null = null;"
+  },
+  {
+   "rule": "wordlist-identifier",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1037,
+   "span": "if (index === -1 || isBlockedDestinationAliasMatch(destination, alias, text, index)) continue;"
+  },
+  {
+   "rule": "wordlist-identifier",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1040,
+   "span": "bestAlias = alias;"
+  },
+  {
+   "rule": "wordlist-identifier",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1043,
+   "span": "if (bestAlias !== null) {"
+  },
+  {
+   "rule": "wordlist-identifier",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1044,
+   "span": "matched.push({ hint: bestAlias, index: bestIndex, canonical: destination });"
+  },
+  {
+   "rule": "wordlist-identifier",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1551,
+   "span": "if (!query.destinationHints.some((other) => other !== hint && (DESTINATION_ALIASES[other] ?? []).includes(hint))) {"
+  },
+  {
+   "rule": "wordlist-identifier",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1555,
+   "span": "return index !== -1 && !isBlockedDestinationAliasMatch(hint, hint, tourCorpus, index);"
+  },
+  {
+   "rule": "wordlist-identifier",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1711,
+   "span": "// 结构化复用 destinationHintsMatchCorpus，不新增词表；点名目的地的查询不走"
+  },
+  {
+   "rule": "cjk-regex",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1766,
+   "span": "if (/[天时][出发回]$|^当日|^次日/.test(`${city}出发`) || /往返$/.test(city)) return null;"
+  },
+  {
+   "rule": "cjk-regex",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 3259,
+   "span": "return /晚[间上]出发|晚[班点]|夜[班航发]|夕发|卧铺/.test(corpus);"
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1028,
+   "span": "3 行内 4 个中文字符串字面量（示例：// 平台定位是广州出发。标题声明了非广州的上车城市（\"天津出发到华东5市\"）说明）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1537,
+   "span": "3 行内 3 个中文字符串字面量（示例：// 平台定位是广州出发。标题声明了非广州的上车城市（\"天津出发到华东5市\"）说明）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1545,
+   "span": "3 行内 3 个中文字符串字面量（示例：// 平台定位是广州出发。标题声明了非广州的上车城市（\"天津出发到华东5市\"）说明）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1564,
+   "span": "3 行内 3 个中文字符串字面量（示例：// 平台定位是广州出发。标题声明了非广州的上车城市（\"天津出发到华东5市\"）说明）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1760,
+   "span": "3 行内 3 个中文字符串字面量（示例：// 平台定位是广州出发。标题声明了非广州的上车城市（\"天津出发到华东5市\"）说明）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1786,
+   "span": "3 行内 5 个中文字符串字面量（示例：// 平台定位是广州出发。标题声明了非广州的上车城市（\"天津出发到华东5市\"）说明）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 3237,
+   "span": "3 行内 5 个中文字符串字面量（示例：// 平台定位是广州出发。标题声明了非广州的上车城市（\"天津出发到华东5市\"）说明）",
+   "count": 5
+  }
+ ]
+}

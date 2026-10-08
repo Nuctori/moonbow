@@ -1,0 +1,31 @@
+{
+ "verdict": "FLAG",
+ "finding_count": 4,
+ "findings": [
+  {
+   "rule": "wordlist-identifier",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1036,
+   "span": "// 目的地提示的语料富集：别名表只覆盖部分省份（缺北京/华东/云南等），像"
+  },
+  {
+   "rule": "wordlist-identifier",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1038,
+   "span": "// 全部失效。候选语料自身的 destination 字段就是最全的目的地词表——数据驱动、"
+  },
+  {
+   "rule": "wordlist-identifier",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1065,
+   "span": "if (hints.some((hint) => (DESTINATION_ALIASES[hint] ?? []).includes(value))) continue;"
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 1037,
+   "span": "3 行内 3 个中文字符串字面量（示例：// 与\"需放宽条件\"标注同一套语义，装配序和标注不会打架。）",
+   "count": 3
+  }
+ ]
+}

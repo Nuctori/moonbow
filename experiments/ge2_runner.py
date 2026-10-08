@@ -49,6 +49,17 @@ import time
 import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def _safe_join(root, *parts):
+    """规范化拼接并校验结果不逃出 root（防路径穿越）。"""
+    p = os.path.realpath(os.path.join(root, *parts))
+    root_r = os.path.realpath(root)
+    if p != root_r and not p.startswith(root_r + os.sep):
+        raise ValueError(f"path escapes root: {p!r}")
+    return p
+
+
 REPO = os.path.abspath(os.path.join(HERE, ".."))
 PI_BIN = os.environ.get("PI_BIN", "pi.cmd" if os.name == "nt" else "pi")
 OUT_DIR = os.path.join(REPO, "results", "guard-effect-v2")
@@ -130,7 +141,7 @@ def preflight(need_guard: bool, need_conv: bool):
             sys.exit(f"[preflight] guard 服务 {GUARD_URL} 不可达: {e} —— 先启动:\n"
                      f"  MOONBOW_GUARD_CONVERGENCE=advisory PYTHONPATH=src "
                      f"python -m moonbow.guard.cli serve --port 18617 --lazy")
-    r = subprocess.run("python -m pytest --version", shell=True, capture_output=True,
+    r = subprocess.run(["python", "-m", "pytest", "--version"], shell=False, capture_output=True,
                        text=True, timeout=60)
     if r.returncode != 0:
         sys.exit("[preflight] python -m pytest 不可用")
@@ -144,12 +155,12 @@ def setup_agent_dir():
         p = os.path.join(src_home, fn)
         if os.path.exists(p):
             shutil.copy2(p, os.path.join(AGENT_DIR, fn))
-    mp = os.path.join(AGENT_DIR, "models.json")
+    mp = _safe_join(AGENT_DIR, "models.json")
     cfg = json.load(open(mp, encoding="utf-8"))
     cfg.setdefault("providers", {})["ge2"] = {
         "baseUrl": "http://127.0.0.1:8901/v1",
         "api": "openai-completions",
-        "apiKey": "sk-ge2-local-proxy",   # 代理注入真实 key，此处任意非空
+        "apiKey": os.environ.get("GE2_LOCAL_PROXY_KEY", "local-proxy-placeholder"),   # 代理注入真实 key，此处任意非空
         "models": [{
             "id": MODEL,
             "name": "gemini-3.5-flash-lite (ge2 gate 8901)",
@@ -176,12 +187,13 @@ def fresh_workspace(arm, run, task_key):
         shutil.rmtree(wd)
     os.makedirs(wd)
     for fn, content in task["files"].items():
-        # ge4：允许子目录路径（如 doc/x.txt），父目录自动创建
-        parent = os.path.dirname(os.path.join(wd, fn))
+        # ge4：允许子目录路径（如 doc/x.txt），父目录自动创建；路径不得逃出工作区
+        dst = _safe_join(wd, fn)
+        parent = os.path.dirname(dst)
         if parent:
             os.makedirs(parent, exist_ok=True)
         # 二进制写入：字节与任务常量一致，篡改检查不被 \r\n 污染
-        with open(os.path.join(wd, fn), "wb") as f:
+        with open(dst, "wb") as f:
             f.write(content.encode("utf-8"))
     return wd
 
@@ -416,13 +428,13 @@ def judge(workdir, task, run_info, ev, pi_info=None):
     tf = task["test_file"]
     m = {"completed": False, "passed": 0, "partial": 0.0,
          "test_file_modified": None, "per_test": {t: None for t in task["tests"]}}
-    test_p = os.path.join(workdir, tf)
+    test_p = _safe_join(workdir, tf)
     if os.path.exists(test_p):
-        h = hashlib.sha1(open(test_p, "rb").read().replace(b"\r\n", b"\n")).hexdigest()
+        h = hashlib.sha256(open(test_p, "rb").read().replace(b"\r\n", b"\n")).hexdigest()
         m["test_file_modified"] = (h != run_info["test_sha1"])
     try:
         # 注意：不能加 -q —— -q 会压制 -v，逐测试行变成点号摘要（实测踩坑）
-        r = subprocess.run(f"python -m pytest {tf} -v --no-header", shell=True,
+        r = subprocess.run(["python", "-m", "pytest", tf, "-v", "--no-header"], shell=False,
                            cwd=workdir, capture_output=True, text=True, timeout=120)
         out = (r.stdout or "") + (r.stderr or "")
         for t in task["tests"]:
@@ -528,8 +540,8 @@ def do_run(phase, task_key, arm, run, sleep_s):
     task = dict(TASKS[task_key])
     task["_key"] = task_key
     wd = fresh_workspace(arm, run, task_key)
-    test_p = os.path.join(wd, task["test_file"])
-    test_sha1 = hashlib.sha1(open(test_p, "rb").read().replace(b"\r\n", b"\n")).hexdigest()
+    test_p = _safe_join(wd, task["test_file"])
+    test_sha1 = hashlib.sha256(open(test_p, "rb").read().replace(b"\r\n", b"\n")).hexdigest()
     preflight(need_guard=(arm != "control"), need_conv=(arm in ("conv", "both")))
     if sleep_s:
         time.sleep(sleep_s)
