@@ -1,0 +1,1068 @@
+{
+ "verdict": "FLAG",
+ "finding_count": 152,
+ "findings": [
+  {
+   "rule": "wordlist-identifier",
+   "file": "docs/quality-gap-checklist.md",
+   "line": 3,
+   "span": "> 来源：2026-10-05 深夜质量循环批 A–J（tmp/subjective-quality-loop.md）。以下缺口均已在确定性层复现并立案，按红线（不扩词表修复召回）归类为「补数据」或「分类头/模型层」。每条附复现用例，可直接派工验收。"
+  },
+  {
+   "rule": "wordlist-identifier",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 5,
+   "span": "// 词项全部来自既有概念桥，零新增词表）+ getDemandSatisfiedCount 作为排序顶层键，"
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/queries-bank6.json",
+   "line": 4,
+   "span": "3 行内 3 个中文字符串字面量（示例：\"温泉\",）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/queries-bank6.json",
+   "line": 14,
+   "span": "3 行内 3 个中文字符串字面量（示例：\"温泉\",）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/queries-bank6.json",
+   "line": 31,
+   "span": "3 行内 3 个中文字符串字面量（示例：\"温泉\",）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/queries-bank6.json",
+   "line": 43,
+   "span": "3 行内 3 个中文字符串字面量（示例：\"温泉\",）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/queries-bank6.json",
+   "line": 56,
+   "span": "3 行内 3 个中文字符串字面量（示例：\"温泉\",）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/queries-bank6.json",
+   "line": 71,
+   "span": "3 行内 3 个中文字符串字面量（示例：\"温泉\",）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/queries-bank6.json",
+   "line": 84,
+   "span": "3 行内 3 个中文字符串字面量（示例：\"温泉\",）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/queries-bank6.json",
+   "line": 100,
+   "span": "3 行内 3 个中文字符串字面量（示例：\"温泉\",）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/queries-bank6.json",
+   "line": 109,
+   "span": "3 行内 3 个中文字符串字面量（示例：\"温泉\",）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_demand_classifier.mjs",
+   "line": 28,
+   "span": "3 行内 4 个中文字符串字面量（示例：avoid: ['户外徒步', ' invented '],）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_demand_classifier.mjs",
+   "line": 33,
+   "span": "3 行内 3 个中文字符串字面量（示例：avoid: ['户外徒步', ' invented '],）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_demand_classifier.mjs",
+   "line": 37,
+   "span": "3 行内 3 个中文字符串字面量（示例：avoid: ['户外徒步', ' invented '],）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_demand_classifier.mjs",
+   "line": 43,
+   "span": "3 行内 3 个中文字符串字面量（示例：avoid: ['户外徒步', ' invented '],）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_demand_classifier.mjs",
+   "line": 48,
+   "span": "3 行内 5 个中文字符串字面量（示例：avoid: ['户外徒步', ' invented '],）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_demand_classifier.mjs",
+   "line": 58,
+   "span": "3 行内 3 个中文字符串字面量（示例：avoid: ['户外徒步', ' invented '],）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_demand_classifier.mjs",
+   "line": 70,
+   "span": "3 行内 4 个中文字符串字面量（示例：avoid: ['户外徒步', ' invented '],）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_demand_classifier.mjs",
+   "line": 81,
+   "span": "3 行内 3 个中文字符串字面量（示例：avoid: ['户外徒步', ' invented '],）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_demand_classifier.mjs",
+   "line": 90,
+   "span": "3 行内 3 个中文字符串字面量（示例：avoid: ['户外徒步', ' invented '],）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_search_separation.mjs",
+   "line": 26,
+   "span": "3 行内 3 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(primitive, ['温泉泡汤']) > 0,）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_search_separation.mjs",
+   "line": 43,
+   "span": "3 行内 5 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(primitive, ['温泉泡汤']) > 0,）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_search_separation.mjs",
+   "line": 50,
+   "span": "3 行内 3 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(primitive, ['温泉泡汤']) > 0,）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_search_separation.mjs",
+   "line": 63,
+   "span": "3 行内 3 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(primitive, ['温泉泡汤']) > 0,）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_search_separation.mjs",
+   "line": 68,
+   "span": "3 行内 4 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(primitive, ['温泉泡汤']) > 0,）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_search_separation.mjs",
+   "line": 73,
+   "span": "3 行内 4 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(primitive, ['温泉泡汤']) > 0,）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_search_separation.mjs",
+   "line": 79,
+   "span": "3 行内 4 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(primitive, ['温泉泡汤']) > 0,）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_search_separation.mjs",
+   "line": 85,
+   "span": "3 行内 4 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(primitive, ['温泉泡汤']) > 0,）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_search_separation.mjs",
+   "line": 92,
+   "span": "3 行内 3 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(primitive, ['温泉泡汤']) > 0,）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_search_separation.mjs",
+   "line": 97,
+   "span": "3 行内 5 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(primitive, ['温泉泡汤']) > 0,）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_search_separation.mjs",
+   "line": 105,
+   "span": "3 行内 3 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(primitive, ['温泉泡汤']) > 0,）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_search_separation.mjs",
+   "line": 116,
+   "span": "3 行内 4 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(primitive, ['温泉泡汤']) > 0,）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r1_water.mjs",
+   "line": 3,
+   "span": "3 行内 4 个中文字符串字面量（示例：// （汤泉+玩水两栖产品属贴合）。字面漂流 = 标题/线路语料含\"漂流\"。）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r1_water.mjs",
+   "line": 38,
+   "span": "3 行内 5 个中文字符串字面量（示例：// （汤泉+玩水两栖产品属贴合）。字面漂流 = 标题/线路语料含\"漂流\"。）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r1_water.mjs",
+   "line": 47,
+   "span": "3 行内 3 个中文字符串字面量（示例：// （汤泉+玩水两栖产品属贴合）。字面漂流 = 标题/线路语料含\"漂流\"。）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r1_water.mjs",
+   "line": 55,
+   "span": "3 行内 4 个中文字符串字面量（示例：// （汤泉+玩水两栖产品属贴合）。字面漂流 = 标题/线路语料含\"漂流\"。）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r1_water.mjs",
+   "line": 67,
+   "span": "3 行内 3 个中文字符串字面量（示例：// （汤泉+玩水两栖产品属贴合）。字面漂流 = 标题/线路语料含\"漂流\"。）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r1_water.mjs",
+   "line": 73,
+   "span": "3 行内 3 个中文字符串字面量（示例：// （汤泉+玩水两栖产品属贴合）。字面漂流 = 标题/线路语料含\"漂流\"。）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r1_water.mjs",
+   "line": 79,
+   "span": "3 行内 3 个中文字符串字面量（示例：// （汤泉+玩水两栖产品属贴合）。字面漂流 = 标题/线路语料含\"漂流\"。）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r1_water.mjs",
+   "line": 86,
+   "span": "3 行内 3 个中文字符串字面量（示例：// （汤泉+玩水两栖产品属贴合）。字面漂流 = 标题/线路语料含\"漂流\"。）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r1_water.mjs",
+   "line": 91,
+   "span": "3 行内 5 个中文字符串字面量（示例：// （汤泉+玩水两栖产品属贴合）。字面漂流 = 标题/线路语料含\"漂流\"。）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r1_water.mjs",
+   "line": 96,
+   "span": "3 行内 3 个中文字符串字面量（示例：// （汤泉+玩水两栖产品属贴合）。字面漂流 = 标题/线路语料含\"漂流\"。）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r1_water.mjs",
+   "line": 105,
+   "span": "3 行内 4 个中文字符串字面量（示例：// （汤泉+玩水两栖产品属贴合）。字面漂流 = 标题/线路语料含\"漂流\"。）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r1_water.mjs",
+   "line": 109,
+   "span": "3 行内 3 个中文字符串字面量（示例：// （汤泉+玩水两栖产品属贴合）。字面漂流 = 标题/线路语料含\"漂流\"。）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 34,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 62,
+   "span": "3 行内 6 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 6
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 69,
+   "span": "3 行内 5 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 76,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 83,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 89,
+   "span": "3 行内 6 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 6
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 97,
+   "span": "3 行内 4 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 104,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 110,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 115,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 125,
+   "span": "3 行内 4 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 129,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 139,
+   "span": "3 行内 6 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 6
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 146,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 152,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 161,
+   "span": "3 行内 4 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 168,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 172,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r2_destination.mjs",
+   "line": 176,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(primitive, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 3,
+   "span": "3 行内 5 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 10,
+   "span": "3 行内 5 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 37,
+   "span": "3 行内 3 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 72,
+   "span": "3 行内 4 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 86,
+   "span": "3 行内 5 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 95,
+   "span": "3 行内 3 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 99,
+   "span": "3 行内 5 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 105,
+   "span": "3 行内 3 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 113,
+   "span": "3 行内 7 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 7
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 120,
+   "span": "3 行内 5 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 131,
+   "span": "3 行内 6 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 6
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 137,
+   "span": "3 行内 7 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 7
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 143,
+   "span": "3 行内 5 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 151,
+   "span": "3 行内 5 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 158,
+   "span": "3 行内 4 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 166,
+   "span": "3 行内 4 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 174,
+   "span": "3 行内 4 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 184,
+   "span": "3 行内 4 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 194,
+   "span": "3 行内 3 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 202,
+   "span": "3 行内 4 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r4_memory.mjs",
+   "line": 206,
+   "span": "3 行内 4 个中文字符串字面量（示例：//  2. 记忆注入不污染：原话\"预算压到600\" + 记忆片段\"海边沙滩 从化温泉 亲子 避开爬山\"）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 1,
+   "span": "3 行内 3 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 44,
+   "span": "3 行内 3 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 57,
+   "span": "3 行内 4 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 81,
+   "span": "3 行内 4 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 91,
+   "span": "3 行内 4 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 98,
+   "span": "3 行内 4 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 110,
+   "span": "3 行内 3 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 119,
+   "span": "3 行内 6 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 6
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 128,
+   "span": "3 行内 3 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 136,
+   "span": "3 行内 4 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 141,
+   "span": "3 行内 8 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 8
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 147,
+   "span": "3 行内 3 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 153,
+   "span": "3 行内 5 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 169,
+   "span": "3 行内 6 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 6
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 175,
+   "span": "3 行内 3 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 189,
+   "span": "3 行内 3 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 196,
+   "span": "3 行内 5 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 211,
+   "span": "3 行内 6 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 6
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 223,
+   "span": "3 行内 5 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r5_redteam.mjs",
+   "line": 231,
+   "span": "3 行内 3 个中文字符串字面量（示例：spring: hooks.getPrimitiveCoverageScore(p, ['温泉泡汤']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r7_focus.mjs",
+   "line": 28,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r7_focus.mjs",
+   "line": 62,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r7_focus.mjs",
+   "line": 65,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r7_focus.mjs",
+   "line": 76,
+   "span": "3 行内 6 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 6
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r7_focus.mjs",
+   "line": 92,
+   "span": "3 行内 5 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r7_focus.mjs",
+   "line": 99,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r7_focus.mjs",
+   "line": 119,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r7_focus.mjs",
+   "line": 122,
+   "span": "3 行内 5 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r7_focus.mjs",
+   "line": 140,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r7_focus.mjs",
+   "line": 149,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r7_focus.mjs",
+   "line": 157,
+   "span": "3 行内 5 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r7_focus.mjs",
+   "line": 166,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 4,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 68,
+   "span": "3 行内 5 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 76,
+   "span": "3 行内 4 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 80,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 90,
+   "span": "3 行内 5 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 98,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 111,
+   "span": "3 行内 4 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 115,
+   "span": "3 行内 5 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 121,
+   "span": "3 行内 4 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 125,
+   "span": "3 行内 5 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 133,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 136,
+   "span": "3 行内 7 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 7
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 154,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 165,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 168,
+   "span": "3 行内 5 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 176,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 186,
+   "span": "3 行内 6 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 6
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 192,
+   "span": "3 行内 3 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 203,
+   "span": "3 行内 5 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 207,
+   "span": "3 行内 4 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r8_redteam2.mjs",
+   "line": 216,
+   "span": "3 行内 4 个中文字符串字面量（示例：beach: hooks.getPrimitiveCoverageScore(p, ['海边沙滩']),）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 3,
+   "span": "3 行内 4 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 39,
+   "span": "3 行内 4 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 42,
+   "span": "3 行内 3 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 46,
+   "span": "3 行内 3 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 49,
+   "span": "3 行内 4 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 53,
+   "span": "3 行内 8 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 8
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 56,
+   "span": "3 行内 3 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 61,
+   "span": "3 行内 3 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 66,
+   "span": "3 行内 3 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 74,
+   "span": "3 行内 3 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 78,
+   "span": "3 行内 3 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 86,
+   "span": "3 行内 4 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 4
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 90,
+   "span": "3 行内 5 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 100,
+   "span": "3 行内 3 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/test_separation_r9_demand.mjs",
+   "line": 106,
+   "span": "3 行内 3 个中文字符串字面量（示例：check('单主题：便宜的沙滩旅游 → 1 个 AND 需求',）",
+   "count": 3
+  }
+ ]
+}

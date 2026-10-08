@@ -1,0 +1,65 @@
+{
+ "verdict": "FLAG",
+ "finding_count": 9,
+ "findings": [
+  {
+   "rule": "legacy-symbol",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 4189,
+   "span": "function buildTripLengthNarration(primitive: RecommendationPrimitive, profile?: RecommendationCopyProfile, variant = 0) {",
+   "symbol": "buildTripLengthNarration"
+  },
+  {
+   "rule": "template-rotation",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 4192,
+   "span": "const pick = (options: string[]) => options[variant % options.length];"
+  },
+  {
+   "rule": "template-phrase",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 4197,
+   "span": "`${dayText}能把节奏收得比较紧凑，周末出发也不容易太折腾`,"
+  },
+  {
+   "rule": "legacy-symbol",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 4227,
+   "span": "const tripLengthLead = buildTripLengthNarration(primitive, profile, variant);",
+   "symbol": "buildTripLengthNarration"
+  },
+  {
+   "rule": "legacy-symbol",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 4229,
+   "span": "// baseReason（buildPrimitiveConcreteReason）的 tail 里已经拼过一次天气提醒，",
+   "symbol": "buildPrimitiveConcreteReason"
+  },
+  {
+   "rule": "template-phrase",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 4230,
+   "span": "// 这里再拼会出现同句重复（\"……留意降雨。出发前再留意一下……留意降雨\"）。"
+  },
+  {
+   "rule": "template-phrase",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 4234,
+   "span": "? `出发前再留意一下${weatherNudge.replace(/^出发前看一下/, '').replace(/^建议留意/, '').replace(/^高温天/, '高温天').replace(/^山水户外/, '山水户外')}` : '',"
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 4197,
+   "span": "3 行内 3 个中文字符串字面量（示例：`${dayText}短平快，主打一个省心出行`,）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 4207,
+   "span": "3 行内 3 个中文字符串字面量（示例：`${dayText}短平快，主打一个省心出行`,）",
+   "count": 3
+  }
+ ]
+}

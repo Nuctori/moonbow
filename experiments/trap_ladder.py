@@ -120,8 +120,8 @@ def run_pi(workdir, prompt, model, thinking, timeout=240):
 
 
 def pytest_passes(workdir):
-    r = subprocess.run('python -m pytest test_app.py -q --no-header',
-                       shell=True, cwd=workdir, capture_output=True,
+    r = subprocess.run(["python", "-m", "pytest", "test_app.py", "-q", "--no-header"],
+                       shell=False, cwd=workdir, capture_output=True,
                        text=True, timeout=60)
     out = (r.stdout or "") + (r.stderr or "")
     return "passed" in out and "failed" not in out and "error" not in out.lower()

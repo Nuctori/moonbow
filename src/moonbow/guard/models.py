@@ -53,7 +53,7 @@ class ModelRegistry:
         slot_enc = AutoModel.from_pretrained(slot_path).to(device).eval()
         self.slot_model = SlotModel(slot_enc).to(device).eval()
         heads_path = os.path.join(slot_path, "heads.pt")
-        heads = torch.load(heads_path, map_location=device)
+        heads = torch.load(heads_path, map_location=device, weights_only=True)
         self.slot_model.mod_head.load_state_dict(heads["mod_head"])
         self.slot_model.eval()
 
@@ -62,7 +62,7 @@ class ModelRegistry:
         self.tok_cap = AutoTokenizer.from_pretrained(cap_path)
         self.enc_cap = AutoModel.from_pretrained(cap_path).to(device).eval()
         self.head_cap = nn.Linear(self.enc_cap.config.hidden_size, 2).to(device)
-        self.head_cap.load_state_dict(torch.load(os.path.join(cap_path, "head.pt"), map_location=device))
+        self.head_cap.load_state_dict(torch.load(os.path.join(cap_path, "head.pt"), map_location=device, weights_only=True))
         self.head_cap.eval()
 
     def _discover_models_dir(self) -> str:

@@ -1,0 +1,19 @@
+{
+ "verdict": "FLAG",
+ "finding_count": 2,
+ "findings": [
+  {
+   "rule": "wordlist-identifier",
+   "file": "scripts/audit_ai_recommendation.ts",
+   "line": 882,
+   "span": "assert.equal(beachHotSpringAliasLocal[0].reason, undefined,"
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/audit_ai_recommendation.ts",
+   "line": 1124,
+   "span": "3 行内 6 个中文字符串字面量（示例：for (const item of localRecommendations(localOnlyTours, '周末温泉短线')) {）",
+   "count": 6
+  }
+ ]
+}

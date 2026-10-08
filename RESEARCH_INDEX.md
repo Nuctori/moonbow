@@ -101,6 +101,18 @@
     任务太易或太难时 uplift 恒为 0。这解释了 SWE-bench 上"零效益"观测的归因。
   * 复现入口：[`experiments/README.md`](experiments/README.md)。
 
+### 新增工具：约束守卫 constraint_gate（提醒制，2026-10-08）
+* **定位**：用户决策 = 目标 + 约束；守卫在两个检查点做语义判定——①任务结束判定目标闭合，
+  ②每个新增决策判定是否违反约束。**全程提醒不阻断**（判定器有误判率，裁决权在用户），
+  与 MOONBOW_GUARD_PROCESS 的 advisory 档同哲学。
+* **证据来源**：真实会话审计（[`docs/session_violation_audit.md`](docs/session_violation_audit.md)，
+  4 次禁令 11 个违规决策全链路取证）→ 机制设计（[`docs/constraint_gate_design.md`](docs/constraint_gate_design.md)）
+  → 首次实验（[`tools/constraint_gate/lab/lab_report.md`](tools/constraint_gate/lab/lab_report.md)）。
+* **首验结果**：tracker 机械层召回 5/5、精度 5/8（召回层定位实证）；T3 语义裁决落地 4/4 全对
+  （含"数据驱动换皮词表"的 P8 识别）；D3 假宣称对账 78 条证据判 CONFLICT；
+  SLM 0.8B 零样本不可用（6/10 不可解析+2 误报）→ 后端须标注流微调。
+* **入口**：[`tools/constraint_gate/README.md`](tools/constraint_gate/README.md)。
+
 ---
 
 ## 三、 关键学术结论与设计原则备忘
