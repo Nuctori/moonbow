@@ -1,0 +1,69 @@
+# 约束卡（constraints registry）
+# 依据 SESSION_VIOLATION_AUDIT.md 登记的 4 条真实禁令。
+# 命名空间按项目 scope；boundary = 用户已拍板的边界条款；legacy = 存量豁免清单（P2 防刷屏）。
+
+meta:
+  version: 1
+  source_audit: ../../docs/session_violation_audit.md
+  policy: remind-only   # 用户定稿：全程提醒，不阻断（SLM 有误判率）
+
+constraints:
+  - id: C1-no-keyword-table
+    scope: D:/react/app
+    declared_at: 2026-10-02T04:05
+    verbatim: 禁止"用关键词表"解决问题，核心的优化ai的能力
+    essence: 目的地识别、需求/意图分类、覆盖判定等语义匹配不得以词表/关键词表为核心机制；
+      必须走模型路径（prompt + 结构化输出 / 分类头）。
+    boundary: 机械词表/正则可用于候选"召回"（generation 候选集），一切"裁决"（排序定胜负、
+      判定满足与否、决定可见性）必须语义。依据：用户 2026-09-14 拍板（spark-4b FNEG 派发令）。
+    examples_positive:
+      - "af4728e69 / 5b0604b5c（B1/B6）：分类头输出槽位语义与目的地归一——模型知识替代词表扩充"
+      - "e1e23955：用 harness 自带结构信号替代 is_real_delegation 正则"
+    examples_negative:
+      - "5735a2d8f：出发指示词证据分级（词表裁决出发方式）"
+      - "f34028611：运行时从语料构建目的地词表做文本匹配（换皮词表，P8）"
+      - "9c603be19：回避族基础别名展开 + 出发地变体词形"
+
+  - id: C2-no-copy-templates
+    scope: D:/react/app
+    declared_at: 2026-10-02T23:27
+    verbatim: 你别限制话术模板！禁止啊！！！！仓库记忆不是写了吗，充分发挥AI的主观能动性！
+    essence: 用户可见文案（推荐理由/summary/导语/尾缀）一律模型原文；模型不可用时退回纯事实，
+      宁缺毋假。禁止模板句式、句式轮换、封闭意图 profile。
+    boundary: 审计依赖的状态行/透明度提示（如"AI 已完成推荐"+模型名）不算话术模板。
+    examples_positive:
+      - "26efda5fa：整族清除 ~700 行话术机器；测试改为断言'模型原文直通、不可用即丢弃、模板句绝不出现'"
+    examples_negative:
+      - "5c42dbedd：buildTripLengthNarration variant % options.length 三措辞轮换"
+      - "a0f08fbcc：畸形理由回退模板 + 注释'不要改成返回空串'（P5 防回改）"
+    legacy_inventory:   # 26efda5fa 已清算；登记为已关闭，检测器命中不再告警
+      - {site: src/lib/ai-recommendation.ts, symbol: buildPrimitiveConcreteReason, status: closed-by-26efda5fa}
+      - {site: src/lib/ai-recommendation.ts, symbol: buildCopyIntentProfile, status: closed-by-26efda5fa}
+      - {site: src/lib/ai-recommendation.ts, symbol: buildTripLengthNarration, status: closed-by-26efda5fa}
+
+  - id: C3-no-wordlist-at-all
+    scope: D:/react/app
+    declared_at: 2026-10-05T02:21
+    verbatim: 给个优雅的，完全不写词表的，正确的方案，解决根本问题
+    essence: C1 的强化版：新方案整体不得以词表为构件（含"数据驱动/运行时构建"的词表，P8）。
+    boundary: 同 C1。
+    examples_negative:
+      - "9c603be19 自称'零新增词表'但含别名展开与变体词形"
+
+  - id: C4-no-test-template-pinning
+    scope: D:/react/app
+    declared_at: 2026-10-08T02:06
+    verbatim: 测试不应该做任何约束模板，让AI充分发挥。
+    essence: 测试断言不得钉死具体话术/句式；只断言政策（模型原文直通、不可用即丢弃、模板句绝不出现）。
+    boundary: 对纯结构化事实字段（数值、枚举）的断言不受限。
+    examples_negative:
+      - "10-08 排查发现 audit 中 12 处钉死固定话术的断言（26efda5fa 已重写）"
+
+  - id: C5-no-regex-adjudication   # spark-4b 铁律（既有，跨会话维护于 describe_not_enforce_spec.md）
+    scope: M:/AI/spark-4b
+    declared_at: 2026-09-07
+    verbatim: 禁止正则是底层原理，你用了正则就没有通用性
+    essence: 正则/模式匹配不得做语义裁决（分类、判定、归因）；描述层只描述不裁决；追踪器零 LLM。
+    boundary: 召回/候选生成/机械事实抽取（引 span）允许正则与词表。
+    examples_negative:
+      - "research_v128_metric_sensitivity.py is_real_delegation()：前缀+长度+问号模式匹配做委托判定（09-15 被对抗审计抓出）"

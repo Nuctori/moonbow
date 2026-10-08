@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# 安全整改批次：convergence_retry.py（2026-10-09）：subprocess 列表参数、
+# torch 权重安全加载、路径 _safe_join 边界校验、sha1→sha256。
 """experiments/convergence_retry.py — 收敛进度追踪 Phase 2：advisory 收敛提示 uplift 实验。
 
 问题：用收敛触发规则（converge.stall / converge.fail_streak，Phase 0/0.5 离线回放
@@ -52,6 +54,17 @@ import time
 import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def _safe_join(root, *parts):
+    """规范化拼接并校验结果不逃出 root（防路径穿越）。"""
+    p = os.path.realpath(os.path.join(root, *parts))
+    root_r = os.path.realpath(root)
+    if p != root_r and not p.startswith(root_r + os.sep):
+        raise ValueError(f"path escapes root: {p!r}")
+    return p
+
+
 REPO = os.path.abspath(os.path.join(HERE, ".."))
 PI_BIN = os.environ.get("PI_BIN", "pi.cmd" if os.name == "nt" else "pi")
 OUT_DIR = os.path.join(REPO, "results", "convergence-phase2")
@@ -109,7 +122,7 @@ def preflight(need_guard: bool):
                      f"  MOONBOW_GUARD_CONVERGENCE=advisory PYTHONPATH=src "
                      f"python -m moonbow.guard.cli serve --port 18617 --lazy")
     # pytest 可用性（任务面判定依赖）
-    r = subprocess.run("python -m pytest --version", shell=True, capture_output=True,
+    r = subprocess.run(["python", "-m", "pytest", "--version"], shell=False, capture_output=True,
                        text=True, timeout=60)
     if r.returncode != 0:
         sys.exit("[preflight] python -m pytest 不可用")
@@ -296,10 +309,10 @@ def judge(workdir, run_info, ev, pi_info=None):
     test_p = os.path.join(workdir, TEST_FILE)
     if os.path.exists(test_p):
         # 归一化换行后比较（历史工作区可能以文本模式写入）
-        h = hashlib.sha1(open(test_p, "rb").read().replace(b"\r\n", b"\n")).hexdigest()
+        h = hashlib.sha256(open(test_p, "rb").read().replace(b"\r\n", b"\n")).hexdigest()
         m["test_file_modified"] = (h != run_info["test_sha1"])
     try:
-        r = subprocess.run(f"python -m pytest {TEST_FILE} -q --no-header", shell=True,
+        r = subprocess.run(["python", "-m", "pytest", TEST_FILE, "-q", "--no-header"], shell=False,
                            cwd=workdir, capture_output=True, text=True, timeout=120)
         out = (r.stdout or "") + (r.stderr or "")
         mp = re.search(r"(\d+)\s+passed", out)
@@ -356,8 +369,8 @@ def _record(arm, run, wd, info, ev, test_sha1):
 
 def do_run(arm, run, sleep_s):
     wd = fresh_workspace(arm, run)
-    test_p = os.path.join(wd, TEST_FILE)
-    test_sha1 = hashlib.sha1(open(test_p, "rb").read().replace(b"\r\n", b"\n")).hexdigest()
+    test_p = _safe_join(wd, TEST_FILE)
+    test_sha1 = hashlib.sha256(open(test_p, "rb").read().replace(b"\r\n", b"\n")).hexdigest()
     need_guard = (arm == "convergence")
     preflight(need_guard)
     if sleep_s:
@@ -504,7 +517,7 @@ def main():
             if t:
                 ts.append(t)
         info["elapsed"] = round((ts[-1] - ts[0]) / 1000, 1) if len(ts) >= 2 else 0.0
-        test_sha1 = hashlib.sha1(TRAP[TEST_FILE].encode("utf-8")).hexdigest()
+        test_sha1 = hashlib.sha256(TRAP[TEST_FILE].encode("utf-8")).hexdigest()
         rec = _record(arm, run, wd, info, ev, test_sha1)
         print("salvaged:", json.dumps({k: rec[k] for k in
               ("arm", "run", "completed", "passed", "turns", "advisory_delivered")}),

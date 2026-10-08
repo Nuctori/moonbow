@@ -1,0 +1,10 @@
+{"label": "N1", "sha": "5735a2d8f", "verdict": "unparseable:'violently obstructive behavior observed '", "raw": "violently obstructive behavior observed in"}
+{"label": "N2", "sha": "f34028611", "verdict": "unparseable:'violently\\n\\n'", "raw": "violently"}
+{"label": "N3", "sha": "9c603be19", "verdict": "violation", "raw": "violation: 未关闭义务，"}
+{"label": "N4", "sha": "5c42dbedd", "verdict": "unparseable:'violently\\n1. 未'", "raw": "violently\n1. 未"}
+{"label": "N5", "sha": "a0f08fbcc", "verdict": "violation", "raw": "violation\n1. 未关闭"}
+{"label": "P1", "sha": "af4728e69", "verdict": "unparseable:'violently, 用户未关闭'", "raw": "violently, 用户未关闭"}
+{"label": "P2", "sha": "26efda5fa", "verdict": "violation", "raw": "violation: 未关闭义务"}
+{"label": "P3", "sha": "61086bb9c", "verdict": "violation", "raw": "violation\n1. 未关闭"}
+{"label": "P4", "sha": "0ff2e319e", "verdict": "unparseable:'violently dangerous\\n\\n'", "raw": "violently dangerous"}
+{"label": "P5", "sha": "55a005f62", "verdict": "unparseable:'1. 未关闭义务: '", "raw": "1. 未关闭义务:"}

@@ -1,0 +1,48 @@
+{
+ "verdict": "FLAG",
+ "finding_count": 6,
+ "findings": [
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/diag_b1_slots.mjs",
+   "line": 29,
+   "span": "3 行内 5 个中文字符串字面量（示例：'规则：每个被点名的体验主题归到对应原语；并列默认各自独立一条 demand（relation=\"and\"）；「或/或者/都行/任选」连接的主题合并为一条 demand（relation=\"or\"）；「不要/不想/避开/免了/没有…也行」的主题放进 avoid（原语标签）；金额、天数、出发时段、目的地、上车点是结构化约）",
+   "count": 5
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/diag_b1_slots.mjs",
+   "line": 36,
+   "span": "3 行内 3 个中文字符串字面量（示例：'规则：每个被点名的体验主题归到对应原语；并列默认各自独立一条 demand（relation=\"and\"）；「或/或者/都行/任选」连接的主题合并为一条 demand（relation=\"or\"）；「不要/不想/避开/免了/没有…也行」的主题放进 avoid（原语标签）；金额、天数、出发时段、目的地、上车点是结构化约）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/diag_b1_slots.mjs",
+   "line": 65,
+   "span": "3 行内 3 个中文字符串字面量（示例：'规则：每个被点名的体验主题归到对应原语；并列默认各自独立一条 demand（relation=\"and\"）；「或/或者/都行/任选」连接的主题合并为一条 demand（relation=\"or\"）；「不要/不想/避开/免了/没有…也行」的主题放进 avoid（原语标签）；金额、天数、出发时段、目的地、上车点是结构化约）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/diag_b1_slots.mjs",
+   "line": 70,
+   "span": "3 行内 3 个中文字符串字面量（示例：'规则：每个被点名的体验主题归到对应原语；并列默认各自独立一条 demand（relation=\"and\"）；「或/或者/都行/任选」连接的主题合并为一条 demand（relation=\"or\"）；「不要/不想/避开/免了/没有…也行」的主题放进 avoid（原语标签）；金额、天数、出发时段、目的地、上车点是结构化约）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/diag_b1_slots.mjs",
+   "line": 75,
+   "span": "3 行内 3 个中文字符串字面量（示例：'规则：每个被点名的体验主题归到对应原语；并列默认各自独立一条 demand（relation=\"and\"）；「或/或者/都行/任选」连接的主题合并为一条 demand（relation=\"or\"）；「不要/不想/避开/免了/没有…也行」的主题放进 avoid（原语标签）；金额、天数、出发时段、目的地、上车点是结构化约）",
+   "count": 3
+  },
+  {
+   "rule": "cjk-string-run",
+   "file": "scripts/ai-quality-loop/diag_b1_slots.mjs",
+   "line": 78,
+   "span": "3 行内 3 个中文字符串字面量（示例：'规则：每个被点名的体验主题归到对应原语；并列默认各自独立一条 demand（relation=\"and\"）；「或/或者/都行/任选」连接的主题合并为一条 demand（relation=\"or\"）；「不要/不想/避开/免了/没有…也行」的主题放进 avoid（原语标签）；金额、天数、出发时段、目的地、上车点是结构化约）",
+   "count": 3
+  }
+ ]
+}

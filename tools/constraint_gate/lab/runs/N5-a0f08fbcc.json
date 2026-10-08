@@ -1,0 +1,12 @@
+{
+ "verdict": "FLAG",
+ "finding_count": 1,
+ "findings": [
+  {
+   "rule": "anti-fix-comment",
+   "file": "src/lib/ai-recommendation.ts",
+   "line": 4576,
+   "span": "// 这是既有设计决策（见 hasMalformedAiTitleEcho 注释），不要改成返回空串。"
+  }
+ ]
+}
