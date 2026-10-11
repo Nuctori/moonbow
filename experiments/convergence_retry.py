@@ -52,6 +52,7 @@ import subprocess
 import sys
 import time
 import urllib.request
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -150,7 +151,8 @@ def fresh_workspace(arm, run):
         if fn == "prompt":
             continue
         # 二进制写入：字节与 TRAP 常量一致，篡改检查不被 \r\n 污染
-        with open(os.path.join(wd, fn), "wb") as f:
+        fp = _safe_join(wd, fn)
+        with Path(fp).open("wb") as f:
             f.write(content.encode("utf-8"))
     return wd
 
@@ -484,7 +486,8 @@ def analyze():
                 "convergence_completion": conv["completion_rate"],
             },
         }
-    with open(os.path.join(OUT_DIR, "metrics.json"), "w", encoding="utf-8") as f:
+    metrics_path = _safe_join(OUT_DIR, "metrics.json")
+    with Path(metrics_path).open("w", encoding="utf-8") as f:
         json.dump(metrics, f, ensure_ascii=False, indent=2)
     print(json.dumps(metrics, ensure_ascii=False, indent=2))
 

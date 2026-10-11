@@ -47,6 +47,7 @@ import subprocess
 import sys
 import time
 import urllib.request
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -155,8 +156,10 @@ def setup_agent_dir():
         p = os.path.join(src_home, fn)
         if os.path.exists(p):
             shutil.copy2(p, os.path.join(AGENT_DIR, fn))
-    mp = _safe_join(AGENT_DIR, "models.json")
-    cfg = json.load(open(mp, encoding="utf-8"))
+    # AGENT_DIR 可来自环境变量，先消毒再做边界校验拼接（防路径穿越）
+    agent_root = re.sub(r"[^A-Za-z0-9_.\-\\/ :]+", "_", AGENT_DIR)
+    mp = _safe_join(agent_root, "models.json")
+    cfg = json.load(Path(mp).open(encoding="utf-8"))
     cfg.setdefault("providers", {})["ge2"] = {
         "baseUrl": "http://127.0.0.1:8901/v1",
         "api": "openai-completions",
@@ -173,7 +176,7 @@ def setup_agent_dir():
             "cost": {"input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0},
         }],
     }
-    with open(mp, "w", encoding="utf-8") as f:
+    with Path(mp).open("w", encoding="utf-8") as f:
         json.dump(cfg, f, ensure_ascii=False, indent=2)
 
 
@@ -188,12 +191,14 @@ def fresh_workspace(arm, run, task_key):
     os.makedirs(wd)
     for fn, content in task["files"].items():
         # ge4：允许子目录路径（如 doc/x.txt），父目录自动创建；路径不得逃出工作区
-        dst = _safe_join(wd, fn)
+        # fn 来自任务集 JSON，先消毒（禁 ..）再做边界校验拼接
+        safe_fn = re.sub(r"[^A-Za-z0-9_.\-/\\]+", "_", fn.replace("..", "_"))
+        dst = _safe_join(wd, safe_fn)
         parent = os.path.dirname(dst)
         if parent:
             os.makedirs(parent, exist_ok=True)
         # 二进制写入：字节与任务常量一致，篡改检查不被 \r\n 污染
-        with open(dst, "wb") as f:
+        with Path(dst).open("wb") as f:
             f.write(content.encode("utf-8"))
     return wd
 
@@ -547,12 +552,14 @@ def do_run(phase, task_key, arm, run, sleep_s):
         time.sleep(sleep_s)
     print(f"[run] {phase}/{task_key}/{arm}/run{run:02d} model={MODEL} ...", flush=True)
     info = run_pi(arm, task, wd, timeout=int(os.environ.get("PI_RUN_TIMEOUT", "420")))
-    # stdout/stderr 留档
+    # stdout/stderr 留档（tag/task_key 来自外部任务集，先消毒再边界校验拼接）
     os.makedirs(LOG_DIR, exist_ok=True)
-    tag = f"{phase}_{task_key}_{arm}_run{run:02d}"
-    with open(os.path.join(LOG_DIR, f"pi_{tag}.stdout.log"), "w", encoding="utf-8") as f:
+    tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", f"{phase}_{task_key}_{arm}_run{run:02d}")
+    stdout_p = _safe_join(LOG_DIR, "pi_%s.stdout.log" % tag)
+    stderr_p = _safe_join(LOG_DIR, "pi_%s.stderr.log" % tag)
+    with Path(stdout_p).open("w", encoding="utf-8") as f:
         f.write(info.get("stdout") or "")
-    with open(os.path.join(LOG_DIR, f"pi_{tag}.stderr.log"), "w", encoding="utf-8") as f:
+    with Path(stderr_p).open("w", encoding="utf-8") as f:
         f.write(info.get("stderr") or "")
     ev = parse_session(info["session"])
     rec = _record(phase, task_key, arm, run, wd, task, info, ev, test_sha1)
@@ -617,7 +624,8 @@ def analyze():
         for f, c in (r.get("pseudo_forms") or {}).items():
             metrics["pseudo_gate"]["pseudo_forms_total"][f] = \
                 metrics["pseudo_gate"]["pseudo_forms_total"].get(f, 0) + c
-    with open(os.path.join(OUT_DIR, "metrics_smoke.json"), "w", encoding="utf-8") as f:
+    metrics_path = _safe_join(OUT_DIR, "metrics_smoke.json")
+    with Path(metrics_path).open("w", encoding="utf-8") as f:
         json.dump(metrics, f, ensure_ascii=False, indent=2)
     print(json.dumps(metrics, ensure_ascii=False, indent=2))
 

@@ -30,11 +30,21 @@ import json
 import os
 import random
 import sys
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 BASE_TRAIN = os.path.join(HERE, "axis1_train.jsonl")
 OUT_TRAIN = os.path.join(HERE, "coverage_train.jsonl")
 OUT_HOLD = os.path.join(HERE, "coverage_holdout.jsonl")
+
+
+def _safe_join(root, *parts):
+    """规范化拼接并校验结果不逃出 root（防路径穿越）。"""
+    p = os.path.realpath(os.path.join(root, *parts))
+    root_r = os.path.realpath(root)
+    if p != root_r and not p.startswith(root_r + os.sep):
+        raise ValueError(f"path escapes root: {p!r}")
+    return p
 
 # (失败句, 训练用变体[含本句], 留出变体[不同领域词], 正确标签)
 PATTERNS = [
@@ -133,10 +143,12 @@ def main() -> None:
     rng = random.Random(53)
     rng.shuffle(out)
 
-    with open(OUT_TRAIN, "w", encoding="utf-8") as f:
+    out_train = _safe_join(HERE, "coverage_train.jsonl")
+    out_hold = _safe_join(HERE, "coverage_holdout.jsonl")
+    with Path(out_train).open("w", encoding="utf-8") as f:
         for r in out:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
-    with open(OUT_HOLD, "w", encoding="utf-8") as f:
+    with Path(out_hold).open("w", encoding="utf-8") as f:
         for r in holdout:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
 

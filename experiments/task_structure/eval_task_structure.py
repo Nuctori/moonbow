@@ -19,6 +19,7 @@ import os
 import sys
 import time
 from collections import Counter, defaultdict
+from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -29,6 +30,27 @@ from moonbow.task_structure.schema import StructureVector  # noqa: E402
 
 EVAL_SET = os.path.join(HERE, "eval_set.jsonl")
 MATCH_JACCARD = 0.5
+
+# SSRF 防护：--backend http URL 是本机评测服务的显式配置，协议仅 http(s)、
+# 主机默认限环回，可用 MOONBOW_TS_ALLOWED_HOSTS 显式扩展。
+_ALLOWED_SCHEMES = ("http", "https")
+_LOOPBACK_HOSTS = {"127.0.0.1", "localhost", "::1"}
+
+
+def validate_backend_url(url: str) -> str:
+    """校验评测后端 URL：协议 http(s) 且主机在显式允许列表内（防 SSRF）。"""
+    u = urlparse(url)
+    if u.scheme not in _ALLOWED_SCHEMES:
+        raise ValueError(
+            f"blocked backend url scheme {u.scheme!r} (allow http/https): {url!r}")
+    extra = {h.strip().lower()
+             for h in os.environ.get("MOONBOW_TS_ALLOWED_HOSTS", "").split(",")
+             if h.strip()}
+    host = (u.hostname or "").lower()
+    if host not in (_LOOPBACK_HOSTS | extra):
+        raise ValueError(
+            f"blocked backend host {host!r} (not in allowlist): {url!r}")
+    return url
 
 KINDS = ("goal", "object", "constraint", "dependency",
          "coordination", "condition", "unresolved", "acceptance")
@@ -70,12 +92,16 @@ def match_captures(gold, pred):
 
 def load_backend(spec: str):
     if spec.startswith("http"):
+        validate_backend_url(spec)          # SSRF 防护：构造时即校验
+        backend_url = spec
+
         class HttpEvalBackend:
-            name = "http:" + spec
+            name = "http:" + backend_url
 
             def extract(self, text):
+                validate_backend_url(backend_url)   # 请求前再校验（防 SSRF）
                 body = json.dumps({"text": text}).encode("utf-8")
-                req = Request(spec, data=body,
+                req = Request(backend_url, data=body,
                               headers={"Content-Type": "application/json"})
                 with urlopen(req, timeout=30) as resp:
                     data = json.loads(resp.read().decode("utf-8"))

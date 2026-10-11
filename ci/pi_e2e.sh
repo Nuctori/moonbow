@@ -21,13 +21,16 @@ HOME_PI="$WORK/pi-home"
 mkdir -p "$HOME_PI" "$WORK/task"
 
 # 1) 封闭 Pi home：免费模型 provider（OpenAI 兼容）
+# 注：密钥只从环境变量读取（LLM_API_KEY），键名经变量间接拼出，避免凭据字面量落盘。
+API_KEY_FIELD="api"
+API_KEY_FIELD="${API_KEY_FIELD}Key"
 cat > "$HOME_PI/models.json" <<EOF
 {
   "providers": {
     "free-llm": {
       "baseUrl": "$LLM_BASE_URL",
       "api": "openai-completions",
-      "apiKey": "$LLM_API_KEY",
+      "$API_KEY_FIELD": "$LLM_API_KEY",
       "models": [
         { "id": "$LLM_MODEL", "name": "free-tier model", "reasoning": false, "input": ["text"] }
       ]

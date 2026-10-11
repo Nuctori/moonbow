@@ -18,6 +18,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PI_BIN = os.environ.get("PI_BIN", "pi.cmd" if os.name == "nt" else "pi")
@@ -25,6 +26,15 @@ AGENT_DIR = os.environ.get("PI_EVAL_AGENT_DIR", os.path.join(HERE, "home"))
 SESSIONS = os.path.join(AGENT_DIR, "sessions")
 ROOT_DIR = os.environ.get("PI_EVAL_WORK_DIR",
                           os.path.join(tempfile.gettempdir(), "trap_ladder"))
+
+
+def _safe_join(root, *parts):
+    """规范化拼接并校验结果不逃出 root（防路径穿越）。"""
+    p = os.path.realpath(os.path.join(root, *parts))
+    root_r = os.path.realpath(root)
+    if p != root_r and not p.startswith(root_r + os.sep):
+        raise ValueError(f"path escapes root: {p!r}")
+    return p
 
 # 已知 LLM 系统性失败模式 → 单文件陷阱任务
 TRAPS = {
@@ -156,7 +166,8 @@ def main():
             if a.sleep and rnd > 0:
                 time.sleep(a.sleep)
             for fn, c in files.items():
-                with open(os.path.join(wd, fn), "w", encoding="utf-8") as f:
+                fp = _safe_join(wd, fn)
+                with Path(fp).open("w", encoding="utf-8") as f:
                     f.write(c)
             t0 = time.time()
             run_pi(wd, files["prompt"], a.model, a.thinking)

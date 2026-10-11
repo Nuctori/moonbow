@@ -47,8 +47,18 @@ import subprocess
 import sys
 import time
 import urllib.request
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def _safe_join(root, *parts):
+    """规范化拼接并校验结果不逃出 root（防路径穿越）。"""
+    p = os.path.realpath(os.path.join(root, *parts))
+    root_r = os.path.realpath(root)
+    if p != root_r and not p.startswith(root_r + os.sep):
+        raise ValueError(f"path escapes root: {p!r}")
+    return p
 REPO = os.path.abspath(os.path.join(HERE, ".."))
 PI_BIN = os.environ.get("PI_BIN", "pi.cmd" if os.name == "nt" else "pi")
 OUT_DIR = os.path.join(REPO, "results", "guard-effect-v2")
@@ -130,8 +140,8 @@ def preflight(need_guard: bool, need_conv: bool):
             sys.exit(f"[preflight] guard 服务 {GUARD_URL} 不可达: {e} —— 先启动:\n"
                      f"  MOONBOW_GUARD_CONVERGENCE=advisory PYTHONPATH=src "
                      f"python -m moonbow.guard.cli serve --port 18617 --lazy")
-    r = subprocess.run("python -m pytest --version", shell=True, capture_output=True,
-                       text=True, timeout=60)
+    r = subprocess.run(["python", "-m", "pytest", "--version"], shell=False,
+                       capture_output=True, text=True, timeout=60)
     if r.returncode != 0:
         sys.exit("[preflight] python -m pytest 不可用")
 
@@ -144,12 +154,12 @@ def setup_agent_dir():
         p = os.path.join(src_home, fn)
         if os.path.exists(p):
             shutil.copy2(p, os.path.join(AGENT_DIR, fn))
-    mp = os.path.join(AGENT_DIR, "models.json")
-    cfg = json.load(open(mp, encoding="utf-8"))
+    mp = _safe_join(AGENT_DIR, "models.json")
+    cfg = json.load(Path(mp).open(encoding="utf-8"))
     cfg.setdefault("providers", {})["ge2"] = {
         "baseUrl": "http://127.0.0.1:8901/v1",
         "api": "openai-completions",
-        "apiKey": "sk-ge2-local-proxy",   # 代理注入真实 key，此处任意非空
+        "apiKey": os.environ.get("GE2_LOCAL_PROXY_KEY", "local-proxy-placeholder"),   # 代理注入真实 key，此处任意非空
         "models": [{
             "id": MODEL,
             "name": "gemini-3.5-flash-lite (ge2 gate 8901)",
@@ -162,7 +172,7 @@ def setup_agent_dir():
             "cost": {"input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0},
         }],
     }
-    with open(mp, "w", encoding="utf-8") as f:
+    with Path(mp).open("w", encoding="utf-8") as f:
         json.dump(cfg, f, ensure_ascii=False, indent=2)
 
 
@@ -177,7 +187,8 @@ def fresh_workspace(arm, run, task_key):
     os.makedirs(wd)
     for fn, content in task["files"].items():
         # 二进制写入：字节与任务常量一致，篡改检查不被 \r\n 污染
-        with open(os.path.join(wd, fn), "wb") as f:
+        dst = _safe_join(wd, fn)
+        with Path(dst).open("wb") as f:
             f.write(content.encode("utf-8"))
     return wd
 
@@ -418,8 +429,9 @@ def judge(workdir, task, run_info, ev, pi_info=None):
         m["test_file_modified"] = (h != run_info["test_sha1"])
     try:
         # 注意：不能加 -q —— -q 会压制 -v，逐测试行变成点号摘要（实测踩坑）
-        r = subprocess.run(f"python -m pytest {tf} -v --no-header", shell=True,
-                           cwd=workdir, capture_output=True, text=True, timeout=120)
+        r = subprocess.run(["python", "-m", "pytest", tf, "-v", "--no-header"],
+                           shell=False, cwd=workdir, capture_output=True,
+                           text=True, timeout=120)
         out = (r.stdout or "") + (r.stderr or "")
         for t in task["tests"]:
             mm = re.search(r"::[^:\s]*" + re.escape(t) + r"\s+(PASSED|FAILED|ERROR"
@@ -534,9 +546,11 @@ def do_run(phase, task_key, arm, run, sleep_s):
     # stdout/stderr 留档
     os.makedirs(LOG_DIR, exist_ok=True)
     tag = f"{phase}_{task_key}_{arm}_run{run:02d}"
-    with open(os.path.join(LOG_DIR, f"pi_{tag}.stdout.log"), "w", encoding="utf-8") as f:
+    stdout_p = _safe_join(LOG_DIR, "pi_%s.stdout.log" % tag)
+    stderr_p = _safe_join(LOG_DIR, "pi_%s.stderr.log" % tag)
+    with Path(stdout_p).open("w", encoding="utf-8") as f:
         f.write(info.get("stdout") or "")
-    with open(os.path.join(LOG_DIR, f"pi_{tag}.stderr.log"), "w", encoding="utf-8") as f:
+    with Path(stderr_p).open("w", encoding="utf-8") as f:
         f.write(info.get("stderr") or "")
     ev = parse_session(info["session"])
     rec = _record(phase, task_key, arm, run, wd, task, info, ev, test_sha1)
@@ -601,7 +615,8 @@ def analyze():
         for f, c in (r.get("pseudo_forms") or {}).items():
             metrics["pseudo_gate"]["pseudo_forms_total"][f] = \
                 metrics["pseudo_gate"]["pseudo_forms_total"].get(f, 0) + c
-    with open(os.path.join(OUT_DIR, "metrics_smoke.json"), "w", encoding="utf-8") as f:
+    metrics_path = _safe_join(OUT_DIR, "metrics_smoke.json")
+    with Path(metrics_path).open("w", encoding="utf-8") as f:
         json.dump(metrics, f, ensure_ascii=False, indent=2)
     print(json.dumps(metrics, ensure_ascii=False, indent=2))
 

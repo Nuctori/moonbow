@@ -40,3 +40,14 @@ python gate.py --repo REDACTED_REPO --since "2026-10-02 04:00" --until "2026-10-
 1. 非高峰补齐 T3 剩余 4 例（`python lab/exp_b_t3.py` 断点续跑），报严格 P/R
 2. gate.py 接入 ZCode hook（PostToolUse / Stop）
 3. 用标注流（findings + 用户裁决）微调 T3 SLM 后端（XPU）
+
+## 后继（2026-10-09）
+
+本组件已被 **intent-loop**（目标/约束语义提醒闭环）接替为活跃开发线：
+语义捕获走 SemanticMatcher SLM 路径（GLiNER/SemanticMatcher，非本目录的
+正则 tracker——后者降级为机械路由），账本/判断/提醒见
+[`docs/intent_loop_delivery.md`](../../docs/intent_loop_delivery.md)
+（**唯一维护点**，CONDITIONAL GO）。
+本目录保留为：约束卡格式参照、机械路由器（tracker.py）、D3 对账 CLI（gate.py）。
+本 README 的"待办"由 intent-loop 台账接手，此处不再更新。
+

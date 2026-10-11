@@ -8,11 +8,36 @@ SLM 后端通过 HTTP 服务接入（进程解耦、失败隔离），或本机
 """
 import json
 import logging
+import os
+from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 from .schema import Capture
 
 logger = logging.getLogger("moonbow.task_structure.backends")
+
+# SSRF 防护：捕获服务是本机/显式配置的服务，URL 协议与主机必须显式受信。
+# 协议仅 http(s)；主机默认环回（127.0.0.1/localhost/::1），
+# 可用 MOONBOW_TS_ALLOWED_HOSTS 显式扩展（逗号分隔）。
+_ALLOWED_SCHEMES = ("http", "https")
+_LOOPBACK_HOSTS = {"127.0.0.1", "localhost", "::1"}
+
+
+def validate_backend_url(url: str) -> str:
+    """校验捕获服务 URL：协议 http(s) 且主机在显式允许列表内（防 SSRF）。"""
+    u = urlparse(url)
+    if u.scheme not in _ALLOWED_SCHEMES:
+        raise ValueError(
+            f"blocked capture-backend url scheme {u.scheme!r} "
+            f"(allow http/https): {url!r}")
+    extra = {h.strip().lower()
+             for h in os.environ.get("MOONBOW_TS_ALLOWED_HOSTS", "").split(",")
+             if h.strip()}
+    host = (u.hostname or "").lower()
+    if host not in (_LOOPBACK_HOSTS | extra):
+        raise ValueError(
+            f"blocked capture-backend host {host!r} (not in allowlist): {url!r}")
+    return url
 
 
 class HttpBackend:
@@ -24,12 +49,14 @@ class HttpBackend:
     """
 
     def __init__(self, url: str, timeout: float = 5.0):
+        validate_backend_url(url)
         self.name = "http:" + url
         self.url = url
         self.timeout = timeout
 
     def extract(self, text: str):
         try:
+            validate_backend_url(self.url)
             body = json.dumps({"text": text}).encode("utf-8")
             req = Request(self.url, data=body,
                           headers={"Content-Type": "application/json"})

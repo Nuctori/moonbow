@@ -716,9 +716,9 @@ def cmd_train(args):
         "best_calib_scan_f1": round(best_f1, 4),
         "final_step": global_step, "stop_reason": stop_reason,
     }
-    with open(OUT_DIR / "run_meta.json", "w", encoding="utf-8") as f:
+    with (OUT_DIR / "run_meta.json").open("w", encoding="utf-8") as f:
         json.dump(run_meta, f, ensure_ascii=False, indent=2)
-    with open(OUT_DIR / "README.md", "w", encoding="utf-8") as f:
+    with (OUT_DIR / "README.md").open("w", encoding="utf-8") as f:
         f.write(f"""# LoRA adapter: modality-jev-v1 (R4/Track2)
 
 - base: {MODEL_ID} revision {MODEL_REVISION}（官方 bundle merged backbone bf16
@@ -807,8 +807,8 @@ def cmd_eval(args):
         "pass": m["gate_pass_cell"] is not None,
         "cell": m["gate_pass_cell"],
     }
-    with open(RESULTS_DIR / "metrics_calib.json", "w",
-              encoding="utf-8") as f:
+    with (RESULTS_DIR / "metrics_calib.json").open("w",
+                                                   encoding="utf-8") as f:
         json.dump(m, f, ensure_ascii=False, indent=2)
     print(json.dumps(m, ensure_ascii=False, indent=2), flush=True)
     print("EVAL DONE gate_pass=", m["gate"]["pass"], flush=True)

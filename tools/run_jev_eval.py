@@ -15,6 +15,7 @@ import os
 import statistics
 import sys
 import time
+from pathlib import Path
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "src"))
@@ -237,7 +238,7 @@ def main():
     metrics["gate"] = {"rule": "P>=0.85 and R>=0.80 (calib scan, per mode)",
                        "n_pass": n_pass, "n_modes": len(PATTERNS),
                        "verdict": "go" if n_pass else "no-go"}
-    with open(METRICS_PATH, "w", encoding="utf-8") as f:
+    with Path(METRICS_PATH).open("w", encoding="utf-8") as f:
         json.dump(metrics, f, ensure_ascii=False, indent=2)
     print("metrics written:", METRICS_PATH)
     for p, d in metrics["patterns"].items():
