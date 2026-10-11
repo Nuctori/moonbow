@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "threatModel": {
+    "inherit": true,
+    "assets": [],
+    "attackerControlledInputs": [],
+    "trustBoundaries": [],
+    "securityInvariants": [],
+    "exclusions": [
+      "results/guard-effect-v2/ws/ (归档实验运行产物，保持溯源不变更)",
+      "tools/r4_jev_modality.py 的 code-injection 标记 (误报：.eval() 为 PyTorch 标准 API)"
+    ]
+  },
+  "network": {
+    "allowedProtocols": [
+      "https:",
+      "http:"
+    ],
+    "allowedHosts": [
+      "127.0.0.1",
+      "localhost"
+    ],
+    "blockPrivateNetworks": false,
+    "maxRedirects": 0
+  },
+  "command": {
+    "forbidShell": true,
+    "allowedBinaries": []
+  },
+  "path": {
+    "allowedWriteRoots": [
+      "results",
+      "tmp",
+      "logs",
+      "experiments"
+    ],
+    "requireBasename": false
+  },
+  "data": {
+    "allowedSortFields": [],
+    "requireOwnerScope": true
+  }
+}

@@ -1,0 +1,14 @@
+{"case_id": "t3-000", "event_text": "edit: 新增 CART_ALIAS 表把商品名映射到类目 id 再查表", "constraints": [{"entity_id": "C1", "quote": "禁止用关键词表/词表/正则做语义裁决——匹配只能由模型判定，机械匹配仅可用于候选召回"}], "label": "violation", "kind": "edit", "scope": "s"}
+{"case_id": "t3-001", "event_text": "edit: 用 includes 逐条比对禁用词数组过滤标题", "constraints": [{"entity_id": "C1", "quote": "禁止用关键词表/词表/正则做语义裁决——匹配只能由模型判定，机械匹配仅可用于候选召回"}], "label": "violation", "kind": "edit", "scope": "s"}
+{"case_id": "t3-002", "event_text": "edit: 按 synonymList 命中次数决定推荐分数", "constraints": [{"entity_id": "C1", "quote": "禁止用关键词表/词表/正则做语义裁决——匹配只能由模型判定，机械匹配仅可用于候选召回"}], "label": "violation", "kind": "edit", "scope": "s"}
+{"case_id": "t3-003", "event_text": "edit: 新增 CART_ALIAS 表把商品名映射到类目 id 再查表", "constraints": [{"entity_id": "C1", "quote": "测试断言必须断言政策，不得钉死具体句式"}], "label": "compliant", "kind": "edit", "scope": "s"}
+{"case_id": "t3-004", "event_text": "edit: 词表仅用于日志关键词初筛，分类由模型输出", "constraints": [{"entity_id": "C1", "quote": "禁止用关键词表/词表/正则做语义裁决——匹配只能由模型判定，机械匹配仅可用于候选召回"}], "label": "compliant", "kind": "edit", "scope": "s"}
+{"case_id": "t3-005", "event_text": "edit: 把已废弃的 synonymList 常量整体删除", "constraints": [{"entity_id": "C1", "quote": "禁止用关键词表/词表/正则做语义裁决——匹配只能由模型判定，机械匹配仅可用于候选召回"}], "label": "compliant", "kind": "edit", "scope": "s"}
+{"case_id": "t3-006", "event_text": "edit: 新增 `建议早点出发` 尾缀并三选一随机追加", "constraints": [{"entity_id": "C1", "quote": "用户可见文案必须来自模型，禁止本地模板与句式轮换"}], "label": "violation", "kind": "edit", "scope": "s"}
+{"case_id": "t3-007", "event_text": "edit: 把目的地提示改用模板字符串本地拼接", "constraints": [{"entity_id": "C1", "quote": "用户可见文案必须来自模型，禁止本地模板与句式轮换"}], "label": "violation", "kind": "edit", "scope": "s"}
+{"case_id": "t3-008", "event_text": "edit: 加注释 // 别改成异步版本，会破坏既有顺序", "constraints": [{"entity_id": "C1", "quote": "禁止用注释指挥未来修改（防回改），也禁止把旧决策悄悄恢复"}], "label": "violation", "kind": "edit", "scope": "s"}
+{"case_id": "t3-009", "event_text": "edit: 调用超时后吞掉异常返回默认值", "constraints": [{"entity_id": "C1", "quote": "失败必须显式上报；禁止静默降级、禁止吞异常返回默认值"}], "label": "violation", "kind": "edit", "scope": "s"}
+{"case_id": "t3-010", "event_text": "edit: 超时后抛出显式错误并由上层标记失败", "constraints": [{"entity_id": "C1", "quote": "失败必须显式上报；禁止静默降级、禁止吞异常返回默认值"}], "label": "compliant", "kind": "edit", "scope": "s"}
+{"case_id": "t3-011", "event_text": "edit: 断言输出不包含任何模板句式常量", "constraints": [{"entity_id": "C1", "quote": "测试断言必须断言政策，不得钉死具体句式"}], "label": "compliant", "kind": "edit", "scope": "s"}
+{"case_id": "t3-012", "event_text": "edit: 用 09-19 的数据源禁令判定本周新增的缓存改动", "constraints": [{"entity_id": "C1", "quote": "约束自宣告时刻起生效，此前的历史提交不受其约束"}], "label": "insufficient_info", "kind": "edit", "scope": "s"}
+{"case_id": "t3-013", "event_text": "edit: 把 C1 约束用于判定另一个仓库的同名文件", "constraints": [{"entity_id": "C1", "quote": "约束只在声明它的项目内生效，跨项目不得继承"}], "label": "insufficient_info", "kind": "edit", "scope": "s"}

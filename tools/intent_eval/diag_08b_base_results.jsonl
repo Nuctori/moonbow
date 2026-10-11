@@ -1,0 +1,20 @@
+{"case_id": "dev-001", "split": "dev", "label": "supports_conflict", "verdict": "unparseable:'violently'", "raw": "violently"}
+{"case_id": "dev-002", "split": "dev", "label": "supports_conflict", "verdict": "unparseable:\"violently\\nassistant\\n<think>\\nHere's a thi\"", "raw": "violently\nassistant\n<think>\nHere's a thinking process by breaking down the reque"}
+{"case_id": "dev-003", "split": "dev", "label": "supports_conflict", "verdict": "unparseable:'violently'", "raw": "violently"}
+{"case_id": "dev-004", "split": "dev", "label": "supports_conflict", "verdict": "unparseable:'violently'", "raw": "violently"}
+{"case_id": "dev-005", "split": "dev", "label": "supports_conflict", "verdict": "unparseable:'violently'", "raw": "violently"}
+{"case_id": "dev-006", "split": "dev", "label": "supports_conflict", "verdict": "unparseable:'violently\\nfulrful\\nassistant\\n<think>\\nHere'", "raw": "violently\nfulrful\nassistant\n<think>\nHere's a thinking process by breaking down t"}
+{"case_id": "dev-007", "split": "dev", "label": "supports_conflict", "verdict": "unparseable:\"violently\\nassistant\\n<think>\\nHere's a thi\"", "raw": "violently\nassistant\n<think>\nHere's a thinking process by analyzing how to think "}
+{"case_id": "dev-008", "split": "dev", "label": "supports_compat", "verdict": "unparseable:'violently'", "raw": "violently"}
+{"case_id": "dev-009", "split": "dev", "label": "supports_compat", "verdict": "unparseable:'violently\\nfulrful\\nassistant\\n<think>\\nHere'", "raw": "violently\nfulrful\nassistant\n<think>\nHere's a thinking process by processing the "}
+{"case_id": "dev-010", "split": "dev", "label": "supports_conflict", "verdict": "unparseable:'violentlyviolentlyviolentlyviolentlyviol'", "raw": "violentlyviolentlyviolentlyviolentlyviolentlyviolentlyentrityoudryoudereeperlyop"}
+{"case_id": "dev-011", "split": "dev", "label": "supports_compat", "verdict": "unparseable:'violentlyviolentlyviolentlyviolentlyviol'", "raw": "violentlyviolentlyviolentlyviolentlyviolentlyviolentlyentrityoudryoudereedfullye"}
+{"case_id": "dev-012", "split": "dev", "label": "insufficient_info", "verdict": "unparseable:'violently'", "raw": "violently"}
+{"case_id": "dev-013", "split": "dev", "label": "supported_partial", "verdict": "unparseable:\"violently\\nassistant\\n<think>\\nHere's a thi\"", "raw": "violently\nassistant\n<think>\nHere's a thinking process by analyzing how to think "}
+{"case_id": "dev-014", "split": "dev", "label": "supports_compat", "verdict": "unparseable:\"violently\\nassistant\\n<think>\\nHere's a thi\"", "raw": "violently\nassistant\n<think>\nHere's a thinking process by processing the requestf"}
+{"case_id": "dev-015", "split": "dev", "label": "supports_compat", "verdict": "unparseable:'violently'", "raw": "violently"}
+{"case_id": "dev-016", "split": "dev", "label": "supports_compat", "verdict": "unparseable:'violently'", "raw": "violently"}
+{"case_id": "dev-017", "split": "dev", "label": "supports_compat", "verdict": "unparseable:'violently'", "raw": "violently"}
+{"case_id": "dev-018", "split": "dev", "label": "capture:constraint", "verdict": "unparseable:'violentlyviolentlyviolentlyviolentlyviol'", "raw": "violentlyviolentlyviolentlyviolentlyviolentlyententlyoudryoudryoudereadlyentopen"}
+{"case_id": "dev-019", "split": "dev", "label": "capture:completion_claim", "verdict": "unparseable:'violently'", "raw": "violently"}
+{"case_id": "dev-020", "split": "dev", "label": "capture:reject", "verdict": "unparseable:'violentlyviolentlyviolentlyviolentlyviol'", "raw": "violentlyviolentlyviolentlyviolentlyviolentlyviolentlyententlyoudryoudereedfully"}

@@ -1,0 +1,14 @@
+{"case_id": "t3-000", "event_text": "新增 cityMap 哈希表把城市名映射到 id 再查表", "constraints": [{"entity_id": "C1", "quote": "禁止用关键词表/词表/正则做语义裁决；机械匹配只允许用于候选召回"}], "label": "violation", "kind": "commit", "scope": "s"}
+{"case_id": "t3-001", "event_text": "用 includes 逐条比对禁用词数组过滤商品标题", "constraints": [{"entity_id": "C1", "quote": "禁止用关键词表/词表/正则做语义裁决；机械匹配只允许用于候选召回"}], "label": "violation", "kind": "commit", "scope": "s"}
+{"case_id": "t3-002", "event_text": "按 synonymList 的命中次数决定推荐分数", "constraints": [{"entity_id": "C1", "quote": "禁止用关键词表/词表/正则做语义裁决；机械匹配只允许用于候选召回"}], "label": "violation", "kind": "commit", "scope": "s"}
+{"case_id": "t3-003", "event_text": "新增 cityMap 哈希表把城市名映射到 id 再查表", "constraints": [{"entity_id": "C1", "quote": "工具调用失败必须显式上报，不得静默降级"}], "label": "compliant", "kind": "commit", "scope": "s"}
+{"case_id": "t3-004", "event_text": "词表仅用于日志关键词初筛，分类由模型输出", "constraints": [{"entity_id": "C1", "quote": "禁止用关键词表/词表/正则做语义裁决；机械匹配只允许用于候选召回"}], "label": "compliant", "kind": "commit", "scope": "s"}
+{"case_id": "t3-005", "event_text": "把已废弃的 synonymList 常量整体删除", "constraints": [{"entity_id": "C1", "quote": "禁止用关键词表/词表/正则做语义裁决；机械匹配只允许用于候选召回"}], "label": "compliant", "kind": "commit", "scope": "s"}
+{"case_id": "t3-006", "event_text": "新增 `建议早点出发` 尾缀并三选一随机追加", "constraints": [{"entity_id": "C1", "quote": "禁止话术模板与句式轮换；用户可见文案必须来自模型"}], "label": "violation", "kind": "commit", "scope": "s"}
+{"case_id": "t3-007", "event_text": "把目的地提示改用模板字符串拼接", "constraints": [{"entity_id": "C1", "quote": "禁止话术模板与句式轮换；用户可见文案必须来自模型"}], "label": "violation", "kind": "commit", "scope": "s"}
+{"case_id": "t3-008", "event_text": "加注释：别改成异步版本，会破坏既有顺序", "constraints": [{"entity_id": "C1", "quote": "禁止用防回改注释恢复旧决策"}], "label": "violation", "kind": "commit", "scope": "s"}
+{"case_id": "t3-009", "event_text": "调用超时后吞掉异常返回默认值", "constraints": [{"entity_id": "C1", "quote": "工具调用失败必须显式上报，不得静默降级"}], "label": "violation", "kind": "commit", "scope": "s"}
+{"case_id": "t3-010", "event_text": "超时后抛出显式错误并由上层标记失败", "constraints": [{"entity_id": "C1", "quote": "工具调用失败必须显式上报，不得静默降级"}], "label": "compliant", "kind": "commit", "scope": "s"}
+{"case_id": "t3-011", "event_text": "断言输出不包含任何模板句式常量", "constraints": [{"entity_id": "C1", "quote": "测试断言必须断言政策而非具体句式"}], "label": "compliant", "kind": "commit", "scope": "s"}
+{"case_id": "t3-012", "event_text": "用 09-19 的数据源禁令判定本周新增的缓存改动", "constraints": [{"entity_id": "C1", "quote": "禁止用关键词表/词表/正则做语义裁决；机械匹配只允许用于候选召回"}], "label": "insufficient_info", "kind": "commit", "scope": "s"}
+{"case_id": "t3-013", "event_text": "把 C1 约束用于判定另一个仓库的同名文件", "constraints": [{"entity_id": "C1", "quote": "禁止用关键词表/词表/正则做语义裁决；机械匹配只允许用于候选召回"}], "label": "insufficient_info", "kind": "commit", "scope": "s"}

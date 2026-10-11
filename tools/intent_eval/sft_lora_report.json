@@ -1,0 +1,128 @@
+{
+ "experiment": "lora_sft_insample_feasibility",
+ "sft_pairs": 48,
+ "epochs": 8,
+ "train_seconds": 158.6,
+ "eval_cases": 16,
+ "parse_ok": 16,
+ "parse_rate": 1.0,
+ "label_agreement_insample": "16/16",
+ "abstain_channel": "none（二值输出无弃权通道，如实标注）",
+ "latency_avg_s": 0.17,
+ "vram_peak_gb": 1.71,
+ "adapter": "M:\\AI\\spark-4b\\models\\intent_lora_v0",
+ "rows": [
+  {
+   "case_id": "dev-001",
+   "label": "supports_conflict",
+   "expected": "violation",
+   "verdict": "violation",
+   "margin": 0.625
+  },
+  {
+   "case_id": "dev-002",
+   "label": "supports_conflict",
+   "expected": "violation",
+   "verdict": "violation",
+   "margin": 0.375
+  },
+  {
+   "case_id": "dev-003",
+   "label": "supports_conflict",
+   "expected": "violation",
+   "verdict": "violation",
+   "margin": 0.0
+  },
+  {
+   "case_id": "dev-004",
+   "label": "supports_conflict",
+   "expected": "violation",
+   "verdict": "violation",
+   "margin": 1.0
+  },
+  {
+   "case_id": "dev-005",
+   "label": "supports_conflict",
+   "expected": "violation",
+   "verdict": "violation",
+   "margin": 1.125
+  },
+  {
+   "case_id": "dev-006",
+   "label": "supports_conflict",
+   "expected": "violation",
+   "verdict": "violation",
+   "margin": 0.375
+  },
+  {
+   "case_id": "dev-007",
+   "label": "supports_conflict",
+   "expected": "violation",
+   "verdict": "violation",
+   "margin": 0.625
+  },
+  {
+   "case_id": "dev-008",
+   "label": "supports_compat",
+   "expected": "compliant",
+   "verdict": "compliant",
+   "margin": -2.25
+  },
+  {
+   "case_id": "dev-009",
+   "label": "supports_compat",
+   "expected": "compliant",
+   "verdict": "compliant",
+   "margin": -3.5
+  },
+  {
+   "case_id": "dev-010",
+   "label": "supports_conflict",
+   "expected": "violation",
+   "verdict": "violation",
+   "margin": 0.25
+  },
+  {
+   "case_id": "dev-011",
+   "label": "supports_compat",
+   "expected": "compliant",
+   "verdict": "compliant",
+   "margin": -5.0
+  },
+  {
+   "case_id": "dev-012",
+   "label": "insufficient_info",
+   "expected": "insufficient",
+   "verdict": "insufficient",
+   "margin": 0.5
+  },
+  {
+   "case_id": "dev-014",
+   "label": "supports_compat",
+   "expected": "compliant",
+   "verdict": "compliant",
+   "margin": -2.0
+  },
+  {
+   "case_id": "dev-015",
+   "label": "supports_compat",
+   "expected": "compliant",
+   "verdict": "compliant",
+   "margin": -3.375
+  },
+  {
+   "case_id": "dev-016",
+   "label": "supports_compat",
+   "expected": "compliant",
+   "verdict": "compliant",
+   "margin": -2.625
+  },
+  {
+   "case_id": "dev-017",
+   "label": "supports_compat",
+   "expected": "compliant",
+   "verdict": "compliant",
+   "margin": -2.875
+  }
+ ]
+}

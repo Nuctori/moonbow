@@ -60,3 +60,10 @@ results/guard-effect-v2/ws/
 results/convergence-phase2/agent_home/
 results/convergence-phase2/ws/
 results/guard-effect-v2/logs/
+
+# --- Runtime artifacts (large ledgers / real session dumps; keep only md reports) ---
+.mimosa/*
+!.mimosa/security-policy.json
+!.mimosa/intent-loop
+.mimosa/intent-loop/*
+!.mimosa/intent-loop/*.md

@@ -1,0 +1,15 @@
+{"event_id": "koishi_m00001", "role": "user_requirement", "events": 1, "entities": 0, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "koishi_m00002", "role": "assistant_claim", "events": 1, "entities": 0, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "koishi_m00003", "role": "tool_observation", "events": 1, "entities": 0, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "koishi_m00004", "role": "tool_observation", "events": 1, "entities": 12, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "koishi_m00005", "role": "tool_observation", "events": 1, "entities": 0, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "koishi_m00006", "role": "tool_observation", "events": 1, "entities": 0, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "koishi_m00007", "role": "tool_observation", "events": 1, "entities": 6, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "koishi_m00008", "role": "tool_observation", "events": 1, "entities": 132, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "koishi_m00009", "role": "tool_observation", "events": 1, "entities": 84, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "koishi_m00010", "role": "tool_observation", "events": 1, "entities": 312, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "koishi_m00011", "role": "assistant_claim", "events": 1, "entities": 0, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "koishi_m00012", "role": "tool_observation", "events": 1, "entities": 0, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "koishi_m00013", "role": "tool_observation", "events": 1, "entities": 186, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "koishi_m00014", "role": "tool_observation", "events": 1, "entities": 102, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "koishi_m00015", "role": "assistant_claim", "events": 1, "entities": 119, "judgments": 0, "reminders": [], "deduped": 0}
