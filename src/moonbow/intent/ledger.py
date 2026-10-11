@@ -145,6 +145,7 @@ class Ledger:
                 abstain=bool(p.get("abstain", False)),
                 abstain_reason=p.get("abstain_reason"),
                 reason=p.get("reason", ""),
+                confidence=p.get("confidence"),
                 evidence_kinds=list(p.get("evidence_kinds") or []),
                 evidence_results=list(p.get("evidence_results") or [])))
         return out

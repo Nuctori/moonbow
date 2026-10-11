@@ -172,6 +172,7 @@ class Judgment:
     reason: str = ""                   # 一句话人工可读理由
     evidence_kinds: Optional[List[str]] = None   # 证据机械类型（EVIDENCE_KINDS）
     evidence_results: Optional[List[str]] = None  # 证据机械结果（EVIDENCE_RESULTS）
+    confidence: Optional[float] = None  # 校准置信度 0-1（None=后端未提供）
 
     def __post_init__(self):
         if self.jtype not in JUDGMENT_TYPES:
@@ -194,6 +195,9 @@ class Judgment:
         if not self.evidence_ids and self.verdict in need_ev:
             raise ValueError(
                 f"verdict {self.verdict!r} requires evidence_ids binding")
+        if self.confidence is not None and not 0 <= self.confidence <= 1:
+            raise ValueError(
+                f"confidence 必须在 [0,1]，得到 {self.confidence}")
         for label, values, allowed in (
                 ("evidence_kinds", self.evidence_kinds, EVIDENCE_KINDS),
                 ("evidence_results", self.evidence_results, EVIDENCE_RESULTS)):
@@ -219,6 +223,7 @@ class Judgment:
             "verdict": self.verdict, "model_id": self.model_id,
             "abstain": self.abstain,
             "abstain_reason": self.abstain_reason, "reason": self.reason,
+            "confidence": self.confidence,
             "evidence_kinds": list(self.evidence_kinds or []),
             "evidence_results": list(self.evidence_results or []),
         }
