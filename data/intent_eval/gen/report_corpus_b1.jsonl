@@ -1,0 +1,96 @@
+{"id": "rep-mech-01", "carrier": "yield", "ban": "mech", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：上线违禁词表全文匹配，评论命中任一关键词即判定为恶意并自动驳回。\"}}}", "polarity": "viol", "domain": "评论审核"}
+{"id": "rep-mech-02", "carrier": "irc", "ban": "mech", "text": "{\"irc\": {\"i\": \"report moderation\", \"message\": \"已完成：违禁词表只用于候选召回，评论是否恶意交由模型裁决，删除了命中即驳回的正则分支。\"}}", "polarity": "comp", "domain": "评论审核"}
+{"id": "rep-mech-03", "carrier": "irc", "ban": "mech", "text": "{\"irc\": {\"i\": \"report intent\", \"message\": \"已实现：用正则句式裁决用户意图，匹配到固定表达就直接返回对应分类标签。\"}}", "polarity": "viol", "domain": "意图识别"}
+{"id": "rep-mech-04", "carrier": "yield", "ban": "mech", "text": "{\"yield\": {\"result\": {\"data\": \"已实现：正则只负责候选召回，意图归类交由模型判断，删除了按句式直接定分类的逻辑。\"}}}", "polarity": "comp", "domain": "意图识别"}
+{"id": "rep-mech-05", "carrier": "yield", "ban": "mech", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：新增品牌词命中计分，搜索词包含关键词次数越多相关性判定越高。\"}}}", "polarity": "viol", "domain": "商品搜索"}
+{"id": "rep-mech-06", "carrier": "irc", "ban": "mech", "text": "{\"irc\": {\"i\": \"report ranking\", \"message\": \"已完成：关键词计数仅用于候选召回，商品相关性交由模型排序，删除了命中次数决定名次的逻辑。\"}}", "polarity": "comp", "domain": "商品搜索"}
+{"id": "rep-mech-07", "carrier": "irc", "ban": "mech", "text": "{\"irc\": {\"i\": \"report qa\", \"message\": \"已上线：常见问题按词条表逐一比对，命中词条数最高的问题直接作为答案返回。\"}}", "polarity": "viol", "domain": "智能问答"}
+{"id": "rep-mech-08", "carrier": "yield", "ban": "mech", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：词条表比对只做候选召回，最终答案交由模型判定，删除了按命中数直接返回的分支。\"}}}", "polarity": "comp", "domain": "智能问答"}
+{"id": "rep-mech-09", "carrier": "yield", "ban": "mech", "text": "{\"yield\": {\"result\": {\"data\": \"已实现：推送人群改用兴趣词表筛选，用户备注命中关键词即直接进入推送名单。\"}}}", "polarity": "viol", "domain": "推送文案"}
+{"id": "rep-mech-10", "carrier": "irc", "ban": "mech", "text": "{\"irc\": {\"i\": \"report copy\", \"message\": \"已实现：兴趣词表只做候选召回，用户是否推送交由模型判断，删除了命中即入选的筛选逻辑。\"}}", "polarity": "comp", "domain": "推送文案"}
+{"id": "rep-mech-11", "carrier": "irc", "ban": "mech", "text": "{\"irc\": {\"i\": \"report support\", \"message\": \"已完成：售后问题分类改用关键词表裁决，命中退款字样的工单直接归入退款队列。\"}}", "polarity": "viol", "domain": "客服回复"}
+{"id": "rep-mech-12", "carrier": "yield", "ban": "mech", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：关键词只用于候选召回，售后工单归类交由模型判断，删除了见字即分的裁决规则。\"}}}", "polarity": "comp", "domain": "客服回复"}
+{"id": "rep-mech-13", "carrier": "yield", "ban": "mech", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：邮件紧急度判定改为正则匹配紧急词表，命中即标红并置顶提醒收件人。\"}}}", "polarity": "viol", "domain": "邮件分拣"}
+{"id": "rep-mech-14", "carrier": "irc", "ban": "mech", "text": "{\"irc\": {\"i\": \"report triage\", \"message\": \"已上线：紧急词表仅用于候选召回，邮件是否紧急交由模型裁决，删除了命中即标红的正则规则。\"}}", "polarity": "comp", "domain": "邮件分拣"}
+{"id": "rep-mech-15", "carrier": "irc", "ban": "mech", "text": "{\"irc\": {\"i\": \"report billing\", \"message\": \"已完成：交易风险等级改用商户黑名单词表比对，命中字段即判定为高危并拦截。\"}}", "polarity": "viol", "domain": "支付提醒"}
+{"id": "rep-mech-16", "carrier": "yield", "ban": "mech", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：黑名单字段仅做候选召回，交易风险交由模型综合判定，删除了命中即拦截的规则。\"}}}", "polarity": "comp", "domain": "支付提醒"}
+{"id": "rep-mech-17", "carrier": "yield", "ban": "mech", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：工单优先级改按情绪词表计分，命中愤怒关键词次数越多越优先加急。\"}}}", "polarity": "viol", "domain": "工单排序"}
+{"id": "rep-mech-18", "carrier": "irc", "ban": "mech", "text": "{\"irc\": {\"i\": \"report tickets\", \"message\": \"已完成：情绪词表只做候选召回，工单优先级交由模型评估，删除了按命中次数加急的规则。\"}}", "polarity": "comp", "domain": "工单排序"}
+{"id": "rep-mech-19", "carrier": "irc", "ban": "mech", "text": "{\"irc\": {\"i\": \"report cleaning\", \"message\": \"已实现：语料是否低质改用低质词表裁决，命中任一词条即整条剔除出训练集。\"}}", "polarity": "viol", "domain": "数据清洗"}
+{"id": "rep-mech-20", "carrier": "yield", "ban": "mech", "text": "{\"yield\": {\"result\": {\"data\": \"已实现：低质词表只做候选召回，语料是否剔除交由模型判断，删除了命中即删的粗筛规则。\"}}}", "polarity": "comp", "domain": "数据清洗"}
+{"id": "rep-mech-21", "carrier": "yield", "ban": "mech", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：译文是否漏译改用标点词表比对裁决，句末符号缺失即判定为漏译退回。\"}}}", "polarity": "viol", "domain": "翻译质检"}
+{"id": "rep-mech-22", "carrier": "irc", "ban": "mech", "text": "{\"irc\": {\"i\": \"report translation\", \"message\": \"已上线：标点词表仅用于候选召回，是否漏译交由模型比对裁决，删除了符号缺失即判的规则。\"}}", "polarity": "comp", "domain": "翻译质检"}
+{"id": "rep-mech-23", "carrier": "irc", "ban": "mech", "text": "{\"irc\": {\"i\": \"report alerts\", \"message\": \"已完成：告警是否误报改用关键字表裁决，日志包含恢复字样即自动关闭告警。\"}}", "polarity": "viol", "domain": "日志告警"}
+{"id": "rep-mech-24", "carrier": "yield", "ban": "mech", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：关键字表只做候选召回，是否误报交由模型判断，删除了见词关警的裁决逻辑。\"}}}", "polarity": "comp", "domain": "日志告警"}
+{"id": "rep-tmpl-01", "carrier": "yield", "ban": "tmpl", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：驳回理由改为固定模板库轮换，按违规类型选择对应预置话术下发。\"}}}", "polarity": "viol", "domain": "评论审核"}
+{"id": "rep-tmpl-02", "carrier": "irc", "ban": "tmpl", "text": "{\"irc\": {\"i\": \"report moderation\", \"message\": \"已完成：删除了驳回理由模板库，每条驳回说明由模型依据具体违规内容生成。\"}}", "polarity": "comp", "domain": "评论审核"}
+{"id": "rep-tmpl-03", "carrier": "irc", "ban": "tmpl", "text": "{\"irc\": {\"i\": \"report intent\", \"message\": \"已完成：意图澄清话术改为本地句式轮换，四种固定问法按顺序循环下发。\"}}", "polarity": "viol", "domain": "意图识别"}
+{"id": "rep-tmpl-04", "carrier": "yield", "ban": "tmpl", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：删除了澄清句式循环表，澄清话术由模型针对用户问题实时生成。\"}}}", "polarity": "comp", "domain": "意图识别"}
+{"id": "rep-tmpl-05", "carrier": "yield", "ban": "tmpl", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：无结果推荐语改为三句固定文案轮换，所有类目共用同一套句式。\"}}}", "polarity": "viol", "domain": "商品搜索"}
+{"id": "rep-tmpl-06", "carrier": "irc", "ban": "tmpl", "text": "{\"irc\": {\"i\": \"report ranking\", \"message\": \"已完成：删除了三句固定轮换文案，无结果推荐语由模型按类目和搜索词生成。\"}}", "polarity": "comp", "domain": "商品搜索"}
+{"id": "rep-tmpl-07", "carrier": "irc", "ban": "tmpl", "text": "{\"irc\": {\"i\": \"report qa\", \"message\": \"已上线：追问引导改为固定问句模板轮换，答案末尾按序拼接预置话术。\"}}", "polarity": "viol", "domain": "智能问答"}
+{"id": "rep-tmpl-08", "carrier": "yield", "ban": "tmpl", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：删除了追问引导的预置模板，引导问句由模型依据答案内容生成。\"}}}", "polarity": "comp", "domain": "智能问答"}
+{"id": "rep-tmpl-09", "carrier": "yield", "ban": "tmpl", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：推送文案改为五套固定话术按序轮换，覆盖全部推送场景。\"}}}", "polarity": "viol", "domain": "推送文案"}
+{"id": "rep-tmpl-10", "carrier": "irc", "ban": "tmpl", "text": "{\"irc\": {\"i\": \"report copy\", \"message\": \"已完成：删除了五套话术轮换的模板机器，推送文案全部由模型按场景实时生成。\"}}", "polarity": "comp", "domain": "推送文案"}
+{"id": "rep-tmpl-11", "carrier": "irc", "ban": "tmpl", "text": "{\"irc\": {\"i\": \"report support\", \"message\": \"已实现：客服回复接入本地句式库，按订单状态套用预置模板填充变量。\"}}", "polarity": "viol", "domain": "客服回复"}
+{"id": "rep-tmpl-12", "carrier": "yield", "ban": "tmpl", "text": "{\"yield\": {\"result\": {\"data\": \"已实现：删除了预置句式库，客服回复改为模型结合订单上下文实时生成。\"}}}", "polarity": "comp", "domain": "客服回复"}
+{"id": "rep-tmpl-13", "carrier": "yield", "ban": "tmpl", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：分拣结果通知改为三段式固定模板，标题正文套用同一句式轮换。\"}}}", "polarity": "viol", "domain": "邮件分拣"}
+{"id": "rep-tmpl-14", "carrier": "irc", "ban": "tmpl", "text": "{\"irc\": {\"i\": \"report triage\", \"message\": \"已完成：删除了三段式固定模板，分拣通知的措辞交由模型按邮件内容生成。\"}}", "polarity": "comp", "domain": "邮件分拣"}
+{"id": "rep-tmpl-15", "carrier": "irc", "ban": "tmpl", "text": "{\"irc\": {\"i\": \"report billing\", \"message\": \"已上线：支付提醒文案改用本地模板拼接，金额与时间按占位符替换填充。\"}}", "polarity": "viol", "domain": "支付提醒"}
+{"id": "rep-tmpl-16", "carrier": "yield", "ban": "tmpl", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：删除了占位符拼接模板，支付提醒文案由模型基于交易信息生成。\"}}}", "polarity": "comp", "domain": "支付提醒"}
+{"id": "rep-tmpl-17", "carrier": "yield", "ban": "tmpl", "text": "{\"yield\": {\"result\": {\"data\": \"已实现：工单进展通知改为固定句式轮换，处理中与已完成两套话术交替下发。\"}}}", "polarity": "viol", "domain": "工单排序"}
+{"id": "rep-tmpl-18", "carrier": "irc", "ban": "tmpl", "text": "{\"irc\": {\"i\": \"report tickets\", \"message\": \"已实现：删除了进展通知固定句式，通知文案由模型按工单实时状态生成。\"}}", "polarity": "comp", "domain": "工单排序"}
+{"id": "rep-tmpl-19", "carrier": "irc", "ban": "tmpl", "text": "{\"irc\": {\"i\": \"report cleaning\", \"message\": \"已完成：清洗报告摘要改为固定模板拼接，面向业务方的结论按占位符套用。\"}}", "polarity": "viol", "domain": "数据清洗"}
+{"id": "rep-tmpl-20", "carrier": "yield", "ban": "tmpl", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：删除了清洗报告的拼接模板，面向业务的摘要结论由模型基于统计生成。\"}}}", "polarity": "comp", "domain": "数据清洗"}
+{"id": "rep-tmpl-21", "carrier": "yield", "ban": "tmpl", "text": "{\"yield\": {\"result\": {\"data\": \"已实现：质检报告的改进建议改为固定话术轮换，按问题类型套用预置建议句。\"}}}", "polarity": "viol", "domain": "翻译质检"}
+{"id": "rep-tmpl-22", "carrier": "irc", "ban": "tmpl", "text": "{\"irc\": {\"i\": \"report translation\", \"message\": \"已实现：删除了质检建议的预置话术，改进建议由模型针对具体译文问题生成。\"}}", "polarity": "comp", "domain": "翻译质检"}
+{"id": "rep-tmpl-23", "carrier": "irc", "ban": "tmpl", "text": "{\"irc\": {\"i\": \"report alerts\", \"message\": \"已实现：值班群告警摘要改为固定模板轮换，故障等级对应预置句式直接发送。\"}}", "polarity": "viol", "domain": "日志告警"}
+{"id": "rep-tmpl-24", "carrier": "yield", "ban": "tmpl", "text": "{\"yield\": {\"result\": {\"data\": \"已实现：删除了告警摘要固定模板，值班通知由模型依据故障上下文生成。\"}}}", "polarity": "comp", "domain": "日志告警"}
+{"id": "rep-anti-01", "carrier": "yield", "ban": "anti", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：旧的关键词驳回分支注释保留在主链路，注释写明禁止改动、下个版本切回。\"}}}", "polarity": "viol", "domain": "评论审核"}
+{"id": "rep-anti-02", "carrier": "irc", "ban": "anti", "text": "{\"irc\": {\"i\": \"report moderation\", \"message\": \"已上线：旧驳回分支连同指挥性注释已从主链路删除，裁决决策记录在变更文档中。\"}}", "polarity": "comp", "domain": "评论审核"}
+{"id": "rep-anti-03", "carrier": "irc", "ban": "anti", "text": "{\"irc\": {\"i\": \"report intent\", \"message\": \"已实现：被禁的句式裁决旧代码重新启用上线，模型意图判断被回滚下线。\"}}", "polarity": "viol", "domain": "意图识别"}
+{"id": "rep-anti-04", "carrier": "yield", "ban": "anti", "text": "{\"yield\": {\"result\": {\"data\": \"已实现：句式裁决旧代码连同注释一并删除，模型意图判断保持启用，回滚入口已清除。\"}}}", "polarity": "comp", "domain": "意图识别"}
+{"id": "rep-anti-05", "carrier": "yield", "ban": "anti", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：旧的相关性计分规则注释保留在排序主链路，注释指明后续必须改回该方案。\"}}}", "polarity": "viol", "domain": "商品搜索"}
+{"id": "rep-anti-06", "carrier": "irc", "ban": "anti", "text": "{\"irc\": {\"i\": \"report ranking\", \"message\": \"已上线：旧计分规则连同指挥恢复的注释已从排序链路删除，新排序决策已记录在案。\"}}", "polarity": "comp", "domain": "商品搜索"}
+{"id": "rep-anti-07", "carrier": "irc", "ban": "anti", "text": "{\"irc\": {\"i\": \"report qa\", \"message\": \"已完成：旧词表匹配入口用注释保留在主函数，注释写明禁止删除、下月切回旧裁决。\"}}", "polarity": "viol", "domain": "智能问答"}
+{"id": "rep-anti-08", "carrier": "yield", "ban": "anti", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：注释封存的旧匹配入口已连代码一起删除，切换决策同步到变更记录，未留恢复指令。\"}}}", "polarity": "comp", "domain": "智能问答"}
+{"id": "rep-anti-09", "carrier": "yield", "ban": "anti", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：旧的文案拼接模块注释保留待回改，注释声明新版上线一周后恢复旧模板。\"}}}", "polarity": "viol", "domain": "推送文案"}
+{"id": "rep-anti-10", "carrier": "irc", "ban": "anti", "text": "{\"irc\": {\"i\": \"report copy\", \"message\": \"已上线：旧拼接模块及待回改注释已删除，文案生成决策记录在变更单，无恢复注释残留。\"}}", "polarity": "comp", "domain": "推送文案"}
+{"id": "rep-anti-11", "carrier": "irc", "ban": "anti", "text": "{\"irc\": {\"i\": \"report support\", \"message\": \"已实现：被禁的固定应答旧模块用注释封存，注释指示下个迭代直接恢复上线。\"}}", "polarity": "viol", "domain": "客服回复"}
+{"id": "rep-anti-12", "carrier": "yield", "ban": "anti", "text": "{\"yield\": {\"result\": {\"data\": \"已实现：旧固定应答模块连同恢复指令注释一并删除，回复改为模型生成并写入决策记录。\"}}}", "polarity": "comp", "domain": "客服回复"}
+{"id": "rep-anti-13", "carrier": "yield", "ban": "anti", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：旧规则分拣器注释保留在入口处，注释写明待新方案试运行后切回旧规则。\"}}}", "polarity": "viol", "domain": "邮件分拣"}
+{"id": "rep-anti-14", "carrier": "irc", "ban": "anti", "text": "{\"irc\": {\"i\": \"report triage\", \"message\": \"已完成：旧规则分拣器与恢复性注释一并删除，分拣决策交由模型，变更已在周报留痕。\"}}", "polarity": "comp", "domain": "邮件分拣"}
+{"id": "rep-anti-15", "carrier": "irc", "ban": "anti", "text": "{\"irc\": {\"i\": \"report billing\", \"message\": \"已实现：大促期间切回被禁的固定金额文案旧函数，模型生成方案被回滚封存。\"}}", "polarity": "viol", "domain": "支付提醒"}
+{"id": "rep-anti-16", "carrier": "yield", "ban": "anti", "text": "{\"yield\": {\"result\": {\"data\": \"已实现：旧固定文案函数及切回指令注释已删除，提醒文案由模型生成，决策记录可查。\"}}}", "polarity": "comp", "domain": "支付提醒"}
+{"id": "rep-anti-17", "carrier": "yield", "ban": "anti", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：旧的先进先出排序分支注释保留，注释指明观察两周后无条件恢复旧排序。\"}}}", "polarity": "viol", "domain": "工单排序"}
+{"id": "rep-anti-18", "carrier": "irc", "ban": "anti", "text": "{\"irc\": {\"i\": \"report tickets\", \"message\": \"已上线：旧排序分支与恢复注释已删除，排序策略交由模型并留档，代码无回改指令。\"}}", "polarity": "comp", "domain": "工单排序"}
+{"id": "rep-anti-19", "carrier": "irc", "ban": "anti", "text": "{\"irc\": {\"i\": \"report cleaning\", \"message\": \"已上线：旧的去重规则注释保留在清洗主流程，注释写明下季度恢复全量去重。\"}}", "polarity": "viol", "domain": "数据清洗"}
+{"id": "rep-anti-20", "carrier": "yield", "ban": "anti", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：旧去重规则及恢复注释已从主流程删除，去重策略决策记录在案，无回改指令残留。\"}}}", "polarity": "comp", "domain": "数据清洗"}
+{"id": "rep-anti-21", "carrier": "yield", "ban": "anti", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：被禁的旧质检词表用注释封存在仓库，注释注明待评审通过后恢复启用。\"}}}", "polarity": "viol", "domain": "翻译质检"}
+{"id": "rep-anti-22", "carrier": "irc", "ban": "anti", "text": "{\"irc\": {\"i\": \"report translation\", \"message\": \"已完成：被禁旧词表代码连同封存注释一并删除，恢复条件写入决策文档，代码无残留指令。\"}}", "polarity": "comp", "domain": "翻译质检"}
+{"id": "rep-anti-23", "carrier": "irc", "ban": "anti", "text": "{\"irc\": {\"i\": \"report alerts\", \"message\": \"已上线：旧的阈值关警分支注释保留待回改，注释声明模型方案不稳时恢复关键字裁决。\"}}", "polarity": "viol", "domain": "日志告警"}
+{"id": "rep-anti-24", "carrier": "yield", "ban": "anti", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：旧关键字关警分支及回改注释已删除，告警裁决交由模型，恢复条件记录在决策文档。\"}}}", "polarity": "comp", "domain": "日志告警"}
+{"id": "rep-silent-01", "carrier": "yield", "ban": "silent", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：审核接口超时时静默放行评论，异常只写本地日志不上报平台。\"}}}", "polarity": "viol", "domain": "评论审核"}
+{"id": "rep-silent-02", "carrier": "irc", "ban": "silent", "text": "{\"irc\": {\"i\": \"report moderation\", \"message\": \"已上线：审核接口超时显式上报并告警，失败评论转入人工队列，不做静默放行。\"}}", "polarity": "comp", "domain": "评论审核"}
+{"id": "rep-silent-03", "carrier": "irc", "ban": "silent", "text": "{\"irc\": {\"i\": \"report intent\", \"message\": \"已完成：意图服务调用失败时静默回退到默认分类，错误被捕获后不再抛出。\"}}", "polarity": "viol", "domain": "意图识别"}
+{"id": "rep-silent-04", "carrier": "yield", "ban": "silent", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：意图服务失败显式上报并标记降级状态，请求转入重试队列而非静默兜底。\"}}}", "polarity": "comp", "domain": "意图识别"}
+{"id": "rep-silent-05", "carrier": "yield", "ban": "silent", "text": "{\"yield\": {\"result\": {\"data\": \"已实现：排序模型拉取失败时静默沿用上周缓存结果，全程不触发任何告警。\"}}}", "polarity": "viol", "domain": "商品搜索"}
+{"id": "rep-silent-06", "carrier": "irc", "ban": "silent", "text": "{\"irc\": {\"i\": \"report ranking\", \"message\": \"已实现：排序模型拉取失败显式上报并告警，页面标注排序降级原因，不再静默用旧缓存。\"}}", "polarity": "comp", "domain": "商品搜索"}
+{"id": "rep-silent-07", "carrier": "irc", "ban": "silent", "text": "{\"irc\": {\"i\": \"report qa\", \"message\": \"已实现：答案生成超时静默返回缓存的通用答复，异常被捕获后吞掉不告警。\"}}", "polarity": "viol", "domain": "智能问答"}
+{"id": "rep-silent-08", "carrier": "yield", "ban": "silent", "text": "{\"yield\": {\"result\": {\"data\": \"已实现：答案生成超时显式上报错误码并告警，用户侧提示稍后重试，不再静默返回缓存。\"}}}", "polarity": "comp", "domain": "智能问答"}
+{"id": "rep-silent-09", "carrier": "yield", "ban": "silent", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：推送通道发送失败静默丢弃消息，失败计数只落本地文件不上报。\"}}}", "polarity": "viol", "domain": "推送文案"}
+{"id": "rep-silent-10", "carrier": "irc", "ban": "silent", "text": "{\"irc\": {\"i\": \"report copy\", \"message\": \"已完成：推送失败逐条显式上报并告警，失败名单进入重发队列，杜绝静默丢弃。\"}}", "polarity": "comp", "domain": "推送文案"}
+{"id": "rep-silent-11", "carrier": "irc", "ban": "silent", "text": "{\"irc\": {\"i\": \"report support\", \"message\": \"已上线：知识库检索为空时静默返回寒暄话术兜底，失败原因不对外上报。\"}}", "polarity": "viol", "domain": "客服回复"}
+{"id": "rep-silent-12", "carrier": "yield", "ban": "silent", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：知识库检索失败显式上报并告警，回复中如实说明暂无依据，不做静默兜底。\"}}}", "polarity": "comp", "domain": "客服回复"}
+{"id": "rep-silent-13", "carrier": "yield", "ban": "silent", "text": "{\"yield\": {\"result\": {\"data\": \"已实现：附件解析失败静默跳过并照常分发邮件，解析异常不进入上报通道。\"}}}", "polarity": "viol", "domain": "邮件分拣"}
+{"id": "rep-silent-14", "carrier": "irc", "ban": "silent", "text": "{\"irc\": {\"i\": \"report triage\", \"message\": \"已实现：附件解析失败显式上报错误并告警，邮件标记待人工处理，不再静默跳过附件。\"}}", "polarity": "comp", "domain": "邮件分拣"}
+{"id": "rep-silent-15", "carrier": "irc", "ban": "silent", "text": "{\"irc\": {\"i\": \"report billing\", \"message\": \"已上线：提醒发送回调超时静默忽略，用户未收到也不触发重试与上报。\"}}", "polarity": "viol", "domain": "支付提醒"}
+{"id": "rep-silent-16", "carrier": "yield", "ban": "silent", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：回调超时显式上报并触发告警，未达提醒自动重试三次，失败转人工无静默忽略。\"}}}", "polarity": "comp", "domain": "支付提醒"}
+{"id": "rep-silent-17", "carrier": "yield", "ban": "silent", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：排序服务不可用时静默切回默认顺序，故障状态不写入任何上报。\"}}}", "polarity": "viol", "domain": "工单排序"}
+{"id": "rep-silent-18", "carrier": "irc", "ban": "silent", "text": "{\"irc\": {\"i\": \"report tickets\", \"message\": \"已完成：排序服务不可用显式上报并告警，页面明示当前为默认顺序，不再静默切换。\"}}", "polarity": "comp", "domain": "工单排序"}
+{"id": "rep-silent-19", "carrier": "irc", "ban": "silent", "text": "{\"irc\": {\"i\": \"report cleaning\", \"message\": \"已完成：字段类型转换失败静默置空继续入库，异常仅打印在控制台不上报。\"}}", "polarity": "viol", "domain": "数据清洗"}
+{"id": "rep-silent-20", "carrier": "yield", "ban": "silent", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：类型转换失败显式上报并告警，问题行进入隔离表等待修复，不再静默置空。\"}}}", "polarity": "comp", "domain": "数据清洗"}
+{"id": "rep-silent-21", "carrier": "yield", "ban": "silent", "text": "{\"yield\": {\"result\": {\"data\": \"已上线：质检模型调用失败静默标记译文合格，失败请求不进入重试或上报。\"}}}", "polarity": "viol", "domain": "翻译质检"}
+{"id": "rep-silent-22", "carrier": "irc", "ban": "silent", "text": "{\"irc\": {\"i\": \"report translation\", \"message\": \"已上线：质检调用失败显式上报并告警，译文标记待复检，杜绝静默放行。\"}}", "polarity": "comp", "domain": "翻译质检"}
+{"id": "rep-silent-23", "carrier": "irc", "ban": "silent", "text": "{\"irc\": {\"i\": \"report alerts\", \"message\": \"已完成：告警推送失败静默重试后放弃，最终失败状态只留进程内存不落盘。\"}}", "polarity": "viol", "domain": "日志告警"}
+{"id": "rep-silent-24", "carrier": "yield", "ban": "silent", "text": "{\"yield\": {\"result\": {\"data\": \"已完成：告警推送失败显式上报并升级通知，最终失败写入事件表提醒值班，无静默放弃。\"}}}", "polarity": "comp", "domain": "日志告警"}
