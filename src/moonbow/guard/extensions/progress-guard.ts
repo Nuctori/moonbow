@@ -9,6 +9,22 @@ import { appendBlocks, appendToolEvent, hasUnauditedToolEvents, isGuardOriginTex
 import { installPseudoCallGuard } from "./pseudo-call-guard.ts";
 
 const URL = process.env.MOONBOW_GUARD_URL || "http://127.0.0.1:18492";
+
+// SSRF 防护：守卫服务地址是本机服务的显式配置。协议必须为 http(s)、
+// 主机必须在环回允许列表内（127.0.0.1/localhost/::1）；非法配置 fail-closed
+//（抛错，扩展不加载）。后续请求只使用该已验证基址派生的 GUARD_BASE。
+// 注意：模块顶层 const URL 遮蔽了全局 URL 构造器，这里显式用 globalThis.URL。
+const GUARD_BASE = (() => {
+  const u = new globalThis.URL(URL);
+  if (u.protocol !== "http:" && u.protocol !== "https:") {
+    throw new Error(`MOONBOW_GUARD_URL must be http(s): ${URL}`);
+  }
+  const host = u.hostname.toLowerCase();
+  if (host !== "127.0.0.1" && host !== "localhost" && host !== "::1") {
+    throw new Error(`MOONBOW_GUARD_URL host not in loopback allowlist: ${host}`);
+  }
+  return u.origin;
+})();
 const MODE = process.env.MOONBOW_GUARD_MODE === "strict" ? "strict" : "advisory";
 // R5：语义 provider 透传。MOONBOW_GUARD_PROVIDER=semantic 时 /check payload
 // 显式带 semantic_provider="semantic"（服务端需以同名环境变量启动并配置
@@ -347,7 +363,7 @@ export default function activate(pi: ExtensionAPI) {
     checking.add(current.id);
     try {
       const started = Date.now();
-      const response = await fetch(URL + "/check", {
+      const response = await fetch(GUARD_BASE + "/check", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: AbortSignal.timeout(10000),

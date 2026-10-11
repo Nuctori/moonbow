@@ -113,6 +113,23 @@
   SLM 0.8B 零样本不可用（6/10 不可解析+2 误报）→ 后端须标注流微调。
 * **入口**：[`tools/constraint_gate/README.md`](tools/constraint_gate/README.md)。
 
+### 新增模块：intent-loop 目标/约束语义提醒闭环（2026-10-09，CONDITIONAL GO）
+* **定位**：constraint_gate 的语义化后继——工作流事件流经 SLM 捕获
+  （目标/约束/决策/完成宣称/证据指认，带 verbatim span），账本支持修订与
+  生效窗口；每新增决策做约束关系判断、收尾做目标覆盖判断；
+  全程提醒不阻断，用户终审。
+* **实现**：`src/moonbow/intent/`（schema/ledger/verify/capture/loop/adapters，
+  27 单测全绿）+ `tools/intent_eval/`（0.8B 诊断、LoRA-SFT 对照、
+  ZCode/pi 双 harness 重放）。
+* **关键实验结论**：base 0.8B 零样本不可用（20/20 基座续写）；
+  自由生成协议不可用于分类（SFT 后仍 1/16 可解析）；
+  **LoRA-SFT + 首 token 受限输出 = 16/16 可解析、in-sample 15/16 一致、
+  0.2s/次、1.72GB**；GLiNER 捕获可用但 8 类全开需校准；
+  scope 跨项目泛化为已知缺口（dev-012）。
+* **交付与 go/no-go**：[`docs/intent_loop_delivery.md`](docs/intent_loop_delivery.md)
+  —— CONDITIONAL GO（捕获附条件；裁决 SFT 后 GO、zero-shot NO-GO；
+  宿主注入未验收如实记录）。唯一维护点即此文档。
+
 ---
 
 ## 三、 关键学术结论与设计原则备忘

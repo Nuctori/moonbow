@@ -29,14 +29,25 @@ import os
 import statistics
 import sys
 import time
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(ROOT, "src"))
 
-OUT_DIR = os.path.join(ROOT, "results", "semantic-runtime", "jev-template-v2")
-PRED_PATH = os.path.join(OUT_DIR, "predictions_calib.jsonl")
-METRICS_PATH = os.path.join(OUT_DIR, "metrics.json")
+
+def _safe_join(root, *parts):
+    """规范化拼接并校验结果不逃出 root（防路径穿越）。"""
+    p = os.path.realpath(os.path.join(root, *parts))
+    root_r = os.path.realpath(root)
+    if p != root_r and not p.startswith(root_r + os.sep):
+        raise ValueError(f"path escapes root: {p!r}")
+    return p
+
+
+OUT_DIR = _safe_join(ROOT, "results", "semantic-runtime", "jev-template-v2")
+PRED_PATH = _safe_join(OUT_DIR, "predictions_calib.jsonl")
+METRICS_PATH = _safe_join(OUT_DIR, "metrics.json")
 TEMPLATE_JSON = os.path.join(HERE, "jev-template-v2.json")
 TEXTS = os.path.join(ROOT, "data", "semantic_frozen_v1", "frozen_texts_calib.jsonl")
 LABELS = os.path.join(ROOT, "data", "semantic_frozen_v1", "frozen_labels_calib.jsonl")
@@ -279,7 +290,7 @@ def main():
                        if gate["f1_ok"] and gate["recall_ok"]
                        else "template-no-go")
     metrics["gate"] = gate
-    with open(METRICS_PATH, "w", encoding="utf-8") as f:
+    with Path(METRICS_PATH).open("w", encoding="utf-8") as f:
         json.dump(metrics, f, ensure_ascii=False, indent=2)
     print("metrics written:", METRICS_PATH)
     for p, d in metrics["patterns"].items():

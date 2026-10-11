@@ -17,9 +17,19 @@
 import hashlib
 import json
 import os
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "eval_set.jsonl")
+
+
+def _safe_join(root, *parts):
+    """规范化拼接并校验结果不逃出 root（防路径穿越）。"""
+    p = os.path.realpath(os.path.join(root, *parts))
+    root_r = os.path.realpath(root)
+    if p != root_r and not p.startswith(root_r + os.sep):
+        raise ValueError(f"path escapes root: {p!r}")
+    return p
 
 # ---------------------------------------------------------------------------
 # 语料：(family, text, gold_captures[(kind, quote)], unknowns, abstain, level, notes)
@@ -723,13 +733,14 @@ def main() -> None:
             "provenance": "agent-authored+self-reviewed (provisional, no human review)",
             "notes": notes,
         })
-    with open(OUT, "w", encoding="utf-8") as f:
+    out_path = _safe_join(HERE, "eval_set.jsonl")
+    with Path(out_path).open("w", encoding="utf-8") as f:
         for r in rows:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
     from collections import Counter
     fam = Counter(r["family"] for r in rows)
     spl = Counter(r["split"] for r in rows)
-    print(f"写出 {len(rows)} 样本 → {OUT}")
+    print(f"写出 {len(rows)} 样本 → {out_path}")
     print("家族分布:", dict(fam))
     print("切分分布:", dict(spl))
     if level_fixes:

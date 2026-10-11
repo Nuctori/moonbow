@@ -244,9 +244,11 @@ class ProgressGuard:
             self._env_provider_tried = True
             if env_provider_key() == "semantic":
                 try:
-                    from .semantic_provider import semantic_provider_from_config
+                    from .semantic_provider import (semantic_config_path_from_env,
+                                                    semantic_provider_from_config)
+                    # 环境变量路径经 semantic_provider 侧统一校验（realpath+存在性）
                     self._provider = provider = semantic_provider_from_config(
-                        os.environ.get(SEMANTIC_CONFIG_ENV))
+                        semantic_config_path_from_env())
                     logger.info("MOONBOW_GUARD_PROVIDER=semantic: "
                                 "已按配置启用 semantic provider")
                 except Exception as e:

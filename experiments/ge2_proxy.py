@@ -30,6 +30,7 @@ import os
 import sys
 import time
 import urllib.request
+from pathlib import Path
 
 from flask import Flask, request, Response, jsonify
 
@@ -56,7 +57,9 @@ _LOG_LOCK = None  # 单进程 flask threaded；append 单行 <4KB 原子性足�
 def _log(entry):
     entry["ts"] = time.strftime("%Y-%m-%dT%H:%M:%S")
     try:
-        with open(REQ_LOG, "a", encoding="utf-8") as f:
+        # REQ_LOG 来自环境变量：路径经 realpath 规范化后再写（防路径穿越）
+        log_path = os.path.realpath(REQ_LOG)
+        with Path(log_path).open("a", encoding="utf-8") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
     except Exception as e:  # 日志失败不影响透传主路径，但打印到 stdout 留痕
         print(f"[ge2-proxy] log write failed: {e}", flush=True)

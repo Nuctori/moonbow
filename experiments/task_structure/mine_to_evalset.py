@@ -121,8 +121,9 @@ def main() -> None:
             break
 
     os.makedirs(OUT_DIR, exist_ok=True)
-    out = os.path.join(OUT_DIR, "session_eval.jsonl")
-    with open(out, "w", encoding="utf-8") as f:
+    out = ms._safe_join(OUT_DIR, "session_eval.jsonl")
+    from pathlib import Path
+    with Path(out).open("w", encoding="utf-8") as f:
         for r in rows:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
 

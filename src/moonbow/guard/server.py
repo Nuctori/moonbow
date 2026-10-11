@@ -281,9 +281,11 @@ def start_server(
     env_key = env_provider_key()
     if semantic_provider is None and env_key == "semantic":
         try:
-            from .semantic_provider import semantic_provider_from_config
+            from .semantic_provider import (semantic_config_path_from_env,
+                                            semantic_provider_from_config)
+            # 环境变量路径经 semantic_provider 侧统一校验（realpath+存在性，防穿越）
             semantic_provider = semantic_provider_from_config(
-                os.environ.get(SEMANTIC_CONFIG_ENV))
+                semantic_config_path_from_env())
             GuardHTTPRequestHandler.default_provider_key = "semantic"
             logger.info("MOONBOW_GUARD_PROVIDER=semantic: /check 默认走 "
                         "semantic provider（白名单；回滚 = 移除该环境变量并重启）")

@@ -20,6 +20,7 @@ import os
 import re
 import sys
 from collections import Counter
+from pathlib import Path
 
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
 os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
@@ -29,6 +30,15 @@ sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..", "..", "src")))
 
 SESSION_ROOT = os.path.expanduser("~/.pi/agent/sessions")
 OUT_DIR = os.path.join(HERE, "mined")
+
+
+def _safe_join(root, *parts):
+    """规范化拼接并校验结果不逃出 root（防路径穿越）。"""
+    p = os.path.realpath(os.path.join(root, *parts))
+    root_r = os.path.realpath(root)
+    if p != root_r and not p.startswith(root_r + os.sep):
+        raise ValueError(f"path escapes root: {p!r}")
+    return p
 
 # 明显不是自然语言指令的消息：斜杠命令、纯路径、超长粘贴、系统提醒
 _SKIP_PREFIX = ("/", "#", "```", "{", "[", "<")
@@ -130,8 +140,8 @@ def main() -> None:
 
     if args.dump:
         os.makedirs(OUT_DIR, exist_ok=True)
-        out = os.path.join(OUT_DIR, "session_clauses.jsonl")
-        with open(out, "w", encoding="utf-8") as f:
+        out = _safe_join(OUT_DIR, "session_clauses.jsonl")
+        with Path(out).open("w", encoding="utf-8") as f:
             for r in candidates:
                 f.write(json.dumps(r, ensure_ascii=False) + "\n")
         print(f"\n已落盘 {len(candidates)} 条 → {out}（本地，不入库）")

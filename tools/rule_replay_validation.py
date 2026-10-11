@@ -62,6 +62,7 @@ import os
 import re
 import sys
 from collections import Counter
+from pathlib import Path
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))      # publish_repo
 WORKSPACE = os.path.dirname(REPO)                                        # M:\AI\spark-4b
@@ -737,7 +738,7 @@ def write_report(path, rows, metrics, budget, stall_line, label_diff, corpus_lin
     w("- 复现：`python tools/rule_replay_validation.py`（默认 budget=900；只读历史会话）")
     w("- 回归：`python -m pytest tests/test_convergence_shadow.py -q`（60 passed，规则实现零改动）")
     w("")
-    with open(path, "w", encoding="utf-8") as fh:
+    with Path(path).open("w", encoding="utf-8") as fh:
         fh.write("\n".join(md))
     return path
 
@@ -838,7 +839,7 @@ def run_parity(out_dir, budget):
 
     total = len(rows)
     runs_path = os.path.join(out_dir, "channel_parity_runs.jsonl")
-    with open(runs_path, "w", encoding="utf-8") as fh:
+    with Path(runs_path).open("w", encoding="utf-8") as fh:
         for row in rows:
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")
 
@@ -967,7 +968,7 @@ def _write_parity_report(path, rows, total, n_equal, n_detail_equal, budget):
     w("- 回归：`python -m pytest tests/test_convergence_shadow.py -q`、"
       "`node --test tests/test_pi_process.mjs`")
     w("")
-    with open(path, "w", encoding="utf-8") as fh:
+    with Path(path).open("w", encoding="utf-8") as fh:
         fh.write("\n".join(md))
     return path
 
@@ -1013,7 +1014,8 @@ def main():
                 row[k + "_detail"] = res[k + "_detail"]
             out_rows.append(row)
 
-    with open(os.path.join(a.out, "replay_runs.jsonl"), "w", encoding="utf-8") as fh:
+    runs_out = os.path.join(a.out, "replay_runs.jsonl")
+    with Path(runs_out).open("w", encoding="utf-8") as fh:
         for row in out_rows:
             fh.write(json.dumps(row, ensure_ascii=False) + "\n")
 
@@ -1153,7 +1155,8 @@ def main():
                      "runs": [r["run"] for r in healthy_repeat]}})
     metrics["known_sample_checks"] = checks
 
-    with open(os.path.join(a.out, "rule_replay_metrics.json"), "w", encoding="utf-8") as fh:
+    metrics_out = os.path.join(a.out, "rule_replay_metrics.json")
+    with Path(metrics_out).open("w", encoding="utf-8") as fh:
         json.dump(metrics, fh, ensure_ascii=False, indent=2)
 
     # ── 报告（与数据同源生成）──

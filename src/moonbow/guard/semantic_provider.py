@@ -495,6 +495,22 @@ def build_whitelist_adapter(matcher,
     )
 
 
+def semantic_config_path_from_env() -> Optional[str]:
+    """读取并校验 MOONBOW_GUARD_SEMANTIC_CONFIG。
+
+    未设置 → None（调用方用 DEFAULT_SEMANTIC_CONFIG）。设置时做路径穿越
+    防护：realpath 规范化 + 存在性校验（必须是已存在的常规文件），不合法
+    直接抛 FileNotFoundError（fail-closed，由调用方降级 legacy）。
+    """
+    raw = os.environ.get(SEMANTIC_CONFIG_ENV)
+    if not raw:
+        return None
+    resolved = os.path.realpath(raw)
+    if not os.path.isfile(resolved):
+        raise FileNotFoundError(f"semantic runtime config not found: {resolved}")
+    return resolved
+
+
 def semantic_provider_from_config(config_path: Optional[str] = None,
                                   timeout: float = 120.0,
                                   ) -> SemanticProviderAdapter:
@@ -506,10 +522,16 @@ def semantic_provider_from_config(config_path: Optional[str] = None,
     构造失败（文件缺失/格式错误）向上抛，由调用方决定降级语义。
     """
     path = config_path or DEFAULT_SEMANTIC_CONFIG
-    with open(path, "r", encoding="utf-8") as f:
+    # 配置路径可来自环境变量（MOONBOW_GUARD_SEMANTIC_CONFIG）：先规范化并
+    # 确认存在且为常规文件，再读取（防路径穿越/探针）。
+    resolved = os.path.realpath(path)
+    if not os.path.isfile(resolved):
+        raise FileNotFoundError(f"semantic runtime config not found: {resolved}")
+    from pathlib import Path
+    with Path(resolved).open("r", encoding="utf-8") as f:
         cfg = json.load(f)
     if not isinstance(cfg, dict):
-        raise ValueError(f"semantic runtime config is not an object: {path}")
+        raise ValueError(f"semantic runtime config is not an object: {resolved}")
     provider_cfg = cfg.get("provider") or {}
     server_cfg = cfg.get("server") or {}
     url = provider_cfg.get("matcher_url") or "http://{}:{}".format(

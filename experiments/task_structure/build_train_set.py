@@ -14,9 +14,19 @@ import json
 import os
 import random
 import sys
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..", "..", "src")))
+
+
+def _safe_join(root, *parts):
+    """规范化拼接并校验结果不逃出 root（防路径穿越）。"""
+    p = os.path.realpath(os.path.join(root, *parts))
+    root_r = os.path.realpath(root)
+    if p != root_r and not p.startswith(root_r + os.sep):
+        raise ValueError(f"path escapes root: {p!r}")
+    return p
 
 from moonbow.task_structure.schema import Capture        # noqa: E402
 from moonbow.task_structure.extractor import split_clauses  # noqa: E402
@@ -195,11 +205,11 @@ def dev_weak() -> list:
 
 
 def main() -> None:
-    out_path = os.path.join(HERE, "train_clf.jsonl")
+    out_path = _safe_join(HERE, "train_clf.jsonl")
     rows = synth() + dev_weak()
     rng = random.Random(7)
     rng.shuffle(rows)
-    with open(out_path, "w", encoding="utf-8") as f:
+    with Path(out_path).open("w", encoding="utf-8") as f:
         for r in rows:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
     from collections import Counter

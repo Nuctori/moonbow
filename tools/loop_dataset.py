@@ -2,8 +2,18 @@
 """loop_dataset.py — 把 283 个历史 run 切成逐轮 (前缀特征, 终局) 训练对，
 并做跨模型考试：mimo 训 → gemini 验（及反向），对照手写规则基线。"""
 import json, os, sys, glob, numpy as np
+from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from convergence_study import parse_session, label_run, snapshot_features, norm
+
+
+def _safe_join(root, *parts):
+    """规范化拼接并校验结果不逃出 root（防路径穿越）。"""
+    p = os.path.realpath(os.path.join(root, *parts))
+    root_r = os.path.realpath(root)
+    if p != root_r and not p.startswith(root_r + os.sep):
+        raise ValueError(f"path escapes root: {p!r}")
+    return p
 
 FEATS = ["rounds_since_last_verify_success", "write_verify_ratio", "scope_churn",
          "repeat_edit_ratio", "pytest_fail_streak", "cumulative_verify_successes",
@@ -112,10 +122,12 @@ def main():
     tr = (ri_arr % 2 == 0); te = ~tr
     res["mixed_train_test"] = evaluate("mx", tr, te)
     print(json.dumps(res, ensure_ascii=False, indent=1))
-    json.dump({"features": FEATS, "results": res,
-               "n_runs": len(runs), "n_samples": len(samples)},
-              open(os.path.join(BASE, "..", "results", "convergence-phase0", "loop_dataset_summary.json"), "w", encoding="utf-8"),
-              ensure_ascii=False, indent=1)
+    summary_path = _safe_join(os.path.join(BASE, "..", "results", "convergence-phase0"),
+                              "loop_dataset_summary.json")
+    with Path(summary_path).open("w", encoding="utf-8") as f:
+        json.dump({"features": FEATS, "results": res,
+                   "n_runs": len(runs), "n_samples": len(samples)},
+                  f, ensure_ascii=False, indent=1)
 
 if __name__ == "__main__":
     main()

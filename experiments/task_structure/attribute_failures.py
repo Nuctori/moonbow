@@ -22,6 +22,7 @@ import random
 import re
 import sys
 from collections import Counter, defaultdict
+from pathlib import Path
 
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
 os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
@@ -37,6 +38,15 @@ from moonbow.task_structure.extractor import (                   # noqa: E402
 
 MODELS = r"M:/AI/spark-4b/models"
 OUT_DIR = os.path.join(HERE, "mined")
+
+
+def _safe_join(root, *parts):
+    """规范化拼接并校验结果不逃出 root（防路径穿越）。"""
+    p = os.path.realpath(os.path.join(root, *parts))
+    root_r = os.path.realpath(root)
+    if p != root_r and not p.startswith(root_r + os.sep):
+        raise ValueError(f"path escapes root: {p!r}")
+    return p
 
 
 def norm_template(text: str) -> str:
@@ -145,8 +155,8 @@ def main() -> None:
 
     if args.dump:
         os.makedirs(OUT_DIR, exist_ok=True)
-        p = os.path.join(OUT_DIR, "disagreements.jsonl")
-        with open(p, "w", encoding="utf-8") as f:
+        p = _safe_join(OUT_DIR, "disagreements.jsonl")
+        with Path(p).open("w", encoding="utf-8") as f:
             for d in disagree:
                 f.write(json.dumps(d, ensure_ascii=False) + "\n")
         print(f"\n已落盘 {len(disagree)} 条 → {p}（本地，不入库）")
