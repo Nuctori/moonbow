@@ -1,0 +1,5 @@
+{"event_id": "ev1", "events": 1, "entities": 8, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "ev2", "events": 1, "entities": 1, "judgments": 1, "reminders": [{"type": "constraint-reminder", "policy": "remind-only", "jtype": "constraint_relation", "verdict": "supports_conflict", "subject_ids": ["ent_37113d8d8530dcee70be0e53"], "reference_ids": ["ent_ce61854f7c5a1fd35d4458dc"], "reason": "首token比较 margin=0.906（violation 方向）", "dedup_key": "rem_af66566a34ed1aa27d982f75"}], "deduped": 0}
+{"event_id": "ev2", "events": 1, "entities": 1, "judgments": 1, "reminders": [], "deduped": 1}
+{"event_id": "ev3", "events": 1, "entities": 0, "judgments": 0, "reminders": [], "deduped": 0}
+{"event_id": "ev4", "events": 1, "entities": 28, "judgments": 0, "reminders": [], "deduped": 0}

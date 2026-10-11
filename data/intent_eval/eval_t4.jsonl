@@ -1,0 +1,8 @@
+{"goal_text": "修复购物车金额计算错误", "event_text": "金额计算已修复", "evidence": [{"evidence_id": "E1", "kind": "test_run", "result": "pass", "note": "pytest -k cart_total 全绿"}], "label": "supported_full", "goals_all": [], "case_id": "e4-000"}
+{"goal_text": "修复购物车金额计算错误；并补充单元测试覆盖边界", "event_text": "金额计算已修复", "evidence": [{"evidence_id": "E1", "kind": "test_run", "result": "pass", "note": "cart_total 用例通过"}], "label": "supported_partial", "goals_all": [], "case_id": "e4-001"}
+{"goal_text": "修复购物车金额计算错误", "event_text": "已经改好了", "evidence": [], "label": "no_evidence", "goals_all": [], "case_id": "e4-002"}
+{"goal_text": "修复购物车金额计算错误", "event_text": "金额计算已修复", "evidence": [{"evidence_id": "E1", "kind": "test_run", "result": "fail", "note": "cart_total 用例失败"}], "label": "no_evidence", "goals_all": [], "case_id": "e4-003"}
+{"goal_text": "修复购物车金额计算错误", "event_text": "登录页样式已调整", "evidence": [{"evidence_id": "E1", "kind": "test_run", "result": "pass", "note": "pytest -k login_style 全绿"}], "label": "insufficient_info", "goals_all": [], "case_id": "e4-004"}
+{"goal_text": "把首屏加载耗时降到 1s 内", "event_text": "首屏优化完成", "evidence": [{"evidence_id": "E1", "kind": "artifact", "result": "pass", "note": "Lighthouse 首屏 0.9s"}], "label": "supported_full", "goals_all": [], "case_id": "e4-005"}
+{"goal_text": "把首屏加载耗时降到 1s 内；并给出优化说明文档", "event_text": "首屏优化完成", "evidence": [{"evidence_id": "E1", "kind": "artifact", "result": "pass", "note": "Lighthouse 首屏 0.9s"}], "label": "supported_partial", "goals_all": [], "case_id": "e4-006"}
+{"goal_text": "把首屏加载耗时降到 1s 内", "event_text": "首屏已完成", "evidence": [{"evidence_id": "E1", "kind": "tool_output", "result": "unknown", "note": "构建产物已生成，未测性能"}], "label": "no_evidence", "goals_all": [], "case_id": "e4-007"}

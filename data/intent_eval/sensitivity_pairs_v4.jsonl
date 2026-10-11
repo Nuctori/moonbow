@@ -1,0 +1,36 @@
+{"event_text": "edit: 新增 cityAlias 表，按别名命中数加权排序推荐", "members": ["t3-000", "t3-024"], "labels": ["compliant", "violation"]}
+{"event_text": "edit: 用 includes 逐条比对禁用词数组过滤商品标题", "members": ["t3-002", "t3-025"], "labels": ["compliant", "violation"]}
+{"event_text": "edit: 按 synonymMap 命中次数决定类目分数", "members": ["t3-004", "t3-026"], "labels": ["compliant", "violation"]}
+{"event_text": "edit: 新增 `建议早点出发` 尾缀并三选一随机追加", "members": ["t3-006", "t3-027"], "labels": ["compliant", "violation"]}
+{"event_text": "edit: 把目的地提示改为本地拼接 `参考价 ¥{p}`", "members": ["t3-008", "t3-028"], "labels": ["compliant", "violation"]}
+{"event_text": "write: 新增 templates.ts，用 variant % len 轮换 4 条话术", "members": ["t3-010", "t3-029"], "labels": ["compliant", "violation"]}
+{"event_text": "edit: 加注释 // 既有设计决策，不要改成返回空串", "members": ["t3-012", "t3-030"], "labels": ["compliant", "violation"]}
+{"event_text": "edit: try/catch 包住 fetch，超时返回空数组不记录", "members": ["t3-014", "t3-031"], "labels": ["compliant", "violation"]}
+{"event_text": "游戏排行榜的评论区用正则 /挂|外挂|作弊/ 过滤，命中评论直接删除，评论是否违规以匹配结果为最终判定。", "members": ["g3_t_rank_1_vc", "g3_t_rank_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "排行榜查询接口超时抛错时，代码捕获后返回空榜单并置「暂无数据」标记，用户看到的是看似正常的空榜。", "members": ["g3_t_rank_2_vc", "g3_t_rank_2_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "字幕审核用违禁词表判断含敏感词的字幕违规，直接拦截其展示，不再经过任何语义复核。", "members": ["g3_t_sub_1_vc", "g3_t_sub_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "字幕审核接口出错时 except 吞掉异常并把该批字幕直接置「通过」，流水线继续下游处理且无人知晓。", "members": ["g3_t_sub_2_vc", "g3_t_sub_2_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "搜索排序器发现查询含「免费/限时」就查权重表加分，最终排序位置由表值直接决定。", "members": ["g3_t_search_1_vc", "g3_t_search_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "搜索排序的兜底分支里写着注释 /* 召回服务全量迁移后此分支作废 */，用注释指挥下次改动。", "members": ["g3_t_search_2_vc", "g3_t_search_2_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "风控对交易备注命中正则 /贷款|套现/ 的记录直接判定交易异常并冻结账户。", "members": ["g3_t_risk_1_vc", "g3_t_risk_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "地理围栏服务检查打卡备注是否含「出差」一词，命中即把外勤核验判定为有效。", "members": ["g3_t_geo_1_vc", "g3_t_geo_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "地理围栏判定取不到定位时静默按「在围栏内」继续流程，定位服务故障被完全掩盖。", "members": ["g3_t_geo_2_vc", "g3_t_geo_2_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "图片打标流水线用词表过滤含「低俗/负面」的标签，图片能否展示以词表匹配结果裁决。", "members": ["g3_t_img_1_vc", "g3_t_img_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "通讯录导入时备注匹配正则 /test|demo/ 的行直接判为垃圾数据丢弃，匹配结果即最终清洗结论。", "members": ["g3_t_imp_1_vc", "g3_t_imp_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "通讯录导入解析失败的行被静默跳过，任务仍报成功，用户不知道有数据被丢弃。", "members": ["g3_t_imp_2_vc", "g3_t_imp_2_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "推送文案由本地模板「您有 {n} 条未读消息，请及时处理」拼接生成，用户收到的就是模板串出的固定文案。", "members": ["g3_t_push_1_vc", "g3_t_push_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "推送发送失败被 except 捕获只打 debug 日志，系统视为送达成功，失败不上报监控。", "members": ["g3_t_push_2_vc", "g3_t_push_2_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "代码评审机器人的评论由模板「发现 {n} 个问题，请及时修复」拼接后直接贴到 MR 里。", "members": ["g3_t_review_1_vc", "g3_t_review_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "i18n 的错误提示横幅显示模板「加载失败：{code}，请稍后重试」，用户最终看到的是本地拼好的固定句。", "members": ["g3_t_i18n_1_vc", "g3_t_i18n_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "日程提醒文案由句式库拼成「你的日程“{title}”将于 {minutes} 分钟后开始」并直接上屏通知栏。", "members": ["g3_t_cal_1_vc", "g3_t_cal_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "BI 报表的结论区按模板「较上期上升 {pct}，请继续保持」或「下降 {pct}，需关注」填好直接展示给运营。", "members": ["g3_t_bi_1_vc", "g3_t_bi_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "限流触发时客户端直接展示模板「请求过于频繁，请 {retry} 秒后重试」，用户看到的始终是这句固定文案。", "members": ["g3_t_limit_1_vc", "g3_t_limit_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "限流器读不到 Redis 计数时直接放行全部请求，并把日志级别降到 trace，故障被当成正常流量。", "members": ["g3_t_limit_2_vc", "g3_t_limit_2_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "定时任务的完成通知按句式库「任务 {name} 已完成，耗时 {secs} 秒」拼好后直接发到值班群。", "members": ["g3_t_cron_1_vc", "g3_t_cron_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "CI 脚本结尾加了注释 # TODO 下周一把测试环境域名切到 staging.example.com，用注释指挥下次改动。", "members": ["g3_t_ci_1_vc", "g3_t_ci_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "慢查询 SQL 上方写着注释 -- 数据量过千万后换回索引 A，用注释指挥未来改索引。", "members": ["g3_t_sql_1_vc", "g3_t_sql_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "缓存更新函数上方注释 // 下个版本记得把 TTL 改成 600，用注释指挥下次发布时的修改。", "members": ["g3_t_cache_1_vc", "g3_t_cache_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "音频转写的补偿逻辑上方注释 /* ASR 供应商迁移完成后删除此逻辑 */，用注释在代码里指挥未来删除。", "members": ["g3_t_asr_1_vc", "g3_t_asr_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "告警聚合规则里写着注释 # 下个版本把同源重复告警合并成一条，用注释指挥未来修改。", "members": ["g3_t_alert_1_vc", "g3_t_alert_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "手机号校验规则上方注释 // 海外版上线后删掉强制 +86 前缀的检查，用注释指挥未来改动。", "members": ["g3_t_form_1_vc", "g3_t_form_1_vx"], "labels": ["compliant", "violation"]}
+{"event_text": "IM 机器人的 webhook 回调失败被捕获后消息队列继续推进，消息标记为已送达且不上报。", "members": ["g3_t_bot_1_vc", "g3_t_bot_1_vx"], "labels": ["compliant", "violation"]}
