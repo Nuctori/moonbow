@@ -224,6 +224,9 @@ class VerifyJudge:
             self._model, self._tok, ids["input_ids"], self._labels,
             literals=self._alias, normalize=False)
         pick = max(scores, key=scores.get)
+        gap = scores["KEEP"] - scores["DROP"]
+        import math
+        confidence = round(1 / (1 + math.exp(-gap)), 4)
         if pick == "KEEP":
             return Judgment(
                 judgment_id=_next_jid(), jtype="constraint_relation",
@@ -231,7 +234,8 @@ class VerifyJudge:
                 reference_ids=claimed.reference_ids,
                 evidence_ids=claimed.evidence_ids,
                 verdict=claimed.verdict, model_id=self.model_id,
-                reason=f"复核KEEP scores={scores}｜{claimed.reason}")
+                confidence=confidence,
+                reason=f"复核KEEP gap={gap:+.3f} conf={confidence}｜{claimed.reason}")
         return Judgment(
             judgment_id=_next_jid(), jtype="constraint_relation",
             subject_ids=claimed.subject_ids,
@@ -239,7 +243,8 @@ class VerifyJudge:
             evidence_ids=[], verdict="insufficient_info",
             model_id=self.model_id, abstain=True,
             abstain_reason="第二级复核判定第一级冲突结论不可靠",
-            reason=f"复核DROP scores={scores}")
+            confidence=confidence,
+            reason=f"复核DROP gap={gap:+.3f} conf={confidence}")
 
 
 class SelectionJudge:
@@ -448,15 +453,19 @@ class IntentLoop:
             return []
 
         if j.verdict == "supports_conflict" and not j.abstain:
-            # 第二级复核（LLM 定量）：冲突在投递前一律升级复核——低置信不是
-            # "丢弃"而是"升级"。复核判官看完整决策 + 全部约束 + 第一级结论，
-            # 输出 KEEP（维持提醒）/ DROP（判定不可靠 → 降级弃权）。
-            # 两级判定都落账。数值门槛方案已被否决：margin 会随训练/领域
-            # 漂移（run6 margin 10.688 的自信错误、v8 后分布整体漂移），
-            # 在其上设裁决阈值与关键词枚举同族。
+            # 第二级复核（LLM 定量）：冲突在投递前一律升级复核。复核判官
+            # 输出 KEEP/DROP 及置信度（KEEP-DROP 的对数似然差过 sigmoid）。
+            # 三档投递策略（阈值是策略参数，校准依据：run13 实测维持提醒
+            # gap ≥ +0.125、推翻 gap ≤ -2.875，0 为分界）：
+            #   conf ≥ strong(0.62)  → 正常提醒
+            #   0.5 ≤ conf < strong  → 人工核对弱提醒（policy=manual-review）
+            #   conf < 0.5（DROP）   → 复核推翻 → 降级弃权，不投递
+            # 三档全部落账；数值门槛的教训已吸收：这里是**投递分层**，
+            # 不是结论裁决——结论永远由两级判官给出。
+            strong_conf = 0.62                    # sigmoid(0.5)
             if self.verify_judge is not None:
                 try:
-                    v = self.verify_judge.verify(dec, constraints, j,
+                    v = self.verify_judge.verify(dec, applicable, j,
                                                  decision_text=event.text)
                 except Exception as e:                # noqa: BLE001
                     report.fail("verify", event.event_id, e)
@@ -469,24 +478,38 @@ class IntentLoop:
                         report.fail("verify_record", event.event_id, e)
                     if v.abstain or v.verdict == "insufficient_info":
                         return []                     # 复核推翻 → 降级，不投递
-                    j = v                             # 复核维持 → 用复核结论投递
-            # 内容基去重键：同一决策文本 × 同一约束集 = 同一问题，跨事件去重。
-            key_src = "\x00".join(
-                [j.jtype, j.verdict, dec.quote]
-                + sorted(c.entity_id for c in constraints))
-            dk = "rem_" + hashlib.sha256(
-                key_src.encode("utf-8")).hexdigest()[:24]
-            # 会话预算：防刷屏保险丝（超预算落账不投递，数量上限，不读内容）
-            if self.max_per_session and \
-                    self._session_reminded >= self.max_per_session:
+                    j = v                             # 复核维持
+            r = self._build_reminder(j, applicable, dec.quote)
+            if r is None:
                 return []
-            self._session_reminded += 1
-            return [Reminder(jtype=j.jtype, verdict=j.verdict,
-                             subject_ids=j.subject_ids,
-                             reference_ids=j.reference_ids,
-                             reason=j.reason, model_id=j.model_id,
-                             dedup_key=dk)]
+            # 置信分层（校准依据：run13 维持档 conf 0.53-0.93、推翻档 ≤0.05）：
+            #   conf ≥ 0.9 → 强提醒；0.5-0.9 → 人工核对弱提醒（显式非静默）
+            if j.confidence is not None and j.confidence < 0.9:
+                r.policy = "manual-review"
+                r.reason = "复核置信不足，建议人工核对｜" + r.reason
+            return [r]
         return []
+
+    def _build_reminder(self, j: Judgment, constraints,
+                        decision_quote: str) -> Reminder:
+        """构造提醒：内容基去重键（决策文本×约束集=问题身份）+ 预算保险丝。
+
+        去重键必须用**决策文本**而非判语（j.reason 随判官/措辞变化，
+        曾致不同决策互相误去重——tests/test_intent_replay 实抓）。"""
+        key_src = "\x00".join(
+            [j.jtype, j.verdict, decision_quote]
+            + sorted(c.entity_id for c in constraints))
+        dk = "rem_" + hashlib.sha256(
+            key_src.encode("utf-8")).hexdigest()[:24]
+        if self.max_per_session and \
+                self._session_reminded >= self.max_per_session:
+            return None                            # 预算耗尽：落账不投递
+        self._session_reminded += 1
+        return Reminder(jtype=j.jtype, verdict=j.verdict,
+                        subject_ids=j.subject_ids,
+                        reference_ids=j.reference_ids,
+                        reason=j.reason, model_id=j.model_id,
+                        dedup_key=dk)
 
     def _record_select_failure(self, dec: Entity, applicable, event: Event,
                                report: LoopReport, exc: BaseException) -> None:
