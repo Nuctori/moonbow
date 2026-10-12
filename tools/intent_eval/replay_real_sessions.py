@@ -102,11 +102,15 @@ def main():
     ap.add_argument("--max-events", type=int, default=200,
                     help="每会话事件上限（控时长）")
     ap.add_argument("--t3-adapter",
-                    default=r"M:/AI/spark-4b/models/intent_lora_t3_v4")
-    ap.add_argument("--verify-adapter", default=None,
-                    help="第二级复核判官 adapter（缺省不复核）")
-    ap.add_argument("--select-adapter", default=None,
-                    help="约束选择判官 adapter（卡数>5 时先选卡再判定；缺省不选卡）")
+                    default=r"M:/AI/spark-4b/models/intent_lora_t3_v17_release")
+    ap.add_argument("--verify-adapter",
+                    default=r"M:/AI/spark-4b/models/intent_lora_verify_v2",
+                    help="第二级复核判官 adapter（空串关闭复核）")
+    ap.add_argument("--select-adapter",
+                    default=r"M:/AI/spark-4b/models/intent_lora_select_v2",
+                    help="约束选择判官 adapter（空串关闭选卡）")
+    ap.add_argument("--kinds", default="omp,kimi,pi",
+                    help="逗号分隔的会话来源过滤（崩溃分段重跑用）")
     ap.add_argument("--cards", default="five", choices=["five", "washed35"],
                     help="注册约束卡规模：five=5 张规范卡（训练同分布）；"
                          "washed35=35 张真实卡（压力测试）")
@@ -166,7 +170,8 @@ def main():
         remind_fh.write(json.dumps(block, ensure_ascii=False) + "\n")
         remind_fh.flush()
 
-    sessions = pick_sessions()
+    wanted = {k.strip() for k in a.kinds.split(",") if k.strip()}
+    sessions = [s for s in pick_sessions() if s[0] in wanted]
     print(f"采样会话：{len(sessions)} "
           f"({[k for k, _ in sessions]})", flush=True)
 
