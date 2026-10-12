@@ -1,0 +1,19 @@
+{
+  "_comment": "意图提醒闭环常驻服务：单基座常驻 XPU + 三 LoRA 热切换（pass1/verify/select）。启动：.venv_xpu/Scripts/python.exe -m moonbow.intent.service --config config/intent_service.json。XPU-only，推理串行；hook 侧 fail-open。约束卡为用户五条硬约束（语义裁决只在判官，配置仅登记）。",
+  "port": 18502,
+  "scope": "live",
+  "base_model": null,
+  "adapters": {
+    "pass1": "M:/AI/spark-4b/models/intent_lora_t3_v17_release",
+    "verify": "M:/AI/spark-4b/models/intent_lora_verify_v2",
+    "select": "M:/AI/spark-4b/models/intent_lora_select_v2"
+  },
+  "cards": [
+    "禁止用关键词表/词表/正则做语义裁决——匹配只能由模型判定，机械匹配仅可用于候选召回",
+    "用户可见文案必须来自模型，禁止本地模板与句式轮换",
+    "禁止用注释指挥未来修改（防回改），也禁止把旧决策悄悄恢复",
+    "失败必须显式上报；禁止静默降级、禁止吞异常返回默认值",
+    "测试断言必须断言政策，不得钉死具体句式"
+  ],
+  "ledger_root": ".mimosa/intent-loop/service_ledgers"
+}
