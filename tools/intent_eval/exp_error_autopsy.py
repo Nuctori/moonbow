@@ -1,27 +1,16 @@
 # -*- coding: utf-8 -*-
-"""tools/intent_eval/exp_error_autopsy.py — 错题剖析器：遮蔽归因定位失效模式。
-
-对每个错例跑五步遮蔽归因（每次只遮一处，测 verdict/logit 变化）：
-  M1 遮约束块   → 结论是否还依赖约束（不依赖 = 约束盲/先验兜底）
-  M2 遮决策文本 → 结论是否还依赖决策（不依赖 = 约束先验驱动）
-  M3 逐卡遮蔽   → 哪张卡在驱动结论（单卡驱动 = 线索/捷径）
-  M4 反义约束   → 极性翻转是否正确（不翻 = 未读义务极性）
-  M5 决策改写   → 同义改写是否稳定（漂移 = 表面措辞依赖）
-
-失效模式分类（自动判定）：
-  prior-driven   M1/M2 都不变 → 先验兜底（分布外猜多数类）
-  constraint-blind M1 翻转但方向不变 → 没读约束
-  cue-triggered  M3 单卡驱动 → 线索/词面捷径
-  polarity-blind M4 反义不翻转 → 未读义务极性
-  surface-drift  M5 改写漂移 → 措辞依赖
-用法：--cases 错例清单 JSONL（event_text/gold）--adapter 判官。
+"""受控遮蔽探针；输出变化是观测，不等同于因果根因证明。
+M1 遮约束，M2 遮决策，M3 换无关卡，M4 反义卡，M5 同义决策。
+反义约束是实验刺激，不是项目运行策略。
 """
+import argparse
 import json, os, sys, time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent.parent
 sys.path.insert(0, str(REPO / "src"))
+from experiment_evidence import adapter_evidence, atomic_json, file_hash
 
 BASE = os.path.expanduser(
     "~/.cache/modelscope/models/Qwen--Qwen3.5-0.8B/snapshots/master")
@@ -31,11 +20,42 @@ C_FLIP = "本项目要求所有匹配判断必须使用关键词表与规则表�
 C_NONE = "（本题不设约束——仅测量模型先验）"
 
 
-def arg(flag, default):
-    return sys.argv[sys.argv.index(flag) + 1] if flag in sys.argv else default
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--pass1", "--adapter", dest="pass1", required=True)
+    parser.add_argument("--cases", default=str(REPO / "data" / "intent_eval" / "autopsy_cases.jsonl"))
+    parser.add_argument("--out", default=str(REPO / ".mimosa" / "intent-loop" / "autopsy_results.json"))
+    return parser.parse_args(argv)
+
+
+def classify_results(v0, v1, v2, v3, v4, v5=None):
+    modes = []
+    if v0 == v1 == v2:
+        modes.append("baseline-unchanged-under-masking")
+    if v0 != v1:
+        modes.append("constraint-sensitive")
+    if v0 != v2:
+        modes.append("decision-sensitive")
+    if v0 != v3:
+        modes.append("constraint-identity-sensitive")
+    if v0 == v4:
+        modes.append("antonym-no-flip")
+    if v5 is not None and v0 != v5:
+        modes.append("surface-drift")
+    return modes
+
+
+def validate_case(case):
+    for field in ("event_text", "constraint", "antonym_constraint", "paraphrase", "gold"):
+        if not case.get(field):
+            raise ValueError(f"{case.get('case_id', '?')}: 缺少 {field}")
+    if case["gold"] not in ("violation", "compliant", "insufficient"):
+        raise ValueError("gold 必须使用规范标签")
+    return case
 
 
 def main():
+    args = parse_args()
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from peft import PeftModel
@@ -46,11 +66,13 @@ def main():
         print("FATAL: torch.xpu 不可用", file=sys.stderr)
         return 2
 
-    pass1_p = arg("--pass1", r"M:/AI/spark-4b/models/intent_lora_t3_v8_stable")
-    cases_f = arg("--cases", str(HERE.parent.parent / ".mimosa" / "intent-loop" /
-                                 "autopsy_cases.jsonl"))
-    out_f = arg("--out", str(HERE.parent.parent / ".mimosa" / "intent-loop" /
-                             "autopsy_results.json"))
+    pass1_p, cases_f, out_f = args.pass1, args.cases, args.out
+
+    if Path(out_f).exists():
+        raise FileExistsError("结果已存在，使用新的 --out")
+    evidence = {"adapter": adapter_evidence(pass1_p), "cases_sha256": file_hash(cases_f)}
+    cases = [validate_case(json.loads(l)) for l in
+             Path(cases_f).read_text(encoding="utf-8").splitlines() if l.strip()]
 
     tok = AutoTokenizer.from_pretrained(BASE, trust_remote_code=True)
     base = AutoModelForCausalLM.from_pretrained(
@@ -80,42 +102,34 @@ def main():
         """对单个错例跑五步遮蔽，返回失效模式判定。"""
         text = case["event_text"]
         gold = case["gold"]
-        card_q = C_BAN
+        card_q = case["constraint"]
         results = {}
         # M0 基线：带约束原判
         v0, s0 = score(text, card_q)
         results["baseline"] = {"verdict": v0, "scores": s0}
         # M1 遮约束块
-        v1, _ = score(text, None)
+        v1, s1 = score(text, None)
         results["M1_mask_constraint"] = v1
         # M2 遮决策文本
-        v2, _ = score("", card_q)
+        v2, s2 = score("", card_q)
         results["M2_mask_decision"] = v2
         # M3 换无关约束（替换为 test 卡——排除主题重合）
-        v3, _ = score(text, "测试断言必须断言政策，不得钉死具体句式")
+        v3, s3 = score(text, "测试断言必须断言政策，不得钉死具体句式")
         results["M3_swap_irrelevant"] = v3
         # M4 反义约束
-        v4, _ = score(text, C_FLIP)
+        v4, s4 = score(text, case["antonym_constraint"])
         results["M4_antonym"] = v4
-        # 模式判定
-        modes = []
-        if v0 == v1 == v2:
-            modes.append("prior-driven（约束/决策双盲，纯先验输出）")
-        else:
-            if v0 != v1:
-                modes.append("constraint-sensitive（遮约束即翻：在读约束）")
-            if v0 != v2:
-                modes.append("decision-sensitive（遮决策即翻：在读决策）")
-        if gold == "violation" and v0 == "supports_compat" and v3 == "supports_conflict":
-            modes.append("polarity-blind（反义卡才判违规：只对反义极性敏感）")
-        results["modes"] = modes
+        paraphrase = case.get("paraphrase")
+        v5, s5 = score(paraphrase, card_q)
+        results["probe_scores"] = {"M1": s1, "M2": s2, "M3": s3, "M4": s4, "M5": s5}
+        results["M5_paraphrase"] = v5
+        results["modes"] = classify_results(v0, v1, v2, v3, v4, v5)
+        results["constraint"] = card_q
+        results["adapter"] = pass1_p
+        results["probe_note"] = case.get("probe_note", "")
         results["gold"] = gold
         return results
 
-    C_FLIP = "本项目要求所有匹配判断必须使用关键词表与规则表完成——这是标准做法，禁止由模型自由判断"
-
-    cases = [json.loads(l) for l in
-             Path(cases_f).read_text(encoding="utf-8").splitlines() if l.strip()]
     print(f"错例数：{len(cases)}", flush=True)
 
     out = []
@@ -125,6 +139,7 @@ def main():
         r["case_id"] = c.get("case_id", "?")
         r["event_text"] = c["event_text"][:80]
         out.append(r)
+        atomic_json(out_f, {"evidence": evidence, "complete": False, "rows": out})
         for m in r["modes"]:
             mode_counter[m] = mode_counter.get(m, 0) + 1
         print(f"[{r['case_id']}] {r['gold']} base={r['baseline']['verdict']} "
@@ -133,8 +148,7 @@ def main():
     print("\n=== 失效模式分布 ===")
     for m, n in sorted(mode_counter.items(), key=lambda x: -x[1]):
         print(f"  {n:3d}  {m}")
-    Path(out_f).write_text(json.dumps(out, ensure_ascii=False, indent=1),
-                           encoding="utf-8")
+    atomic_json(out_f, {"evidence": evidence, "complete": True, "rows": out})
     print(f"落盘：{out_f}")
     return 0
 

@@ -22,6 +22,9 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent.parent
 OUT = REPO / "data" / "intent_eval"
+sys.path.insert(0, str(HERE))
+from exp_real_recall import GOLD, git_show
+AUDIT_GOLD = {sha: label for sha, label, _ in GOLD}
 GEN = OUT / "gen"
 
 # 审计锚定的 12 commit（held-out，绝不进训练）
@@ -43,6 +46,15 @@ def main():
     add, heldout = [], []
     n = 0
     n_lowconf = 0
+    missing = AUDIT_HELD_OUT - commits.keys()
+    for sha in sorted(missing):
+        commits[sha] = {"sha": sha, "subject": "", "diff_head": git_show(sha)}
+    for sha, c in commits.items():
+        if sha in AUDIT_HELD_OUT:
+            text = (c.get("subject", "") + chr(10) + c.get("diff_head", ""))[:2000]
+            heldout.append({"case_id": f"held-{sha}", "event_text": text,
+                            "label": AUDIT_GOLD[sha], "sha": sha,
+                            "gold_source": "audit-anchor"})
     for sha, lab in labels.items():
         c = commits.get(sha)
         if c is None:
@@ -50,37 +62,44 @@ def main():
         card, pol, conf = lab.get("relevant_card"), lab.get("polarity"), lab.get("confidence")
         event_text = (c.get("subject", "") + "\n" + c.get("diff_head", ""))[:2000]
         if sha in AUDIT_HELD_OUT:
-            gold = "violation" if pol == "viol" else (
-                "compliant" if pol == "comp" else "uncertain")
-            heldout.append({"case_id": f"held-{sha[:9]}", "event_text": event_text,
-                            "label": gold, "sha": sha,
-                            "conf": conf, "reason": lab.get("reason", "")[:120]})
             continue
-        if pol == "none" or card == "none" or (conf or 0) < 0.7:
-            n_lowconf += (0 if pol == "none" or card == "none" else 0) + \
-                (0 if (conf or 0) < 0.7 else 1)
+        if pol not in ("viol", "comp") or card not in ("mech", "tmpl", "anti", "silent", "test") or (conf or 0) < 0.7:
+            n_lowconf += 1
             continue
         label = "violation" if pol == "viol" else "compliant"
         add.append({"case_id": f"v12real-{n:03d}", "event_text": event_text,
                     "constraints": [], "label": label, "kind": "commit",
-                    "scope": "s", "gold_note": lab.get("reason", "")[:100]})
+                    "scope": "s", "sha": sha, "gold_note": lab.get("reason", "")[:100]})
         n += 1
 
     tr = [json.loads(l) for l in
           (OUT / "train_t3_v9.jsonl").read_text(encoding="utf-8").splitlines()
           if l.strip()]
-    tr12 = tr + add
+    from train_intent_lora import leak_check
+    candidates = tr + add
+    tr12 = []
+    excluded = []
+    for row in candidates:
+        exact, near = leak_check([row], heldout)
+        if exact or near:
+            excluded.append(row["case_id"])
+        else:
+            tr12.append(row)
+    print(f"留出近重隔离剔除: {excluded}")
+    for i, row in enumerate(tr12):
+        row["source_case_id"] = row.get("source_case_id", row["case_id"])
+        row["case_id"] = f"v12-{i:04d}"
     with (OUT / "train_t3_v12.jsonl").open("w", encoding="utf-8") as fh:
         for r in tr12:
             fh.write(json.dumps(r, ensure_ascii=False) + "\n")
     with (OUT / "heldout_real_recall.jsonl").open("w", encoding="utf-8") as fh:
         for r in heldout:
             fh.write(json.dumps(r, ensure_ascii=False) + "\n")
-    print(f"train_t3_v12: {len(tr12)}（真实高置信 +{len(add)}）")
+    print(f"train_t3_v12: {len(tr12)}（筛选真实候选 {len(add)}，近重剔除 {len(excluded)}）")
     print(f"heldout_real_recall: {len(heldout)}")
     from collections import Counter
-    print("heldout gold:", dict(Counter(r.get("gold") for r in heldout)),
-          "| uncertain:", sum(1 for r in heldout if r.get("gold") == "uncertain"))
+    print("heldout gold:", dict(Counter(r.get("label") for r in heldout)),
+          "| uncertain:", sum(1 for r in heldout if r.get("label") == "uncertain"))
     print(f"低置信/不适用剔除: {n_lowconf}")
     return 0
 
