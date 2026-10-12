@@ -11,12 +11,16 @@ gold 来源：docs/session_violation_audit.md（用户亲自裁定的时间线�
 就是这些）。这是**真·违规**的召回测量——不是合成注入。
 铁律：XPU-only；--pass1/--verify/--select 可换 adapter。
 """
+import argparse
 import json, os, subprocess, sys, time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent.parent
 sys.path.insert(0, str(REPO / "src"))
+sys.path.insert(0, str(HERE))
+from experiment_evidence import adapter_evidence, atomic_json, file_hash, training_provenance
+
 OUT = REPO / "data" / "intent_eval" / "real_recall_results.json"
 
 BASE = os.path.expanduser(
@@ -49,14 +53,42 @@ def git_show(sha):
         ["git", "show", sha, "--format=%s%n%b", "--unified=0"],
         cwd="REDACTED_REPO", capture_output=True, text=True,
         encoding="utf-8", errors="replace")
-    return (r.stdout or "")[:2000]
+    if r.returncode or not r.stdout.strip():
+        raise RuntimeError(f"git show {sha} 失败: {r.stderr}")
+    return r.stdout[:2000]
 
 
-def arg(flag, default):
-    return sys.argv[sys.argv.index(flag) + 1] if flag in sys.argv else default
+def parse_args(argv=None):
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--pass1", "--adapter", dest="pass1", required=True)
+    ap.add_argument("--verify", required=True)
+    ap.add_argument("--select", required=True)
+    ap.add_argument("--train", required=True)
+    ap.add_argument("--out", required=True)
+    ap.add_argument("--allow-unverified-provenance", action="store_true")
+    return ap.parse_args(argv)
+
+
+def evaluation_partition(train_rows):
+    anchors = {sha for sha, _, _ in GOLD}
+    seen = {sha for sha in anchors for r in train_rows
+            if sha in r.get("gold_note", "") or str(r.get("sha", "")).startswith(sha)}
+    return "in-sample" if seen else "heldout-unverified"
 
 
 def main():
+    args = parse_args()
+    train_rows = [json.loads(l) for l in Path(args.train).read_text(encoding="utf-8").splitlines() if l.strip()]
+    if Path(args.out).exists():
+        raise FileExistsError("结果已存在，使用新的 --out 保留实验历史")
+    partition = evaluation_partition(train_rows)
+    provenance = training_provenance(args.pass1, args.train, args.allow_unverified_provenance)
+    evidence = {"pass1": adapter_evidence(args.pass1), "verify": adapter_evidence(args.verify),
+                "select": adapter_evidence(args.select), "train_sha256": file_hash(args.train),
+                "training_provenance": provenance}
+    if partition != "in-sample" and provenance["status"] != "verified":
+        partition = "heldout-unverified"
+    print(f"adapter={args.pass1} train={args.train} partition={partition}", flush=True)
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from peft import PeftModel
@@ -71,9 +103,7 @@ def main():
         print("FATAL: torch.xpu 不可用", file=sys.stderr)
         return 2
 
-    pass1_p = arg("--pass1", r"M:/AI/spark-4b/models/intent_lora_t3_v8_stable")
-    verify_p = arg("--verify", r"M:/AI/spark-4b/models/intent_lora_verify_stable")
-    select_p = arg("--select", r"M:/AI/spark-4b/models/intent_lora_select_v0")
+    pass1_p, verify_p, select_p = args.pass1, args.verify, args.select
 
     tok = AutoTokenizer.from_pretrained(BASE, trust_remote_code=True)
     base1 = AutoModelForCausalLM.from_pretrained(
@@ -88,7 +118,7 @@ def main():
     print("三级判官就绪", flush=True)
 
     run_dir = REPO / ".mimosa" / "intent-loop" / "host_replay" / \
-        f"run17_real_recall_{time.strftime('%H%M%S')}"
+        f"real_recall_{time.time_ns()}"
     run_dir.mkdir(parents=True, exist_ok=True)
     ledger = Ledger(run_dir / "ledger.jsonl")
     loop = IntentLoop(ledger, CaptureStage(FakeCaptureBackend([])), pass1,
@@ -118,13 +148,15 @@ def main():
         final = mine[-1] if mine else None
         hit = bool(final and final.verdict == "supports_conflict"
                    and not final.abstain)
-        results.append({"sha": sha, "gold": gold,
+        results.append({"sha": sha, "gold": gold, "adapter": pass1_p,
+                        "partition": partition, "train_file": args.train,
                         "final": (final.verdict if final else "no_judgment"),
                         "abstain": bool(final and final.abstain), "hit": hit,
                         "reason": ((final.reason or "")[:100]
                                    if final else "")})
+        atomic_json(args.out, {"evidence": evidence, "partition": partition, "complete": False, "rows": results})
         if rep.failures:
-            print(f"  FAILURES {sha}: {rep.failures}", flush=True)
+            raise RuntimeError(f"评测流水线失败: {rep.failures}")
         print(f"{sha} gold={gold:10s} final={results[-1]['final']:20s} "
               f"hit={hit}", flush=True)
     print(f"耗时 {time.time()-t0:.0f}s", flush=True)
@@ -137,9 +169,7 @@ def main():
     print(f"违规 commit：{len(inj)} | 命中：{len(recalled)} → 召回率 "
           f"{len(recalled)/max(1,len(inj))*100:.0f}%")
     print(f"合规 commit：{len(comp)} | 误报：{len(fp)}")
-    (REPO / ".mimosa" / "intent-loop" / "real_recall_results.json").write_text(
-        json.dumps(results, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"落盘：{REPO / '.mimosa' / 'intent-loop' / 'real_recall_results.json'}")
+    atomic_json(args.out, {"evidence": evidence, "partition": partition, "complete": True, "rows": results})
     return 0
 
 

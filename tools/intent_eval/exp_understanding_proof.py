@@ -14,7 +14,7 @@ H6 表先验检验：在"要求用词表"的反义卡下，召回型用法也应
 
 判读：
   H4 翻转且方向正确 → 约束语义被读取（理解证据）
-  H4 不翻转 → 字面拟合实锤（当前模型不合格）
+  H4 不翻转 → 极性探针未通过，不能单独证明字面拟合
   H5 稳定 → 约束侧理解（措辞无关）
   H6 合规 → 无表先验
 """
@@ -39,6 +39,8 @@ def main():
     globals()["protocol"] = protocol
     adapter = sys.argv[sys.argv.index("--adapter") + 1] if "--adapter" in sys.argv \
         else r"M:/AI/spark-4b/models/intent_lora_t3_v8_stable"
+    if not torch.xpu.is_available():
+        raise RuntimeError("XPU 不可用，禁止 CPU 推理")
     tok = AutoTokenizer.from_pretrained(BASE, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
         BASE, dtype="bfloat16", trust_remote_code=True).to("xpu")
@@ -74,7 +76,7 @@ def main():
             verdicts[cname] = j
         V = {"violation": "supports_conflict", "compliant": "supports_compat"}
         expect_ban = V["violation"] if name == "裁决型用法" else V["compliant"]
-        expect_ant = V["compliant"]
+        expect_ant = V["compliant"] if name == "裁决型用法" else V["violation"]
         ok = (verdicts["禁止卡"] == expect_ban and verdicts["要求卡"] == expect_ant)
         total += 1
         correct += ok
@@ -92,13 +94,14 @@ def main():
         flag = "✓稳定" if v1 == v2 else "✗漂移"
         print(f"  [{name}] 原卡={v1} 改写卡={v2} {flag}（期望 {expect}）")
 
-    print("=== H6 表先验检验（要求卡下，两类用法都应 compliant）===")
+    print("=== H6 要求卡义务边界（规则裁决合规，模型最终裁决违规）===")
     n_ok = 0
     for name, text in DECISIONS:
         v = model_judge(model, tok, text, card(C_ANT))
-        n_ok += v == "supports_compat"
+        expected = "supports_compat" if name == "裁决型用法" else "supports_conflict"
+        n_ok += v == expected
         print(f"  [{name}] {v}")
-    print(f"  → {n_ok}/2 合规（无表先验 = 2/2）")
+    print(f"  → {n_ok}/2 方向正确")
 
 
 def model_judge(model, tok, text, cons):

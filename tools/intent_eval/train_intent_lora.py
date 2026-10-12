@@ -36,6 +36,8 @@ BASE = os.path.expanduser(
     r"~/.cache/modelscope/models/Qwen--Qwen3.5-0.8B/snapshots/master")
 
 from moonbow.intent import protocol  # noqa: E402
+sys.path.insert(0, str(HERE))
+from experiment_evidence import adapter_evidence, atomic_json, file_hash
 
 # 任务定义：别名 → (账本口径标签, 中文说明)
 TASK_SPECS = {
@@ -111,12 +113,12 @@ def label_of(rec, task):
 def leak_check(train, evals, thr=0.85):
     """返回 (精确重复, 近重列表)。近重用字符 3-gram Jaccard。"""
     tr_texts = [r["event_text"] for r in train]
-    tr_exact = set(tr_texts)
+    tr_exact = {"".join(t.split()) for t in tr_texts}
     tr_grams = [(t, ngrams(t)) for t in tr_texts]
     exact, near = [], []
     for e in evals:
         t = e["event_text"]
-        if t in tr_exact:
+        if "".join(t.split()) in tr_exact:
             exact.append(e.get("case_id", t[:40]))
             continue
         g = ngrams(t)
@@ -128,6 +130,34 @@ def leak_check(train, evals, thr=0.85):
                 near.append((e.get("case_id", t[:40]), round(j, 3)))
                 break
     return exact, near
+
+
+def validated_rows(rows, task):
+    if not rows:
+        raise ValueError("训练/评测数据不能为空")
+    result = []
+    for r in rows:
+        label = label_of(r, task)
+        if label is None or not isinstance(r.get("event_text"), str) or not r["event_text"].strip():
+            raise ValueError(f"非法样本: {r.get('case_id', '?')}")
+        result.append(dict(r, label=label))
+    return result
+
+
+def checkpoint_score(accuracy, sensitivity):
+    return accuracy + max(0.0, sensitivity)
+
+
+def restore_best_adapter(model, out_dir, best_epoch, loader):
+    if best_epoch:
+        from peft import set_peft_model_state_dict
+        weights = loader(str(out_dir), device="xpu")
+        expected = {k for k in model.state_dict() if "lora_" in k and ".default." in k}
+        result = set_peft_model_state_dict(model, weights, adapter_name="default")
+        missing = expected.intersection(result.missing_keys)
+        if missing or result.unexpected_keys:
+            raise ValueError(f"best adapter 恢复不完整: missing={sorted(missing)}, unexpected={result.unexpected_keys}")
+    return model
 
 
 def build_prompt(task, rec, card=None):
@@ -171,6 +201,8 @@ def main():
     ap.add_argument("--train", required=True)
     ap.add_argument("--eval", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--init-adapter", default=None,
+                    help="从已有 LoRA 继续训练；父模型来源在报告中保留")
     ap.add_argument("--epochs", type=int, default=12)
     ap.add_argument("--lr", type=float, default=1e-4)
     ap.add_argument("--seed", type=int, default=42,
@@ -184,13 +216,13 @@ def main():
                     help="只做数据检查与泄漏检测，不加载模型")
     a = ap.parse_args()
 
+    if a.epochs < 1 or a.lr <= 0 or a.eval_every < 0:
+        raise ValueError("epochs/lr/eval-every 参数无效")
     spec = TASK_SPECS[a.task]
     train_raw = load_jsonl(a.train)
     eval_raw = load_jsonl(a.eval)
-    train = [dict(r, label=label_of(r, a.task)) for r in train_raw]
-    evals = [dict(r, label=label_of(r, a.task)) for r in eval_raw]
-    train = [r for r in train if r["label"]]
-    evals = [r for r in evals if r["label"]]
+    train = validated_rows(train_raw, a.task)
+    evals = validated_rows(eval_raw, a.task)
 
     print(f"task={a.task} train={len(train)} eval={len(evals)}", flush=True)
     print("train labels:", dict(Counter(r["label"] for r in train)), flush=True)
@@ -235,7 +267,12 @@ def main():
     from peft import LoraConfig, get_peft_model
     lcfg = LoraConfig(r=8, lora_alpha=16, lora_dropout=0.05,
                       target_modules=["q_proj", "v_proj"])
-    model = get_peft_model(model, lcfg)
+    if a.init_adapter:
+        from peft import PeftModel
+        model = PeftModel.from_pretrained(model, a.init_adapter, is_trainable=True)
+    else:
+        model = get_peft_model(model, lcfg)
+    parent_adapter = adapter_evidence(a.init_adapter) if a.init_adapter else None
     model.print_trainable_parameters()
     opt = torch.optim.AdamW(
         [p for p in model.parameters() if p.requires_grad], lr=a.lr)
@@ -327,7 +364,7 @@ def main():
             out = model(input_ids=ids, labels=labels)
             out.loss.backward()
             opt.step(); opt.zero_grad()
-            losses.append(float(out.loss))
+            losses.append(float(out.loss.detach()))
         print(f"epoch {ep+1}/{a.epochs} loss={sum(losses)/len(losses):.4f} "
               f"({time.time()-t0:.0f}s)", flush=True)
         if eval_every and ((ep + 1) % eval_every == 0 or ep + 1 == a.epochs):
@@ -349,11 +386,17 @@ def main():
                   f"degenerate={curve[-1]['degenerate']}", flush=True)
             # 按曲线存最佳 checkpoint（综合 = accuracy + 敏感度各半）：
             # 训练震荡（ep10 35% ↔ ep20 84%）下盲存最后一轮等于抽奖。
-            score = c_acc + (c_sens_val if c_sens_val >= 0 else 0)
-            if score > best["acc"] + best["sens"]:
+            score = checkpoint_score(c_acc, c_sens_val)
+            if score > checkpoint_score(best["acc"], best["sens"]):
                 best = {"epoch": ep + 1, "acc": c_acc, "sens": c_sens_val}
                 out_dir.mkdir(parents=True, exist_ok=True)
                 model.save_pretrained(str(out_dir))
+                atomic_json(out_dir / "training_manifest.json", {
+                    "train_sha256": file_hash(a.train), "eval_sha256": file_hash(a.eval),
+                    "task": a.task, "best": best, "adapter": adapter_evidence(out_dir),
+                    "parent_adapter": parent_adapter,
+                    "parent_training_provenance": "unverified" if parent_adapter else "base-model",
+                    "status": "checkpoint-saved-training-not-complete"})
                 print(f"  [best] 已存 checkpoint（ep{ep+1}，综合 {score:.3f}）",
                       flush=True)
 
@@ -364,6 +407,8 @@ def main():
           flush=True)
 
     # ── 终评：独立集 + 原始总似然 + 混淆矩阵 ────────────────────────────
+    from peft.utils.save_and_load import load_peft_weights
+    restore_best_adapter(model, out_dir, best["epoch"], load_peft_weights)
     torch.xpu.reset_peak_memory_stats()
     rows, acc, per_class, cm, picks, lat = run_eval(model)
     vram = round(torch.xpu.max_memory_allocated() / 2**30, 2)
@@ -375,7 +420,7 @@ def main():
         flipped, total = sens["flipped"], sens["pairs_total"]
         print(f"\n约束敏感度：{flipped}/{total} 对翻转 "
               f"({flipped/total*100:.0f}%)  "
-              f"——{'模型在读约束' if flipped/total >= 0.7 else '模型没有读约束（输出与约束无关）'}",
+              "——仅记录受控输入变化下的预测翻转，不单独证明理解机制",
               flush=True)
 
     report = {
@@ -384,6 +429,7 @@ def main():
         "train_n": len(train), "eval_n": len(rows), "epochs": a.epochs,
         "train_seconds": round(time.time() - t0, 1),
         "best_epoch": best["epoch"], "best_acc": best["acc"],
+        "evaluated_epoch": best["epoch"] or a.epochs,
         "accuracy": round(acc, 3),
         "macro_recall": round(sum(v["recall"] for v in per_class.values())
                               / len(labels), 3),
@@ -397,6 +443,9 @@ def main():
         "latency_avg_s": round(sum(lat) / len(lat), 3),
         "vram_peak_gb": vram, "adapter": str(out_dir),
         "train_file": a.train, "eval_file": a.eval,
+        "train_sha256": file_hash(a.train), "eval_sha256": file_hash(a.eval),
+        "adapter_evidence": adapter_evidence(out_dir),
+        "parent_adapter": parent_adapter,
         "rows": rows,
     }
     (out_dir / "eval_report.json").write_text(
