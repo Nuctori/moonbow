@@ -5,8 +5,7 @@
         real_commits_domain_labels.jsonl（subagent 分类：相关卡/极性/置信）。
 
 v12 组装规则（弱标签治理）：
-1. 审计锚定 12 commit → **held-out 评测集**（绝不进训练）——首次拿到
-   "训练不含、真值已锚定"的干净真实召回测量；
+1. 审计锚定 commit（本地 gold 文件）→ **held-out 评测集**（绝不进训练）；
 2. 训练集 = confidence ≥0.7 且 polarity≠none 且 relevant_card≠none 的高置信
    真实 commit（viol→violation / comp→compliant）；
 3. event_text = subject + diff_head（与运行时 commit 载体同构）；
@@ -27,12 +26,9 @@ from exp_real_recall import GOLD, git_show
 AUDIT_GOLD = {sha: label for sha, label, _ in GOLD}
 GEN = OUT / "gen"
 
-# 审计锚定的 12 commit（held-out，绝不进训练）
-AUDIT_HELD_OUT = {
-    "REDACTED_SHA", "REDACTED_SHA", "REDACTED_SHA", "REDACTED_SHA", "REDACTED_SHA",
-    "REDACTED_SHA", "REDACTED_SHA", "REDACTED_SHA", "REDACTED_SHA", "REDACTED_SHA",
-    "REDACTED_SHA", "REDACTED_SHA",
-}
+AUDIT_HELD_OUT = {sha for sha, _, _ in GOLD}
+
+
 
 
 def main():

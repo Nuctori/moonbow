@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """tools/intent_eval/exp_coverage_matrix.py — T4 目标覆盖的受控能力实验。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 动机：dev 只有 1 条 goal_coverage 案例（且真实会话数据不可得），单点结果
 没有信息量。本实验用**受控合成矩阵**回答一个具体问题：
@@ -79,7 +83,7 @@ def main():
     base = AutoModelForCausalLM.from_pretrained(
         BASE_DIR, dtype="bfloat16", trust_remote_code=True).to("xpu")
 
-    adapter = Path(arg_val("--adapter", r"M:/AI/spark-4b/models/intent_lora_v0"))
+    adapter = Path(arg_val("--adapter", str(MOONBOW_HOME) + r"/models/intent_lora_v0"))
     variants = [("base", None)]
     if adapter.exists():
         variants.append(("intent_lora_v0", str(adapter)))

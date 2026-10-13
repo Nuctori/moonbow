@@ -67,7 +67,7 @@ _JEV_PATTERN_VERSIONS: Dict[str, str] = {
 }
 DEFAULT_MODEL_ID = "TokenRhythm/NeoHorse-Jev-4B"
 DEFAULT_MODEL_DIR = (
-    "REDACTED_HOME/.cache/huggingface/hub/"
+    str(Path.home() / ".cache/huggingface/hub/") +
     "models--TokenRhythm--NeoHorse-Jev-4B/snapshots/"
     "434cb21d3a994a953d3ae5788405fcb2c4970554")
 

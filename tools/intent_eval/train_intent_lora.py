@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """tools/intent_eval/train_intent_lora.py — T3/T4 双任务 LoRA 训练器（统一口径）。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 为什么要重写（第四轮审计发现的问题）：
 1. **数据泄漏**：旧脚本把 dev 集自动并入训练对，再用同一条 dev 评测——报告里的
@@ -22,7 +26,7 @@
   python train_intent_lora.py --task t3 \
       --train data/intent_eval/train_t3.jsonl \
       --eval  data/intent_eval/eval_t3.jsonl \
-      --out M:/AI/spark-4b/models/intent_lora_t3
+      --out MOONBOW_HOME/models/intent_lora_t3
 """
 import argparse, json, os, sys, time
 from collections import Counter

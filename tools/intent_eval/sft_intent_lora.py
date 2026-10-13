@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """tools/intent_eval/sft_intent_lora.py — 阶段三收尾：LoRA-SFT 可行性对照实验。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 范围（如实声明）：用 dev 集 16 条 constraint_relation 做 LoRA-SFT（dev 允许进
 训练），再在全部 20 条 dev 上评测——**in-sample 可行性对照**，不是泛化验收
@@ -7,7 +11,7 @@
 
 产出指标：可解析率 / 标签一致率 / 延迟 / 显存峰值 / 弃权率（本轮二值输出无
 弃权通道，如实标注）。
-铁律：XPU-only；串行；adapter 存 M:/AI/spark-4b/models/（不入 git 仓库）。
+铁律：XPU-only；串行；adapter 存 MOONBOW_HOME/models/（不入 git 仓库）。
 """
 import json, os, sys, time
 from pathlib import Path
@@ -17,7 +21,7 @@ REPO = HERE.parent.parent
 sys.path.insert(0, str(REPO / "src"))
 BASE = os.path.expanduser(
     r"~/.cache/modelscope/models/Qwen--Qwen3.5-0.8B/snapshots/master")
-ADAPTER_OUT = Path("M:/AI/spark-4b/models/intent_lora_v0")
+ADAPTER_OUT = Path(str(MOONBOW_HOME) + "/models/intent_lora_v0")
 DEV = REPO / "data" / "intent_eval" / "dev_cases.jsonl"
 
 from moonbow.intent import protocol  # noqa: E402  （训练/运行时共用协议，D1/D2）

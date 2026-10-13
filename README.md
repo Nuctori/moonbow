@@ -363,3 +363,34 @@ API / 部署 / 回滚详情：[docs/semantic_api.md](docs/semantic_api.md) ·
 ## 6. 开源许可证
 
 本项目采用 [Apache License 2.0](LICENSE) 开源许可证。
+
+
+---
+
+## 意图提醒插件（intent-reminder，开箱即用）
+
+一个常驻小模型判官：监控工作中的 AI 的每次工具调用，判定是否触碰你声明的约束，
+只提醒、不阻断。三级流水线（约束选择 → 义务三分类 → 复核定量），单基座常驻 +
+三个 LoRA 热切换；权重随仓库发布（`weights/`），无需外部下载。
+
+```bash
+pip install -r requirements.txt
+python tools/intent_plugin/init.py          # 预下载基座 + 校验权重 + 打印 hook 注册说明
+python -m moonbow.intent.service --config config/intent_service.json
+```
+
+- **设备**：自动探测 Intel Arc XPU → CUDA → CPU（推理允许 CPU；训练/评估工具
+  仍要求 XPU）。
+- **约束卡**：默认 `config/intent_service.json` 内置作者的五条示例约束；换成你自己的：
+  `python tools/intent_plugin/init.py --cards my_cards.json`（字符串数组）。
+- **hook**：见 `tools/intent_plugin/claude_code_hooks.json`（Claude Code）与
+  `tools/intent_plugin/init.py` 输出的 ZCode 说明；服务不可达时 hook 静默放行。
+
+### 诚实边界
+
+- 判官为 0.8B + LoRA（训练/评测口径见 `tests/` 与 `tools/intent_eval/`）：
+  开发集三分类 91.8%，禁止/要求双向对照 11/12；**训练语料为中文**，英文会话
+  偏离训练分布。
+- 提醒不是拦截：存在漏报与误报，strong/manual-review/抑制三档置信投递，
+  最终判断永远在人。
+- 真实违规召回为训练内复测口径；详见 commit 历史中的评测记录。

@@ -11,8 +11,9 @@ PeftModel 上，按判定阶段 set_adapter 热切换（~ms）。**
 语义结论永远由判官给出）。捕获层 v1 用 FakeCaptureBackend（新约束
 抽取是 GLiNER 独立能力，不在本服务范围）。
 
-铁律：XPU-only（启动即校验）；推理全程持锁串行；任何判定失败显式
-记录不抛出——hook 侧 fail-open，绝不阻断工作 AI。
+设备策略（用户 2026-10-13 澄清）：**推理允许 CPU**——自动探测
+xpu→cuda→cpu；训练/评估工具仍保持 XPU 硬闸不变。推理全程持锁串行；
+任何判定失败显式记录不抛出——hook 侧 fail-open，绝不阻断工作 AI。
 
 启动：.venv_xpu/Scripts/python.exe -m moonbow.intent.service --config config/intent_service.json
 """
@@ -64,10 +65,11 @@ class BankFirstTokenJudge:
 
     model_id = "intent_lora_bank_pass1"
 
-    def __init__(self, bank, tokenizer):
+    def __init__(self, bank, tokenizer, device):
         from moonbow.intent import protocol
         self._bank = bank
         self._tok = tokenizer
+        self._device = device
         self._protocol = protocol
         self._token_ids = protocol.first_token_ids(tokenizer)
 
@@ -90,7 +92,7 @@ class BankFirstTokenJudge:
                 model_id=self.model_id, abstain=True,
                 abstain_reason=f"decision too long: {ji.truncation_note}",
                 reason="决策文本超长，未做静默截断判定")
-        ids = self._tok(ji.prompt, return_tensors="pt").to("xpu")
+        ids = self._tok(ji.prompt, return_tensors="pt").to(self._device)
         with torch.no_grad():
             logits = self._bank.model(**ids).logits[0, -1, :].float()
         label, scores = protocol.pick_label(
@@ -115,9 +117,10 @@ class BankVerifyJudge:
 
     model_id = "intent_lora_bank_verify"
 
-    def __init__(self, bank, tokenizer):
+    def __init__(self, bank, tokenizer, device):
         self._bank = bank
         self._tok = tokenizer
+        self._device = device
         self._labels = protocol.VERIFY_LABELS
         self._alias = protocol.VERIFY_LITERALS
 
@@ -128,7 +131,7 @@ class BankVerifyJudge:
         prompt = protocol.build_verification_input(
             decision_text or decision.quote, constraints, claimed.verdict,
             claimed.reason)
-        ids = self._tok(prompt, return_tensors="pt").to("xpu")
+        ids = self._tok(prompt, return_tensors="pt").to(self._device)
         with torch.no_grad():
             scores = protocol.sequence_scores(
                 self._bank.model, self._tok, ids["input_ids"], self._labels,
@@ -163,9 +166,10 @@ class BankSelectJudge:
 
     model_id = "intent_lora_bank_select"
 
-    def __init__(self, bank, tokenizer):
+    def __init__(self, bank, tokenizer, device):
         self._bank = bank
         self._tok = tokenizer
+        self._device = device
         self._labels = list(protocol.SELECT_LABELS)
         self._alias = dict(protocol.SELECT_LITERALS)
 
@@ -173,7 +177,7 @@ class BankSelectJudge:
         import torch
         self._bank.set("select")
         prompt = protocol.build_selection_input(decision_text, card_quotes)
-        ids = self._tok(prompt, return_tensors="pt").to("xpu")
+        ids = self._tok(prompt, return_tensors="pt").to(self._device)
         with torch.no_grad():
             scores = protocol.sequence_scores(
                 self._bank.model, self._tok, ids["input_ids"], self._labels,
@@ -185,27 +189,43 @@ class BankSelectJudge:
 class IntentService:
     """会话化 IntentLoop 工厂 + 串行推理锁。"""
 
+    @staticmethod
+    def pick_device():
+        """推理设备自动探测：xpu→cuda→cpu（CPU 推理合法）。"""
+        import torch
+        if getattr(torch, "xpu", None) and torch.xpu.is_available():
+            return "xpu"
+        if torch.cuda.is_available():
+            return "cuda"
+        return "cpu"
+
     def __init__(self, cfg, ledger_root):
         import torch
-        if not torch.xpu.is_available():
-            raise RuntimeError("XPU 不可用（铁律：禁止 CPU 推理）")
         self._cfg = cfg
         self._torch = torch
         self._lock = threading.Lock()
         self._sessions = {}
         self.ledger_root = Path(ledger_root)
+        self.device = self.pick_device()
 
         from transformers import AutoModelForCausalLM, AutoTokenizer
-        base_dir = cfg.get("base_model") or Path.home() / (
-            ".cache/modelscope/models/Qwen--Qwen3.5-0.8B/snapshots/master")
+        base_dir = cfg.get("base_model") or "Qwen/Qwen3.5-0.8B"
+        dtype = torch.bfloat16 if self.device != "cpu" else torch.float32
         self.tok = AutoTokenizer.from_pretrained(base_dir,
                                                  trust_remote_code=True)
         base = AutoModelForCausalLM.from_pretrained(
-            base_dir, dtype="bfloat16", trust_remote_code=True).to("xpu")
-        self.bank = LoRAAdapterBank(base, cfg["adapters"])
-        self.pass1 = BankFirstTokenJudge(self.bank, self.tok)
-        self.verify = BankVerifyJudge(self.bank, self.tok)
-        self.select = BankSelectJudge(self.bank, self.tok)
+            base_dir, dtype=dtype, trust_remote_code=True).to(self.device)
+        root = Path(__file__).resolve().parents[2]
+        adapters = {name: (str(root / path) if not Path(path).is_absolute()
+                           else path)
+                    for name, path in cfg["adapters"].items()}
+        missing = [p for p in adapters.values() if not Path(p).exists()]
+        if missing:
+            raise FileNotFoundError(f"adapter 权重缺失: {missing}")
+        self.bank = LoRAAdapterBank(base, adapters)
+        self.pass1 = BankFirstTokenJudge(self.bank, self.tok, self.device)
+        self.verify = BankVerifyJudge(self.bank, self.tok, self.device)
+        self.select = BankSelectJudge(self.bank, self.tok, self.device)
 
     def session_loop(self, session):
         if session in self._sessions:
@@ -308,8 +328,8 @@ def main():
     server = ThreadingHTTPServer(("127.0.0.1", cfg["port"]),
                                  build_handler(service))
     print(f"intent service on 127.0.0.1:{cfg['port']} "
-          f"adapters={sorted(cfg['adapters'])} cards={len(cfg['cards'])}",
-          flush=True)
+          f"device={service.device} adapters={sorted(cfg['adapters'])} "
+          f"cards={len(cfg['cards'])}", flush=True)
     server.serve_forever()
 
 

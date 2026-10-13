@@ -1,10 +1,18 @@
+import pytest
 import importlib.util
+import os
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools/intent_eval"))
 sys.path.insert(0, str(ROOT / "src"))
+def _requires_local(*names):
+    return pytest.mark.skipif(
+        not all((ROOT / "data/intent_eval" / n).exists() for n in names),
+        reason="本地真实数据不在社区树中，跳过")
+
+
 spec = importlib.util.spec_from_file_location("v18", ROOT / "tools/intent_eval/build_v18_data.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
@@ -22,6 +30,7 @@ def test_r3_rows_are_symmetric_and_disjoint_domains():
     assert topics.isdisjoint({"校验", "审核", "加密", "重试", "审批", "清理"})
 
 
+@_requires_local("train_t3_v18.jsonl",)
 def test_v18_actual_train_builds_on_v17_and_isolated():
     out = ROOT / "data/intent_eval"
     train = module.load_jsonl(out / "train_t3_v18.jsonl")

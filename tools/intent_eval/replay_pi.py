@@ -13,9 +13,9 @@ REPO = HERE.parent.parent
 sys.path.insert(0, str(REPO / "src"))
 OUT = HERE / "replay_pi_results.jsonl"
 
-PI_SESSION = (r"REDACTED_HOME/.pi/agent/sessions"
-              r"/--D--cs-KoishiNavigationRebuildMain--"
-              r"/2026-08-04T23-03-41-645Z_019fcf04-bb4d-7848-96c4-35193fd53d64.jsonl")
+PI_SESSION = (str(Path(os.environ.get("MOONBOW_PI_HOME", Path.home() / ".pi/agent/sessions")))
+              + "/--D--cs-KoishiNavigationRebuildMain--"
+              + "/2026-08-04T23-03-41-645Z_019fcf04-bb4d-7848-96c4-35193fd53d64.jsonl")
 
 
 def main():

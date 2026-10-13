@@ -60,7 +60,7 @@ constraints:
       - "10-08 排查发现 audit 中 12 处钉死固定话术的断言（REDACTED_SHA 已重写）"
 
   - id: C5-no-regex-adjudication   # spark-4b 铁律（既有，跨会话维护于 describe_not_enforce_spec.md）
-    scope: M:/AI/spark-4b
+    scope: MOONBOW_HOME
     declared_at: 2026-09-07
     verbatim: 禁止正则是底层原理，你用了正则就没有通用性
     essence: 正则/模式匹配不得做语义裁决（分类、判定、归因）；描述层只描述不裁决；追踪器零 LLM。

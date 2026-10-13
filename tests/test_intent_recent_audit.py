@@ -6,6 +6,18 @@ from types import SimpleNamespace
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+
+import os
+
+def _local(*names):
+    root = ROOT / "data" / "intent_eval"
+    return all((root / n).exists() for n in names)
+
+
+requires_local_data = pytest.mark.skipif(
+    not os.environ.get("MOONBOW_HAS_PRIVATE_DATA") and not _local(
+        "train_t3_v13.jsonl"), reason="本地真实数据不在社区树中，跳过")
+
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "tools" / "intent_eval"))
 
@@ -84,11 +96,15 @@ def test_v12_audit_gold_is_not_weak_labels(tmp_path, monkeypatch):
     gen.mkdir()
     def dump(path, rows):
         path.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
+    fake_anchors = {f"sha{i:04d}": ("violation" if i < 5 else "compliant")
+                    for i in range(12)}
     dump(gen / "real_commits_domain.jsonl", [
-        {"sha": sha, "subject": sha, "diff_head": "diff"} for sha in builder.AUDIT_HELD_OUT])
+        {"sha": sha, "subject": sha, "diff_head": "diff"} for sha in fake_anchors])
     dump(gen / "real_commits_domain_labels.jsonl", [
-        {"sha": sha, "polarity": "none"} for sha in builder.AUDIT_HELD_OUT])
+        {"sha": sha, "polarity": "none"} for sha in fake_anchors])
     dump(tmp_path / "train_t3_v9.jsonl", [{"case_id": "base", "event_text": "base", "label": "compliant"}])
+    monkeypatch.setattr(builder, "AUDIT_HELD_OUT", set(fake_anchors))
+    monkeypatch.setattr(builder, "AUDIT_GOLD", fake_anchors)
     monkeypatch.setattr(builder, "OUT", tmp_path)
     monkeypatch.setattr(builder, "GEN", gen)
     assert builder.main() == 0
@@ -133,12 +149,14 @@ def test_autopsy_adapter_alias():
         autopsy.parse_args(["--adaptre", "new"])
 
 
+@requires_local_data
 def test_rebuilt_v13_ids_and_sources():
     rows = tr.load_jsonl(ROOT / "data/intent_eval/train_t3_v13.jsonl")
     assert len(rows) == len({r["case_id"] for r in rows})
     assert all(r.get("source_case_id") for r in rows)
 
 
+@requires_local_data
 def test_rebuilt_real_holdout_is_complete_and_leak_free():
     held = tr.load_jsonl(ROOT / "data/intent_eval/heldout_real_recall.jsonl")
     train = tr.load_jsonl(ROOT / "data/intent_eval/train_t3_v12.jsonl")
@@ -158,11 +176,13 @@ def test_experiment_resume_rejects_changed_inputs():
         evidence.require_matching_evidence({"hash": "a"}, {"hash": "b"})
 
 
+@requires_local_data
 def test_autopsy_all_cases_have_m5():
     rows = tr.load_jsonl(ROOT / "data/intent_eval/autopsy_cases.jsonl")
     assert all(autopsy.validate_case(r)["paraphrase"] != r["event_text"] for r in rows)
 
 
+@requires_local_data
 def test_v12_unique_ids():
     rows = tr.load_jsonl(ROOT / "data/intent_eval/train_t3_v12.jsonl")
     assert len(rows) == len({r["case_id"] for r in rows})

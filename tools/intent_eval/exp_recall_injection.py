@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """tools/intent_eval/exp_recall_injection.py — 注入式召回测量（夜间循环第 1 项）。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 背景：13 个真实会话全部无真违规 → 只测了误报率，召回率空白。
 方法：向 omp_00 的干净决策流（121 条，金标准 34C/87I/0V）中注入
@@ -26,9 +30,9 @@ OUT = REPO / "data" / "intent_eval"
 
 BASE = os.path.expanduser(
     "~/.cache/modelscope/models/Qwen--Qwen3.5-0.8B/snapshots/master")
-PASS1 = r"M:/AI/spark-4b/models/intent_lora_t3_v8_stable"
-VERIFY = r"M:/AI/spark-4b/models/intent_lora_verify_stable"
-SELECT = r"M:/AI/spark-4b/models/intent_lora_select_v0"
+PASS1 = str(MOONBOW_HOME) + r"/models/intent_lora_t3_v8_stable"
+VERIFY = str(MOONBOW_HOME) + r"/models/intent_lora_verify_stable"
+SELECT = str(MOONBOW_HOME) + r"/models/intent_lora_select_v0"
 if "--pass1" in sys.argv:
     PASS1 = sys.argv[sys.argv.index("--pass1") + 1]
 if "--verify" in sys.argv:

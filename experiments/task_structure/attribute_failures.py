@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """experiments/task_structure/attribute_failures.py — 从真实会话反推语义维度。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 方法（用户指定）：不预设维度，让失败样本自己暴露分辨轴。
   1. 取真实会话子句，用两轴后端与规则后端各跑一遍
@@ -36,7 +40,7 @@ from moonbow.task_structure.extractor import (                   # noqa: E402
     RuleBackend, split_clauses,
 )
 
-MODELS = r"M:/AI/spark-4b/models"
+MODELS = str(MOONBOW_HOME) + r"/models"
 OUT_DIR = os.path.join(HERE, "mined")
 
 

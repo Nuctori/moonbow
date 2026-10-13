@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """tools/intent_eval/replay_dev.py — 阶段四重放验证：dev 案例过完整链路。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 事件序列（真实引文）：
   ev1 user 约束（dev-018）→ 捕获 constraint
@@ -56,7 +60,7 @@ def main():
     base = AutoModelForCausalLM.from_pretrained(
         _BASE_DIR, dtype="bfloat16", trust_remote_code=True).to("xpu")
     judge = LoraFirstTokenJudge(
-        base, tok, r"M:/AI/spark-4b/models/intent_lora_v0")
+        base, tok, str(MOONBOW_HOME) + r"/models/intent_lora_v0")
 
     gliner = GlinerCaptureBackend()
     gliner._load()                           # 权重预热（超时教训）

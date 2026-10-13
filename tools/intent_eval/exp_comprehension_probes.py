@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """tools/intent_eval/exp_comprehension_probes.py — 语言理解难点定位实验。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 三个假设（fp_mechanism_analysis.md 的语言层展开）：
 H1 线索捷径：合规判定依赖"由模型判定/仅用于召回"等豁免线索短语，
@@ -33,7 +37,7 @@ def main():
     from moonbow.intent.schema import Entity
 
     adapter = sys.argv[sys.argv.index("--adapter") + 1] if "--adapter" in sys.argv \
-        else r"M:/AI/spark-4b/models/intent_lora_t3_v6"
+        else str(MOONBOW_HOME) + r"/models/intent_lora_t3_v6"
     tok = AutoTokenizer.from_pretrained(BASE, trust_remote_code=True)
     base = AutoModelForCausalLM.from_pretrained(
         BASE, dtype="bfloat16", trust_remote_code=True).to("xpu")

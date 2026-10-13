@@ -1,12 +1,12 @@
 {
-  "_comment": "意图提醒闭环常驻服务：单基座常驻 XPU + 三 LoRA 热切换（pass1/verify/select）。启动：.venv_xpu/Scripts/python.exe -m moonbow.intent.service --config config/intent_service.json。XPU-only，推理串行；hook 侧 fail-open。约束卡为用户五条硬约束（语义裁决只在判官，配置仅登记）。",
+  "_comment": "意图提醒闭环常驻服务：单基座 + 三 LoRA 热切换（pass1/verify/select）。启动：python -m moonbow.intent.service --config config/intent_service.json。设备自动探测 xpu→cuda→cpu（CPU 推理合法；训练/评估仍 XPU 专用）。权重随仓库发布于 weights/。",
   "port": 18502,
   "scope": "live",
-  "base_model": null,
+  "base_model": "Qwen/Qwen3.5-0.8B",
   "adapters": {
-    "pass1": "M:/AI/spark-4b/models/intent_lora_t3_v17_release",
-    "verify": "M:/AI/spark-4b/models/intent_lora_verify_v2",
-    "select": "M:/AI/spark-4b/models/intent_lora_select_v2"
+    "pass1": "weights/intent_lora_release/pass1",
+    "verify": "weights/intent_lora_release/verify",
+    "select": "weights/intent_lora_release/select"
   },
   "cards": [
     "禁止用关键词表/词表/正则做语义裁决——匹配只能由模型判定，机械匹配仅可用于候选召回",

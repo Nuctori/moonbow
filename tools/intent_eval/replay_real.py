@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """tools/intent_eval/replay_real.py — 真实会话全量实测（基线/SFT 对照共用）。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 输入：--events JSONL（默认 .mimosa/intent-loop/real_events_zcode.jsonl）
 链路：IntentLoop（GLiNER 捕获 + 裁决后端）
@@ -53,7 +57,7 @@ def main():
         return 2
 
     events_path = Path(arg_value("--events", str(DEFAULT_EVENTS)))
-    adapter = arg_value("--adapter", r"M:/AI/spark-4b/models/intent_lora_v0")
+    adapter = arg_value("--adapter", str(MOONBOW_HOME) + r"/models/intent_lora_v0")
     run_id = arg_value("--run-id", time.strftime("%Y%m%d-%H%M%S"))
     run_dir = Path(arg_value("--run-dir", str(RUNS_DIR / run_id)))
     run_dir.mkdir(parents=True, exist_ok=True)
