@@ -14,6 +14,12 @@
 import json
 import sys
 import urllib.request
+from pathlib import Path
+
+_MUTE_FILE = Path(__file__).resolve().parents[2] / (
+    ".mimosa/intent-loop/REMINDERS_MUTED")
+_LOG_FILE = Path(__file__).resolve().parents[2] / (
+    ".mimosa/intent-loop/hook_reminders.jsonl")
 
 JUDGE_ENDPOINT = "http://127.0.0.1:18502/judge"   # 固定环回端点，禁止外部配置
 TIMEOUT_S = 20.0
@@ -93,6 +99,18 @@ def main():
     try:
         result = call_service(judge_payload(event, session_id))
     except Exception:                                  # noqa: BLE001 — fail-open
+        return 0
+    reminders = (result or {}).get("reminders", [])
+    if reminders:
+        try:                                           # 效果测量：提醒留档
+            with _LOG_FILE.open("a", encoding="utf-8") as fh:
+                for r in reminders:
+                    fh.write(json.dumps({"session": session_id,
+                                         "reminder": r},
+                                        ensure_ascii=False) + "\n")
+        except OSError:
+            pass
+    if _MUTE_FILE.exists():                            # 静音：只记录不注入
         return 0
     message = format_reminders(result or {})
     if message:
