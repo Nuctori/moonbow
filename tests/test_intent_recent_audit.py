@@ -35,6 +35,14 @@ real = load("exp_real_recall")
 autopsy = load("exp_error_autopsy")
 
 
+def _has_local_gold():
+    return bool(real.GOLD)
+
+
+requires_local_gold = pytest.mark.skipif(
+    not _has_local_gold(), reason="本地 gold 锚定文件不在社区树中，跳过")
+
+
 def test_real_recall_adapter_alias_and_unknown_flag():
     args = real.parse_args(["--adapter", "new", "--verify", "v", "--select", "s", "--train", "t", "--out", "o"])
     assert args.pass1 == "new"
@@ -42,6 +50,7 @@ def test_real_recall_adapter_alias_and_unknown_flag():
         real.parse_args(["--adaptre", "new"])
 
 
+@requires_local_gold
 def test_real_recall_detects_in_sample():
     assert real.evaluation_partition([{"gold_note": "审计锚定 REDACTED_SHA"}]) == "in-sample"
     assert real.evaluation_partition([]) == "heldout-unverified"
@@ -166,6 +175,7 @@ def test_rebuilt_real_holdout_is_complete_and_leak_free():
     assert tr.leak_check(train, held) == ([], [])
 
 
+@requires_local_gold
 def test_full_sha_marks_in_sample():
     assert real.evaluation_partition([{"sha": "REDACTED_SHAabcdef0123"}]) == "in-sample"
 
