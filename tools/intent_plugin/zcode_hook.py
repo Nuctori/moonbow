@@ -24,7 +24,8 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-_opener = urllib.request.build_opener(_NoRedirect)
+_opener = urllib.request.build_opener(
+    _NoRedirect, urllib.request.ProxyHandler({}))  # 本机服务不走系统代理
 
 # 各工具的决策文本提取（机械路由：只决定"发什么原文"，语义结论在服务端判官）。
 # 与 adapters.py 的字段习惯一致：command / content / input 等原文直送。
