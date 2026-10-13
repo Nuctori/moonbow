@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 """experiments/task_structure/train_axis2.py — 轴 2（结构角色）八分类头训练。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 规范 v2：轴 2 = 结构角色，仅在轴 1 判定为 demand 的子句上运行。
 对照样本（同词面不同角色）是关键，见 build_axis2_set.py。
 
 数据：build_axis2_set.py 产出的 axis2_train.jsonl（1346 条，类别配平 + 同词面对照）。
 底座：本地 287M boundary 架构（AutoExtractor；GLiNER2.from_pretrained 不适用）。
-输出：M:/AI/spark-4b/models/task_structure_axis2_v1/final
+输出：MOONBOW_HOME/models/task_structure_axis2_v1/final
 
 用法：
   python train_axis1.py --smoke    # 80 条 1 epoch 验证管线

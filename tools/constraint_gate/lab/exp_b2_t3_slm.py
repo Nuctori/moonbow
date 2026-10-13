@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """exp_b2_t3_slm.py — 实验B2：T3 裁决的 SLM 后端探针（XPU，零限流）。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[3])))
+
 
 用 spark-4b 本地 Qwen3.5-0.8B（+auditor LoRA v3）对同一标注集做约束裁决，
 与 LLM 兜底路径（exp_b_t3.py）对照。这是 T3 的目标后端形态（铁律：语义判定走 SLM/XPU）。
@@ -13,7 +17,7 @@ import json, os, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 BASE = os.path.expanduser(r"~/.cache/modelscope/models/Qwen--Qwen3.5-0.8B/snapshots/master")
-LORA = r"M:/AI/spark-4b/models/qwen35_auditor_lora_v3"
+LORA = str(MOONBOW_HOME) + r"/models/qwen35_auditor_lora_v3"
 REPO = r'REDACTED_REPO'
 LABELED = [
     ('N1', 'REDACTED_SHA', '本地推荐四根因——假晚间信号/目的地具体性/姊妹SKU刷屏/异地团无惩戒'),

@@ -1,15 +1,24 @@
+import pytest
 import importlib.util
+import os
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools/intent_eval"))
 sys.path.insert(0, str(ROOT / "src"))
+def _requires_local(*names):
+    return pytest.mark.skipif(
+        not all((ROOT / "data/intent_eval" / n).exists() for n in names),
+        reason="本地真实数据不在社区树中，跳过")
+
+
 spec = importlib.util.spec_from_file_location("v14", ROOT / "tools/intent_eval/build_v14_data.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
 
+@_requires_local("train_t3_v14.jsonl", "eval_t3_v14_dev.jsonl")
 def test_v14_actual_replay_polarity_and_isolation():
     out = ROOT / "data/intent_eval"
     rows = module.load_jsonl(out / "train_t3_v14.jsonl")

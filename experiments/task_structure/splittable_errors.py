@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """experiments/task_structure/splittable_errors.py — 可拆错误占比实验。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 用户假设：让小模型做"对立语义拆分"是最简单的任务，多轮拆分可拉精度。
 本实验判定该假设的可操作版本：
@@ -34,7 +38,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..", "..", "src")))
 sys.path.insert(0, HERE)
 
-MODELS = r"M:/AI/spark-4b/models"
+MODELS = str(MOONBOW_HOME) + r"/models"
 
 # 已确认的语义维度及其正反例（用于判据检验）
 KNOWN_AXES = {

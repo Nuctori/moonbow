@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """tools/intent_eval/replay_real_sessions.py — 真实多样会话全链路重放。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 用户决策（2026-10-10）：真实宿主接入成本高，改为完成接线组件后
 用真实多样的会话数据重放验收。
@@ -27,7 +31,7 @@ RUNS = REPO / ".mimosa" / "intent-loop" / "host_replay"
 
 OMP = os.path.expanduser("~/.omp/agent/sessions")
 KIMI = os.path.expanduser("~/.kimi/sessions")
-PI = r"M:/AI/spark-4b/pi_eval/home/sessions"
+PI = str(MOONBOW_HOME) + r"/pi_eval/home/sessions"
 ZCODE = REPO / ".mimosa" / "intent-loop" / "real_events_zcode.jsonl"
 
 
@@ -102,12 +106,12 @@ def main():
     ap.add_argument("--max-events", type=int, default=200,
                     help="每会话事件上限（控时长）")
     ap.add_argument("--t3-adapter",
-                    default=r"M:/AI/spark-4b/models/intent_lora_t3_v17_release")
+                    default=str(MOONBOW_HOME) + r"/models/intent_lora_t3_v17_release")
     ap.add_argument("--verify-adapter",
-                    default=r"M:/AI/spark-4b/models/intent_lora_verify_v2",
+                    default=str(MOONBOW_HOME) + r"/models/intent_lora_verify_v2",
                     help="第二级复核判官 adapter（空串关闭复核）")
     ap.add_argument("--select-adapter",
-                    default=r"M:/AI/spark-4b/models/intent_lora_select_v2",
+                    default=str(MOONBOW_HOME) + r"/models/intent_lora_select_v2",
                     help="约束选择判官 adapter（空串关闭选卡）")
     ap.add_argument("--kinds", default="omp,kimi,pi",
                     help="逗号分隔的会话来源过滤（崩溃分段重跑用）")

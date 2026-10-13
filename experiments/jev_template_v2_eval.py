@@ -1,7 +1,11 @@
 """jev-template-v2 calib 评测（XPU only，断点续跑，分批落盘 ≤25 条）。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[1])))
+
 
 用法：
-  M:/AI/spark-4b/.venv_xpu/Scripts/python.exe experiments/jev_template_v2_eval.py [--limit N]
+  MOONBOW_HOME/.venv_xpu/Scripts/python.exe experiments/jev_template_v2_eval.py [--limit N]
 
 设计（guard-effect-v2 Track 2，2026-10-03）：
 - 模板来源 experiments/jev-template-v2.json：仅 completion.asserted 措辞改动，

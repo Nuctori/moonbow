@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """experiments/task_structure/verify_coverage.py — 覆盖路线验证。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 判定两件事（用户授权的验证）：
   1. 记忆效应：补进训练集的 25 条错误句，重训后是否转正
@@ -22,7 +26,7 @@ os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..", "..", "src")))
 
-MODELS = r"M:/AI/spark-4b/models"
+MODELS = str(MOONBOW_HOME) + r"/models"
 
 # 补进训练的错误句（记忆组）—— 标签按规范 v2（R1：动作指向 → demand）
 MEMORIZED = [

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """exp_b3_t3_4b.py — 实验B3：Spark-X2.5-4B 零样本 T3 裁决探针（XPU）。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[3])))
+
 
 与 B2 同标注集同 prompt 形态，换 4B 基座（无 LoRA），检验指令跟随与判定质量。
 铁律：torch.xpu 不可用立即报错，禁止 CPU 回退。串行单模型。
@@ -10,7 +14,7 @@
 """
 import json, os, subprocess, sys
 
-BASE = r'M:/AI/spark-4b/models/Spark-X2.5-4B'
+BASE = rstr(MOONBOW_HOME) + '/models/Spark-X2.5-4B'
 REPO = r'REDACTED_REPO'
 HERE = os.path.dirname(os.path.abspath(__file__))
 LABELED = [

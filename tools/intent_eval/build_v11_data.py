@@ -5,15 +5,14 @@ run17 发现：真实 commit（长 diff、代码密集）是训练未覆盖的�
 v8-stable 在真实 commit 场景 100% 误报（含 5 个审计违规全召回，
 但 7 个合规 commit 也全判违规）。
 
-v11 = v10 ⊕ REDACTED_REPO 审计锚定真实 commit（gold 来自
+v11 = v10 ⊕ 本地锚定的真实 commit（gold 来自
 docs/session_violation_audit.md 用户裁定时间线）：
-- violation×5：REDACTED_SHA/REDACTED_SHA/REDACTED_SHA/REDACTED_SHA/REDACTED_SHA
-- compliant×7：REDACTED_SHA(清理补救) + 6 个整改后提交
+- 真实 commit 清单见本地 gold 文件（不入库）
 
 产出 train_t3_v11.jsonl。评测口径：本批为**同源验证**（训后在这 12 条上
 复测 = in-sample 证明载体可学）；held-out 真实召回需更多真实 commit（后续）。
 """
-import json, subprocess, sys
+import json, os, subprocess, sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -28,26 +27,21 @@ C = {
     "silent": "失败必须显式上报；禁止静默降级、禁止吞异常返回默认值",
     "test": "测试断言必须断言政策，不得钉死具体句式",
 }
-REAL = [
-    ("REDACTED_SHA", "violation", "fix(copy): 本地推荐语去重与多样化——天气提醒不再同句重复,节奏叙述按条轮换"),
-    ("REDACTED_SHA", "violation", "fix(audit): 畸形理由回退保持本地事实文案——宁要事实模板不要坏句子"),
-    ("REDACTED_SHA", "violation", "fix(ai): 需求分类头（原语封闭集+profile覆盖）+ 检索分离度门 + 字典序排序"),
-    ("REDACTED_SHA", "violation", "fix(ai): 本地推荐四根因——假晚间信号/目的地具体性/姊妹SKU刷屏/异地团无惩戒"),
-    ("REDACTED_SHA", "violation", "fix(ai): 硬约束装配纪律 + 目的地提示语料富集——AI结果尾部不再违反本轮约束"),
-    ("REDACTED_SHA", "compliant", "refactor(ai): 杜绝全部本地模板话术——用户可见文案只能来自模型"),
-    ("REDACTED_SHA", "compliant", "feat(proxy): OpenRouter 双 key 轮换 + 免费模型硬约束"),
-    ("REDACTED_SHA", "compliant", "fix(proxy): GLM 429 分型重试——1305 短退避、1302 直接换家"),
-    ("REDACTED_SHA", "compliant", "fix(ai): 文案质检按「便宜比无消息好」松绑 + 修三个真收缩元凶"),
-    ("REDACTED_SHA", "compliant", "feat(ai): 客户端不明文——上游 key 收进 Cloudflare Worker 反代"),
-    ("REDACTED_SHA", "compliant", "fix(geo): 简写别名拼接不再发明重复地名（REDACTED禾木×37）"),
-    ("REDACTED_SHA", "compliant", "fix(geo): 酒店类目的地只到镇级的五个根因"),
-]
+# 真实 commit 锚定清单在本地文件（gitignored）：real_recall_gold.local.jsonl
+LOCAL_GOLD = Path(__file__).resolve().parents[2] / ("data/intent_eval/"
+                                                    "real_recall_gold.local.jsonl")
+REAL = []
+if LOCAL_GOLD.exists():
+    for line in LOCAL_GOLD.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            row = json.loads(line)
+            REAL.append((row["sha"], row["gold"], row.get("desc", "")[:60]))
 
 
 def git_text(sha):
     r = subprocess.run(
         ["git", "show", sha, "--format=%s%n%b", "--unified=0"],
-        cwd="REDACTED_REPO", capture_output=True, text=True,
+        cwd=os.environ.get("MOONBOW_REAL_REPO", "."), capture_output=True, text=True,
         encoding="utf-8", errors="replace")
     return (r.stdout or "")[:2000]
 

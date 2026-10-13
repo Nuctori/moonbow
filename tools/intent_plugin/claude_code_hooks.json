@@ -1,0 +1,17 @@
+{
+  "_comment": "Claude Code 提醒 hook 模板：合并到 .claude/settings.json 的 hooks 段。仅提醒不阻断；服务未启动时静默放行。",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash|Write|Edit|NotebookEdit|ApplyPatch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PROJECT_DIR}/tools/intent_plugin/zcode_hook.py\"",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

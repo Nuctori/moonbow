@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """tools/intent_eval/exp_goal_coverage.py — C1 目标覆盖裁决的真实推理实验。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 问题（第三轮遗留）：目标验收闭环的代码路径已闭环，但**没有任何语义后端
 被验证过**。本脚本做最直接的一步：拿 dev 里的 goal_coverage 案例，用
@@ -93,7 +97,7 @@ def main():
     tok_ids = ft
 
     variants = [("base", None)]
-    adapter = Path(arg_val("--adapter", r"M:/AI/spark-4b/models/intent_lora_v0"))
+    adapter = Path(arg_val("--adapter", str(MOONBOW_HOME) + r"/models/intent_lora_v0"))
     if adapter.exists():
         variants.append(("intent_lora_v0", str(adapter)))
 

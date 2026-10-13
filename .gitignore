@@ -61,9 +61,21 @@ results/convergence-phase2/agent_home/
 results/convergence-phase2/ws/
 results/guard-effect-v2/logs/
 
-# --- Runtime artifacts (large ledgers / real session dumps; keep only md reports) ---
+# --- Runtime artifacts & internal reports (never publish) ---
 .mimosa/*
 !.mimosa/security-policy.json
-!.mimosa/intent-loop
-.mimosa/intent-loop/*
-!.mimosa/intent-loop/*.md
+
+# --- Intent 真实数据与本地权重（社区树不含；本地保留） ---
+data/intent_eval/train_t3_v1[1-9].jsonl
+data/intent_eval/train_v3.jsonl
+data/intent_eval/train_t3_synth_v1.jsonl
+data/intent_eval/autopsy_cases.jsonl
+data/intent_eval/dev_cases.jsonl
+data/intent_eval/gold_omp00.jsonl
+data/intent_eval/real_*.jsonl
+data/intent_eval/test_cases.jsonl
+data/intent_eval/heldout_*.jsonl
+data/intent_eval/*_data_manifest.json
+data/intent_eval/gen/real_*
+data/intent_eval/gen/domain_commits_index.txt
+config/semantic_runtime_lora.json

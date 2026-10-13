@@ -1,10 +1,18 @@
+import pytest
 import importlib.util
+import os
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools/intent_eval"))
 sys.path.insert(0, str(ROOT / "src"))
+def _requires_local(*names):
+    return pytest.mark.skipif(
+        not all((ROOT / "data/intent_eval" / n).exists() for n in names),
+        reason="本地真实数据不在社区树中，跳过")
+
+
 spec = importlib.util.spec_from_file_location("v16", ROOT / "tools/intent_eval/build_v16_data.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
@@ -19,6 +27,7 @@ def test_v16_boundary_rows_are_paired_and_clean():
     assert all(card["quote"] for *_, card in module.NEW_ROWS)
 
 
+@_requires_local("train_t3_v16.jsonl",)
 def test_v16_actual_train_unique_and_isolated():
     out = ROOT / "data/intent_eval"
     train = module.load_jsonl(out / "train_t3_v16.jsonl")

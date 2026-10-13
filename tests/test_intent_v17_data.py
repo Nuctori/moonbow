@@ -1,11 +1,19 @@
+import pytest
 import importlib.util
 import json
+import os
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools/intent_eval"))
 sys.path.insert(0, str(ROOT / "src"))
+def _requires_local(*names):
+    return pytest.mark.skipif(
+        not all((ROOT / "data/intent_eval" / n).exists() for n in names),
+        reason="本地真实数据不在社区树中，跳过")
+
+
 spec = importlib.util.spec_from_file_location("v17", ROOT / "tools/intent_eval/build_v17_data.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
@@ -22,6 +30,7 @@ def test_r2_violation_side_is_symmetric():
     assert all(len(text) >= 18 for _, text, _, _ in module.V17_ROWS)
 
 
+@_requires_local("train_t3_v17.jsonl",)
 def test_v17_actual_train_unique_and_isolated():
     out = ROOT / "data/intent_eval"
     train = module.load_jsonl(out / "train_t3_v17.jsonl")

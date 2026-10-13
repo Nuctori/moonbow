@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 """experiments/task_structure/train_axis1.py — 轴 1（言语行为）二元头训练。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 规范 v2 草案：轴 1 = demand（待实现的要求）/ mention（提及叙述），
 它是唯一决定"是否产生捕获"的闸门；轴 2（角色分类）留待轴 1 稳定后。
 
 数据：build_axis1_set.py 产出的 axis1_train.jsonl（579 条，成对结构）。
 底座：本地 287M boundary 架构（AutoExtractor；GLiNER2.from_pretrained 不适用）。
-输出：M:/AI/spark-4b/models/task_structure_axis1_v1/final
+输出：MOONBOW_HOME/models/task_structure_axis1_v1/final
 
 用法：
   python train_axis1.py --smoke    # 80 条 1 epoch 验证管线

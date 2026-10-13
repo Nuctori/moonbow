@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """tools/intent_eval/exp_understanding_proof.py — "理解 vs 字面拟合"判定实验。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 用户问题：能证明模型是"正确理解问题"而非"拟合文本字面"吗？
 
@@ -38,7 +42,7 @@ def main():
 
     globals()["protocol"] = protocol
     adapter = sys.argv[sys.argv.index("--adapter") + 1] if "--adapter" in sys.argv \
-        else r"M:/AI/spark-4b/models/intent_lora_t3_v8_stable"
+        else str(MOONBOW_HOME) + r"/models/intent_lora_t3_v8_stable"
     if not torch.xpu.is_available():
         raise RuntimeError("XPU 不可用，禁止 CPU 推理")
     tok = AutoTokenizer.from_pretrained(BASE, trust_remote_code=True)

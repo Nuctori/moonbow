@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """experiments/task_structure/eval_two_axis.py — 双轴后端三口径评测。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 三个口径，缺一不可（前两轮实验的教训）：
   1. dev / test 冻结集：与既有后端可比，但**分布偏移**（goal 占 66% vs 真实 10.5%）
@@ -25,7 +29,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.abspath(os.path.join(HERE, "..", "..", "src")))
 sys.path.insert(0, HERE)
 
-MODELS = r"M:/AI/spark-4b/models"
+MODELS = str(MOONBOW_HOME) + r"/models"
 
 
 def build_backends():

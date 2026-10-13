@@ -325,7 +325,7 @@ NLI_TEMPLATES_PATH = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "..",
     "tools", "openjev_templates.json")
 NLI_MODEL_DIR = (
-    "REDACTED_HOME/.cache/huggingface/hub/models--AlexWortega--openjev/"
+    str(Path.home() / ".cache/huggingface/hub/models--AlexWortega--openjev/") +
     "snapshots/26de23c44b67586b4bea31c0ef2e016e3068ae66/"
     "qwen3.5-0.8b-nli-v2s-long")
 NLI_ENTAILMENT_ID = 1  # id2label: 0=contradiction 1=entailment 2=neutral

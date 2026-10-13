@@ -1,0 +1,26 @@
+{
+  "train_sha256": "8556d640e87ea6cd69968846a4b07b0d6d2387e4043fca2695794a2ab78f0454",
+  "eval_sha256": "ac734c1a3546d7e3d6f45e237f62fdb373f9e09ac8612268fd7d7dcf935d45e2",
+  "task": "t3",
+  "best": {
+    "epoch": 2,
+    "acc": 0.9217391304347826,
+    "sens": -1.0
+  },
+  "adapter": {
+    "path": "P:\\Temp\\_t3v17_symmetric",
+    "files": {
+      "adapter_config.json": "1544bb9962d612fcb4dfd7a1323b62e09fb9ecc7e893fa1a64f5ba84667f08cf",
+      "adapter_model.safetensors": "ba27c751c0451f6d9ad318a6fc0d0fc836dfa0ab8db596eeaf19afa2896a4c36"
+    }
+  },
+  "parent_adapter": {
+    "path": "P:\\Temp\\_t3v15_roles",
+    "files": {
+      "adapter_config.json": "1544bb9962d612fcb4dfd7a1323b62e09fb9ecc7e893fa1a64f5ba84667f08cf",
+      "adapter_model.safetensors": "ce3caba6128f901a086bdc668cf73b59d8b39a51fd33f36ddce0c8d33ba74e9f"
+    }
+  },
+  "parent_training_provenance": "unverified",
+  "status": "checkpoint-saved-training-not-complete"
+}

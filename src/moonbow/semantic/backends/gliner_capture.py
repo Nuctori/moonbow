@@ -59,9 +59,9 @@ LABELS_V1: Dict[str, str] = {
 LABELS_VERSION = "gliner:labels-v1"
 
 DEFAULT_MODEL_PATH = (
-    r"C:\Users\Nuctori\.cache\huggingface\hub"
-    r"\models--fastino--gliner2.5-multi-v1"
-    r"\snapshots\aaecfe45db1d828c963717054ccb868e8ad1f1d5"
+    Path.home() / ".cache/huggingface/hub"
+    / "models--fastino--gliner2.5-multi-v1"
+    / "snapshots/aaecfe45db1d828c963717054ccb868e8ad1f1d5"
 )
 DEFAULT_THRESHOLD = 0.05  # 零样本 boundary head 的可用工作点（诊断值）
 

@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """experiments/task_structure/train_clf.py — 微调 287M 子句结构分类头。
+import os as _os
+from pathlib import Path as _Path
+MOONBOW_HOME = _Path(_os.environ.get("MOONBOW_HOME", str(_Path(__file__).resolve().parents[2])))
+
 
 用户已授权训练（2026-09-24）。底座 = 本地 fastino/gliner2.5-multi-v1
 （boundary 架构，经 AutoExtractor 加载；GLiNER2.from_pretrained 是 span
@@ -12,7 +16,7 @@ ExtractorTrainer（官方文档注明 architecture-neutral，支持 boundary）�
 用法：
   python train_clf.py --smoke     # 200 条 1 epoch，验证管线
   python train_clf.py             # 全量 3 epoch
-输出：M:/AI/spark-4b/models/task_structure_clf_v1/final
+输出：MOONBOW_HOME/models/task_structure_clf_v1/final
 """
 import argparse
 import json
