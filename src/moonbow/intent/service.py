@@ -215,7 +215,7 @@ class IntentService:
                                                  trust_remote_code=True)
         base = AutoModelForCausalLM.from_pretrained(
             base_dir, dtype=dtype, trust_remote_code=True).to(self.device)
-        root = Path(__file__).resolve().parents[2]
+        root = Path(__file__).resolve().parents[3]
         adapters = {name: (str(root / path) if not Path(path).is_absolute()
                            else path)
                     for name, path in cfg["adapters"].items()}
