@@ -52,7 +52,8 @@ def test_real_recall_adapter_alias_and_unknown_flag():
 
 @requires_local_gold
 def test_real_recall_detects_in_sample():
-    assert real.evaluation_partition([{"gold_note": "审计锚定 REDACTED_SHA"}]) == "in-sample"
+    anchor = real.GOLD[0][0]
+    assert real.evaluation_partition([{"gold_note": f"anchored {anchor}"}]) == "in-sample"
     assert real.evaluation_partition([]) == "heldout-unverified"
 
 
@@ -177,7 +178,8 @@ def test_rebuilt_real_holdout_is_complete_and_leak_free():
 
 @requires_local_gold
 def test_full_sha_marks_in_sample():
-    assert real.evaluation_partition([{"sha": "REDACTED_SHAabcdef0123"}]) == "in-sample"
+    assert real.evaluation_partition(
+        [{"sha": real.GOLD[0][0] + "abcdef0123"}]) == "in-sample"
 
 
 def test_experiment_resume_rejects_changed_inputs():
