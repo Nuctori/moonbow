@@ -19,6 +19,7 @@ xpu→cuda→cpu；训练/评估工具仍保持 XPU 硬闸不变。推理全程�
 """
 import argparse
 import json
+import os
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -190,6 +191,22 @@ class IntentService:
     """会话化 IntentLoop 工厂 + 串行推理锁。"""
 
     @staticmethod
+    def resolve_base_model(cfg):
+        """基座解析顺序：环境变量 > 配置指定的本地目录 > 本地 ModelScope
+        快照 > HF 模型 ID（联网下载）。避免无 HuggingFace 访问的环境卡死。"""
+        env = os.environ.get("MOONBOW_BASE_MODEL")
+        if env:
+            return env
+        configured = cfg.get("base_model") or "Qwen/Qwen3.5-0.8B"
+        if Path(configured).exists():
+            return configured
+        local = (Path.home() / ".cache/modelscope/models"
+                 / "Qwen--Qwen3.5-0.8B/snapshots/master")
+        if local.exists():
+            return str(local)
+        return configured
+
+    @staticmethod
     def pick_device():
         """推理设备自动探测：xpu→cuda→cpu（CPU 推理合法）。"""
         import torch
@@ -209,7 +226,7 @@ class IntentService:
         self.device = self.pick_device()
 
         from transformers import AutoModelForCausalLM, AutoTokenizer
-        base_dir = cfg.get("base_model") or "Qwen/Qwen3.5-0.8B"
+        base_dir = self.resolve_base_model(cfg)
         dtype = torch.bfloat16 if self.device != "cpu" else torch.float32
         self.tok = AutoTokenizer.from_pretrained(base_dir,
                                                  trust_remote_code=True)
