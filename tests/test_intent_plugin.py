@@ -47,7 +47,9 @@ def test_format_reminders_none_when_empty():
     assert "仅提醒" in message and "strong" in message
 
 
-def test_hook_main_fail_open_when_service_down(monkeypatch, capsys):
+def test_hook_main_fail_open_when_service_down(monkeypatch, capsys, tmp_path):
+    monkeypatch.setattr(hook, "_LOG_FILE", tmp_path / "reminders.jsonl")
+    monkeypatch.setattr(hook, "_MUTE_FILE", tmp_path / "no-mute")
     def boom(*a, **kw):
         raise urllib.error.URLError("connection refused")
     monkeypatch.setattr(hook, "call_service", boom)
@@ -57,7 +59,9 @@ def test_hook_main_fail_open_when_service_down(monkeypatch, capsys):
     assert capsys.readouterr().out == ""
 
 
-def test_hook_main_emits_additional_context(monkeypatch, capsys):
+def test_hook_main_emits_additional_context(monkeypatch, capsys, tmp_path):
+    monkeypatch.setattr(hook, "_MUTE_FILE", tmp_path / "no-mute")
+    monkeypatch.setattr(hook, "_LOG_FILE", tmp_path / "reminders.jsonl")
     monkeypatch.setattr(hook, "call_service", lambda p: {
         "reminders": [{"policy": "manual-review", "reason": "r", "quote": "q"}]})
     monkeypatch.setattr(sys, "stdin", io.StringIO("{}"))
@@ -66,7 +70,23 @@ def test_hook_main_emits_additional_context(monkeypatch, capsys):
     assert "additionalContext" in out and "manual-review" in out["additionalContext"]
 
 
-def test_hook_main_ignores_bad_stdin(monkeypatch, capsys):
+def test_hook_mute_still_logs_but_not_injects(monkeypatch, capsys, tmp_path):
+    mute = tmp_path / "REMINDERS_MUTED"
+    mute.write_text("", encoding="utf-8")
+    log = tmp_path / "reminders.jsonl"
+    monkeypatch.setattr(hook, "_MUTE_FILE", mute)
+    monkeypatch.setattr(hook, "_LOG_FILE", log)
+    monkeypatch.setattr(hook, "call_service", lambda p: {
+        "reminders": [{"policy": "strong", "reason": "r", "quote": "q"}]})
+    monkeypatch.setattr(sys, "stdin", io.StringIO("{}"))
+    assert hook.main() == 0
+    assert capsys.readouterr().out == ""
+    assert "strong" in log.read_text(encoding="utf-8")
+
+
+def test_hook_main_ignores_bad_stdin(monkeypatch, capsys, tmp_path):
+    monkeypatch.setattr(hook, "_LOG_FILE", tmp_path / "reminders.jsonl")
+    monkeypatch.setattr(hook, "_MUTE_FILE", tmp_path / "no-mute")
     monkeypatch.setattr(sys, "stdin", io.StringIO("not-json"))
     assert hook.main() == 0
     assert capsys.readouterr().out == ""
