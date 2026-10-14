@@ -79,3 +79,7 @@ data/intent_eval/*_data_manifest.json
 data/intent_eval/gen/real_*
 data/intent_eval/gen/domain_commits_index.txt
 config/semantic_runtime_lora.json
+data/intent_eval/train_t3_v19b*.jsonl
+data/intent_eval/train_t3_v19b_at_train.jsonl
+data/intent_eval/gate_real_fp.jsonl
+data/intent_eval/gate_*.local.jsonl
