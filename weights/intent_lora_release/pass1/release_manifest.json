@@ -1,0 +1,20 @@
+{
+  "kind": "release",
+  "date": "2026-10-15",
+  "role": "pass1 constraint judge",
+  "version": "v20-scale (init v17, +real tool-traffic carriers 160 rows, scaled)",
+  "gates": {
+    "A1_real_fp_flip": "11/12",
+    "A2_carrier_violation": "6/7 (gateviol-01 已知漏报)",
+    "A3_holdout": "violation 20/20, compliant FP 0/20",
+    "B_original": "152/170, polarity 30/36, roles 24/24 (接受的小回退)"
+  },
+  "decision": "用户 2026-10-15 标准：提醒无害且不频繁即可，精度缺陷可接受；投递侧配套 max_per_session=5 + 仅强提醒档注入",
+  "adapter": {
+    "path": "M:\\AI\\spark-4b\\publish_repo\\weights\\intent_lora_release\\pass1",
+    "files": {
+      "adapter_config.json": "1544bb9962d612fcb4dfd7a1323b62e09fb9ecc7e893fa1a64f5ba84667f08cf",
+      "adapter_model.safetensors": "f2de359e75b73bc4821c9c08bc75ffe3761373fed35263b50bc0d950504f3eb0"
+    }
+  }
+}
