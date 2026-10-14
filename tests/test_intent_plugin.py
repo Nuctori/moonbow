@@ -135,3 +135,25 @@ def test_service_judge_rejects_blank_text_without_model():
     svc = service_mod.IntentService.__new__(service_mod.IntentService)
     result = svc.judge({"session": "s", "text": "  "})
     assert result["error"] and result["reminders"] == []
+
+
+def test_manifest_survives_adapter_relocation(tmp_path):
+    import json
+    ev = load("experiment_evidence", ROOT / "tools/intent_eval/experiment_evidence.py")
+    adapter_evidence, file_hash, training_provenance = (
+        ev.adapter_evidence, ev.file_hash, ev.training_provenance)
+    trained_at = tmp_path / "trained_here"
+    trained_at.mkdir()
+    (trained_at / "adapter_config.json").write_text("{}", encoding="utf-8")
+    (trained_at / "adapter_model.safetensors").write_bytes(b"w")
+    train = tmp_path / "train.jsonl"
+    train.write_text("row", encoding="utf-8")
+    manifest = {"train_sha256": file_hash(train), "adapter": adapter_evidence(trained_at)}
+    (trained_at / "training_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    moved = tmp_path / "moved"
+    moved.mkdir()
+    import shutil
+    shutil.copy2(trained_at / "adapter_config.json", moved / "adapter_config.json")
+    shutil.copy2(trained_at / "adapter_model.safetensors", moved / "adapter_model.safetensors")
+    (moved / "training_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    assert training_provenance(moved, train)["status"] == "verified"
