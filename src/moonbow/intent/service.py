@@ -251,6 +251,7 @@ class IntentService:
         from moonbow.intent.ledger import Ledger
         from moonbow.intent.loop import IntentLoop
         from moonbow.intent.schema import Entity
+        cfg_max = self._cfg.get("max_per_session", 5)
         safe = "".join(ch if ch.isalnum() or ch in "-_." else "_"
                        for ch in session)[:80] or "default"
         ledger = Ledger(self.ledger_root / f"svc_{safe}.jsonl")
@@ -262,7 +263,8 @@ class IntentService:
         loop = IntentLoop(ledger, CaptureStage(FakeCaptureBackend([])),
                           self.pass1, self._cfg.get("scope", "live"),
                           verify_judge=self.verify,
-                          select_judge=self.select)
+                          select_judge=self.select,
+                          max_per_session=int(cfg_max))
         self._sessions[session] = loop
         return loop
 

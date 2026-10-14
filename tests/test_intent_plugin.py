@@ -59,15 +59,29 @@ def test_hook_main_fail_open_when_service_down(monkeypatch, capsys, tmp_path):
     assert capsys.readouterr().out == ""
 
 
-def test_hook_main_emits_additional_context(monkeypatch, capsys, tmp_path):
+def test_hook_main_emits_strong_band_only(monkeypatch, capsys, tmp_path):
     monkeypatch.setattr(hook, "_MUTE_FILE", tmp_path / "no-mute")
     monkeypatch.setattr(hook, "_LOG_FILE", tmp_path / "reminders.jsonl")
     monkeypatch.setattr(hook, "call_service", lambda p: {
-        "reminders": [{"policy": "manual-review", "reason": "r", "quote": "q"}]})
+        "reminders": [{"policy": "manual-review", "reason": "weak", "quote": "q"},
+                      {"policy": "remind-only", "reason": "strong", "quote": "q"}]})
     monkeypatch.setattr(sys, "stdin", io.StringIO("{}"))
     assert hook.main() == 0
     out = json.loads(capsys.readouterr().out)
-    assert "additionalContext" in out and "manual-review" in out["additionalContext"]
+    ctx = out["additionalContext"]
+    assert "strong" in ctx and "manual-review" not in ctx
+
+
+def test_hook_manual_review_logged_not_injected(monkeypatch, capsys, tmp_path):
+    log = tmp_path / "reminders.jsonl"
+    monkeypatch.setattr(hook, "_MUTE_FILE", tmp_path / "no-mute")
+    monkeypatch.setattr(hook, "_LOG_FILE", log)
+    monkeypatch.setattr(hook, "call_service", lambda p: {
+        "reminders": [{"policy": "manual-review", "reason": "weak", "quote": "q"}]})
+    monkeypatch.setattr(sys, "stdin", io.StringIO("{}"))
+    assert hook.main() == 0
+    assert capsys.readouterr().out == ""
+    assert "weak" in log.read_text(encoding="utf-8")
 
 
 def test_hook_mute_still_logs_but_not_injects(monkeypatch, capsys, tmp_path):

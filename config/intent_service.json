@@ -1,5 +1,5 @@
 {
-  "_comment": "意图提醒闭环常驻服务：单基座 + 三 LoRA 热切换（pass1/verify/select）。启动：python -m moonbow.intent.service --config config/intent_service.json。设备自动探测 xpu→cuda→cpu（CPU 推理合法；训练/评估仍 XPU 专用）。权重随仓库发布于 weights/。",
+  "_comment": "意图提醒闭环常驻服务：单基座 + 三 LoRA 热切换（pass1/verify/select）。启动：python -m moonbow.intent.service --config config/intent_service.json。设备自动探测 xpu→cuda→cpu（CPU 推理合法；训练/评估仍 XPU 专用）。单会话提醒预算 5（防刷屏保险丝）。权重随仓库发布于 weights/。",
   "port": 18502,
   "scope": "live",
   "base_model": "Qwen/Qwen3.5-0.8B",
@@ -15,5 +15,6 @@
     "失败必须显式上报；禁止静默降级、禁止吞异常返回默认值",
     "测试断言必须断言政策，不得钉死具体句式"
   ],
-  "ledger_root": ".mimosa/intent-loop/service_ledgers"
+  "ledger_root": ".mimosa/intent-loop/service_ledgers",
+  "max_per_session": 5
 }

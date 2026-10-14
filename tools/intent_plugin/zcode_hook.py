@@ -112,7 +112,8 @@ def main():
             pass
     if _MUTE_FILE.exists():                            # 静音：只记录不注入
         return 0
-    message = format_reminders(result or {})
+    strong = [r for r in reminders if r.get("policy") == "remind-only"]
+    message = format_reminders({"reminders": strong})
     if message:
         print(json.dumps({"additionalContext": message}, ensure_ascii=False))
     return 0
